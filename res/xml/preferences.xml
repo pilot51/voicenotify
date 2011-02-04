@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <EditTextPreference android:key="ttsString" android:dialogMessage="App title = %t\nNotification message = %m" android:title="TTS Message" android:summary="Customize how Text-To-Speech says notifications" android:defaultValue="%t: %m"></EditTextPreference>
+</PreferenceScreen>

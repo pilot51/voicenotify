@@ -5,11 +5,13 @@ import java.util.List;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -19,16 +21,16 @@ public class VoiceNotify extends AccessibilityService {
 		STOP_SPEAK = 2,
 		START_TTS = 3,
 		STOP_TTS = 4;
-	private final StringBuilder mUtterance = new StringBuilder();
 	private TextToSpeech mTts;
 	private boolean isInfrastructureInitialized;
+	private SharedPreferences prefs;
 
 	Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case SPEAK:
-				//Log.d("Test", "Message: " + message.obj);
+				//Log.d("VoiceNotify", "Message: " + message.obj);
 				mTts.speak((String) message.obj, TextToSpeech.QUEUE_ADD, null);
 				return;
 			case STOP_SPEAK:
@@ -63,30 +65,29 @@ public class VoiceNotify extends AccessibilityService {
 			e.printStackTrace();
 		}
 		String label = String.valueOf(packMan.getApplicationLabel(packInfo.applicationInfo));
-		/*
-		Log.i("Test", event.toString());
-		Log.d("Test", "ParcelableData: " + event.getParcelableData());
-		Log.d("Test", "EventType: " + event.getEventType());
-		Log.d("Test", "EventTime: " + event.getEventTime());
-		Log.d("Test", "PackageName: " + event.getPackageName());
-		Log.d("Test", "BeforeText: " + event.getBeforeText());
-		Log.d("Test", "ClassName: " + event.getClassName());
-		Log.d("Test", "Text: " + event.getText());
-		Log.d("Test", "Label: " + label);
-		*/
+/*
+		Log.i("VoiceNotify", event.toString());
+		Log.d("VoiceNotify", "ParcelableData: " + event.getParcelableData());
+		Log.d("VoiceNotify", "EventType: " + event.getEventType());
+		Log.d("VoiceNotify", "EventTime: " + event.getEventTime());
+		Log.d("VoiceNotify", "PackageName: " + event.getPackageName());
+		Log.d("VoiceNotify", "BeforeText: " + event.getBeforeText());
+		Log.d("VoiceNotify", "ClassName: " + event.getClassName());
+		Log.d("VoiceNotify", "Text: " + event.getText());
+		Log.d("VoiceNotify", "Label: " + label);
+*/
 		mHandler.obtainMessage(SPEAK, formatUtterance(event, label)).sendToTarget();
 	}
 
 	private String formatUtterance(AccessibilityEvent event, String label) {
-		StringBuilder utterance = mUtterance;
-		utterance.delete(0, utterance.length());
-		utterance.append(label + ". ");
 		List<CharSequence> eventText = event.getText();
+		StringBuilder mesg = new StringBuilder();
 		if (!eventText.isEmpty())
 			for (CharSequence subText : eventText)
-				utterance.append(subText);
-		//Log.d("Test", "Utterance: " + utterance.toString());
-		return utterance.toString();
+				mesg.append(subText);
+		String s = prefs.getString("ttsString", null);
+		s = s.replaceAll("%t", "%1$s").replaceAll("%m", "%2$s");
+		return String.format(s, label, mesg);
 	}
 
 	@Override
@@ -97,6 +98,8 @@ public class VoiceNotify extends AccessibilityService {
 	@Override
 	public void onServiceConnected() {
 		if (isInfrastructureInitialized) return;
+		PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
+		prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		mHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 		isInfrastructureInitialized = true;
