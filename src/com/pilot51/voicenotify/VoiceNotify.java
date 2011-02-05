@@ -1,5 +1,6 @@
 package com.pilot51.voicenotify;
 
+import java.util.Arrays;
 import java.util.List;
 
 import android.accessibilityservice.AccessibilityService;
@@ -65,7 +66,12 @@ public class VoiceNotify extends AccessibilityService {
 			e.printStackTrace();
 		}
 		String label = String.valueOf(packMan.getApplicationLabel(packInfo.applicationInfo));
-/*
+		String[] ignoredApps = prefs.getString("ignoredApps", "").toLowerCase().split(";");
+		for (int i = 0, length = ignoredApps.length; i < length; i++) {
+			if (ignoredApps[i] != null) ignoredApps[i] = ignoredApps[i].trim();
+		}
+		if (Arrays.asList(ignoredApps).contains(label.toLowerCase())) return;
+		/*
 		Log.i("VoiceNotify", event.toString());
 		Log.d("VoiceNotify", "ParcelableData: " + event.getParcelableData());
 		Log.d("VoiceNotify", "EventType: " + event.getEventType());
@@ -75,7 +81,7 @@ public class VoiceNotify extends AccessibilityService {
 		Log.d("VoiceNotify", "ClassName: " + event.getClassName());
 		Log.d("VoiceNotify", "Text: " + event.getText());
 		Log.d("VoiceNotify", "Label: " + label);
-*/
+		*/
 		mHandler.obtainMessage(SPEAK, formatUtterance(event, label)).sendToTarget();
 	}
 

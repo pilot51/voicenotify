@@ -2,4 +2,5 @@
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
     <EditTextPreference android:key="ttsString" android:dialogMessage="App title = %t\nNotification message = %m" android:title="TTS Message" android:summary="Customize how Text-To-Speech says notifications" android:defaultValue="%t: %m"></EditTextPreference>
+    <EditTextPreference android:title="Ignored Apps" android:key="ignoredApps" android:summary="Titles of apps to ignore" android:dialogMessage="Separate titles with semicolon ( ; )\nNot case-sensitive"></EditTextPreference>
 </PreferenceScreen>
