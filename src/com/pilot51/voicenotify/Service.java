@@ -16,7 +16,7 @@ import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.view.accessibility.AccessibilityEvent;
 
-public class VoiceNotify extends AccessibilityService {
+public class Service extends AccessibilityService {
 	private static final int
 		SPEAK = 1,
 		STOP_SPEAK = 2,
@@ -38,7 +38,7 @@ public class VoiceNotify extends AccessibilityService {
 				mTts.stop();
 				return;
 			case START_TTS:
-				mTts = new TextToSpeech(VoiceNotify.this, null);
+				mTts = new TextToSpeech(Service.this, null);
 				return;
 			case STOP_TTS:
 				mTts.shutdown();
