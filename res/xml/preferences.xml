@@ -2,5 +2,5 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<Preference android:key="accessibility" android:title="Enable/Disable" android:summary="Open Accessibility settings" />
 	<EditTextPreference android:key="ttsString" android:title="TTS Message" android:summary="Customize how Text-To-Speech says notifications" android:dialogMessage="App title = %t\nNotification message = %m" android:defaultValue="%t: %m" />
-	<EditTextPreference android:key="ignoredApps" android:title="Ignored Apps" android:summary="Titles of apps to ignore" android:dialogMessage="Separate titles with semicolon ( ; )\nNot case-sensitive" android:defaultValue="download manager"/>
+	<Preference android:key="appList" android:title="App List" android:summary="Open list of apps to ignore"/>
 </PreferenceScreen>

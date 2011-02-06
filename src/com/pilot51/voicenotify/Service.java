@@ -1,19 +1,20 @@
 package com.pilot51.voicenotify;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
+import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 public class Service extends AccessibilityService {
@@ -22,16 +23,19 @@ public class Service extends AccessibilityService {
 		STOP_SPEAK = 2,
 		START_TTS = 3,
 		STOP_TTS = 4;
+	private String TAG;
 	private TextToSpeech mTts;
 	private boolean isInfrastructureInitialized;
 	private SharedPreferences prefs;
+	private ArrayList<String> ignoredApps;
+	private Common common;
 
 	Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case SPEAK:
-				//Log.d("VoiceNotify", "Message: " + message.obj);
+				//Log.d(TAG, "Message: " + message.obj);
 				mTts.speak((String) message.obj, TextToSpeech.QUEUE_ADD, null);
 				return;
 			case STOP_SPEAK:
@@ -59,28 +63,29 @@ public class Service extends AccessibilityService {
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
 		PackageManager packMan = getPackageManager();
-		PackageInfo packInfo = new PackageInfo();
+		ApplicationInfo appInfo = new ApplicationInfo();
+		String pkgName = String.valueOf(event.getPackageName());
 		try {
-			packInfo = packMan.getPackageInfo(String.valueOf(event.getPackageName()), 0);
+			appInfo = packMan.getApplicationInfo(pkgName, 0);
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-		String label = String.valueOf(packMan.getApplicationLabel(packInfo.applicationInfo));
-		String[] ignoredApps = prefs.getString("ignoredApps", "").toLowerCase().split(";");
-		for (int i = 0, length = ignoredApps.length; i < length; i++) {
-			if (ignoredApps[i] != null) ignoredApps[i] = ignoredApps[i].trim();
+		ignoredApps = common.readList();
+		String label = String.valueOf(appInfo.loadLabel(packMan));
+		if (ignoredApps.contains(pkgName)) {
+			Log.i(TAG, "Notification event ignored: " + label);
+			return;
 		}
-		if (Arrays.asList(ignoredApps).contains(label.toLowerCase())) return;
 		/*
-		Log.i("VoiceNotify", event.toString());
-		Log.d("VoiceNotify", "ParcelableData: " + event.getParcelableData());
-		Log.d("VoiceNotify", "EventType: " + event.getEventType());
-		Log.d("VoiceNotify", "EventTime: " + event.getEventTime());
-		Log.d("VoiceNotify", "PackageName: " + event.getPackageName());
-		Log.d("VoiceNotify", "BeforeText: " + event.getBeforeText());
-		Log.d("VoiceNotify", "ClassName: " + event.getClassName());
-		Log.d("VoiceNotify", "Text: " + event.getText());
-		Log.d("VoiceNotify", "Label: " + label);
+		Log.i(TAG, event.toString());
+		Log.d(TAG, "ParcelableData: " + event.getParcelableData());
+		Log.d(TAG, "EventType: " + event.getEventType());
+		Log.d(TAG, "EventTime: " + event.getEventTime());
+		Log.d(TAG, "PackageName: " + event.getPackageName());
+		Log.d(TAG, "BeforeText: " + event.getBeforeText());
+		Log.d(TAG, "ClassName: " + event.getClassName());
+		Log.d(TAG, "Text: " + event.getText());
+		Log.d(TAG, "Label: " + label);
 		*/
 		mHandler.obtainMessage(SPEAK, formatUtterance(event, label)).sendToTarget();
 	}
@@ -106,6 +111,8 @@ public class Service extends AccessibilityService {
 		if (isInfrastructureInitialized) return;
 		PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
 		prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+		common = new Common(this);
+		TAG = common.TAG;
 		mHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 		isInfrastructureInitialized = true;

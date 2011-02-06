@@ -4,8 +4,13 @@
 	<application android:icon="@drawable/icon" android:label="@string/app_name">
 		<activity android:name="MainActivity">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN"></action>
-				<category android:name="android.intent.category.LAUNCHER"></category>
+				<action android:name="android.intent.action.MAIN" />
+				<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+		<activity android:name="AppList" android:configChanges="keyboardHidden|orientation">
+			<intent-filter>
+				<action android:name="android.intent.action.MAIN" />
 			</intent-filter>
 		</activity>
 		<service android:name="Service">
