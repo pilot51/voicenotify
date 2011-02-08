@@ -14,6 +14,7 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
+        public static final int checkbox=0x7f060002;
         public static final int text1=0x7f060000;
         public static final int text2=0x7f060001;
     }

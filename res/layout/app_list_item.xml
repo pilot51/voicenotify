@@ -4,5 +4,5 @@
 		<TextView android:id="@+id/text1" android:text="1" android:layout_width="match_parent" android:layout_height="wrap_content" android:textSize="24sp" />
 		<TextView android:id="@+id/text2" android:text="2" android:layout_width="match_parent" android:layout_height="wrap_content" />
 	</LinearLayout>
-	<!--<CheckBox android:id="@+id/checkbox" android:layout_width="40dp" android:layout_height="40dp" android:layout_gravity="center" android:checked="true" android:clickable="false" android:duplicateParentState="true" />-->
+	<CheckBox android:id="@+id/checkbox" android:layout_width="40dp" android:layout_height="40dp" android:layout_gravity="center" android:clickable="false" android:focusable="false" android:duplicateParentState="true" />
 </LinearLayout>

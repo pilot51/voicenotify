@@ -17,12 +17,11 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 public class AppList extends ListActivity {
 	private Common common;
-	private SimpleAdapter adapter;
+	private MySimpleAdapter adapter;
 	private ArrayList<HashMap<String, String>> appArray = new ArrayList<HashMap<String, String>>();
 	private ProgressDialog progress;
 	private String TAG;
@@ -56,6 +55,7 @@ public class AppList extends ListActivity {
 					app.put("package", pkg);
 					String label = String.valueOf(appInfo.loadLabel(packMan));
 					app.put("label", label);
+					app.put("enabled", Boolean.toString(!ignoredApps.contains(pkg)));
 					appArray = insertApp(app, appArray);
 					//Log.d(TAG, "Label: " + label + " | Package: " + pkg);
 					progress.setProgress(i+1);
@@ -63,36 +63,29 @@ public class AppList extends ListActivity {
 				runOnUiThread(new Runnable() {
 					public void run() {
 						final ListView lv = getListView();
-						//lv.setTextFilterEnabled(true);
-						adapter = new SimpleAdapter(AppList.this, appArray, R.layout.app_list_item,
-								new String[] {"label", "package"},
-								new int[] {R.id.text1, R.id.text2});
+						lv.setTextFilterEnabled(true);
+						adapter = new MySimpleAdapter(AppList.this, appArray, R.layout.app_list_item,
+								new String[] {"label", "package", "enabled"},
+								new int[] {R.id.text1, R.id.text2, R.id.checkbox});
 						lv.setAdapter(adapter);
-						/*
-						for (int i = 0; i < lv.getChildCount(); i++) {
-							View view = lv.getChildAt(i);
-							CheckBox checkbox = (CheckBox)view.findViewById(R.id.checkbox);
-							if (ignoredApps.contains(((TextView)view.findViewById(R.id.text2)).getText())) checkbox.setChecked(true);
-							else checkbox.setChecked(false);
-						}
-						*/
 						lv.setOnItemClickListener(new OnItemClickListener() {
 							@Override
 							public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-								//((TextView)parent.findViewById(R.id.text1)).setBackgroundColor(Color.RED);
-								Log.d(TAG, "id: " + id);
-								Log.d(TAG, "position: " + position);
-								//CheckBox checkbox = (CheckBox)view.findViewById(R.id.checkbox);
+								HashMap<String, String> clickedApp = appArray.get(position);
+								clickedApp.put("enabled", Boolean.toString(!Boolean.parseBoolean(clickedApp.get("enabled"))));
+								appArray.set(position, clickedApp);
+								adapter = new MySimpleAdapter(AppList.this, appArray, R.layout.app_list_item,
+										new String[] {"label", "package", "enabled"},
+										new int[] {R.id.text1, R.id.text2, R.id.checkbox});
+								lv.setAdapter(adapter);
 								String
-									pkg = appArray.get(position).get("package"),
-									label = appArray.get(position).get("label");
+									pkg = clickedApp.get("package"),
+									label = clickedApp.get("label");
 								if (ignoredApps.contains(pkg)) {
 									ignoredApps.remove(pkg);
-									//checkbox.setChecked(false);
 									Toast.makeText(AppList.this, label + " is not ignored", Toast.LENGTH_SHORT).show();
 								} else {
 									ignoredApps.add(pkg);
-									//checkbox.setChecked(true);
 									Toast.makeText(AppList.this, label + " is ignored", Toast.LENGTH_SHORT).show();
 								}
 								saveList(ignoredApps);
