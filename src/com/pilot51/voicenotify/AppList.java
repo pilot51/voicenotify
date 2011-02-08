@@ -38,6 +38,7 @@ public class AppList extends ListActivity {
 		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progress.setCancelable(true);
 		progress.setTitle("Apps List");
+		progress.setMessage("Loading...");
 		progress.show();
 		new Thread(new Runnable() {
 			public void run() {
@@ -45,7 +46,6 @@ public class AppList extends ListActivity {
 				//List<PackageInfo> packList = packMan.getInstalledPackages(0);
 				List<ApplicationInfo> appList = packMan.getInstalledApplications(0);
 				int listSize = appList.size();
-				progress.setMessage("Loading...");
 				progress.setMax(listSize);
 				ApplicationInfo appInfo = new ApplicationInfo();
 				HashMap<String, String> app;
@@ -58,7 +58,7 @@ public class AppList extends ListActivity {
 					app.put("label", label);
 					appArray = insertApp(app, appArray);
 					//Log.d(TAG, "Label: " + label + " | Package: " + pkg);
-					progress.setProgress(i);
+					progress.setProgress(i+1);
 				}
 				runOnUiThread(new Runnable() {
 					public void run() {
@@ -105,7 +105,6 @@ public class AppList extends ListActivity {
 	}
 
 	private ArrayList<HashMap<String, String>> insertApp(HashMap<String, String> app, ArrayList<HashMap<String, String>> array) {
-		progress.setMessage("Sorting app into list...");
 		try {
 			int n = array.size();
 			String appLabel = app.get("label");
