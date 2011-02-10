@@ -11,6 +11,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -36,7 +37,7 @@ public class AppList extends ListActivity {
 		progress = new ProgressDialog(this);
 		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progress.setCancelable(true);
-		progress.setTitle("Apps List");
+		progress.setTitle("App List");
 		progress.setMessage("Loading...");
 		progress.show();
 		new Thread(new Runnable() {
@@ -95,6 +96,7 @@ public class AppList extends ListActivity {
 					}});
 			}
 		}).start();
+		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
 
 	private ArrayList<HashMap<String, String>> insertApp(HashMap<String, String> app, ArrayList<HashMap<String, String>> array) {
