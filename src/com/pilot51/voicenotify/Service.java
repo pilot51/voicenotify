@@ -73,7 +73,10 @@ public class Service extends AccessibilityService {
 		ignoredApps = common.readList();
 		String label = String.valueOf(appInfo.loadLabel(packMan));
 		if (ignoredApps.contains(pkgName)) {
-			Log.i(TAG, "Notification event ignored: " + label);
+			Log.i(TAG, "Notification event ignored by user preference: " + label);
+			return;
+		} else if (event.getText().isEmpty()) {
+			Log.i(TAG, "Notification event ignored due to empty message: " + label);
 			return;
 		}
 		/*
