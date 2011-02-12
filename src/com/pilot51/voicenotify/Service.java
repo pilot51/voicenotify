@@ -100,7 +100,7 @@ public class Service extends AccessibilityService {
 			for (CharSequence subText : eventText)
 				mesg.append(subText);
 		String s = prefs.getString("ttsString", null);
-		s = s.replaceAll("%t", "%1$s").replaceAll("%m", "%2$s");
+		s = s.replace("%t", "%1$s").replace("%m", "%2$s");
 		return String.format(s, label, mesg);
 	}
 
