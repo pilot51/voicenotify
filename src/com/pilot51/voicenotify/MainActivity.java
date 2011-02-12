@@ -23,7 +23,9 @@ public class MainActivity extends PreferenceActivity {
 			intent.setClassName("com.android.settings", "com.android.settings.AccessibilitySettings");
 			accessPref.setIntent(intent);
 		}
-		
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
+		((Preference)findPreference("ttsSettings")).setIntent(intent);
 		((Preference)findPreference("appList")).setIntent(new Intent(this, AppList.class));
 	}
 }
