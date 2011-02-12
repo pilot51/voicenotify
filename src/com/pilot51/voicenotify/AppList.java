@@ -3,6 +3,8 @@ package com.pilot51.voicenotify;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,7 +29,7 @@ public class AppList extends ListActivity {
 	private ProgressDialog progress;
 	private String TAG;
 	private ArrayList<String> ignoredApps;
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,10 +59,16 @@ public class AppList extends ListActivity {
 					String label = String.valueOf(appInfo.loadLabel(packMan));
 					app.put("label", label);
 					app.put("enabled", Boolean.toString(!ignoredApps.contains(pkg)));
-					appArray = insertApp(app, appArray);
+					appArray.add(app);
 					//Log.d(TAG, "Label: " + label + " | Package: " + pkg);
-					progress.setProgress(i+1);
+					progress.setProgress(i + 1);
 				}
+				Collections.sort(appArray, new Comparator<HashMap<String, String>>() {
+					@Override
+					public int compare(HashMap<String, String> object1, HashMap<String, String> object2) {
+						return object1.get("label").compareToIgnoreCase(object2.get("label"));
+					}
+				});
 				runOnUiThread(new Runnable() {
 					public void run() {
 						final ListView lv = getListView();
@@ -93,52 +101,13 @@ public class AppList extends ListActivity {
 							}
 						});
 						progress.dismiss();
-					}});
+					}
+				});
 			}
 		}).start();
 		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
 
-	private ArrayList<HashMap<String, String>> insertApp(HashMap<String, String> app, ArrayList<HashMap<String, String>> array) {
-		try {
-			int n = array.size();
-			String appLabel = app.get("label");
-			long i;
-			do {
-				n--;
-				i = appLabel.compareToIgnoreCase(array.get(n).get("label"));
-				//Log.d(TAG, "i = " + i + " - " + event.get("name") + ": " + new SimpleDateFormat("yyyy-MMMM-dd HH:mm:ss zzz").format(((Calendar)event.get(cal)).getTime()) + " - " + mapArray.get(n).get("name") + ": " + new SimpleDateFormat("yyyy-MMMM-dd HH:mm:ss zzz").format(((Calendar)mapArray.get(n).get(cal)).getTime()));
-			} while (i < 0 & n > 0);
-			//String pkg = app.get("package");
-			/*if (pkg.equals(array.get(n).get("package"))) {
-				return array;
-			}
-			*/
-			if (n + 1 < array.size()) {
-				/*if (pkg.equals(array.get(n+1).get("package"))) {
-					return array;
-				}
-				*/
-				if (n > 0 | (n == 0 & i >= 0)) {
-					//Log.d(TAG, (String)event.get("name") + " is after " + ((String)((HashMap<String, Object>)mapArray.get(n)).get("name")));
-					n++;
-					//Log.d(TAG, (String)event.get("name") + " is before " + ((String)((HashMap<String, Object>)mapArray.get(n)).get("name")));
-				} else if (n == 0 & i < 0) {
-					//Log.d(TAG, (String)event.get("name") + " is at the beginning, before " + ((String)((HashMap<String, Object>)mapArray.get(n)).get("name")));
-				}
-				array.add(n, app);
-			} else {
-				//Log.d(TAG, (String)event.get("name") + " is at the end, after " + ((String)((HashMap<String, Object>)mapArray.get(n-1)).get("name")));
-				array.add(app);
-			}
-		} catch (IndexOutOfBoundsException e) {
-			//Log.i(TAG, "Sort exception, most likely first item in list.");
-			e.printStackTrace();
-			array.add(app);
-		}
-		return array;
-	}
-	
 	private void saveList(ArrayList<String> list) {
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(openFileOutput("ignored_apps", Context.MODE_WORLD_READABLE));
