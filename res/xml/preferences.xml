@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<Preference android:key="accessibility" android:title="Enable/Disable" android:summary="Open Accessibility settings" />
-	<Preference android:key="ttsSettings" android:title="TTS Settings" android:summary="Configure Text-To-Speech in Android settings" />
+	<Preference android:key="accessibility" android:title="Enable/Disable" android:summary="Open Android's Accessibility settings" />
+	<Preference android:key="ttsSettings" android:title="TTS Settings" android:summary="Open Android's Text-To-Speech settings" />
 	<EditTextPreference android:key="ttsString" android:title="TTS Message" android:summary="Customize how Text-To-Speech says notifications" android:dialogMessage="%t = App title\n%m = Notification message" android:defaultValue="%t: %m" />
 	<Preference android:key="appList" android:title="App List" android:summary="List installed apps which can be ignored" />
 </PreferenceScreen>
