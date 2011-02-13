@@ -1,5 +1,7 @@
 package com.pilot51.voicenotify;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
@@ -19,8 +21,15 @@ public class Common {
 	@SuppressWarnings("unchecked")
 	public ArrayList<String> readList() {
 		ArrayList<String> list = new ArrayList<String>();
+		FileInputStream file = null;
 		try {
-			ObjectInputStream in = new ObjectInputStream(context.openFileInput("ignored_apps"));
+			file = context.openFileInput("ignored_apps");
+		} catch (FileNotFoundException e) {
+			Log.i(TAG, "ignored_apps file does not exist");
+			return list;
+		}
+		try {
+			ObjectInputStream in = new ObjectInputStream(file);
 			try {
 				list = (ArrayList<String>)in.readObject();
 			} catch (ClassNotFoundException e) {

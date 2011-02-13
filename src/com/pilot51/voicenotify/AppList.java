@@ -35,7 +35,6 @@ public class AppList extends ListActivity {
 		super.onCreate(savedInstanceState);
 		common = new Common(this);
 		TAG = common.TAG;
-		ignoredApps = common.readList();
 		progress = new ProgressDialog(this);
 		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progress.setCancelable(true);
@@ -44,6 +43,7 @@ public class AppList extends ListActivity {
 		progress.show();
 		new Thread(new Runnable() {
 			public void run() {
+				ignoredApps = common.readList();
 				PackageManager packMan = getPackageManager();
 				//List<PackageInfo> packList = packMan.getInstalledPackages(0);
 				List<ApplicationInfo> appList = packMan.getInstalledApplications(0);
