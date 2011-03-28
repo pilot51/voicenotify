@@ -2,6 +2,7 @@ package com.pilot51.voicenotify;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.IllegalFormatException;
 import java.util.List;
 
 import android.accessibilityservice.AccessibilityService;
@@ -103,8 +104,13 @@ public class Service extends AccessibilityService {
 			for (CharSequence subText : eventText)
 				mesg.append(subText);
 		String s = prefs.getString("ttsString", null);
-		s = s.replace("%t", "%1$s").replace("%m", "%2$s");
-		return String.format(s, label, mesg);
+		try {
+			return String.format(s.replace("%t", "%1$s").replace("%m", "%2$s"), label, mesg);
+		} catch(IllegalFormatException e) {
+			Log.w(TAG, "Error formatting custom TTS string");
+			e.printStackTrace();
+			return s;
+		}
 	}
 
 	@Override
