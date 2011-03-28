@@ -1,21 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.pilot51.voicenotify" android:versionName="@string/app_version" android:versionCode="1" android:installLocation="auto">
-	<uses-sdk android:minSdkVersion="4" android:targetSdkVersion="8"/>
-	<application android:icon="@drawable/icon" android:label="@string/app_name">
-		<activity android:name="MainActivity">
+<manifest
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	package="com.pilot51.voicenotify"
+	android:versionName="@string/app_version"
+	android:installLocation="auto"
+	android:versionCode="2">
+	<uses-sdk
+		android:minSdkVersion="4"
+		android:targetSdkVersion="8" />
+	<application
+		android:icon="@drawable/icon"
+		android:label="@string/app_name">
+		<activity
+			android:name="MainActivity">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
-				<category android:name="android.intent.category.LAUNCHER" />
+				<action
+					android:name="android.intent.action.MAIN" />
+				<category
+					android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
-		<activity android:name="AppList" android:configChanges="keyboardHidden|orientation">
+		<activity
+			android:name="AppList"
+			android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
-				<action android:name="android.intent.action.MAIN" />
+				<action
+					android:name="android.intent.action.MAIN" />
 			</intent-filter>
 		</activity>
-		<service android:name="Service">
+		<service
+			android:name="Service">
 			<intent-filter>
-				<action android:name="android.accessibilityservice.AccessibilityService" />
+				<action
+					android:name="android.accessibilityservice.AccessibilityService" />
 			</intent-filter>
 		</service>
 	</application>

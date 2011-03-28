@@ -13,7 +13,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -41,8 +40,8 @@ public class AppList extends ListActivity {
 		progress = new ProgressDialog(this);
 		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progress.setCancelable(true);
-		progress.setTitle("App List");
-		progress.setMessage("Loading...");
+		progress.setTitle(R.string.app_list);
+		progress.setMessage(getString(R.string.loading));
 		progress.show();
 		new Thread(new Runnable() {
 			public void run() {
@@ -89,14 +88,13 @@ public class AppList extends ListActivity {
 				});
 			}
 		}).start();
-		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, 1, 0, "Ignore all");
-		menu.add(0, 2, 0, "Ignore none");
+		menu.add(0, 1, 0, R.string.ignore_all);
+		menu.add(0, 2, 0, R.string.ignore_none);
 		return true;
 	}
 
@@ -128,11 +126,11 @@ public class AppList extends ListActivity {
 		if (ignoredApps.contains(pkg) & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_OFF)) {
 			ignoredApps.remove(pkg);
 			app.put("enabled", Boolean.toString(true));
-			if (ignoreType == IGNORE_TOGGLE) Toast.makeText(this, label + " is not ignored", Toast.LENGTH_SHORT).show();
+			if (ignoreType == IGNORE_TOGGLE) Toast.makeText(this, label + " " + getString(R.string.is_not_ignored), Toast.LENGTH_SHORT).show();
 		} else if (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_ON) {
 			ignoredApps.add(pkg);
 			app.put("enabled", Boolean.toString(false));
-			if (ignoreType == IGNORE_TOGGLE) Toast.makeText(this, label + " is ignored", Toast.LENGTH_SHORT).show();
+			if (ignoreType == IGNORE_TOGGLE) Toast.makeText(this, label + " " + getString(R.string.is_ignored), Toast.LENGTH_SHORT).show();
 		}
 		appArray.set(position, app);
 	}

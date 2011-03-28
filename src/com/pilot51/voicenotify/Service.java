@@ -39,7 +39,6 @@ public class Service extends AccessibilityService {
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case SPEAK:
-				//Log.d(TAG, "Message: " + message.obj);
 				mTts.speak((String) message.obj, TextToSpeech.QUEUE_ADD, ttsStream);
 				return;
 			case STOP_SPEAK:
@@ -59,8 +58,6 @@ public class Service extends AccessibilityService {
 		AccessibilityServiceInfo info = new AccessibilityServiceInfo();
 		info.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
 		info.feedbackType = feedbackType;
-		//info.notificationTimeout = 0;
-		//info.packageNames = new String[] {"com.pilot51.predisat", "com.pilot51.lclock"};
 		setServiceInfo(info);
 	}
 
@@ -83,17 +80,6 @@ public class Service extends AccessibilityService {
 			Log.i(TAG, "Notification event ignored due to empty message: " + label);
 			return;
 		}
-		/*
-		Log.i(TAG, event.toString());
-		Log.d(TAG, "ParcelableData: " + event.getParcelableData());
-		Log.d(TAG, "EventType: " + event.getEventType());
-		Log.d(TAG, "EventTime: " + event.getEventTime());
-		Log.d(TAG, "PackageName: " + event.getPackageName());
-		Log.d(TAG, "BeforeText: " + event.getBeforeText());
-		Log.d(TAG, "ClassName: " + event.getClassName());
-		Log.d(TAG, "Text: " + event.getText());
-		Log.d(TAG, "Label: " + label);
-		*/
 		mHandler.obtainMessage(SPEAK, formatUtterance(event, label)).sendToTarget();
 	}
 
@@ -126,9 +112,9 @@ public class Service extends AccessibilityService {
 		common = new Common(this);
 		TAG = common.TAG;
 		mHandler.sendEmptyMessage(START_TTS);
+		ttsStream.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 		isInfrastructureInitialized = true;
-		ttsStream.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
 	}
 
 	@Override
