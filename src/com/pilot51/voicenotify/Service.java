@@ -1,6 +1,7 @@
 package com.pilot51.voicenotify;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import android.accessibilityservice.AccessibilityService;
@@ -10,6 +11,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
@@ -27,6 +29,7 @@ public class Service extends AccessibilityService {
 	private TextToSpeech mTts;
 	private boolean isInfrastructureInitialized;
 	private SharedPreferences prefs;
+	private HashMap<String, String> ttsStream = new HashMap<String, String>();
 	private ArrayList<String> ignoredApps;
 	private Common common;
 
@@ -36,7 +39,7 @@ public class Service extends AccessibilityService {
 			switch (message.what) {
 			case SPEAK:
 				//Log.d(TAG, "Message: " + message.obj);
-				mTts.speak((String) message.obj, TextToSpeech.QUEUE_ADD, null);
+				mTts.speak((String) message.obj, TextToSpeech.QUEUE_ADD, ttsStream);
 				return;
 			case STOP_SPEAK:
 				mTts.stop();
@@ -119,6 +122,7 @@ public class Service extends AccessibilityService {
 		mHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 		isInfrastructureInitialized = true;
+		ttsStream.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
 	}
 
 	@Override

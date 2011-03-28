@@ -1,7 +1,6 @@
 package com.pilot51.voicenotify;
 
 import android.content.Intent;
-import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -11,8 +10,6 @@ public class MainActivity extends PreferenceActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
-		
-		setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
 		Preference accessPref = (Preference)findPreference("accessibility");
 		int sdkVer = android.os.Build.VERSION.SDK_INT;
