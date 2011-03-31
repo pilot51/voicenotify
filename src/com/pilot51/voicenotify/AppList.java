@@ -73,7 +73,7 @@ public class AppList extends ListActivity {
 				});
 				runOnUiThread(new Runnable() {
 					public void run() {
-						final ListView lv = getListView();
+						ListView lv = getListView();
 						lv.setTextFilterEnabled(true);
 						updateList(false);
 						lv.setOnItemClickListener(new OnItemClickListener() {
@@ -139,7 +139,10 @@ public class AppList extends ListActivity {
 		adapter = new MySimpleAdapter(AppList.this, appArray, R.layout.app_list_item,
 				new String[] {"label", "package", "enabled"},
 				new int[] {R.id.text1, R.id.text2, R.id.checkbox});
-		getListView().setAdapter(adapter);
+		ListView lv = getListView();
+		int scrollPos = lv.getFirstVisiblePosition();
+		lv.setAdapter(adapter);
+		lv.setSelection(scrollPos);
 		if (doSave) saveList(ignoredApps);
 	}
 
