@@ -1,14 +1,19 @@
 package com.pilot51.voicenotify;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
 
-public class MainActivity extends PreferenceActivity {
+public class MainActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+	private Common common;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		common = new Common(this);
 		addPreferencesFromResource(R.xml.preferences);
 
 		Preference accessPref = (Preference)findPreference("accessibility");
@@ -24,5 +29,23 @@ public class MainActivity extends PreferenceActivity {
 		intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
 		((Preference)findPreference("ttsSettings")).setIntent(intent);
 		((Preference)findPreference("appList")).setIntent(new Intent(this, AppList.class));
+	}
+	
+	@Override
+	protected void onResume() {
+		super.onResume();
+		common.prefs.registerOnSharedPreferenceChangeListener(this);
+	}
+
+	@Override
+	protected void onPause() {
+		super.onPause();
+		common.prefs.unregisterOnSharedPreferenceChangeListener(this);
+	}
+	
+	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
+		if (key.equals("ttsStream")) {
+			common.setVolumeStream();
+		}
 	}
 }

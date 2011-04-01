@@ -6,6 +6,10 @@
 		android:title="@string/toggle"
 		android:summary="@string/toggle_summary" />
 	<Preference
+		android:key="appList"
+		android:title="@string/app_list"
+		android:summary="@string/app_list_summary" />
+	<Preference
 		android:key="ttsSettings"
 		android:title="@string/tts_settings"
 		android:summary="@string/tts_settings_summary" />
@@ -15,8 +19,11 @@
 		android:summary="@string/tts_message_summary"
 		android:dialogMessage="@string/tts_message_dialog"
 		android:defaultValue="%t: %m" />
-	<Preference
-		android:key="appList"
-		android:title="@string/app_list"
-		android:summary="@string/app_list_summary" />
+	<ListPreference
+		android:key="ttsStream"
+		android:title="@string/tts_stream"
+		android:summary="@string/tts_stream_summary"
+		android:entries="@array/stream_name"
+		android:entryValues="@array/stream_value"
+		android:defaultValue="notification" />
 </PreferenceScreen>

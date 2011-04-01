@@ -8,14 +8,12 @@ import java.util.List;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
@@ -29,7 +27,6 @@ public class Service extends AccessibilityService {
 	private String TAG;
 	private TextToSpeech mTts;
 	private boolean isInfrastructureInitialized;
-	private SharedPreferences prefs;
 	private HashMap<String, String> ttsStream = new HashMap<String, String>();
 	private ArrayList<String> ignoredApps;
 	private Common common;
@@ -39,6 +36,9 @@ public class Service extends AccessibilityService {
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case SPEAK:
+				if (common.prefs.getString("ttsStream", null).contentEquals("notification"))
+					ttsStream.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
+				else ttsStream.clear();
 				mTts.speak((String) message.obj, TextToSpeech.QUEUE_ADD, ttsStream);
 				return;
 			case STOP_SPEAK:
@@ -89,7 +89,7 @@ public class Service extends AccessibilityService {
 		if (!eventText.isEmpty())
 			for (CharSequence subText : eventText)
 				mesg.append(subText);
-		String s = prefs.getString("ttsString", null);
+		String s = common.prefs.getString("ttsString", null);
 		try {
 			return String.format(s.replace("%t", "%1$s").replace("%m", "%2$s"), label, mesg);
 		} catch(IllegalFormatException e) {
@@ -107,12 +107,9 @@ public class Service extends AccessibilityService {
 	@Override
 	public void onServiceConnected() {
 		if (isInfrastructureInitialized) return;
-		PreferenceManager.setDefaultValues(this, R.xml.preferences, true);
-		prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
 		common = new Common(this);
 		TAG = common.TAG;
 		mHandler.sendEmptyMessage(START_TTS);
-		ttsStream.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 		isInfrastructureInitialized = true;
 	}
