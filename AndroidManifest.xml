@@ -4,7 +4,7 @@
 	package="com.pilot51.voicenotify"
 	android:versionName="@string/app_version"
 	android:installLocation="auto"
-	android:versionCode="2">
+	android:versionCode="3">
 	<uses-sdk
 		android:minSdkVersion="4"
 		android:targetSdkVersion="8" />

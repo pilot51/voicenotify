@@ -3,6 +3,7 @@ package com.pilot51.voicenotify;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -29,6 +30,8 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 		intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
 		((Preference)findPreference("ttsSettings")).setIntent(intent);
 		((Preference)findPreference("appList")).setIntent(new Intent(this, AppList.class));
+		((Preference)findPreference("donate")).setIntent(new Intent(Intent.ACTION_VIEW,
+				Uri.parse("https://paypal.com/cgi-bin/webscr?cmd=_donations&business=pilota51%40gmail%2ecom&lc=US&item_name=Voice%20Notify&no_note=1&no_shipping=1&currency_code=USD")));
 	}
 	
 	@Override

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">Voice Notify</string>
-	<string name="app_version">1.0.1</string>
+	<string name="app_version">1.0.2</string>
 	<string name="toggle">Enable/Disable</string>
 	<string name="toggle_summary">Open Android\'s Accessibility settings</string>
 	<string name="tts_settings">TTS Settings</string>
@@ -13,6 +13,8 @@
 	<string name="tts_stream_summary">Choose the audio stream that Text-To-Speech plays through</string>
 	<string name="app_list">App List</string>
 	<string name="app_list_summary">List installed apps which can be ignored</string>
+	<string name="donate">Donate</string>
+	<string name="donate_summary">Donations are accepted via Paypal to pilota51@gmail.com.\nIn-app donations should be coming soon.</string>
 	<string name="loading">Loading...</string>
 	<string name="ignore_all">Ignore All</string>
 	<string name="ignore_none">Ignore None</string>
