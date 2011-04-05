@@ -19,17 +19,18 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 public class Service extends AccessibilityService {
+	private Common common;
+	private String TAG, lastMsg = "";
 	private static final int
 		SPEAK = 1,
 		STOP_SPEAK = 2,
 		START_TTS = 3,
 		STOP_TTS = 4;
-	private String TAG;
+	private long lastMsgTime;
 	private TextToSpeech mTts;
 	private boolean isInfrastructureInitialized;
 	private HashMap<String, String> ttsStream = new HashMap<String, String>();
 	private ArrayList<String> ignoredApps;
-	private Common common;
 
 	Handler mHandler = new Handler() {
 		@Override
@@ -72,15 +73,20 @@ public class Service extends AccessibilityService {
 			e.printStackTrace();
 		}
 		ignoredApps = common.readList();
-		String label = String.valueOf(appInfo.loadLabel(packMan));
+		String label = String.valueOf(appInfo.loadLabel(packMan)),
+			newMsg = formatUtterance(event, label);
+		long newMsgTime = System.currentTimeMillis();
 		if (ignoredApps.contains(pkgName)) {
-			Log.i(TAG, "Notification event ignored by user preference: " + label);
-			return;
+			Log.i(TAG, "Notification ignored by user preference: " + label);
 		} else if (event.getText().isEmpty()) {
-			Log.i(TAG, "Notification event ignored due to empty message: " + label);
-			return;
+			Log.i(TAG, "Notification ignored due to empty message: " + label);
+		} else if (lastMsg.contentEquals(newMsg) & newMsgTime - lastMsgTime < 10000) {
+			Log.i(TAG, "Notification ignored due to identical message within 10 seconds: " + label);
+		} else {
+			mHandler.obtainMessage(SPEAK, newMsg).sendToTarget();
 		}
-		mHandler.obtainMessage(SPEAK, formatUtterance(event, label)).sendToTarget();
+		lastMsg = newMsg;
+		lastMsgTime = newMsgTime;
 	}
 
 	private String formatUtterance(AccessibilityEvent event, String label) {
