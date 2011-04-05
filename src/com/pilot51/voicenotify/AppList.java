@@ -30,7 +30,7 @@ public class AppList extends ListActivity {
 	private ProgressDialog progress;
 	private String TAG;
 	private ArrayList<String> ignoredApps;
-	private static final int IGNORE_TOGGLE = 0, IGNORE_ON = 1, IGNORE_OFF = 2;
+	private static final int IGNORE_TOGGLE = 0, IGNORE_ALL = 1, IGNORE_NONE = 2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -102,10 +102,10 @@ public class AppList extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case 1:
-			massIgnore(IGNORE_ON);
+			massIgnore(IGNORE_ALL);
 			return true;
 		case 2:
-			massIgnore(IGNORE_OFF);
+			massIgnore(IGNORE_NONE);
 			return true;
 		}
 		return false;
@@ -123,11 +123,11 @@ public class AppList extends ListActivity {
 		String
 			pkg = app.get("package"),
 			label = app.get("label");
-		if (ignoredApps.contains(pkg) & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_OFF)) {
+		if (ignoredApps.contains(pkg) & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_NONE)) {
 			ignoredApps.remove(pkg);
 			app.put("enabled", Boolean.toString(true));
 			if (ignoreType == IGNORE_TOGGLE) Toast.makeText(this, label + " " + getString(R.string.is_not_ignored), Toast.LENGTH_SHORT).show();
-		} else if (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_ON) {
+		} else if (!ignoredApps.contains(pkg) & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_ALL)) {
 			ignoredApps.add(pkg);
 			app.put("enabled", Boolean.toString(false));
 			if (ignoreType == IGNORE_TOGGLE) Toast.makeText(this, label + " " + getString(R.string.is_ignored), Toast.LENGTH_SHORT).show();
