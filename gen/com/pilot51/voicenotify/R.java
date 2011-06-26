@@ -11,6 +11,7 @@ public final class R {
     public static final class array {
         public static final int stream_name=0x7f060000;
         public static final int stream_value=0x7f060001;
+        public static final int support_items=0x7f060002;
     }
     public static final class attr {
     }
@@ -30,13 +31,21 @@ public final class R {
         public static final int app_list_summary=0x7f05000c;
         public static final int app_name=0x7f050000;
         public static final int app_version=0x7f050001;
-        public static final int donate=0x7f05000d;
-        public static final int donate_summary=0x7f05000e;
-        public static final int ignore_all=0x7f050010;
-        public static final int ignore_none=0x7f050011;
-        public static final int is_ignored=0x7f050012;
-        public static final int is_not_ignored=0x7f050013;
-        public static final int loading=0x7f05000f;
+        public static final int dev_email=0x7f05000f;
+        public static final int email_subject=0x7f050010;
+        public static final int error_email=0x7f050012;
+        public static final int error_market=0x7f050011;
+        public static final int ignore_all=0x7f050014;
+        public static final int ignore_none=0x7f050015;
+        public static final int is_ignored=0x7f050016;
+        public static final int is_not_ignored=0x7f050017;
+        /**  AppList.java 
+         */
+        public static final int loading=0x7f050013;
+        public static final int support=0x7f05000d;
+        public static final int support_summary=0x7f05000e;
+        /**  MainActivity.java 
+         */
         public static final int toggle=0x7f050002;
         public static final int toggle_summary=0x7f050003;
         public static final int tts_message=0x7f050006;
