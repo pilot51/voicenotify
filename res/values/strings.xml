@@ -23,6 +23,10 @@
 	</string-array>
 	<string name="app_list">App List</string>
 	<string name="app_list_summary">List installed apps which can be ignored</string>
+	<string name="quiet_start">Quiet Time Start</string>
+	<string name="quiet_start_summary">Don\'t speak after this time.\nLeave the same as end to disable.</string>
+	<string name="quiet_end">Quiet Time End</string>
+	<string name="quiet_end_summary">Don\'t speak before this time.\nLeave the same as start to disable.</string>
 	<string name="support">Support Voice Notify</string>
 	<string name="support_summary">Donate, rate/comment, or contact the developer with problems or suggestions.</string>
 	<string-array name="support_items">

@@ -14,10 +14,10 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 public class Common {
-	protected String TAG;
+	protected static String TAG;
 	private Activity activity;
 	private Context context;
-	protected SharedPreferences prefs;
+	protected static SharedPreferences prefs;
 	
 	Common(Activity a) {
 		activity = a;
@@ -30,9 +30,11 @@ public class Common {
 		onStart();
 	}
 	void onStart() {
-		TAG = context.getString(R.string.app_name);
-		PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
-		prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		if (TAG == null) {
+			TAG = context.getString(R.string.app_name);
+			PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
+			prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+		}
 	}
 	
 	protected void setVolumeStream() {

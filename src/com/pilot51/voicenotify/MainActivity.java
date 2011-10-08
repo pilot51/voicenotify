@@ -1,6 +1,8 @@
 package com.pilot51.voicenotify;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,18 +11,23 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
-public class MainActivity extends PreferenceActivity implements OnSharedPreferenceChangeListener {
+public class MainActivity extends PreferenceActivity implements OnPreferenceClickListener, OnSharedPreferenceChangeListener {
 	private Common common;
+	private AlertDialog dlgSupport;
+	private Preference pSupport, pQuietStart, pQuietEnd;
+	private static final int DLG_QUIET_START = 0, DLG_QUIET_END = 1;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		common = new Common(this);
 		addPreferencesFromResource(R.xml.preferences);
-		final AlertDialog dlgSupport = new AlertDialog.Builder(this)
+		dlgSupport = new AlertDialog.Builder(this)
 		.setTitle(R.string.support)
 		.setItems(R.array.support_items, new DialogInterface.OnClickListener() {
 		    public void onClick(DialogInterface dialog, int item) {
@@ -54,43 +61,81 @@ public class MainActivity extends PreferenceActivity implements OnSharedPreferen
 		        }
 		    }
 		}).create();
-		Preference accessPref = (Preference)findPreference("accessibility");
+		Preference pAccess = findPreference("accessibility");
+		pSupport = findPreference("support");
+		pSupport.setOnPreferenceClickListener(this);
+		pQuietStart = findPreference("quietStart");
+		pQuietStart.setOnPreferenceClickListener(this);
+		pQuietEnd = findPreference("quietEnd");
+		pQuietEnd.setOnPreferenceClickListener(this);
 		int sdkVer = android.os.Build.VERSION.SDK_INT;
-		if (sdkVer > 4) {
-			accessPref.setIntent(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS));
-		} else if (sdkVer == 4) {
+		if (sdkVer > 4)
+			pAccess.setIntent(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS));
+		else if (sdkVer == 4) {
 			Intent intent = new Intent(Intent.ACTION_MAIN);
 			intent.setClassName("com.android.settings", "com.android.settings.AccessibilitySettings");
-			accessPref.setIntent(intent);
+			pAccess.setIntent(intent);
 		}
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
-		((Preference)findPreference("ttsSettings")).setIntent(intent);
-		((Preference)findPreference("appList")).setIntent(new Intent(this, AppList.class));
-		((Preference)findPreference("support")).setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(Preference preference) {
-				dlgSupport.show();
-				return true;
-			}
-		});
+		findPreference("ttsSettings").setIntent(intent);
+		findPreference("appList").setIntent(new Intent(this, AppList.class));
 	}
+	
+	@Override
+	public boolean onPreferenceClick(Preference preference) {
+		if (preference == pSupport) {
+			dlgSupport.show();
+			return true;
+		} else if (preference == pQuietStart) {
+			showDialog(DLG_QUIET_START);
+			return true;
+		} else if (preference == pQuietEnd) {
+			showDialog(DLG_QUIET_END);
+			return true;
+		}
+		return false;
+	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		int i;
+		switch (id) {
+		case DLG_QUIET_START:
+			i = Common.prefs.getInt("quietStart", 0);
+			return new TimePickerDialog(MainActivity.this, sTimeSetListener, i/60, i%60, false);
+		case DLG_QUIET_END:
+			i = Common.prefs.getInt("quietEnd", 0);
+			return new TimePickerDialog(MainActivity.this, eTimeSetListener, i/60, i%60, false);
+		}
+		return null;
+	}
+
+	private TimePickerDialog.OnTimeSetListener sTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			Common.prefs.edit().putInt("quietStart", hourOfDay * 60 + minute).commit();
+		}
+	};
+	private TimePickerDialog.OnTimeSetListener eTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+			Common.prefs.edit().putInt("quietEnd", hourOfDay * 60 + minute).commit();
+		}
+	};
 	
 	@Override
 	protected void onResume() {
 		super.onResume();
-		common.prefs.registerOnSharedPreferenceChangeListener(this);
+		Common.prefs.registerOnSharedPreferenceChangeListener(this);
 	}
 
 	@Override
 	protected void onPause() {
 		super.onPause();
-		common.prefs.unregisterOnSharedPreferenceChangeListener(this);
+		Common.prefs.unregisterOnSharedPreferenceChangeListener(this);
 	}
 	
 	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-		if (key.equals("ttsStream")) {
+		if (key.equals("ttsStream"))
 			common.setVolumeStream();
-		}
 	}
 }

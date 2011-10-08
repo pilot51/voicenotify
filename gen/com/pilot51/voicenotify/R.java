@@ -31,19 +31,23 @@ public final class R {
         public static final int app_list_summary=0x7f05000c;
         public static final int app_name=0x7f050000;
         public static final int app_version=0x7f050001;
-        public static final int dev_email=0x7f05000f;
-        public static final int email_subject=0x7f050010;
-        public static final int error_email=0x7f050012;
-        public static final int error_market=0x7f050011;
-        public static final int ignore_all=0x7f050014;
-        public static final int ignore_none=0x7f050015;
-        public static final int is_ignored=0x7f050016;
-        public static final int is_not_ignored=0x7f050017;
+        public static final int dev_email=0x7f050013;
+        public static final int email_subject=0x7f050014;
+        public static final int error_email=0x7f050016;
+        public static final int error_market=0x7f050015;
+        public static final int ignore_all=0x7f050018;
+        public static final int ignore_none=0x7f050019;
+        public static final int is_ignored=0x7f05001a;
+        public static final int is_not_ignored=0x7f05001b;
         /**  AppList.java 
          */
-        public static final int loading=0x7f050013;
-        public static final int support=0x7f05000d;
-        public static final int support_summary=0x7f05000e;
+        public static final int loading=0x7f050017;
+        public static final int quiet_end=0x7f05000f;
+        public static final int quiet_end_summary=0x7f050010;
+        public static final int quiet_start=0x7f05000d;
+        public static final int quiet_start_summary=0x7f05000e;
+        public static final int support=0x7f050011;
+        public static final int support_summary=0x7f050012;
         /**  MainActivity.java 
          */
         public static final int toggle=0x7f050002;

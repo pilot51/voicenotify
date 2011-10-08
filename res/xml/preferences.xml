@@ -27,6 +27,14 @@
 		android:entryValues="@array/stream_value"
 		android:defaultValue="notification" />
 	<Preference
+		android:key="quietStart"
+		android:title="@string/quiet_start"
+		android:summary="@string/quiet_start_summary" />
+	<Preference
+		android:key="quietEnd"
+		android:title="@string/quiet_end"
+		android:summary="@string/quiet_end_summary" />
+	<Preference
 		android:key="support"
 		android:title="@string/support"
 		android:summary="@string/support_summary" />
