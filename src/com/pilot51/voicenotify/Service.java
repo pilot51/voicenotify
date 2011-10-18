@@ -8,6 +8,7 @@ import java.util.List;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
@@ -16,6 +17,7 @@ import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
 import android.speech.tts.TextToSpeech;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
@@ -29,11 +31,12 @@ public class Service extends AccessibilityService {
 		STOP_TTS = 4;
 	private long lastMsgTime;
 	private TextToSpeech mTts;
+	private TelephonyManager telephony;
 	private boolean isInfrastructureInitialized;
 	private HashMap<String, String> ttsStream = new HashMap<String, String>();
 	private ArrayList<String> ignoredApps;
 
-	Handler mHandler = new Handler() {
+	private Handler mHandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {
@@ -72,6 +75,10 @@ public class Service extends AccessibilityService {
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
 				| (quietEnd < quietStart & (quietStart <= calTime | calTime < quietEnd))) {
 			Log.i(Common.TAG, "Notification ignored by quiet time");
+			return;
+		} else if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
+				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
+			Log.i(Common.TAG, "Notification ignored due to active or ringing call");
 			return;
 		}
 		PackageManager packMan = getPackageManager();
@@ -126,6 +133,7 @@ public class Service extends AccessibilityService {
 		common = new Common(this);
 		mHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
+		telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 		isInfrastructureInitialized = true;
 	}
 
