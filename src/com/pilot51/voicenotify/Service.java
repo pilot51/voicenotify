@@ -119,7 +119,7 @@ public class Service extends AccessibilityService {
 				mesg.append(subText);
 		String s = Common.prefs.getString("ttsString", null);
 		try {
-			return String.format(s.replace("%t", "%1$s").replace("%m", "%2$s"), label, mesg);
+			return String.format(s.replace("%t", "%1$s").replace("%m", "%2$s"), label, mesg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
 		} catch(IllegalFormatException e) {
 			Log.w(Common.TAG, "Error formatting custom TTS string");
 			e.printStackTrace();
