@@ -31,6 +31,7 @@ public class Service extends AccessibilityService {
 		STOP_TTS = 4;
 	private long lastMsgTime;
 	private TextToSpeech mTts;
+	private AudioManager audioMan;
 	private TelephonyManager telephony;
 	private boolean isInfrastructureInitialized;
 	private HashMap<String, String> ttsStream = new HashMap<String, String>();
@@ -75,6 +76,10 @@ public class Service extends AccessibilityService {
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
 				| (quietEnd < quietStart & (quietStart <= calTime | calTime < quietEnd))) {
 			Log.i(Common.TAG, "Notification ignored by quiet time");
+			return;
+		} else if (audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
+				| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+			Log.i(Common.TAG, "Notification ignored due to silent or vibrate mode");
 			return;
 		} else if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
 				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
@@ -133,6 +138,7 @@ public class Service extends AccessibilityService {
 		common = new Common(this);
 		mHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
+		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 		isInfrastructureInitialized = true;
 	}
