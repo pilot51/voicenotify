@@ -25,7 +25,7 @@
 		android:summary="@string/tts_stream_summary"
 		android:entries="@array/stream_name"
 		android:entryValues="@array/stream_value"
-		android:defaultValue="notification" />
+		android:defaultValue="media" />
 	<Preference
 		android:key="quietStart"
 		android:title="@string/quiet_start"

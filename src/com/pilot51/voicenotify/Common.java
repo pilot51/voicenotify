@@ -51,7 +51,6 @@ public class Common {
 		try {
 			file = context.openFileInput("ignored_apps");
 		} catch (FileNotFoundException e) {
-			Log.i(TAG, "ignored_apps file does not exist");
 			return list;
 		}
 		try {
