@@ -28,7 +28,6 @@ public class AppList extends ListActivity {
 	private MySimpleAdapter adapter;
 	private ArrayList<HashMap<String, String>> appArray = new ArrayList<HashMap<String, String>>();
 	private ProgressDialog progress;
-	private String TAG;
 	private ArrayList<String> ignoredApps;
 	private static final int IGNORE_TOGGLE = 0, IGNORE_ALL = 1, IGNORE_NONE = 2;
 
@@ -36,7 +35,6 @@ public class AppList extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		common = new Common(this);
-		TAG = common.TAG;
 		progress = new ProgressDialog(this);
 		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
 		progress.setCancelable(true);
@@ -153,7 +151,7 @@ public class AppList extends ListActivity {
 			out.flush();
 			out.close();
 		} catch (IOException e) {
-			Log.e(TAG, "Error: Failed to save ignored_apps");
+			Log.e(Common.TAG, "Error: Failed to save ignored_apps");
 			e.printStackTrace();
 		}
 	}

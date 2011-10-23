@@ -30,14 +30,14 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		dlgSupport = new AlertDialog.Builder(this)
 		.setTitle(R.string.support)
 		.setItems(R.array.support_items, new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int item) {
-		        switch (item) {
-		        	case 0: // Donate
-		        		startActivity(new Intent(Intent.ACTION_VIEW,
-		    				Uri.parse("https://paypal.com/cgi-bin/webscr?cmd=_donations&business=pilota51%40gmail%2ecom&lc=US&item_name=Voice%20Notify&no_note=1&no_shipping=1&currency_code=USD")));
-		        		break;
-		        	case 1: // Rate/Comment
-		        		Intent iMarket = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.pilot51.voicenotify"));
+			public void onClick(DialogInterface dialog, int item) {
+				switch (item) {
+					case 0: // Donate
+						startActivity(new Intent(Intent.ACTION_VIEW,
+							Uri.parse("https://paypal.com/cgi-bin/webscr?cmd=_donations&business=pilota51%40gmail%2ecom&lc=US&item_name=Voice%20Notify&no_note=0&no_shipping=1&currency_code=USD")));
+						break;
+					case 1: // Rate/Comment
+						Intent iMarket = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.pilot51.voicenotify"));
 						iMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 						try {
 							startActivity(iMarket);
@@ -45,9 +45,9 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 							e.printStackTrace();
 							Toast.makeText(getBaseContext(), R.string.error_market, Toast.LENGTH_LONG).show();
 						}
-		        		break;
-		        	case 2: // Contact developer
-		        		Intent iEmail = new Intent(Intent.ACTION_SEND);
+						break;
+					case 2: // Contact developer
+						Intent iEmail = new Intent(Intent.ACTION_SEND);
 						iEmail.setType("plain/text");
 						iEmail.putExtra(Intent.EXTRA_EMAIL, new String[] {getString(R.string.dev_email)});
 						iEmail.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
@@ -57,9 +57,9 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 							e.printStackTrace();
 							Toast.makeText(getBaseContext(), R.string.error_email, Toast.LENGTH_LONG).show();
 						}
-		        		break;
-		        }
-		    }
+						break;
+				}
+			}
 		}).create();
 		Preference pAccess = findPreference("accessibility");
 		pSupport = findPreference("support");
