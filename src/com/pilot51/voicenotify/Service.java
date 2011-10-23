@@ -34,7 +34,7 @@ public class Service extends AccessibilityService {
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
 	private boolean isInfrastructureInitialized;
-	private HashMap<String, String> ttsStream = new HashMap<String, String>();
+	private HashMap<String, String> ttsParams = new HashMap<String, String>();
 	private ArrayList<String> ignoredApps;
 
 	private Handler mHandler = new Handler() {
@@ -42,20 +42,24 @@ public class Service extends AccessibilityService {
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case SPEAK:
-				if (Common.prefs.getString("ttsStream", null).contentEquals("notification"))
-					ttsStream.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
-				else ttsStream.clear();
-				mTts.speak((String) message.obj, TextToSpeech.QUEUE_ADD, ttsStream);
-				return;
+				boolean isNotificationStream = Common.prefs.getString("ttsStream", null).contentEquals("notification");
+				if (isNotificationStream)
+					ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
+				mTts.speak((String)message.obj, TextToSpeech.QUEUE_ADD, ttsParams);
+				if (isNotificationStream) {
+					ttsParams.clear();
+					mTts.speak(" ", TextToSpeech.QUEUE_ADD, null);
+				}
+				break;
 			case STOP_SPEAK:
 				mTts.stop();
-				return;
+				break;
 			case START_TTS:
 				mTts = new TextToSpeech(Service.this, null);
-				return;
+				break;
 			case STOP_TTS:
 				mTts.shutdown();
-				return;
+				break;
 			}
 		}
 	};
