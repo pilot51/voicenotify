@@ -4,14 +4,14 @@
 	
 	<!-- preferences.xml -->
 	<string name="toggle">Enable/Disable</string>
-	<string name="toggle_summary">Open Android\'s Accessibility settings</string>
+	<string name="toggle_summary">Open Android\'s Accessibility settings.</string>
 	<string name="tts_settings">TTS Settings</string>
-	<string name="tts_settings_summary">Open Android\'s Text-To-Speech settings</string>
+	<string name="tts_settings_summary">Open Android\'s Text-To-Speech settings.</string>
 	<string name="tts_message">TTS Message</string>
-	<string name="tts_message_summary">Customize how Text-To-Speech says notifications</string>
+	<string name="tts_message_summary">Customize how Text-To-Speech says notifications.</string>
 	<string name="tts_message_dialog">%t = App title\n%m = Notification message</string>
 	<string name="tts_stream">TTS Audio Stream</string>
-	<string name="tts_stream_summary">Choose the audio stream that Text-To-Speech plays through</string>
+	<string name="tts_stream_summary">Choose the audio stream that Text-To-Speech plays through.</string>
 	<string-array name="stream_name">
 		<item>Media</item>
 		<item>Notification</item>
@@ -20,8 +20,13 @@
 		<item>media</item>
 		<item>notification</item>
 	</string-array>
+	<string name="screen_state">Screen state</string>
+	<string name="screen_state_summary">Select whether to speak when screen is on or off.</string>
+	<string name="screen_state_dialog_title">Speak during these screen states</string>
+	<string name="on">On</string>
+	<string name="off">Off</string>
 	<string name="app_list">App List</string>
-	<string name="app_list_summary">List installed apps which can be ignored</string>
+	<string name="app_list_summary">List installed apps which can be ignored.</string>
 	<string name="quiet_start">Quiet Time Start</string>
 	<string name="quiet_start_summary">Don\'t speak after this time.\nLeave the same as end to disable.</string>
 	<string name="quiet_end">Quiet Time End</string>

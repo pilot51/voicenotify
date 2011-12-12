@@ -16,6 +16,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.os.Handler;
 import android.os.Message;
+import android.os.PowerManager;
 import android.speech.tts.TextToSpeech;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -31,6 +32,7 @@ public class Service extends AccessibilityService {
 		STOP_TTS = 4;
 	private long lastMsgTime;
 	private TextToSpeech mTts;
+	private PowerManager powerMan;
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
 	private boolean isInfrastructureInitialized;
@@ -89,6 +91,12 @@ public class Service extends AccessibilityService {
 				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
 			Log.i(Common.TAG, "Notification ignored due to active or ringing call");
 			return;
+		} else if (!powerMan.isScreenOn() & !Common.prefs.getBoolean("speakScreenOff", true)) {
+			Log.i(Common.TAG, "Notification ignored due to screen off (user preference)");
+			return;
+		} else if (powerMan.isScreenOn() & !Common.prefs.getBoolean("speakScreenOn", true)) {
+			Log.i(Common.TAG, "Notification ignored due to screen on (user preference)");
+			return;
 		}
 		PackageManager packMan = getPackageManager();
 		ApplicationInfo appInfo = new ApplicationInfo();
@@ -142,6 +150,7 @@ public class Service extends AccessibilityService {
 		common = new Common(this);
 		mHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
+		powerMan = (PowerManager)getSystemService(Context.POWER_SERVICE);
 		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 		isInfrastructureInitialized = true;

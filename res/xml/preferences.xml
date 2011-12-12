@@ -27,6 +27,10 @@
 		android:entryValues="@array/stream_value"
 		android:defaultValue="media" />
 	<Preference
+		android:key="screen"
+		android:title="@string/screen_state"
+		android:summary="@string/screen_state_summary" />
+	<Preference
 		android:key="quietStart"
 		android:title="@string/quiet_start"
 		android:summary="@string/quiet_start_summary" />
