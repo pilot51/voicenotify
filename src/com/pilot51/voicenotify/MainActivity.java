@@ -44,7 +44,9 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			pAccess.setIntent(intent);
 		}
 		Intent intent = new Intent(Intent.ACTION_MAIN);
-		intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
+		intent.setClassName("com.google.tv.settings", "com.google.tv.settings.TextToSpeechSettingsTop");
+		if (getPackageManager().queryIntentActivities(intent, 0).size() == 0)
+			intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
 		findPreference("ttsSettings").setIntent(intent);
 		findPreference("appList").setIntent(new Intent(this, AppList.class));
 	}
