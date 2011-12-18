@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 public class AppList extends ListActivity {
 	private Common common;
+	private ListView lv;
 	private MySimpleAdapter adapter;
 	private ArrayList<HashMap<String, String>> appArray = new ArrayList<HashMap<String, String>>();
 	private ProgressDialog progress;
@@ -45,7 +46,6 @@ public class AppList extends ListActivity {
 			public void run() {
 				ignoredApps = common.readList();
 				PackageManager packMan = getPackageManager();
-				//List<PackageInfo> packList = packMan.getInstalledPackages(0);
 				List<ApplicationInfo> appList = packMan.getInstalledApplications(0);
 				int listSize = appList.size();
 				progress.setMax(listSize);
@@ -60,7 +60,6 @@ public class AppList extends ListActivity {
 					app.put("label", label);
 					app.put("enabled", Boolean.toString(!ignoredApps.contains(pkg)));
 					appArray.add(app);
-					//Log.d(TAG, "Label: " + label + " | Package: " + pkg);
 					progress.setProgress(i + 1);
 				}
 				Collections.sort(appArray, new Comparator<HashMap<String, String>>() {
@@ -71,14 +70,15 @@ public class AppList extends ListActivity {
 				});
 				runOnUiThread(new Runnable() {
 					public void run() {
-						ListView lv = getListView();
+						lv = getListView();
 						lv.setTextFilterEnabled(true);
-						updateList(false);
+						createList();
 						lv.setOnItemClickListener(new OnItemClickListener() {
 							@Override
 							public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 								setIgnore(position, IGNORE_TOGGLE);
-								updateList(true);
+								adapter.notifyDataSetChanged();
+								saveList();
 							}
 						});
 						progress.dismiss();
@@ -110,44 +110,43 @@ public class AppList extends ListActivity {
 	}
 	
 	private void massIgnore(int ignoreType) {
-		for (int i = 0; i < appArray.size(); i++) {
+		for (int i = 0; i < adapter.getData().size(); i++) {
 			setIgnore(i, ignoreType);
 		}
-		updateList(true);
+		adapter.notifyDataSetChanged();
+		saveList();
 	}
 	
 	private void setIgnore(int position, int ignoreType) {
-		HashMap<String, String> app = appArray.get(position);
+		HashMap<String, String> app = adapter.getData().get(position);
 		String
 			pkg = app.get("package"),
 			label = app.get("label");
 		if (ignoredApps.contains(pkg) & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_NONE)) {
 			ignoredApps.remove(pkg);
 			app.put("enabled", Boolean.toString(true));
-			if (ignoreType == IGNORE_TOGGLE) Toast.makeText(this, label + " " + getString(R.string.is_not_ignored), Toast.LENGTH_SHORT).show();
+			if (ignoreType == IGNORE_TOGGLE)
+				Toast.makeText(this, label + " " + getString(R.string.is_not_ignored), Toast.LENGTH_SHORT).show();
 		} else if (!ignoredApps.contains(pkg) & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_ALL)) {
 			ignoredApps.add(pkg);
 			app.put("enabled", Boolean.toString(false));
-			if (ignoreType == IGNORE_TOGGLE) Toast.makeText(this, label + " " + getString(R.string.is_ignored), Toast.LENGTH_SHORT).show();
+			if (ignoreType == IGNORE_TOGGLE)
+				Toast.makeText(this, label + " " + getString(R.string.is_ignored), Toast.LENGTH_SHORT).show();
 		}
-		appArray.set(position, app);
+		adapter.getData().set(position, app);
 	}
 	
-	private void updateList(boolean doSave) {
+	private void createList() {
 		adapter = new MySimpleAdapter(AppList.this, appArray, R.layout.app_list_item,
 				new String[] {"label", "package", "enabled"},
 				new int[] {R.id.text1, R.id.text2, R.id.checkbox});
-		ListView lv = getListView();
-		int scrollPos = lv.getFirstVisiblePosition();
 		lv.setAdapter(adapter);
-		lv.setSelection(scrollPos);
-		if (doSave) saveList(ignoredApps);
 	}
 
-	private void saveList(ArrayList<String> list) {
+	private synchronized void saveList() {
 		try {
 			ObjectOutputStream out = new ObjectOutputStream(openFileOutput("ignored_apps", Context.MODE_WORLD_READABLE));
-			out.writeObject(list);
+			out.writeObject(ignoredApps);
 			out.flush();
 			out.close();
 		} catch (IOException e) {
