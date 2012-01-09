@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -26,7 +27,6 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		super.onCreate(savedInstanceState);
 		common = new Common(this);
 		addPreferencesFromResource(R.xml.preferences);
-		Preference pAccess = findPreference("accessibility");
 		pScreen = findPreference("screen");
 		pScreen.setOnPreferenceClickListener(this);
 		pQuietStart = findPreference("quietStart");
@@ -35,6 +35,9 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		pQuietEnd.setOnPreferenceClickListener(this);
 		pSupport = findPreference("support");
 		pSupport.setOnPreferenceClickListener(this);
+		findPreference("appList").setIntent(new Intent(this, AppList.class));
+		Preference pAccess = findPreference("accessibility"),
+			pTTS = findPreference("ttsSettings");
 		int sdkVer = android.os.Build.VERSION.SDK_INT;
 		if (sdkVer > 4)
 			pAccess.setIntent(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS));
@@ -44,11 +47,20 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			pAccess.setIntent(intent);
 		}
 		Intent intent = new Intent(Intent.ACTION_MAIN);
-		intent.setClassName("com.google.tv.settings", "com.google.tv.settings.TextToSpeechSettingsTop");
-		if (getPackageManager().queryIntentActivities(intent, 0).size() == 0)
-			intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
-		findPreference("ttsSettings").setIntent(intent);
-		findPreference("appList").setIntent(new Intent(this, AppList.class));
+		intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
+		if (!isCallable(intent))
+			intent.setClassName("com.google.tv.settings", "com.google.tv.settings.TextToSpeechSettingsTop");
+		if (isCallable(intent))
+			pTTS.setIntent(intent);
+		else {
+			pTTS.setEnabled(false);
+			pTTS.setSummary(R.string.tts_settings_summary_fail);
+		}
+	}
+	
+	private boolean isCallable(Intent intent) {
+		return getPackageManager().resolveActivity(intent,
+			PackageManager.MATCH_DEFAULT_ONLY) != null;
 	}
 	
 	@Override
