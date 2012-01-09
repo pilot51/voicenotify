@@ -13,6 +13,9 @@
 	<string name="tts_message_dialog">%t = App title\n%m = Notification message</string>
 	<string name="tts_stream">TTS Audio Stream</string>
 	<string name="tts_stream_summary">Choose the audio stream that Text-To-Speech plays through.</string>
+	<string name="tts_delay">TTS Delay</string>
+	<string name="tts_delay_summary">Delay TTS a set number of seconds after notification.</string>
+	<string name="tts_delay_dialog_msg">Number of seconds to wait after notification before speaking.</string>
 	<string-array name="stream_name">
 		<item>Media</item>
 		<item>Notification</item>

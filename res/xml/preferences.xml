@@ -26,6 +26,13 @@
 		android:entries="@array/stream_name"
 		android:entryValues="@array/stream_value"
 		android:defaultValue="media" />
+	<EditTextPreference
+		android:key="ttsDelay"
+		android:title="@string/tts_delay"
+		android:summary="@string/tts_delay_summary"
+		android:dialogMessage="@string/tts_delay_dialog_msg"
+		android:digits="0123456789"
+		android:inputType="phone" />
 	<Preference
 		android:key="screen"
 		android:title="@string/screen_state"

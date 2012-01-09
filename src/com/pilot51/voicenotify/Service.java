@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
@@ -107,7 +109,7 @@ public class Service extends AccessibilityService {
 			e.printStackTrace();
 		}
 		ignoredApps = common.readList();
-		String label = String.valueOf(appInfo.loadLabel(packMan)),
+		final String label = String.valueOf(appInfo.loadLabel(packMan)),
 			newMsg = formatUtterance(event, label);
 		long newMsgTime = System.currentTimeMillis();
 		if (ignoredApps.contains(pkgName)) {
@@ -117,7 +119,18 @@ public class Service extends AccessibilityService {
 		} else if (lastMsg.contentEquals(newMsg) & newMsgTime - lastMsgTime < 10000) {
 			Log.i(Common.TAG, "Notification ignored due to identical message within 10 seconds: " + label);
 		} else {
-			mHandler.obtainMessage(SPEAK, newMsg).sendToTarget();
+			int delay = 0;
+			try {
+				delay = Integer.parseInt(Common.prefs.getString("ttsDelay", null));
+			} catch (NumberFormatException e) {}
+			if (delay > 0) {
+				new Timer().schedule(new TimerTask() {
+					@Override
+					public void run() {
+						mHandler.obtainMessage(SPEAK, newMsg).sendToTarget();
+					}
+				}, delay * 1000);
+			} else mHandler.obtainMessage(SPEAK, newMsg).sendToTarget();
 		}
 		lastMsg = newMsg;
 		lastMsgTime = newMsgTime;
