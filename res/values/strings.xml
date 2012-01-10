@@ -24,11 +24,13 @@
 		<item>media</item>
 		<item>notification</item>
 	</string-array>
-	<string name="screen_state">Screen state</string>
-	<string name="screen_state_summary">Select whether to speak when screen is on or off.</string>
-	<string name="screen_state_dialog_title">Speak during these screen states</string>
-	<string name="on">On</string>
-	<string name="off">Off</string>
+	<string name="device_state">Device State</string>
+	<string name="device_state_summary">Select whether to speak during certain device states.</string>
+	<string name="device_state_dialog_title">Speak during these device states</string>
+	<string name="screen_on">Screen on</string>
+	<string name="screen_off">Screen off</string>
+	<string name="headset_on">Headset on</string>
+	<string name="headset_off">Headset off</string>
 	<string name="app_list">App List</string>
 	<string name="app_list_summary">List installed apps which can be ignored.</string>
 	<string name="quiet_start">Quiet Time Start</string>

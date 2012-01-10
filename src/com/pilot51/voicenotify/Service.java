@@ -10,8 +10,11 @@ import java.util.TimerTask;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.bluetooth.BluetoothDevice;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -37,7 +40,8 @@ public class Service extends AccessibilityService {
 	private PowerManager powerMan;
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
-	private boolean isInfrastructureInitialized;
+	private HeadsetReceiver headsetReceiver = new HeadsetReceiver();
+	private boolean isInitialized, isHeadsetPlugged, isBluetoothConnected;
 	private HashMap<String, String> ttsParams = new HashMap<String, String>();
 	private ArrayList<String> ignoredApps;
 
@@ -99,6 +103,12 @@ public class Service extends AccessibilityService {
 		} else if (powerMan.isScreenOn() & !Common.prefs.getBoolean("speakScreenOn", true)) {
 			Log.i(Common.TAG, "Notification ignored due to screen on (user preference)");
 			return;
+		} else if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOff", true)) {
+			Log.i(Common.TAG, "Notification ignored due to headset off (user preference)");
+			return;
+		} else if ((isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOn", true)) {
+			Log.i(Common.TAG, "Notification ignored due to headset on (user preference)");
+			return;
 		}
 		PackageManager packMan = getPackageManager();
 		ApplicationInfo appInfo = new ApplicationInfo();
@@ -159,22 +169,40 @@ public class Service extends AccessibilityService {
 
 	@Override
 	public void onServiceConnected() {
-		if (isInfrastructureInitialized) return;
+		if (isInitialized) return;
 		common = new Common(this);
 		mHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 		powerMan = (PowerManager)getSystemService(Context.POWER_SERVICE);
 		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-		isInfrastructureInitialized = true;
+		IntentFilter filter =  new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
+		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+		registerReceiver(headsetReceiver, filter);
+		isInitialized = true;
 	}
 
 	@Override
 	public boolean onUnbind(Intent intent) {
-		if (isInfrastructureInitialized) {
+		if (isInitialized) {
 			mHandler.sendEmptyMessage(STOP_TTS);
-			isInfrastructureInitialized = false;
+			unregisterReceiver(headsetReceiver);
+			isInitialized = false;
 		}
 		return false;
+	}
+	
+	private class HeadsetReceiver extends BroadcastReceiver {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			String action = intent.getAction();
+			if (action.equals(Intent.ACTION_HEADSET_PLUG))
+				isHeadsetPlugged = intent.getIntExtra("state", 0) == 1;
+			else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED))
+				isBluetoothConnected = true;
+			else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED))
+				isBluetoothConnected = false;
+		}
 	}
 }

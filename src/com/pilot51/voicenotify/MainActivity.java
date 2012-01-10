@@ -99,18 +99,26 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		int i;
 		switch (id) {
 		case DLG_SCREEN:
-			final CharSequence[] items = {MainActivity.this.getString(R.string.off), MainActivity.this.getString(R.string.on)};
+			final CharSequence[] items = {MainActivity.this.getString(R.string.screen_off), MainActivity.this.getString(R.string.screen_on),
+				MainActivity.this.getString(R.string.headset_off), MainActivity.this.getString(R.string.headset_on)};
+			final String speakScreenOff = "speakScreenOff", speakScreenOn = "speakScreenOn",
+				speakHeadsetOff = "speakHeadsetOff", speakHeadsetOn = "speakHeadsetOn";
 			return new AlertDialog.Builder(this)
-			.setTitle(R.string.screen_state_dialog_title)
+			.setTitle(R.string.device_state_dialog_title)
 			.setMultiChoiceItems(items,
-				new boolean[] {Common.prefs.getBoolean("speakScreenOff", true), Common.prefs.getBoolean("speakScreenOn", true)},
+				new boolean[] {Common.prefs.getBoolean(speakScreenOff, true), Common.prefs.getBoolean(speakScreenOn, true),
+					Common.prefs.getBoolean(speakHeadsetOff, true), Common.prefs.getBoolean(speakHeadsetOn, true)},
 				new DialogInterface.OnMultiChoiceClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-						if (which == 0) // Off
-							Common.prefs.edit().putBoolean("speakScreenOff", isChecked).commit();
-						else if (which == 1) // On
-							Common.prefs.edit().putBoolean("speakScreenOn", isChecked).commit();
+						if (which == 0) // Screen off
+							Common.prefs.edit().putBoolean(speakScreenOff, isChecked).commit();
+						else if (which == 1) // Screen on
+							Common.prefs.edit().putBoolean(speakScreenOn, isChecked).commit();
+						else if (which == 2) // Headset off
+							Common.prefs.edit().putBoolean(speakHeadsetOff, isChecked).commit();
+						else if (which == 3) // Headset on
+							Common.prefs.edit().putBoolean(speakHeadsetOn, isChecked).commit();
 					}
 			}).create();
 		case DLG_QUIET_START:

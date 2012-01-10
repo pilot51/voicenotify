@@ -35,8 +35,8 @@
 		android:inputType="phone" />
 	<Preference
 		android:key="screen"
-		android:title="@string/screen_state"
-		android:summary="@string/screen_state_summary" />
+		android:title="@string/device_state"
+		android:summary="@string/device_state_summary" />
 	<Preference
 		android:key="quietStart"
 		android:title="@string/quiet_start"
