@@ -46,6 +46,10 @@
 		android:title="@string/quiet_end"
 		android:summary="@string/quiet_end_summary" />
 	<Preference
+		android:key="test"
+		android:title="@string/test"
+		android:summary="@string/test_summary" />
+	<Preference
 		android:key="support"
 		android:title="@string/support"
 		android:summary="@string/support_summary" />

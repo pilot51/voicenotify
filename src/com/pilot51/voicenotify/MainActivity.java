@@ -2,8 +2,12 @@ package com.pilot51.voicenotify;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -19,7 +23,7 @@ import android.widget.Toast;
 
 public class MainActivity extends PreferenceActivity implements OnPreferenceClickListener, OnSharedPreferenceChangeListener {
 	private Common common;
-	private Preference pScreen, pQuietStart, pQuietEnd, pSupport;
+	private Preference pScreen, pQuietStart, pQuietEnd, pTest, pSupport;
 	private static final int DLG_SCREEN = 0, DLG_QUIET_START = 1, DLG_QUIET_END = 2, DLG_SUPPORT = 3;
 	
 	@Override
@@ -33,6 +37,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		pQuietStart.setOnPreferenceClickListener(this);
 		pQuietEnd = findPreference("quietEnd");
 		pQuietEnd.setOnPreferenceClickListener(this);
+		pTest = findPreference("test");
+		pTest.setOnPreferenceClickListener(this);
 		pSupport = findPreference("support");
 		pSupport.setOnPreferenceClickListener(this);
 		findPreference("appList").setIntent(new Intent(this, AppList.class));
@@ -74,6 +80,13 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		} else if (preference == pQuietEnd) {
 			showDialog(DLG_QUIET_END);
 			return true;
+		} else if (preference == pTest) {
+			Notification notification = new Notification(R.drawable.icon, getString(R.string.test_notify_msg), System.currentTimeMillis());
+			notification.defaults |= Notification.DEFAULT_SOUND;
+			notification.flags |= Notification.FLAG_AUTO_CANCEL;
+			notification.setLatestEventInfo(this, Common.TAG, getString(R.string.test), PendingIntent.getActivity(this, 0, getIntent(), 0));
+			((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, notification);
+			return true;
 		} else if (preference == pSupport) {
 			showDialog(DLG_SUPPORT);
 			return true;
@@ -106,7 +119,6 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		case DLG_QUIET_END:
 			i = Common.prefs.getInt("quietEnd", 0);
 			return new TimePickerDialog(MainActivity.this, eTimeSetListener, i/60, i%60, false);
-
 		case DLG_SUPPORT:
 			return new AlertDialog.Builder(this)
 			.setTitle(R.string.support)

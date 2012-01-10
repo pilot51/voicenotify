@@ -11,8 +11,6 @@ public final class R {
     public static final class array {
         public static final int stream_name=0x7f060000;
         public static final int stream_value=0x7f060001;
-        /**  MainActivity.java 
-         */
         public static final int support_items=0x7f060002;
     }
     public static final class attr {
@@ -32,17 +30,17 @@ public final class R {
         public static final int app_list=0x7f050013;
         public static final int app_list_summary=0x7f050014;
         public static final int app_name=0x7f050000;
-        public static final int dev_email=0x7f05001b;
-        public static final int email_subject=0x7f05001c;
-        public static final int error_email=0x7f05001e;
-        public static final int error_market=0x7f05001d;
-        public static final int ignore_all=0x7f050020;
-        public static final int ignore_none=0x7f050021;
-        public static final int is_ignored=0x7f050022;
-        public static final int is_not_ignored=0x7f050023;
+        public static final int dev_email=0x7f05001e;
+        public static final int email_subject=0x7f05001f;
+        public static final int error_email=0x7f050021;
+        public static final int error_market=0x7f050020;
+        public static final int ignore_all=0x7f050023;
+        public static final int ignore_none=0x7f050024;
+        public static final int is_ignored=0x7f050025;
+        public static final int is_not_ignored=0x7f050026;
         /**  AppList.java 
          */
-        public static final int loading=0x7f05001f;
+        public static final int loading=0x7f050022;
         public static final int off=0x7f050012;
         public static final int on=0x7f050011;
         public static final int quiet_end=0x7f050017;
@@ -52,10 +50,15 @@ public final class R {
         public static final int screen_state=0x7f05000e;
         public static final int screen_state_dialog_title=0x7f050010;
         public static final int screen_state_summary=0x7f05000f;
+        public static final int support=0x7f05001c;
+        public static final int support_summary=0x7f05001a;
         /**  MainActivity.java and preferences.xml 
          */
-        public static final int support=0x7f05001a;
-        public static final int support_summary=0x7f050019;
+        public static final int test=0x7f05001b;
+        /**  MainActivity.java 
+         */
+        public static final int test_notify_msg=0x7f05001d;
+        public static final int test_summary=0x7f050019;
         /**  preferences.xml 
          */
         public static final int toggle=0x7f050001;
