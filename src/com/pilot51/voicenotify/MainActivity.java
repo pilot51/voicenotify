@@ -1,5 +1,8 @@
 package com.pilot51.voicenotify;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.Notification;
@@ -81,11 +84,18 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			showDialog(DLG_QUIET_END);
 			return true;
 		} else if (preference == pTest) {
-			Notification notification = new Notification(R.drawable.icon, getString(R.string.test_notify_msg), System.currentTimeMillis());
-			notification.defaults |= Notification.DEFAULT_SOUND;
-			notification.flags |= Notification.FLAG_AUTO_CANCEL;
-			notification.setLatestEventInfo(this, Common.TAG, getString(R.string.test), PendingIntent.getActivity(this, 0, getIntent(), 0));
-			((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, notification);
+			new Timer().schedule(new TimerTask() {
+				@Override
+				public void run() {
+					Notification notification = new Notification(R.drawable.icon,
+						getString(R.string.test_notify_msg), System.currentTimeMillis());
+					notification.defaults |= Notification.DEFAULT_SOUND;
+					notification.flags |= Notification.FLAG_AUTO_CANCEL;
+					notification.setLatestEventInfo(MainActivity.this, Common.TAG, getString(R.string.test),
+						PendingIntent.getActivity(MainActivity.this, 0, getIntent(), 0));
+					((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, notification);
+				}
+			}, 5000);
 			return true;
 		} else if (preference == pSupport) {
 			showDialog(DLG_SUPPORT);

@@ -37,7 +37,7 @@
 	<string name="quiet_start_summary">Don\'t speak after this time.\nLeave the same as end to disable.</string>
 	<string name="quiet_end">Quiet Time End</string>
 	<string name="quiet_end_summary">Don\'t speak before this time.\nLeave the same as start to disable.</string>
-	<string name="test_summary">Post a notification to test current settings.</string>
+	<string name="test_summary">Post a notification (delayed 5 seconds) to test current settings.</string>
 	<string name="support_summary">Donate, rate/comment, or contact the developer with problems or suggestions.</string>
 	
 	<!-- MainActivity.java and preferences.xml -->

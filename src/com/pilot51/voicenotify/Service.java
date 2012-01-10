@@ -41,7 +41,7 @@ public class Service extends AccessibilityService {
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
 	private HeadsetReceiver headsetReceiver = new HeadsetReceiver();
-	private boolean isInitialized, isHeadsetPlugged, isBluetoothConnected;
+	private boolean isInitialized, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
 	private HashMap<String, String> ttsParams = new HashMap<String, String>();
 	private ArrayList<String> ignoredApps;
 
@@ -97,10 +97,10 @@ public class Service extends AccessibilityService {
 				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
 			Log.i(Common.TAG, "Notification ignored due to active or ringing call");
 			return;
-		} else if (!powerMan.isScreenOn() & !Common.prefs.getBoolean("speakScreenOff", true)) {
+		} else if (!isScreenOn() & !Common.prefs.getBoolean("speakScreenOff", true)) {
 			Log.i(Common.TAG, "Notification ignored due to screen off (user preference)");
 			return;
-		} else if (powerMan.isScreenOn() & !Common.prefs.getBoolean("speakScreenOn", true)) {
+		} else if (isScreenOn() & !Common.prefs.getBoolean("speakScreenOn", true)) {
 			Log.i(Common.TAG, "Notification ignored due to screen on (user preference)");
 			return;
 		} else if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOff", true)) {
@@ -179,6 +179,8 @@ public class Service extends AccessibilityService {
 		IntentFilter filter =  new IntentFilter(Intent.ACTION_HEADSET_PLUG);
 		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
 		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
+		filter.addAction(Intent.ACTION_SCREEN_ON);
+		filter.addAction(Intent.ACTION_SCREEN_OFF);
 		registerReceiver(headsetReceiver, filter);
 		isInitialized = true;
 	}
@@ -193,6 +195,12 @@ public class Service extends AccessibilityService {
 		return false;
 	}
 	
+	private boolean isScreenOn() {
+		if (android.os.Build.VERSION.SDK_INT >= 7)
+			isScreenOn = powerMan.isScreenOn();
+		return isScreenOn;
+	}
+	
 	private class HeadsetReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -203,6 +211,10 @@ public class Service extends AccessibilityService {
 				isBluetoothConnected = true;
 			else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED))
 				isBluetoothConnected = false;
+			else if (action.equals(Intent.ACTION_SCREEN_ON))
+				isScreenOn = true;
+			else if (action.equals(Intent.ACTION_SCREEN_OFF))
+				isScreenOn = false;
 		}
 	}
 }
