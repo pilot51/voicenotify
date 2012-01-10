@@ -24,7 +24,7 @@
 		<item>media</item>
 		<item>notification</item>
 	</string-array>
-	<string name="device_state">Device State</string>
+	<string name="device_state">Device States</string>
 	<string name="device_state_summary">Select whether to speak during certain device states.</string>
 	<string name="device_state_dialog_title">Speak during these device states</string>
 	<string name="screen_on">Screen on</string>
