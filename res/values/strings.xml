@@ -57,7 +57,7 @@
 	<string name="error_email">Error: Unable to find an installed email app.</string>
 	
 	<!-- AppList.java -->
-	<string name="loading">Loading...</string>
+	<string name="loading">Loading…</string>
 	<string name="ignore_all">Ignore All</string>
 	<string name="ignore_none">Ignore None</string>
 	<string name="is_ignored">is ignored</string>
