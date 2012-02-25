@@ -37,7 +37,6 @@ public class Service extends AccessibilityService {
 		STOP_TTS = 4;
 	private long lastMsgTime;
 	private TextToSpeech mTts;
-	private PowerManager powerMan;
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
 	private HeadsetReceiver headsetReceiver = new HeadsetReceiver();
@@ -173,7 +172,6 @@ public class Service extends AccessibilityService {
 		common = new Common(this);
 		mHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
-		powerMan = (PowerManager)getSystemService(Context.POWER_SERVICE);
 		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 		IntentFilter filter =  new IntentFilter(Intent.ACTION_HEADSET_PLUG);
@@ -197,8 +195,17 @@ public class Service extends AccessibilityService {
 	
 	private boolean isScreenOn() {
 		if (android.os.Build.VERSION.SDK_INT >= 7)
-			isScreenOn = powerMan.isScreenOn();
+			isScreenOn = CheckScreen.isScreenOn(this);
 		return isScreenOn;
+	}
+	
+	private static class CheckScreen {
+		private static PowerManager powerMan;
+		private static boolean isScreenOn(Context c) {
+			if (powerMan == null)
+				powerMan = (PowerManager)c.getSystemService(Context.POWER_SERVICE);
+			return powerMan.isScreenOn();
+		}
 	}
 	
 	private class HeadsetReceiver extends BroadcastReceiver {
