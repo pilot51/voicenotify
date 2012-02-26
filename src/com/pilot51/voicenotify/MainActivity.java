@@ -58,6 +58,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
 		if (!isCallable(intent))
+			intent.setClassName("com.android.settings", "com.android.settings.Settings$TextToSpeechSettingsActivity");
+		if (!isCallable(intent))
 			intent.setClassName("com.google.tv.settings", "com.google.tv.settings.TextToSpeechSettingsTop");
 		if (isCallable(intent))
 			pTTS.setIntent(intent);
