@@ -42,7 +42,7 @@ public class Service extends AccessibilityService {
 	private HeadsetReceiver headsetReceiver = new HeadsetReceiver();
 	private boolean isInitialized, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
 	private HashMap<String, String> ttsParams = new HashMap<String, String>();
-	private ArrayList<String> ignoredApps;
+	private ArrayList<String> ignoredApps, ignoreReasons = new ArrayList<String>();
 
 	private Handler mHandler = new Handler() {
 		@Override
@@ -80,35 +80,6 @@ public class Service extends AccessibilityService {
 
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
-		Calendar c = Calendar.getInstance();
-		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE),
-			quietStart = Common.prefs.getInt("quietStart", 0),
-			quietEnd = Common.prefs.getInt("quietEnd", 0);
-		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
-				| (quietEnd < quietStart & (quietStart <= calTime | calTime < quietEnd))) {
-			Log.i(Common.TAG, "Notification ignored by quiet time");
-			return;
-		} else if (audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
-				| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
-			Log.i(Common.TAG, "Notification ignored due to silent or vibrate mode");
-			return;
-		} else if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
-				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
-			Log.i(Common.TAG, "Notification ignored due to active or ringing call");
-			return;
-		} else if (!isScreenOn() & !Common.prefs.getBoolean("speakScreenOff", true)) {
-			Log.i(Common.TAG, "Notification ignored due to screen off (user preference)");
-			return;
-		} else if (isScreenOn() & !Common.prefs.getBoolean("speakScreenOn", true)) {
-			Log.i(Common.TAG, "Notification ignored due to screen on (user preference)");
-			return;
-		} else if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOff", true)) {
-			Log.i(Common.TAG, "Notification ignored due to headset off (user preference)");
-			return;
-		} else if ((isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOn", true)) {
-			Log.i(Common.TAG, "Notification ignored due to headset on (user preference)");
-			return;
-		}
 		PackageManager packMan = getPackageManager();
 		ApplicationInfo appInfo = new ApplicationInfo();
 		String pkgName = String.valueOf(event.getPackageName());
@@ -136,13 +107,54 @@ public class Service extends AccessibilityService {
 				new Timer().schedule(new TimerTask() {
 					@Override
 					public void run() {
-						mHandler.obtainMessage(SPEAK, newMsg).sendToTarget();
+						speak(newMsg);
 					}
 				}, delay * 1000);
-			} else mHandler.obtainMessage(SPEAK, newMsg).sendToTarget();
+			} else speak(newMsg);
 		}
 		lastMsg = newMsg;
 		lastMsgTime = newMsgTime;
+	}
+	
+	/**
+	 * Checks for any notification-independent ignore states, sends msg to TTS if not ignored.
+	 * @param msg The string to be spoken.
+	 */
+	private void speak(String msg) {
+		Calendar c = Calendar.getInstance();
+		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE),
+			quietStart = Common.prefs.getInt("quietStart", 0),
+			quietEnd = Common.prefs.getInt("quietEnd", 0);
+		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
+				| (quietEnd < quietStart & (quietStart <= calTime | calTime < quietEnd))) {
+			ignoreReasons.add("quiet time (user preference)");
+		}
+		if (audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
+				| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
+			ignoreReasons.add("silent or vibrate mode");
+		}
+		if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
+				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
+			ignoreReasons.add("active or ringing call");
+		}
+		if (!isScreenOn() & !Common.prefs.getBoolean("speakScreenOff", true)) {
+			ignoreReasons.add("screen off (user preference)");
+		}
+		if (isScreenOn() & !Common.prefs.getBoolean("speakScreenOn", true)) {
+			ignoreReasons.add("screen on (user preference)");
+		}
+		if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOff", true)) {
+			ignoreReasons.add("headset off (user preference)");
+		}
+		if ((isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOn", true)) {
+			ignoreReasons.add("headset on (user preference)");
+		}
+		if (!ignoreReasons.isEmpty()) {
+			Log.i(Common.TAG, "Notification ignored for reason(s): " + ignoreReasons.toString().replaceAll("\\[|\\]", ""));
+			ignoreReasons.clear();
+			return;
+		}
+		mHandler.obtainMessage(SPEAK, msg).sendToTarget();
 	}
 
 	private String formatUtterance(AccessibilityEvent event, String label) {
