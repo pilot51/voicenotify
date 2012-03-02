@@ -15,6 +15,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -47,31 +48,48 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		findPreference("appList").setIntent(new Intent(this, AppList.class));
 		Preference pAccess = findPreference("accessibility"),
 			pTTS = findPreference("ttsSettings");
+		Intent intent;
 		int sdkVer = android.os.Build.VERSION.SDK_INT;
 		if (sdkVer > 4)
 			pAccess.setIntent(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS));
 		else if (sdkVer == 4) {
-			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent = new Intent(Intent.ACTION_MAIN);
 			intent.setClassName("com.android.settings", "com.android.settings.AccessibilitySettings");
 			pAccess.setIntent(intent);
 		}
-		Intent intent = new Intent(Intent.ACTION_MAIN);
-		intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
-		if (!isCallable(intent))
-			intent.setClassName("com.android.settings", "com.android.settings.Settings$TextToSpeechSettingsActivity");
-		if (!isCallable(intent))
+		intent = new Intent(Intent.ACTION_MAIN);
+		if (isClassExist("com.android.settings.TextToSpeechSettings")) {
+			if (sdkVer >= 11 & sdkVer <= 13) {
+				intent.setAction(android.provider.Settings.ACTION_SETTINGS);
+				intent.putExtra(EXTRA_SHOW_FRAGMENT, "com.android.settings.TextToSpeechSettings");
+		        intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
+			} else intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
+		} else if (isClassExist("com.android.settings.Settings$TextToSpeechSettingsActivity")) {
+			if (sdkVer == 14) {
+				intent.setAction(android.provider.Settings.ACTION_SETTINGS);
+				intent.putExtra(EXTRA_SHOW_FRAGMENT, "com.android.settings.tts.TextToSpeechSettings");
+		        intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
+			} else intent.setClassName("com.android.settings", "com.android.settings.Settings$TextToSpeechSettingsActivity");
+		} else if (isClassExist("com.google.tv.settings.TextToSpeechSettingsTop"))
 			intent.setClassName("com.google.tv.settings", "com.google.tv.settings.TextToSpeechSettingsTop");
-		if (isCallable(intent))
-			pTTS.setIntent(intent);
 		else {
 			pTTS.setEnabled(false);
 			pTTS.setSummary(R.string.tts_settings_summary_fail);
 		}
+		if (pTTS.isEnabled()) pTTS.setIntent(intent);
 	}
 	
-	private boolean isCallable(Intent intent) {
-		return getPackageManager().resolveActivity(intent,
-			PackageManager.MATCH_DEFAULT_ONLY) != null;
+	private boolean isClassExist(String name) {
+		try {
+			PackageInfo pkgInfo = getPackageManager().getPackageInfo(
+				name.substring(0, name.lastIndexOf(".")), PackageManager.GET_ACTIVITIES);
+			if (pkgInfo.activities != null) {
+				for (int n = 0; n < pkgInfo.activities.length; n++) {
+					if (pkgInfo.activities[n].name.equals(name)) return true;
+				}
+			}
+		} catch (PackageManager.NameNotFoundException e) {}
+		return false;
 	}
 	
 	@Override
