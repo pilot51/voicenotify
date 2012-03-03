@@ -44,7 +44,7 @@ public class Service extends AccessibilityService {
 	private HashMap<String, String> ttsParams = new HashMap<String, String>();
 	private ArrayList<String> ignoredApps, ignoreReasons = new ArrayList<String>();
 
-	private Handler mHandler = new Handler() {
+	private Handler ttsHandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {
@@ -117,10 +117,19 @@ public class Service extends AccessibilityService {
 	}
 	
 	/**
-	 * Checks for any notification-independent ignore states, sends msg to TTS if not ignored.
+	 * Sends msg to TTS if ignore condition is not met.
 	 * @param msg The string to be spoken.
 	 */
 	private void speak(String msg) {
+		if (ignore()) return;
+		ttsHandler.obtainMessage(SPEAK, msg).sendToTarget();
+	}
+	
+	/**
+	 * Checks for any notification-independent ignore states.
+	 * @returns True if an ignore condition is met, false otherwise.
+	 */
+	private boolean ignore() {
 		Calendar c = Calendar.getInstance();
 		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE),
 			quietStart = Common.prefs.getInt("quietStart", 0),
@@ -152,9 +161,9 @@ public class Service extends AccessibilityService {
 		if (!ignoreReasons.isEmpty()) {
 			Log.i(Common.TAG, "Notification ignored for reason(s): " + ignoreReasons.toString().replaceAll("\\[|\\]", ""));
 			ignoreReasons.clear();
-			return;
+			return true;
 		}
-		mHandler.obtainMessage(SPEAK, msg).sendToTarget();
+		return false;
 	}
 
 	private String formatUtterance(AccessibilityEvent event, String label) {
@@ -175,14 +184,14 @@ public class Service extends AccessibilityService {
 
 	@Override
 	public void onInterrupt() {
-		mHandler.obtainMessage(STOP_SPEAK);
+		ttsHandler.sendEmptyMessage(STOP_SPEAK);
 	}
 
 	@Override
 	public void onServiceConnected() {
 		if (isInitialized) return;
 		common = new Common(this);
-		mHandler.sendEmptyMessage(START_TTS);
+		ttsHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
@@ -198,7 +207,7 @@ public class Service extends AccessibilityService {
 	@Override
 	public boolean onUnbind(Intent intent) {
 		if (isInitialized) {
-			mHandler.sendEmptyMessage(STOP_TTS);
+			ttsHandler.sendEmptyMessage(STOP_TTS);
 			unregisterReceiver(headsetReceiver);
 			isInitialized = false;
 		}
@@ -234,6 +243,8 @@ public class Service extends AccessibilityService {
 				isScreenOn = true;
 			else if (action.equals(Intent.ACTION_SCREEN_OFF))
 				isScreenOn = false;
+			if (mTts.isSpeaking() && ignore())
+				ttsHandler.sendEmptyMessage(STOP_SPEAK);
 		}
 	}
 }
