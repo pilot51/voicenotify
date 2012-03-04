@@ -24,6 +24,9 @@
 		<item>media</item>
 		<item>notification</item>
 	</string-array>
+	<string name="ignore_strings">Ignore Text</string>
+	<string name="ignore_strings_summary">Ignore notifications according to text contained in message.</string>
+	<string name="ignore_strings_dialog_msg">Separate individual entries with a new line.</string>
 	<string name="device_state">Device States</string>
 	<string name="device_state_summary">Select whether to speak during certain device states.</string>
 	<string name="device_state_dialog_title">Speak during these device states</string>

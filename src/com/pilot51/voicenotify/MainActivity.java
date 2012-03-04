@@ -27,16 +27,16 @@ import android.widget.Toast;
 
 public class MainActivity extends PreferenceActivity implements OnPreferenceClickListener, OnSharedPreferenceChangeListener {
 	private Common common;
-	private Preference pScreen, pQuietStart, pQuietEnd, pTest, pSupport;
-	private static final int DLG_SCREEN = 0, DLG_QUIET_START = 1, DLG_QUIET_END = 2, DLG_SUPPORT = 3;
+	private Preference pDeviceState, pQuietStart, pQuietEnd, pTest, pSupport;
+	private static final int DLG_DEVICE_STATE = 0, DLG_QUIET_START = 1, DLG_QUIET_END = 2, DLG_SUPPORT = 3;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		common = new Common(this);
 		addPreferencesFromResource(R.xml.preferences);
-		pScreen = findPreference("screen");
-		pScreen.setOnPreferenceClickListener(this);
+		pDeviceState = findPreference("device_state");
+		pDeviceState.setOnPreferenceClickListener(this);
 		pQuietStart = findPreference("quietStart");
 		pQuietStart.setOnPreferenceClickListener(this);
 		pQuietEnd = findPreference("quietEnd");
@@ -94,8 +94,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	
 	@Override
 	public boolean onPreferenceClick(Preference preference) {
-		if (preference == pScreen) {
-			showDialog(DLG_SCREEN);
+		if (preference == pDeviceState) {
+			showDialog(DLG_DEVICE_STATE);
 			return true;
 		} else if (preference == pQuietStart) {
 			showDialog(DLG_QUIET_START);
@@ -128,7 +128,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	protected Dialog onCreateDialog(int id) {
 		int i;
 		switch (id) {
-		case DLG_SCREEN:
+		case DLG_DEVICE_STATE:
 			final CharSequence[] items = {MainActivity.this.getString(R.string.screen_off), MainActivity.this.getString(R.string.screen_on),
 				MainActivity.this.getString(R.string.headset_off), MainActivity.this.getString(R.string.headset_on)};
 			final String speakScreenOff = "speakScreenOff", speakScreenOn = "speakScreenOn",

@@ -26,7 +26,7 @@ import android.widget.Toast;
 public class AppList extends ListActivity {
 	private Common common;
 	private ListView lv;
-	private MySimpleAdapter adapter;
+	private AppListAdapter adapter;
 	private ArrayList<HashMap<String, String>> appArray = new ArrayList<HashMap<String, String>>();
 	private ProgressDialog progress;
 	private ArrayList<String> ignoredApps;
@@ -137,7 +137,7 @@ public class AppList extends ListActivity {
 	}
 	
 	private void createList() {
-		adapter = new MySimpleAdapter(AppList.this, appArray, R.layout.app_list_item,
+		adapter = new AppListAdapter(AppList.this, appArray, R.layout.app_list_item,
 				new String[] {"label", "package", "enabled"},
 				new int[] {R.id.text1, R.id.text2, R.id.checkbox});
 		lv.setAdapter(adapter);

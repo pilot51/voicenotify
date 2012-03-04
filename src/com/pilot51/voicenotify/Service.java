@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
-import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -80,6 +79,7 @@ public class Service extends AccessibilityService {
 
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
+		long newMsgTime = System.currentTimeMillis();
 		PackageManager packMan = getPackageManager();
 		ApplicationInfo appInfo = new ApplicationInfo();
 		String pkgName = String.valueOf(event.getPackageName());
@@ -89,28 +89,55 @@ public class Service extends AccessibilityService {
 			e.printStackTrace();
 		}
 		ignoredApps = common.readList();
+		StringBuilder notifyMsg = new StringBuilder();
+		if (!event.getText().isEmpty())
+			for (CharSequence subText : event.getText())
+				notifyMsg.append(subText);
 		final String label = String.valueOf(appInfo.loadLabel(packMan)),
-			newMsg = formatUtterance(event, label);
-		long newMsgTime = System.currentTimeMillis();
-		if (ignoredApps.contains(pkgName)) {
-			Log.i(Common.TAG, "Notification ignored by user preference: " + label);
-		} else if (event.getText().isEmpty()) {
-			Log.i(Common.TAG, "Notification ignored due to empty message: " + label);
-		} else if (lastMsg.contentEquals(newMsg) & newMsgTime - lastMsgTime < 10000) {
-			Log.i(Common.TAG, "Notification ignored due to identical message within 10 seconds: " + label);
-		} else {
+			ttsStringPref = Common.prefs.getString("ttsString", null);
+		String newMsg;
+		try {
+			newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"), label, notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
+		} catch(IllegalFormatException e) {
+			Log.w(Common.TAG, "Error formatting custom TTS string!");
+			e.printStackTrace();
+			newMsg = ttsStringPref;
+		}
+		final String[] ignoreStrings = Common.prefs.getString("ignore_strings", null).split("\n");
+		boolean stringIgnored = false;
+		if (ignoreStrings != null) {
+			for (int i = 0; i < ignoreStrings.length; i++) {
+				if (!ignoreStrings[i].isEmpty() && notifyMsg.toString().toLowerCase().contains(ignoreStrings[i])) {
+					stringIgnored = true;
+					break;
+				}
+			}
+		}
+		if (ignoredApps.contains(pkgName))
+			ignoreReasons.add("ignored app (pref.)");
+		if (stringIgnored)
+			ignoreReasons.add("ignored string (pref.)");
+		if (event.getText().isEmpty())
+			ignoreReasons.add("empty message");
+		if (lastMsg.contentEquals(newMsg) & newMsgTime - lastMsgTime < 10000)
+			ignoreReasons.add("identical message within 10 seconds");
+		if (ignoreReasons.isEmpty()) {
 			int delay = 0;
 			try {
 				delay = Integer.parseInt(Common.prefs.getString("ttsDelay", null));
 			} catch (NumberFormatException e) {}
 			if (delay > 0) {
+				final String msg = newMsg;
 				new Timer().schedule(new TimerTask() {
 					@Override
 					public void run() {
-						speak(newMsg);
+						speak(msg);
 					}
 				}, delay * 1000);
 			} else speak(newMsg);
+		} else {
+			Log.i(Common.TAG, "Notification from " + label + " ignored for reason(s): " + ignoreReasons.toString().replaceAll("\\[|\\]", ""));
+			ignoreReasons.clear();
 		}
 		lastMsg = newMsg;
 		lastMsgTime = newMsgTime;
@@ -136,7 +163,7 @@ public class Service extends AccessibilityService {
 			quietEnd = Common.prefs.getInt("quietEnd", 0);
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
 				| (quietEnd < quietStart & (quietStart <= calTime | calTime < quietEnd))) {
-			ignoreReasons.add("quiet time (user preference)");
+			ignoreReasons.add("quiet time (pref.)");
 		}
 		if (audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
 				| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
@@ -147,16 +174,16 @@ public class Service extends AccessibilityService {
 			ignoreReasons.add("active or ringing call");
 		}
 		if (!isScreenOn() & !Common.prefs.getBoolean("speakScreenOff", true)) {
-			ignoreReasons.add("screen off (user preference)");
+			ignoreReasons.add("screen off (pref.)");
 		}
 		if (isScreenOn() & !Common.prefs.getBoolean("speakScreenOn", true)) {
-			ignoreReasons.add("screen on (user preference)");
+			ignoreReasons.add("screen on (pref.)");
 		}
 		if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOff", true)) {
-			ignoreReasons.add("headset off (user preference)");
+			ignoreReasons.add("headset off (pref.)");
 		}
 		if ((isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOn", true)) {
-			ignoreReasons.add("headset on (user preference)");
+			ignoreReasons.add("headset on (pref.)");
 		}
 		if (!ignoreReasons.isEmpty()) {
 			Log.i(Common.TAG, "Notification ignored for reason(s): " + ignoreReasons.toString().replaceAll("\\[|\\]", ""));
@@ -164,22 +191,6 @@ public class Service extends AccessibilityService {
 			return true;
 		}
 		return false;
-	}
-
-	private String formatUtterance(AccessibilityEvent event, String label) {
-		List<CharSequence> eventText = event.getText();
-		StringBuilder mesg = new StringBuilder();
-		if (!eventText.isEmpty())
-			for (CharSequence subText : eventText)
-				mesg.append(subText);
-		String s = Common.prefs.getString("ttsString", null);
-		try {
-			return String.format(s.replace("%t", "%1$s").replace("%m", "%2$s"), label, mesg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
-		} catch(IllegalFormatException e) {
-			Log.w(Common.TAG, "Error formatting custom TTS string");
-			e.printStackTrace();
-			return s;
-		}
 	}
 
 	@Override

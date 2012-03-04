@@ -13,7 +13,7 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.TextView;
 
-public class MySimpleAdapter extends BaseAdapter implements Filterable {
+public class AppListAdapter extends BaseAdapter implements Filterable {
 	private int[] mTo;
 	private String[] mFrom;
 	private ViewBinder mViewBinder;
@@ -23,7 +23,7 @@ public class MySimpleAdapter extends BaseAdapter implements Filterable {
 	private SimpleFilter mFilter;
 	private ArrayList<HashMap<String, String>> mUnfilteredData;
 
-	public MySimpleAdapter(Context context, ArrayList<HashMap<String, String>> data, int resource, String[] from, int[] to) {
+	public AppListAdapter(Context context, ArrayList<HashMap<String, String>> data, int resource, String[] from, int[] to) {
 		mData = data;
 		mResource = resource;
 		mFrom = from;
