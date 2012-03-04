@@ -119,8 +119,14 @@ public class Service extends AccessibilityService {
 			ignoreReasons.add("ignored string (pref.)");
 		if (event.getText().isEmpty())
 			ignoreReasons.add("empty message");
-		if (lastMsg.contentEquals(newMsg) & newMsgTime - lastMsgTime < 10000)
-			ignoreReasons.add("identical message within 10 seconds");
+		int ignoreRepeat;
+		try {
+			ignoreRepeat = Integer.parseInt(Common.prefs.getString("ignore_repeat", null));
+		} catch (NumberFormatException e) {
+			ignoreRepeat = -1;
+		}
+		if (lastMsg.contentEquals(newMsg) && (ignoreRepeat == -1 || newMsgTime - lastMsgTime < ignoreRepeat * 1000))
+			ignoreReasons.add("identical message within " + (ignoreRepeat == -1 ? "infinite" : ignoreRepeat) + " seconds (pref.)");
 		if (ignoreReasons.isEmpty()) {
 			int delay = 0;
 			try {

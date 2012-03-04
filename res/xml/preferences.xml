@@ -38,6 +38,14 @@
 		android:title="@string/ignore_strings"
 		android:summary="@string/ignore_strings_summary"
 		android:dialogMessage="@string/ignore_strings_dialog_msg" />
+	<EditTextPreference
+		android:key="ignore_repeat"
+		android:title="@string/ignore_repeat"
+		android:summary="@string/ignore_repeat_summary"
+		android:dialogMessage="@string/ignore_repeat_dialog_msg"
+		android:digits="0123456789"
+		android:inputType="phone"
+		android:defaultValue="10" />
 	<Preference
 		android:key="device_state"
 		android:title="@string/device_state"
