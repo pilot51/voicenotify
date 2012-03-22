@@ -107,7 +107,7 @@ public class Service extends AccessibilityService {
 		boolean stringIgnored = false;
 		if (ignoreStrings != null) {
 			for (int i = 0; i < ignoreStrings.length; i++) {
-				if (!ignoreStrings[i].isEmpty() && notifyMsg.toString().toLowerCase().contains(ignoreStrings[i])) {
+				if (ignoreStrings[i].length() != 0 && notifyMsg.toString().toLowerCase().contains(ignoreStrings[i])) {
 					stringIgnored = true;
 					break;
 				}
