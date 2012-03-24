@@ -27,7 +27,6 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 public class Service extends AccessibilityService {
-	private Common common;
 	private String lastMsg = "";
 	private static final int
 		SPEAK = 1,
@@ -41,7 +40,7 @@ public class Service extends AccessibilityService {
 	private HeadsetReceiver headsetReceiver = new HeadsetReceiver();
 	private boolean isInitialized, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
 	private HashMap<String, String> ttsParams = new HashMap<String, String>();
-	private ArrayList<String> ignoredApps, ignoreReasons = new ArrayList<String>();
+	private ArrayList<String> ignoreReasons = new ArrayList<String>();
 
 	private Handler ttsHandler = new Handler() {
 		@Override
@@ -88,7 +87,6 @@ public class Service extends AccessibilityService {
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
-		ignoredApps = common.readList();
 		StringBuilder notifyMsg = new StringBuilder();
 		if (!event.getText().isEmpty())
 			for (CharSequence subText : event.getText())
@@ -113,7 +111,7 @@ public class Service extends AccessibilityService {
 				}
 			}
 		}
-		if (ignoredApps.contains(pkgName))
+		if (!AppList.getIsEnabled(pkgName))
 			ignoreReasons.add("ignored app (pref.)");
 		if (stringIgnored)
 			ignoreReasons.add("ignored string (pref.)");
@@ -207,7 +205,6 @@ public class Service extends AccessibilityService {
 	@Override
 	public void onServiceConnected() {
 		if (isInitialized) return;
-		common = new Common(this);
 		ttsHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);

@@ -1,87 +1,101 @@
 package com.pilot51.voicenotify;
 
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import android.app.ListActivity;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class AppList extends ListActivity {
-	private Common common;
 	private ListView lv;
 	private AppListAdapter adapter;
-	private ArrayList<HashMap<String, String>> appArray = new ArrayList<HashMap<String, String>>();
-	private ProgressDialog progress;
-	private ArrayList<String> ignoredApps;
+	private static ArrayList<App> apps;
+	private List<ApplicationInfo> installedApps;
 	private static final int IGNORE_TOGGLE = 0, IGNORE_ALL = 1, IGNORE_NONE = 2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		common = new Common(this);
-		progress = new ProgressDialog(this);
-		progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-		progress.setCancelable(true);
-		progress.setTitle(R.string.app_list);
-		progress.setMessage(getString(R.string.loading));
-		progress.show();
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		new Thread(new Runnable() {
 			public void run() {
-				ignoredApps = common.readList();
-				PackageManager packMan = getPackageManager();
-				List<ApplicationInfo> appList = packMan.getInstalledApplications(0);
-				int listSize = appList.size();
-				progress.setMax(listSize);
-				ApplicationInfo appInfo = new ApplicationInfo();
-				HashMap<String, String> app;
-				for (int i = 0; i < listSize; i++) {
-					appInfo = appList.get(i);
-					app = new HashMap<String, String>();
-					String pkg = appInfo.packageName;
-					app.put("package", pkg);
-					String label = String.valueOf(appInfo.loadLabel(packMan));
-					app.put("label", label);
-					app.put("enabled", Boolean.toString(!ignoredApps.contains(pkg)));
-					appArray.add(app);
-					progress.setProgress(i + 1);
-				}
-				Collections.sort(appArray, new Comparator<HashMap<String, String>>() {
-					@Override
-					public int compare(HashMap<String, String> object1, HashMap<String, String> object2) {
-						return object1.get("label").compareToIgnoreCase(object2.get("label"));
-					}
-				});
+				apps = Database.getApps();
 				runOnUiThread(new Runnable() {
 					public void run() {
 						lv = getListView();
 						lv.setTextFilterEnabled(true);
-						createList();
+						adapter = new AppListAdapter(AppList.this, apps);
+						lv.setAdapter(adapter);
 						lv.setOnItemClickListener(new OnItemClickListener() {
 							@Override
 							public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 								setIgnore(position, IGNORE_TOGGLE);
-								adapter.notifyDataSetChanged();
-								saveList();
+								adapter.setData(apps);
 							}
 						});
-						progress.dismiss();
+						setProgressBarIndeterminateVisibility(true);
+					}
+				});
+				PackageManager packMan = getPackageManager();
+				
+				// Remove uninstalled
+				App app;
+				for (int i = 0; i < apps.size(); i++) {
+					app = apps.get(i);
+					try {
+						packMan.getApplicationInfo(app.getPackage(), 0);
+					} catch (NameNotFoundException e) {
+						app.remove();
+						apps.remove(i);
+						runOnUiThread(new Runnable() {
+							public void run() {
+								adapter.setData(apps);
+							}
+						});
+					}
+				}
+				
+				// Add new
+				installedApps = packMan.getInstalledApplications(0);
+				ApplicationInfo appInfo;
+				inst:for (int i = 0; i < installedApps.size(); i++) {
+					appInfo = installedApps.get(i);
+					for (int n = 0; n < apps.size(); n++) {
+						if (apps.get(n).getPackage().equals(appInfo.packageName))
+							continue inst;
+					}
+					apps.add(new App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)),
+						getIsEnabled(appInfo.packageName)).updateDb());
+					runOnUiThread(new Runnable() {
+						public void run() {
+							adapter.setData(apps);
+						}
+					});
+				}
+				
+				Collections.sort(apps, new Comparator<App>() {
+					@Override
+					public int compare(App object1, App object2) {
+						return object1.label.compareToIgnoreCase(object2.label);
+					}
+				});
+				runOnUiThread(new Runnable() {
+					public void run() {
+						adapter.setData(apps);
+						setProgressBarIndeterminateVisibility(false);
 					}
 				});
 			}
@@ -110,48 +124,79 @@ public class AppList extends ListActivity {
 	}
 	
 	private void massIgnore(int ignoreType) {
-		for (int i = 0; i < adapter.getData().size(); i++) {
+		for (int i = 0; i < apps.size(); i++) {
 			setIgnore(i, ignoreType);
 		}
 		adapter.notifyDataSetChanged();
-		saveList();
+		new Thread(new Runnable() {
+			public void run() {
+				Database.setApps(apps);
+			}
+		}).start();
 	}
 	
 	private void setIgnore(int position, int ignoreType) {
-		HashMap<String, String> app = adapter.getData().get(position);
-		String
-			pkg = app.get("package"),
-			label = app.get("label");
-		if (ignoredApps.contains(pkg) & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_NONE)) {
-			ignoredApps.remove(pkg);
-			app.put("enabled", Boolean.toString(true));
+		App app = adapter.getData().get(position);
+		if (!app.getEnabled() & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_NONE)) {
+			app.setEnabled(true, ignoreType == IGNORE_TOGGLE);
 			if (ignoreType == IGNORE_TOGGLE)
-				Toast.makeText(this, label + " " + getString(R.string.is_not_ignored), Toast.LENGTH_SHORT).show();
-		} else if (!ignoredApps.contains(pkg) & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_ALL)) {
-			ignoredApps.add(pkg);
-			app.put("enabled", Boolean.toString(false));
+				Toast.makeText(this, app.getLabel() + " " + getString(R.string.is_not_ignored), Toast.LENGTH_SHORT).show();
+		} else if (app.getEnabled() & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_ALL)) {
+			app.setEnabled(false, ignoreType == IGNORE_TOGGLE);
 			if (ignoreType == IGNORE_TOGGLE)
-				Toast.makeText(this, label + " " + getString(R.string.is_ignored), Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, app.getLabel() + " " + getString(R.string.is_ignored), Toast.LENGTH_SHORT).show();
 		}
-		adapter.getData().set(position, app);
 	}
 	
-	private void createList() {
-		adapter = new AppListAdapter(AppList.this, appArray, R.layout.app_list_item,
-				new String[] {"label", "package", "enabled"},
-				new int[] {R.id.text1, R.id.text2, R.id.checkbox});
-		lv.setAdapter(adapter);
+	protected static boolean getIsEnabled(String pkg) {
+		App app;
+		for (int n = 0; n < apps.size(); n++) {
+			app = apps.get(n);
+			if (app.getPackage().equals(pkg))
+				return app.enabled;
+		}
+		return true;
 	}
-
-	private synchronized void saveList() {
-		try {
-			ObjectOutputStream out = new ObjectOutputStream(openFileOutput("ignored_apps", Context.MODE_WORLD_READABLE));
-			out.writeObject(ignoredApps);
-			out.flush();
-			out.close();
-		} catch (IOException e) {
-			Log.e(Common.TAG, "Error: Failed to save ignored_apps");
-			e.printStackTrace();
+	
+	protected static class App {
+		private String packageName, label;
+		private boolean enabled;
+		
+		protected App(String pkg, String name, boolean enable) {
+			packageName = pkg;
+			label = name;
+			enabled = enable;
+		}
+		
+		/**
+		 * Updates self in database.
+		 * @return This instance.
+		 */
+		private App updateDb() {
+			Database.updateApp(this);
+			return this;
+		}
+		
+		private void setEnabled(boolean enable, boolean updateDb) {
+			enabled = enable;
+			if (updateDb) Database.updateAppEnable(this);
+		}
+		
+		/** Removes self from database. */
+		private void remove() {
+			Database.removeApp(this);
+		}
+		
+		protected String getLabel() {
+			return label;
+		}
+		
+		protected String getPackage() {
+			return packageName;
+		}
+		
+		protected boolean getEnabled() {
+			return enabled;
 		}
 	}
 }
