@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -24,12 +25,16 @@ public class AppList extends ListActivity {
 	private AppListAdapter adapter;
 	private static ArrayList<App> apps;
 	private List<ApplicationInfo> installedApps;
+	private SharedPreferences prefs;
+	private static boolean defEnable;
 	private static final int IGNORE_TOGGLE = 0, IGNORE_ALL = 1, IGNORE_NONE = 2;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		prefs = getSharedPreferences("defValues", MODE_WORLD_READABLE);
+		defEnable = prefs.getBoolean("enable", true);
 		new Thread(new Runnable() {
 			public void run() {
 				apps = Database.getApps();
@@ -114,9 +119,11 @@ public class AppList extends ListActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case 1:
+			setDefaultEnable(false);
 			massIgnore(IGNORE_ALL);
 			return true;
 		case 2:
+			setDefaultEnable(true);
 			massIgnore(IGNORE_NONE);
 			return true;
 		}
@@ -148,6 +155,12 @@ public class AppList extends ListActivity {
 		}
 	}
 	
+	/** Set the default enabled value for new apps. */
+	private void setDefaultEnable(boolean enable) {
+		defEnable = enable;
+		prefs.edit().putBoolean("enable", defEnable).commit();
+	}
+	
 	protected static boolean getIsEnabled(String pkg) {
 		App app;
 		for (int n = 0; n < apps.size(); n++) {
@@ -155,7 +168,7 @@ public class AppList extends ListActivity {
 			if (app.getPackage().equals(pkg))
 				return app.enabled;
 		}
-		return true;
+		return defEnable;
 	}
 	
 	protected static class App {
