@@ -6,7 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.app.ListActivity;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -25,7 +24,6 @@ public class AppList extends ListActivity {
 	private AppListAdapter adapter;
 	private static ArrayList<App> apps;
 	private List<ApplicationInfo> installedApps;
-	private SharedPreferences prefs;
 	private static boolean defEnable;
 	private static final int IGNORE_TOGGLE = 0, IGNORE_ALL = 1, IGNORE_NONE = 2;
 
@@ -33,8 +31,7 @@ public class AppList extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		prefs = getSharedPreferences("defValues", MODE_WORLD_READABLE);
-		defEnable = prefs.getBoolean("enable", true);
+		defEnable = Common.prefs.getBoolean("defEnable", true);
 		new Thread(new Runnable() {
 			public void run() {
 				apps = Database.getApps();
@@ -158,11 +155,14 @@ public class AppList extends ListActivity {
 	/** Set the default enabled value for new apps. */
 	private void setDefaultEnable(boolean enable) {
 		defEnable = enable;
-		prefs.edit().putBoolean("enable", defEnable).commit();
+		Common.prefs.edit().putBoolean("defEnable", defEnable).commit();
 	}
 	
 	protected static boolean getIsEnabled(String pkg) {
-		if (apps == null) apps = Database.getApps();
+		if (apps == null) {
+			defEnable = Common.prefs.getBoolean("defEnable", true);
+			apps = Database.getApps();
+		}
 		App app;
 		for (int n = 0; n < apps.size(); n++) {
 			app = apps.get(n);
