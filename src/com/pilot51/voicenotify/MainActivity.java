@@ -104,6 +104,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			showDialog(DLG_QUIET_END);
 			return true;
 		} else if (preference == pTest) {
+			if (!AppList.getIsEnabled(getPackageName()))
+				Toast.makeText(this, getString(R.string.test_ignored), Toast.LENGTH_LONG).show();
 			new Timer().schedule(new TimerTask() {
 				@Override
 				public void run() {

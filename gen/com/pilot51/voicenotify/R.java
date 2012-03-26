@@ -31,38 +31,39 @@ public final class R {
         public static final int app_list=0x7f050017;
         public static final int app_list_summary=0x7f050018;
         public static final int app_name=0x7f050000;
-        public static final int dev_email=0x7f050022;
+        public static final int dev_email=0x7f050023;
         public static final int device_state=0x7f050011;
         public static final int device_state_dialog_title=0x7f050013;
         public static final int device_state_summary=0x7f050012;
-        public static final int email_subject=0x7f050023;
-        public static final int error_email=0x7f050025;
-        public static final int error_market=0x7f050024;
-        public static final int ignore_all=0x7f050027;
-        public static final int ignore_none=0x7f050028;
+        public static final int email_subject=0x7f050024;
+        public static final int error_email=0x7f050026;
+        public static final int error_market=0x7f050025;
+        public static final int ignore_all=0x7f050028;
+        public static final int ignore_none=0x7f050029;
         public static final int ignore_repeat=0x7f050014;
         public static final int ignore_repeat_dialog_msg=0x7f050016;
         public static final int ignore_repeat_summary=0x7f050015;
         public static final int ignore_strings=0x7f05000e;
         public static final int ignore_strings_dialog_msg=0x7f050010;
         public static final int ignore_strings_summary=0x7f05000f;
-        public static final int is_ignored=0x7f050029;
-        public static final int is_not_ignored=0x7f05002a;
+        public static final int is_ignored=0x7f05002a;
+        public static final int is_not_ignored=0x7f05002b;
         /**  AppList.java 
          */
-        public static final int loading=0x7f050026;
+        public static final int loading=0x7f050027;
         public static final int quiet_end=0x7f05001b;
         public static final int quiet_end_summary=0x7f05001c;
         public static final int quiet_start=0x7f050019;
         public static final int quiet_start_summary=0x7f05001a;
-        public static final int support=0x7f050020;
-        public static final int support_summary=0x7f05001e;
+        public static final int support=0x7f050021;
+        public static final int support_summary=0x7f05001f;
         /**  MainActivity.java and preferences.xml 
          */
-        public static final int test=0x7f05001f;
+        public static final int test=0x7f050020;
+        public static final int test_ignored=0x7f05001e;
         /**  MainActivity.java 
          */
-        public static final int test_notify_msg=0x7f050021;
+        public static final int test_notify_msg=0x7f050022;
         public static final int test_summary=0x7f05001d;
         /**  preferences.xml 
          */
