@@ -162,6 +162,7 @@ public class AppList extends ListActivity {
 	}
 	
 	protected static boolean getIsEnabled(String pkg) {
+		if (apps == null) apps = Database.getApps();
 		App app;
 		for (int n = 0; n < apps.size(); n++) {
 			app = apps.get(n);

@@ -205,6 +205,7 @@ public class Service extends AccessibilityService {
 	@Override
 	public void onServiceConnected() {
 		if (isInitialized) return;
+		new Common(this);
 		ttsHandler.sendEmptyMessage(START_TTS);
 		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
 		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
