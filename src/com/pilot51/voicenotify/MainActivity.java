@@ -129,26 +129,26 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		int i;
 		switch (id) {
 		case DLG_DEVICE_STATE:
-			final CharSequence[] items = {MainActivity.this.getString(R.string.screen_off), MainActivity.this.getString(R.string.screen_on),
-				MainActivity.this.getString(R.string.headset_off), MainActivity.this.getString(R.string.headset_on)};
-			final String speakScreenOff = "speakScreenOff", speakScreenOn = "speakScreenOn",
-				speakHeadsetOff = "speakHeadsetOff", speakHeadsetOn = "speakHeadsetOn";
+			final CharSequence[] items = MainActivity.this.getResources().getStringArray(R.array.device_states);
 			return new AlertDialog.Builder(this)
 			.setTitle(R.string.device_state_dialog_title)
 			.setMultiChoiceItems(items,
-				new boolean[] {Common.prefs.getBoolean(speakScreenOff, true), Common.prefs.getBoolean(speakScreenOn, true),
-					Common.prefs.getBoolean(speakHeadsetOff, true), Common.prefs.getBoolean(speakHeadsetOn, true)},
+				new boolean[] {Common.prefs.getBoolean(Common.SPEAK_SCREEN_OFF, true), Common.prefs.getBoolean(Common.SPEAK_SCREEN_ON, true),
+					Common.prefs.getBoolean(Common.SPEAK_HEADSET_OFF, true), Common.prefs.getBoolean(Common.SPEAK_HEADSET_ON, true),
+					Common.prefs.getBoolean(Common.SPEAK_SILENT_ON, false)},
 				new DialogInterface.OnMultiChoiceClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 						if (which == 0) // Screen off
-							Common.prefs.edit().putBoolean(speakScreenOff, isChecked).commit();
+							Common.prefs.edit().putBoolean(Common.SPEAK_SCREEN_OFF, isChecked).commit();
 						else if (which == 1) // Screen on
-							Common.prefs.edit().putBoolean(speakScreenOn, isChecked).commit();
+							Common.prefs.edit().putBoolean(Common.SPEAK_SCREEN_ON, isChecked).commit();
 						else if (which == 2) // Headset off
-							Common.prefs.edit().putBoolean(speakHeadsetOff, isChecked).commit();
+							Common.prefs.edit().putBoolean(Common.SPEAK_HEADSET_OFF, isChecked).commit();
 						else if (which == 3) // Headset on
-							Common.prefs.edit().putBoolean(speakHeadsetOn, isChecked).commit();
+							Common.prefs.edit().putBoolean(Common.SPEAK_HEADSET_ON, isChecked).commit();
+						else if (which == 4) // Silent/vibrate
+							Common.prefs.edit().putBoolean(Common.SPEAK_SILENT_ON, isChecked).commit();
 					}
 			}).create();
 		case DLG_QUIET_START:

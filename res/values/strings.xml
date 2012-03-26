@@ -30,10 +30,13 @@
 	<string name="device_state">Device States</string>
 	<string name="device_state_summary">Select whether to speak during certain device states.</string>
 	<string name="device_state_dialog_title">Speak during these device states</string>
-	<string name="screen_on">Screen on</string>
-	<string name="screen_off">Screen off</string>
-	<string name="headset_on">Headset on</string>
-	<string name="headset_off">Headset off</string>
+	<string-array name="device_states">
+		<item>Screen on</item>
+		<item>Screen off</item>
+		<item>Headset on</item>
+		<item>Headset off</item>
+		<item>Silent/Vibrate</item>
+	</string-array>
 	<string name="ignore_repeat">Ignore Repeats</string>
 	<string name="ignore_repeat_summary">Ignore subsequent identical notifications within a set time.</string>
 	<string name="ignore_repeat_dialog_msg">Set number of seconds that must pass since last notification before a repeat can be spoken.\nIgnored repeats reset the count and different notifications clear it.\nBlank = infinite.</string>

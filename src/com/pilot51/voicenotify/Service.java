@@ -169,24 +169,25 @@ public class Service extends AccessibilityService {
 				| (quietEnd < quietStart & (quietStart <= calTime | calTime < quietEnd))) {
 			ignoreReasons.add("quiet time (pref.)");
 		}
-		if (audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
-				| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE) {
-			ignoreReasons.add("silent or vibrate mode");
+		if ((audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
+				|| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
+				&& !Common.prefs.getBoolean(Common.SPEAK_SILENT_ON, false)) {
+			ignoreReasons.add("silent or vibrate mode (pref.)");
 		}
 		if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
 				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
 			ignoreReasons.add("active or ringing call");
 		}
-		if (!isScreenOn() & !Common.prefs.getBoolean("speakScreenOff", true)) {
+		if (!isScreenOn() & !Common.prefs.getBoolean(Common.SPEAK_SCREEN_OFF, true)) {
 			ignoreReasons.add("screen off (pref.)");
 		}
-		if (isScreenOn() & !Common.prefs.getBoolean("speakScreenOn", true)) {
+		if (isScreenOn() & !Common.prefs.getBoolean(Common.SPEAK_SCREEN_ON, true)) {
 			ignoreReasons.add("screen on (pref.)");
 		}
-		if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOff", true)) {
+		if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean(Common.SPEAK_HEADSET_OFF, true)) {
 			ignoreReasons.add("headset off (pref.)");
 		}
-		if ((isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean("speakHeadsetOn", true)) {
+		if ((isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean(Common.SPEAK_HEADSET_ON, true)) {
 			ignoreReasons.add("headset on (pref.)");
 		}
 		if (!ignoreReasons.isEmpty()) {

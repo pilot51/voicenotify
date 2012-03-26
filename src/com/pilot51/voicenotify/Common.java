@@ -11,6 +11,13 @@ public class Common {
 	private Activity activity;
 	private Context context;
 	protected static SharedPreferences prefs;
+	/** Preference key name. */
+	protected static final String
+		SPEAK_SCREEN_OFF = "speakScreenOff",
+		SPEAK_SCREEN_ON = "speakScreenOn",
+		SPEAK_HEADSET_OFF = "speakHeadsetOff",
+		SPEAK_HEADSET_ON = "speakHeadsetOn",
+		SPEAK_SILENT_ON = "speakSilentOn";
 	
 	Common(Activity a) {
 		activity = a;
