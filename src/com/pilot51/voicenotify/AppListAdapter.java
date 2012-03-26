@@ -83,20 +83,13 @@ public class AppListAdapter extends BaseAdapter implements Filterable {
 				results.count = list.size();
 			} else {
 				String prefixString = prefix.toString().toLowerCase();
-				ArrayList<AppList.App> unfilteredValues = mUnfilteredData;
-				int count = unfilteredValues.size();
-				ArrayList<AppList.App> newValues = new ArrayList<AppList.App>(count);
-				for (int i = 0; i < count; i++) {
-					AppList.App h = unfilteredValues.get(i);
-					if (h != null) {
-						String[] words = h.getLabel().split(" ");
-						for (int k = 0; k < words.length; k++) {
-							if (words[k].toLowerCase().startsWith(prefixString)) {
-								newValues.add(h);
-								break;
-							}
-						}
-					}
+				ArrayList<AppList.App> newValues = new ArrayList<AppList.App>(mUnfilteredData.size());
+				AppList.App app;
+				for (int i = 0; i < mUnfilteredData.size(); i++) {
+					app = mUnfilteredData.get(i);
+					if (app.getLabel().toLowerCase().contains(prefixString)
+						|| app.getPackage().toLowerCase().contains(prefixString))
+							newValues.add(app);
 				}
 				results.values = newValues;
 				results.count = newValues.size();
