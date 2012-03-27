@@ -31,10 +31,10 @@
 	<string name="device_state_summary">Select whether to speak during certain device states.</string>
 	<string name="device_state_dialog_title">Speak during these device states</string>
 	<string-array name="device_states">
-		<item>Screen on</item>
 		<item>Screen off</item>
-		<item>Headset on</item>
+		<item>Screen on</item>
 		<item>Headset off</item>
+		<item>Headset on</item>
 		<item>Silent/Vibrate</item>
 	</string-array>
 	<string name="ignore_repeat">Ignore Repeats</string>
