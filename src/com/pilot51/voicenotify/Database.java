@@ -41,9 +41,14 @@ public class Database extends SQLiteOpenHelper {
 		}
 		database = this;
 		this.context = context;
-		if (!context.getDatabasePath(DB_NAME).exists()
-			&& new File(context.getFilesDir().toString() + File.separatorChar + OLD_FILE).exists())
-				upgradeOldIgnores();
+		try {
+			if (!context.getDatabasePath(DB_NAME).exists()
+				&& new File(context.getFilesDir().toString() + File.separatorChar + OLD_FILE).exists())
+					upgradeOldIgnores();
+		} catch (Exception e) {
+			Log.w(Common.TAG, "Error checking for old ignores to be transferred to database.");
+			e.printStackTrace();
+		}
 	}
 	
 	/** @return Previously initialized static instance of this class. */
