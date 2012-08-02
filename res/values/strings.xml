@@ -2,6 +2,9 @@
 <resources>
 	<string name="app_name">Voice Notify</string>
 	
+	<!-- service_config.xml -->
+	<string name="service_desc">Reads status bar notifications with Text-To-Speech.</string>
+	
 	<!-- preferences.xml -->
 	<string name="toggle">Enable/Disable</string>
 	<string name="toggle_summary">Open Android\'s Accessibility settings.</string>

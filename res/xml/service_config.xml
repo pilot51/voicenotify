@@ -1,0 +1,5 @@
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+	android:accessibilityEventTypes="typeNotificationStateChanged"
+	android:accessibilityFeedbackType="feedbackSpoken"
+	android:description="@string/service_desc"
+	android:settingsActivity="com.pilot51.voicenotify.MainActivity" />

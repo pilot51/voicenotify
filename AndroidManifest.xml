@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest
-	xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.pilot51.voicenotify"
+	android:installLocation="auto"
 	android:versionCode="10"
-	android:versionName="1.0.7.2"
-	android:installLocation="auto">
+	android:versionName="1.0.7.2">
 	<uses-sdk
 		android:minSdkVersion="4"
-		android:targetSdkVersion="8" />
-	<uses-permission android:name="android.permission.BLUETOOTH" />
-	<uses-feature android:name="android.hardware.touchscreen" android:required="false" />
-	<uses-feature android:name="android.hardware.bluetooth" android:required="false" />
+		android:targetSdkVersion="8"/>
+	<uses-permission android:name="android.permission.BLUETOOTH"/>
+	<uses-feature
+		android:name="android.hardware.touchscreen"
+		android:required="false"/>
+	<uses-feature
+		android:name="android.hardware.bluetooth"
+		android:required="false"/>
 	<application
 		android:icon="@drawable/icon"
 		android:label="@string/app_name">
-		<activity
-			android:name="MainActivity">
+		<activity android:name="MainActivity">
 			<intent-filter>
-				<action
-					android:name="android.intent.action.MAIN" />
-				<category
-					android:name="android.intent.category.LAUNCHER" />
+				<action android:name="android.intent.action.MAIN"/>
+				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
 		<activity
 			android:name="AppList"
 			android:configChanges="keyboardHidden|orientation">
 			<intent-filter>
-				<action
-					android:name="android.intent.action.MAIN" />
+				<action android:name="android.intent.action.MAIN"/>
 			</intent-filter>
 		</activity>
-		<service
-			android:name="Service">
+		<service android:name="Service">
 			<intent-filter>
-				<action
-					android:name="android.accessibilityservice.AccessibilityService" />
+				<action android:name="android.accessibilityservice.AccessibilityService"/>
 			</intent-filter>
+			<meta-data
+				android:name="android.accessibilityservice"
+				android:resource="@xml/service_config"/>
 		</service>
 	</application>
 </manifest>
