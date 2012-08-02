@@ -38,6 +38,7 @@ public class Service extends AccessibilityService {
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
 	private HeadsetReceiver headsetReceiver = new HeadsetReceiver();
+	private Shake shake;
 	private boolean isInitialized, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
 	private HashMap<String, String> ttsParams = new HashMap<String, String>();
 	private ArrayList<String> ignoreReasons = new ArrayList<String>();
@@ -47,6 +48,7 @@ public class Service extends AccessibilityService {
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case SPEAK:
+				shake.enable();
 				boolean isNotificationStream = Common.prefs.getString("ttsStream", null).contentEquals("notification");
 				if (isNotificationStream)
 					ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
@@ -57,6 +59,7 @@ public class Service extends AccessibilityService {
 				}
 				break;
 			case STOP_SPEAK:
+				shake.disable();
 				mTts.stop();
 				break;
 			case START_TTS:
@@ -68,13 +71,6 @@ public class Service extends AccessibilityService {
 			}
 		}
 	};
-
-	private void setServiceInfo(int feedbackType) {
-		AccessibilityServiceInfo info = new AccessibilityServiceInfo();
-		info.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
-		info.feedbackType = feedbackType;
-		setServiceInfo(info);
-	}
 
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
@@ -208,7 +204,10 @@ public class Service extends AccessibilityService {
 		if (isInitialized) return;
 		new Common(this);
 		ttsHandler.sendEmptyMessage(START_TTS);
-		setServiceInfo(AccessibilityServiceInfo.FEEDBACK_SPOKEN);
+		AccessibilityServiceInfo info = new AccessibilityServiceInfo();
+		info.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
+		info.feedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
+		setServiceInfo(info);
 		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 		IntentFilter filter =  new IntentFilter(Intent.ACTION_HEADSET_PLUG);
@@ -217,6 +216,13 @@ public class Service extends AccessibilityService {
 		filter.addAction(Intent.ACTION_SCREEN_ON);
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
 		registerReceiver(headsetReceiver, filter);
+		shake = new Shake(this);
+		shake.setOnShakeListener(new Shake.OnShakeListener() {
+			@Override
+			public void onShake() {
+				ttsHandler.sendEmptyMessage(STOP_SPEAK);
+			}
+		});
 		isInitialized = true;
 	}
 
