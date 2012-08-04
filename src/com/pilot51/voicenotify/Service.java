@@ -280,6 +280,7 @@ public class Service extends AccessibilityService {
 		shake.setOnShakeListener(new Shake.OnShakeListener() {
 			@Override
 			public void onShake() {
+				Log.i(Common.TAG, "TTS silenced by shake");
 				ttsHandler.sendEmptyMessage(STOP_SPEAK);
 			}
 		});
