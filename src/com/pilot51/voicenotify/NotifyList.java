@@ -28,7 +28,8 @@ public class NotifyList extends ListView {
 		if (list.size() == 10)
 			list.remove(list.size() - 1);
 		list.add(0, new NotifyItem(title, message));
-		listener.onListChange();
+		if (listener != null)
+			listener.onListChange();
 	}
 	
 	protected static void setLastIgnore(String ignoreReasons) {

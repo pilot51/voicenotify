@@ -38,10 +38,12 @@ public class Service extends AccessibilityService {
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
 	private HeadsetReceiver headsetReceiver = new HeadsetReceiver();
+	private RepeatTimer repeater;
 	private Shake shake;
 	private boolean isInitialized, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
 	private HashMap<String, String> ttsParams = new HashMap<String, String>();
-	private ArrayList<String> ignoreReasons = new ArrayList<String>();
+	private ArrayList<String> ignoreReasons = new ArrayList<String>(),
+			repeatList = new ArrayList<String>();
 
 	private Handler ttsHandler = new Handler() {
 		@Override
@@ -127,18 +129,33 @@ public class Service extends AccessibilityService {
 			try {
 				delay = Integer.parseInt(Common.prefs.getString("ttsDelay", null));
 			} catch (NumberFormatException e) {}
+			if (!isScreenOn()) {
+				int interval;
+				try {
+					interval = Integer.parseInt(Common.prefs.getString("tts_repeat", "0"));
+				} catch (NumberFormatException e) {
+					interval = 0;
+				}
+				if (interval > 0) {
+					repeatList.add(newMsg);
+					if (repeater == null)
+						repeater = new RepeatTimer(interval);
+					else repeater.checkInterval(interval);
+				}
+			}
 			if (delay > 0) {
 				final String msg = newMsg;
 				new Timer().schedule(new TimerTask() {
 					@Override
 					public void run() {
-						speak(msg);
+						speak(msg, false);
 					}
 				}, delay * 1000);
-			} else speak(newMsg);
+			} else speak(newMsg, false);
 		} else {
-			Log.i(Common.TAG, "Notification from " + label + " ignored for reason(s): " + ignoreReasons.toString().replaceAll("\\[|\\]", ""));
-			NotifyList.setLastIgnore(ignoreReasons.toString().replaceAll("\\[|\\]", ""));
+			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
+			Log.i(Common.TAG, "Notification from " + label + " ignored for reason(s): " + reasons);
+			NotifyList.setLastIgnore(reasons);
 			ignoreReasons.clear();
 		}
 		lastMsg = newMsg;
@@ -149,8 +166,8 @@ public class Service extends AccessibilityService {
 	 * Sends msg to TTS if ignore condition is not met.
 	 * @param msg The string to be spoken.
 	 */
-	private void speak(String msg) {
-		if (ignore()) return;
+	private void speak(String msg, boolean isNew) {
+		if (ignore(isNew)) return;
 		ttsHandler.obtainMessage(SPEAK, msg).sendToTarget();
 	}
 	
@@ -158,7 +175,7 @@ public class Service extends AccessibilityService {
 	 * Checks for any notification-independent ignore states.
 	 * @returns True if an ignore condition is met, false otherwise.
 	 */
-	private boolean ignore() {
+	private boolean ignore(boolean isNew) {
 		Calendar c = Calendar.getInstance();
 		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE),
 			quietStart = Common.prefs.getInt("quietStart", 0),
@@ -189,12 +206,52 @@ public class Service extends AccessibilityService {
 			ignoreReasons.add("headset on (pref.)");
 		}
 		if (!ignoreReasons.isEmpty()) {
-			Log.i(Common.TAG, "Notification ignored for reason(s): " + ignoreReasons.toString().replaceAll("\\[|\\]", ""));
-			NotifyList.setLastIgnore(ignoreReasons.toString().replaceAll("\\[|\\]", ""));
+			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
+			Log.i(Common.TAG, "Notification ignored for reason(s): " + reasons);
+			if (isNew) NotifyList.setLastIgnore(reasons);
 			ignoreReasons.clear();
 			return true;
 		}
 		return false;
+	}
+	
+	private class RepeatTimer extends TimerTask {
+		private int interval;
+		private RepeatTimer(int interval) {
+			this.interval = interval;
+			if (interval <= 0) return;
+			new Timer().schedule(this, interval * 60000, interval * 60000);
+		}
+		
+		/**
+		 * If passed interval is different from current timer interval,
+		 *  cancels current timer and, if interval > 0, creates new instance with passed interval.
+		 * @param interval The interval to check against.
+		 */
+		private void checkInterval(int interval) {
+			if (this.interval != interval) {
+				cancel();
+				if (interval > 0)
+					repeater = new RepeatTimer(interval);
+			}
+		}
+		
+		@Override
+		public void run() {
+			if (isScreenOn()) {
+				repeatList.clear();
+				cancel();
+			}
+			for (int i = 0; i < repeatList.size(); i++) {
+				speak(repeatList.get(i), true);
+			}
+		}
+
+		@Override
+		public boolean cancel() {
+			repeater = null;
+			return super.cancel();
+		}
 	}
 
 	@Override
@@ -268,7 +325,7 @@ public class Service extends AccessibilityService {
 				isScreenOn = true;
 			else if (action.equals(Intent.ACTION_SCREEN_OFF))
 				isScreenOn = false;
-			if (mTts.isSpeaking() && ignore())
+			if (mTts.isSpeaking() && ignore(false))
 				ttsHandler.sendEmptyMessage(STOP_SPEAK);
 		}
 	}
