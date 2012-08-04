@@ -55,6 +55,8 @@
 	
 	<!-- MainActivity.java and preferences.xml -->
 	<string name="test">Test</string>
+	<string name="notify_log">Notification Log</string>
+	<string name="notify_log_summary">List last 10 notifications. Displays time, app name, message, and ignore reasons.</string>
 	<string name="support">Support Voice Notify</string>
 	
 	<!-- MainActivity.java -->

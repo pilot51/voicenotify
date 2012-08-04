@@ -27,8 +27,8 @@ import android.widget.Toast;
 
 public class MainActivity extends PreferenceActivity implements OnPreferenceClickListener, OnSharedPreferenceChangeListener {
 	private Common common;
-	private Preference pDeviceState, pQuietStart, pQuietEnd, pTest, pSupport;
-	private static final int DLG_DEVICE_STATE = 0, DLG_QUIET_START = 1, DLG_QUIET_END = 2, DLG_SUPPORT = 3;
+	private Preference pDeviceState, pQuietStart, pQuietEnd, pTest, pNotifyLog, pSupport;
+	private static final int DLG_DEVICE_STATE = 0, DLG_QUIET_START = 1, DLG_QUIET_END = 2, DLG_LOG = 3, DLG_SUPPORT = 4;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -43,6 +43,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		pQuietEnd.setOnPreferenceClickListener(this);
 		pTest = findPreference("test");
 		pTest.setOnPreferenceClickListener(this);
+		pNotifyLog = findPreference("notify_log");
+		pNotifyLog.setOnPreferenceClickListener(this);
 		pSupport = findPreference("support");
 		pSupport.setOnPreferenceClickListener(this);
 		findPreference("appList").setIntent(new Intent(this, AppList.class));
@@ -119,6 +121,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 				}
 			}, 5000);
 			return true;
+		} else if (preference == pNotifyLog) {
+			showDialog(DLG_LOG);
 		} else if (preference == pSupport) {
 			showDialog(DLG_SUPPORT);
 			return true;
@@ -159,6 +163,16 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		case DLG_QUIET_END:
 			i = Common.prefs.getInt("quietEnd", 0);
 			return new TimePickerDialog(MainActivity.this, eTimeSetListener, i/60, i%60, false);
+		case DLG_LOG:
+			return new AlertDialog.Builder(this)
+			.setTitle(R.string.notify_log)
+			.setView(new NotifyList(this))
+			.setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.dismiss();
+				}
+			})
+			.create();
 		case DLG_SUPPORT:
 			return new AlertDialog.Builder(this)
 			.setTitle(R.string.support)

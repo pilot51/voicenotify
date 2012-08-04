@@ -6,22 +6,30 @@ import java.util.Comparator;
 import java.util.List;
 
 import android.app.ListActivity;
+import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class AppList extends ListActivity {
 	private ListView lv;
-	private AppListAdapter adapter;
+	private Adapter adapter;
 	private static ArrayList<App> apps;
 	private List<ApplicationInfo> installedApps;
 	private static boolean defEnable;
@@ -39,7 +47,7 @@ public class AppList extends ListActivity {
 					public void run() {
 						lv = getListView();
 						lv.setTextFilterEnabled(true);
-						adapter = new AppListAdapter(AppList.this, apps);
+						adapter = new Adapter(AppList.this, apps);
 						lv.setAdapter(adapter);
 						lv.setOnItemClickListener(new OnItemClickListener() {
 							@Override
@@ -211,6 +219,98 @@ public class AppList extends ListActivity {
 		
 		protected boolean getEnabled() {
 			return enabled;
+		}
+	}
+	
+	private class Adapter extends BaseAdapter implements Filterable {
+		private ArrayList<App> data = new ArrayList<App>();
+		private LayoutInflater mInflater;
+		private SimpleFilter mFilter;
+		private ArrayList<App> mUnfilteredData;
+
+		private Adapter(Context context, ArrayList<App> list) {
+			data.addAll(list);
+			mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		}
+		
+		private ArrayList<App> getData() {
+			return data;
+		}
+		
+		private void setData(ArrayList<App> list) {
+			data.clear();
+			data.addAll(list);
+			notifyDataSetChanged();
+		}
+
+		@Override
+		public int getCount() {
+			return data.size();
+		}
+
+		@Override
+		public Object getItem(int position) {
+			return data.get(position);
+		}
+
+		@Override
+		public long getItemId(int position) {
+			return position;
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			View view;
+			if (convertView == null)
+				view = mInflater.inflate(R.layout.app_list_item, parent, false);
+			else view = convertView;
+			((TextView)view.findViewById(R.id.text1)).setText(data.get(position).getLabel());
+			((TextView)view.findViewById(R.id.text2)).setText(data.get(position).getPackage());
+			((CheckBox)view.findViewById(R.id.checkbox)).setChecked(data.get(position).getEnabled());
+			return view;
+		}
+
+		@Override
+		public Filter getFilter() {
+			if (mFilter == null)
+				mFilter = new SimpleFilter();
+			return mFilter;
+		}
+
+		private class SimpleFilter extends Filter {
+			@Override
+			protected FilterResults performFiltering(CharSequence prefix) {
+				FilterResults results = new FilterResults();
+				if (mUnfilteredData == null)
+					mUnfilteredData = new ArrayList<App>(data);
+				if (prefix == null || prefix.length() == 0) {
+					ArrayList<App> list = mUnfilteredData;
+					results.values = list;
+					results.count = list.size();
+				} else {
+					String prefixString = prefix.toString().toLowerCase();
+					ArrayList<App> newValues = new ArrayList<App>(mUnfilteredData.size());
+					App app;
+					for (int i = 0; i < mUnfilteredData.size(); i++) {
+						app = mUnfilteredData.get(i);
+						if (app.getLabel().toLowerCase().contains(prefixString)
+							|| app.getPackage().toLowerCase().contains(prefixString))
+								newValues.add(app);
+					}
+					results.values = newValues;
+					results.count = newValues.size();
+				}
+				return results;
+			}
+
+			@SuppressWarnings("unchecked")
+			@Override
+			protected void publishResults(CharSequence constraint, FilterResults results) {
+				data = (ArrayList<App>)results.values;
+				if (results.count > 0)
+					notifyDataSetChanged();
+				else notifyDataSetInvalidated();
+			}
 		}
 	}
 }

@@ -63,6 +63,10 @@
 		android:title="@string/test"
 		android:summary="@string/test_summary" />
 	<Preference
+		android:key="notify_log"
+		android:title="@string/notify_log"
+		android:summary="@string/notify_log_summary" />
+	<Preference
 		android:key="support"
 		android:title="@string/support"
 		android:summary="@string/support_summary" />

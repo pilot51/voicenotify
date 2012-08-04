@@ -89,6 +89,7 @@ public class Service extends AccessibilityService {
 				notifyMsg.append(subText);
 		final String label = String.valueOf(appInfo.loadLabel(packMan)),
 			ttsStringPref = Common.prefs.getString("ttsString", null);
+		NotifyList.addNotification(label, notifyMsg.toString());
 		String newMsg;
 		try {
 			newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"), label, notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
@@ -137,6 +138,7 @@ public class Service extends AccessibilityService {
 			} else speak(newMsg);
 		} else {
 			Log.i(Common.TAG, "Notification from " + label + " ignored for reason(s): " + ignoreReasons.toString().replaceAll("\\[|\\]", ""));
+			NotifyList.setLastIgnore(ignoreReasons.toString().replaceAll("\\[|\\]", ""));
 			ignoreReasons.clear();
 		}
 		lastMsg = newMsg;
@@ -188,6 +190,7 @@ public class Service extends AccessibilityService {
 		}
 		if (!ignoreReasons.isEmpty()) {
 			Log.i(Common.TAG, "Notification ignored for reason(s): " + ignoreReasons.toString().replaceAll("\\[|\\]", ""));
+			NotifyList.setLastIgnore(ignoreReasons.toString().replaceAll("\\[|\\]", ""));
 			ignoreReasons.clear();
 			return true;
 		}
