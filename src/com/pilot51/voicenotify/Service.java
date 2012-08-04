@@ -100,7 +100,7 @@ public class Service extends AccessibilityService {
 			e.printStackTrace();
 			newMsg = ttsStringPref;
 		}
-		final String[] ignoreStrings = Common.prefs.getString("ignore_strings", "").split("\n");
+		final String[] ignoreStrings = Common.prefs.getString("ignore_strings", "").toLowerCase().split("\n");
 		boolean stringIgnored = false;
 		if (ignoreStrings != null) {
 			for (int i = 0; i < ignoreStrings.length; i++) {
