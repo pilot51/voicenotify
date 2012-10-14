@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Уведомления Голосом</string>
+	
+	<!-- service_config.xml -->
+	<string name="service_desc">Читать текст из строки уведомлений с помощью Text-To-Speech.</string>
+	
+	<!-- preferences.xml -->
+	<string name="toggle">Включить / Выключить</string>
+	<string name="toggle_summary">Открыть настройки спец.возможностей Android.</string>
+	<string name="tts_settings">Настройки TTS</string>
+	<string name="tts_settings_summary">Открыть настройки Text-To-Speech.</string>
+	<string name="tts_settings_summary_fail">Невозможно найти настройки TTS. Если TTS установлено на вашем устройстве, пожалуйста свяжитесь с производителем.</string>
+	<string name="tts_message">Текст сообщения TTS</string>
+	<string name="tts_message_summary">Настроить как TTS будет произносить уведомления.</string>
+	<string name="tts_message_dialog">%t = Имя приложения\n%m = Текст уведомления</string>
+	<string name="tts_stream">TTS Аудио-канал</string>
+	<string name="tts_stream_summary">Выберите, какой аудио-канал будет использовать TTS при прочтении уведомлений.</string>
+	<string name="tts_delay">Задержка уведомлений TTS</string>
+	<string name="tts_delay_summary">Пауза в секундах, которую будет выдерживать TTS, перед прочтением уведомления.</string>
+	<string name="tts_delay_dialog_msg"># секунд до прочтения уведомления.</string>
+	<string name="tts_repeat">Повторение TTS</string>
+	<string name="tts_repeat_summary">Позволяет циклично повторять уведомления TTS при включенном экране.</string>
+	<string name="tts_repeat_dialog_msg">Уведомления будут повторятся, указанный интервал, пока экран остается включенным. Уведомления появившиеся в то время пока экран был включен, не повторяются.\n\nЗначение в минутах. Оставьте поле пустым или введите 0, для отключения.</string>
+	<string-array name="stream_name">
+		<item>Мультимедиа</item>
+		<item>Уведомления</item>
+	</string-array>
+	<string-array name="stream_value">
+		<item>мультимедиа</item>
+		<item>уведомления</item>
+	</string-array>
+	<string name="ignore_strings">Игнорирование текста</string>
+	<string name="ignore_strings_summary">Игнорировать сообщения содержащие определённый текст.</string>
+	<string name="ignore_strings_dialog_msg">Разделяйте текстовые фрагменты переходом на новую строку.</string>
+	<string name="device_state">Состояния устройства</string>
+	<string name="device_state_summary">Позволяет выбрать: при каких состояниях устройства приложение будет активно.</string>
+	<string name="device_state_dialog_title">Произносить напоминания в следующих состояниях:</string>
+	<string-array name="device_states">
+		<item>Экран выключен</item>
+		<item>Экран включен</item>
+		<item>Гарнитура отключена</item>
+		<item>Гарнитура подключена</item>
+		<item>Без звука / Вибрация</item>
+	</string-array>
+	<string name="ignore_repeat">Игнорирование повторений</string>
+	<string name="ignore_repeat_summary">Позволяет игнорировать частые повторения идентичного текста, выдаваемые в строку состояния.</string>
+	<string name="ignore_repeat_dialog_msg"># секунд должно пройти, со времени последнего уведомления в строке состояния, до разрешения следующего прочтения. \nПрогнорированные, повторяющиеся сообщения - обнуляют таймер, тогда как новые - очищают его.\nПустое значение этого поля = бесконечный таймер.</string>
+	<string name="app_list">Список приложений</string>
+	<string name="app_list_summary">Список выбранных для обработки приложений.</string>
+	<string name="quiet_start">Начало \'Тихого времени\'</string>
+	<string name="quiet_start_summary">Не произносить уведомления после этого времени.\nДля отключения этой опции, введите то-же время что и в графе Окончание \'Тихого времени\'.</string>
+	<string name="quiet_end">Окончание \'Тихого времени\'</string>
+	<string name="quiet_end_summary">Не произносить уведомления до этого времени.\nДля отключения этой опции, введите то-же время что и в графе Начало \'Тихого времени\'.</string>
+	<string name="test_summary">Прочитать тестовое уведомление (с задержкой 5 сек), чтобы протестировать настройки.</string>
+	<string name="test_ignored">приложение \'Уведомления голосом\' не выбрано в Cписке обрабатываемых приложений.\nТест будет запущен, но уведомление не будет произнесено.</string>
+	<string name="support_summary">Сделать пожертвование, выставить рейтинг / комментировать приложение, либо связаться с разработчиком, для обсуждения неполадок, или внесения идей и предложений для дальнейшей разработки.</string>
+	
+	<!-- MainActivity.java and preferences.xml -->
+	<string name="test">Тест</string>
+	<string name="notify_log">Лог уведомлений</string>
+	<string name="notify_log_summary">Список последних 10-ти уведомлений. Отображается имя приложения, текст уведомления, и причины игнорирования.</string>
+	<string name="support">Поддержать \'Уведомления голосом\'</string>
+	
+	<!-- MainActivity.java -->
+	<string name="test_notify_msg">Это тестовое уведомление. Проверка настроек.</string>
+	<string-array name="support_items">
+		<item>Сделать пожертвование (PayPal)</item>
+		<item>Выставить рейтинг / Комментировать приложение</item>
+		<item>Связаться с разработчиком</item>
+	</string-array>
+	<string name="dev_email">pilota51@gmail.com</string>
+	<string name="email_subject">Связь с разработчиком \'Уведомлений голосом\'</string>
+	<string name="error_market">Ошибка: Невозможно найти установленный Market.</string>
+	<string name="error_email">Ошибка: Невозможно найти установленный почтовый клиент.</string>
+	
+	<!-- AppList.java -->
+	<string name="ignore_all">Игнорировать всё.</string>
+	<string name="ignore_none">Ничего не игнорировать</string>
+	<string name="is_ignored">- игнорируется</string>
+	<string name="is_not_ignored">- не игнорируется</string>
+</resources>

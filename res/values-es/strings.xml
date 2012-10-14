@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Notificación por voz</string>
+	
+	<!-- service_config.xml -->
+	<string name="service_desc">Lee la barra de notificaciones con Texto-a-Voz</string>
+	
+	<!-- preferences.xml -->
+	<string name="toggle">Activar/Desactivar</string>
+	<string name="toggle_summary">Abrir configuración de accesibilidad de Android</string>
+	<string name="tts_settings">Configuración de TTS (Texto a voz)</string>
+	<string name="tts_settings_summary">Abrir configuración de Texto-a-Voz de Android</string>
+	<string name="tts_settings_summary_fail">No se encontró el menú de configuración de TTS! Si está seguro de que se encuentra instalado en el dispositivo, (debería estarlo) por favor contacte al desarrollador de la aplicación</string>
+	<string name="tts_message">Mensaje de Texto-a-Voz</string>
+	<string name="tts_message_summary">Personalizar la forma en que Texto-a-Voz pronuncia las notificaciones</string>
+	<string name="tts_message_dialog">%t = App title\n%m = Notificación</string>
+	<string name="tts_stream">Emisor de audio de Texto-a-Voz</string>
+	<string name="tts_stream_summary">Seleccione el emisor de audio a través del cual Texto-a-Voz trabajará</string>
+	<string name="tts_delay">Retraso de Texto-a-Voz</string>
+	<string name="tts_delay_summary">Retrasar Texto-a-Voz una serie de segundos luego de la notificación</string>
+	<string name="tts_delay_dialog_msg">Segundos a esperar para hablar luego de la notificación</string>
+	<string name="tts_repeat">Repetición de Texto-a-Voz</string>
+	<string name="tts_repeat_summary">Repetir las notificaciones con Texto-a-Voz hasta que la pantalla se encienda</string>
+	<string name="tts_repeat_dialog_msg">Las notificaciones se repiten al intervalo de tiempo definido hasta que la pantalla se encienda. Las notificaciones generadas mientras la pantalla se encuentra encendida no se repiten.\n\nEl valor se encuentra en minutos. Dejar en blanco o colocar 0 para desactivar.</string>
+	<string-array name="stream_name">
+		<item>Medios</item>
+		<item>Notificación</item>
+	</string-array>
+	<string-array name="stream_value">
+		<item>medios</item>
+		<item>notificación</item>
+	</string-array>
+	<string name="ignore_strings">Ignorar texto</string>
+	<string name="ignore_strings_summary">Ignorar las notificaciones de acuerdo al texto contenido en el mensaje</string>
+	<string name="ignore_strings_dialog_msg">Separar las entradas individuales con una línea nueva</string>
+	<string name="device_state">Estado del dispositivo</string>
+	<string name="device_state_summary">Selecciona si se debe hablar durante según el estado en el que se encuentra el dispositivo</string>
+	<string name="device_state_dialog_title">Hablar durante los siguientes estados del dispositivo</string>
+	<string-array name="device_states">
+		<item>Pantalla apagada</item>
+		<item>Pantalla encendida</item>
+		<item>Auriculares desconectados</item>
+		<item>Auriculares conectados</item>
+		<item>Silencio/Vibración</item>
+	</string-array>
+	<string name="ignore_repeat">Ignorar repeticiones</string>
+	<string name="ignore_repeat_summary">Ignora notificaciones consecutivas idénticas dentro de un lapso de tiempo determinado</string>
+	<string name="ignore_repeat_dialog_msg">Defina el número de segundos que deben pasar desde la última notificación antes de repetirla.\nLas repeticiones ignoradas reinician el contador y las diferentes lo borran.\nBlank = infinito.</string>
+	<string name="app_list">Listado de aplicaciones</string>
+	<string name="app_list_summary">Lista las aplicaciones instaladas que pueden ser ignoradas</string>
+	<string name="quiet_start">Inicio de Hora Silenciosa</string>
+	<string name="quiet_start_summary">No se habla pasada esta hora.\nDejar igual que la última para desactivar.</string>
+	<string name="quiet_end">Fin de Hora Silenciosa</string>
+	<string name="quiet_end_summary">No habla antes de esta hora.\nDejar igual que la primera para desactivar</string>
+	<string name="test_summary">Genera una notificación (con un retraso de 5 segundos) para probar la configuración actual</string>
+	<string name="test_ignored">Notificación por voz ha sido ignorada en el listado de aplicaciones.\n La prueba se realizará, pero no habrá notificación hablada</string>
+	<string name="support_summary">Donar, calificar/comentar, o contactar al desarrollador de la aplicación por problemas o sugerencias</string>
+	
+	<!-- MainActivity.java and preferences.xml -->
+	<string name="test">Prueba</string>
+	<string name="notify_log">Registro de notificaciones</string>
+	<string name="notify_log_summary">Lista las 10 últimas notificaciones. Muestra la hora, el nombre de la aplicación, el mensaje y las razones por las que pudo ser ignorado</string>
+	<string name="support">Dar soporte a Notificación por voz</string>
+	
+	<!-- MainActivity.java -->
+	<string name="test_notify_msg">Ésta es una notificación de prueba</string>
+	<string-array name="support_items">
+		<item>Donar (PayPal)</item>
+		<item>Calificar/Comentar</item>
+		<item>Contactar al Desarrollador</item>
+	</string-array>
+	<string name="dev_email">pilota51@gmail.com</string>
+	<string name="email_subject">Contacto sobre Notificación por voz</string>
+	<string name="error_market">Error: No se pudo encontrar la aplicación Market instalada</string>
+	<string name="error_email">Error: No se pudo encontrar una aplicación de email instalada</string>
+	
+	<!-- AppList.java -->
+	<string name="ignore_all">Ignorar todo</string>
+	<string name="ignore_none">No ingorar ninguno</string>
+	<string name="is_ignored">Ignorado</string>
+	<string name="is_not_ignored">No ignorado</string>
+</resources>
