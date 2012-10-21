@@ -164,10 +164,10 @@ public class Service extends AccessibilityService {
 				new Timer().schedule(new TimerTask() {
 					@Override
 					public void run() {
-						speak(msg, false);
+						speak(msg, true);
 					}
 				}, delay * 1000);
-			} else speak(newMsg, false);
+			} else speak(newMsg, true);
 		} else {
 			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
 			Log.i(Common.TAG, "Notification from " + label + " ignored for reason(s): " + reasons);
@@ -181,6 +181,7 @@ public class Service extends AccessibilityService {
 	/**
 	 * Sends msg to TTS if ignore condition is not met.
 	 * @param msg The string to be spoken.
+	 * @param isNew True if notification is new, otherwise false if it is being repeated.
 	 */
 	private void speak(String msg, boolean isNew) {
 		if (ignore(isNew)) return;
@@ -189,6 +190,7 @@ public class Service extends AccessibilityService {
 	
 	/**
 	 * Checks for any notification-independent ignore states.
+	 * @param isNew True if notification is new, otherwise false if it is being repeated.
 	 * @returns True if an ignore condition is met, false otherwise.
 	 */
 	private boolean ignore(boolean isNew) {
@@ -259,7 +261,7 @@ public class Service extends AccessibilityService {
 				cancel();
 			}
 			for (int i = 0; i < repeatList.size(); i++) {
-				speak(repeatList.get(i), true);
+				speak(repeatList.get(i), false);
 			}
 		}
 
