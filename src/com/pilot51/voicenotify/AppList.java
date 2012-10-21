@@ -69,7 +69,7 @@ public class AppList extends ListActivity {
 							@Override
 							public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 								setIgnore(position, IGNORE_TOGGLE);
-								adapter.setData(apps);
+								adapter.notifyDataSetChanged();
 							}
 						});
 						setProgressBarIndeterminateVisibility(true);
@@ -100,7 +100,7 @@ public class AppList extends ListActivity {
 							continue inst;
 					}
 					apps.add(new App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)),
-						getIsEnabled(appInfo.packageName)).updateDb());
+						defEnable).updateDb());
 					runOnUiThread(new Runnable() {
 						public void run() {
 							adapter.setData(apps);
@@ -148,8 +148,8 @@ public class AppList extends ListActivity {
 	}
 	
 	private void massIgnore(int ignoreType) {
-		for (int i = 0; i < apps.size(); i++) {
-			setIgnore(i, ignoreType);
+		for (App app : apps) {
+			setIgnore(app, ignoreType);
 		}
 		adapter.notifyDataSetChanged();
 		new Thread(new Runnable() {
@@ -160,7 +160,10 @@ public class AppList extends ListActivity {
 	}
 	
 	private void setIgnore(int position, int ignoreType) {
-		App app = adapter.getData().get(position);
+		setIgnore(apps.get(position), ignoreType);
+	}
+	
+	private void setIgnore(App app, int ignoreType) {
 		if (!app.getEnabled() & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_NONE)) {
 			app.setEnabled(true, ignoreType == IGNORE_TOGGLE);
 			if (ignoreType == IGNORE_TOGGLE)
@@ -241,10 +244,6 @@ public class AppList extends ListActivity {
 		private Adapter(Context context, ArrayList<App> list) {
 			data.addAll(list);
 			mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		}
-		
-		private ArrayList<App> getData() {
-			return data;
 		}
 		
 		private void setData(ArrayList<App> list) {
