@@ -96,9 +96,9 @@ public class Database extends SQLiteOpenHelper {
 		ArrayList<AppList.App> newList = new ArrayList<AppList.App>();
 		PackageManager packMan = context.getPackageManager();
 		ApplicationInfo appInfo;
-		for (int i = 0; i < oldList.size(); i++) {
+		for (String s : oldList) {
 			try {
-				appInfo = packMan.getApplicationInfo(oldList.get(i), PackageManager.GET_UNINSTALLED_PACKAGES);
+				appInfo = packMan.getApplicationInfo(s, PackageManager.GET_UNINSTALLED_PACKAGES);
 				newList.add(new AppList.App(appInfo.packageName,
 					String.valueOf(appInfo.loadLabel(packMan)),	false));
 			} catch (NameNotFoundException e) {
@@ -133,10 +133,8 @@ public class Database extends SQLiteOpenHelper {
 		SQLiteDatabase db = database.getWritableDatabase();
 		db.delete(TABLE_NAME, null, null);
 		ContentValues values;
-		AppList.App app;
-		for (int i = 0; i < list.size(); i++) {
+		for (AppList.App app : list) {
 			values = new ContentValues();
-			app = list.get(i);
 			values.put(COLUMN_PACKAGE,  app.getPackage());
 			values.put(COLUMN_LABEL,  app.getLabel());
 			values.put(COLUMN_ENABLED,  app.getEnabled() ? 1 : 0);

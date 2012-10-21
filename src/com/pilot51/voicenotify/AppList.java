@@ -78,14 +78,12 @@ public class AppList extends ListActivity {
 				PackageManager packMan = getPackageManager();
 				
 				// Remove uninstalled
-				App app;
-				for (int i = 0; i < apps.size(); i++) {
-					app = apps.get(i);
+				for (App app : apps) {
 					try {
 						packMan.getApplicationInfo(app.getPackage(), 0);
 					} catch (NameNotFoundException e) {
 						app.remove();
-						apps.remove(i);
+						apps.remove(app);
 						runOnUiThread(new Runnable() {
 							public void run() {
 								adapter.setData(apps);
@@ -96,11 +94,9 @@ public class AppList extends ListActivity {
 				
 				// Add new
 				installedApps = packMan.getInstalledApplications(0);
-				ApplicationInfo appInfo;
-				inst:for (int i = 0; i < installedApps.size(); i++) {
-					appInfo = installedApps.get(i);
-					for (int n = 0; n < apps.size(); n++) {
-						if (apps.get(n).getPackage().equals(appInfo.packageName))
+				inst:for (ApplicationInfo appInfo : installedApps) {
+					for (App app : apps) {
+						if (app.getPackage().equals(appInfo.packageName))
 							continue inst;
 					}
 					apps.add(new App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)),
@@ -187,9 +183,7 @@ public class AppList extends ListActivity {
 			defEnable = Common.prefs.getBoolean("defEnable", true);
 			apps = Database.getApps();
 		}
-		App app;
-		for (int n = 0; n < apps.size(); n++) {
-			app = apps.get(n);
+		for (App app : apps) {
 			if (app.getPackage().equals(pkg))
 				return app.enabled;
 		}
@@ -306,9 +300,7 @@ public class AppList extends ListActivity {
 				} else {
 					String prefixString = prefix.toString().toLowerCase();
 					ArrayList<App> newValues = new ArrayList<App>(mUnfilteredData.size());
-					App app;
-					for (int i = 0; i < mUnfilteredData.size(); i++) {
-						app = mUnfilteredData.get(i);
+					for (App app : mUnfilteredData) {
 						if (app.getLabel().toLowerCase().contains(prefixString)
 							|| app.getPackage().toLowerCase().contains(prefixString))
 								newValues.add(app);

@@ -119,8 +119,8 @@ public class Service extends AccessibilityService {
 		final String[] ignoreStrings = Common.prefs.getString("ignore_strings", "").toLowerCase().split("\n");
 		boolean stringIgnored = false;
 		if (ignoreStrings != null) {
-			for (int i = 0; i < ignoreStrings.length; i++) {
-				if (ignoreStrings[i].length() != 0 && notifyMsg.toString().toLowerCase().contains(ignoreStrings[i])) {
+			for (String s : ignoreStrings) {
+				if (s.length() != 0 && notifyMsg.toString().toLowerCase().contains(s)) {
 					stringIgnored = true;
 					break;
 				}
@@ -260,8 +260,8 @@ public class Service extends AccessibilityService {
 				repeatList.clear();
 				cancel();
 			}
-			for (int i = 0; i < repeatList.size(); i++) {
-				speak(repeatList.get(i), false);
+			for (String s : repeatList) {
+				speak(s, false);
 			}
 		}
 
