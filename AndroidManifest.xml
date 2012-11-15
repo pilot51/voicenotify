@@ -16,8 +16,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	package="com.pilot51.voicenotify"
 	android:installLocation="auto"
-	android:versionCode="11"
-	android:versionName="1.0.8">
+	android:versionCode="12"
+	android:versionName="1.0.9">
 	<uses-sdk
 		android:minSdkVersion="4"
 		android:targetSdkVersion="8"/>
