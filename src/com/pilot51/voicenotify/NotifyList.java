@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +49,8 @@ public class NotifyList extends ListView {
 			listener.onListChange();
 	}
 	
-	protected static void setLastIgnore(String ignoreReasons) {
-		list.get(0).setIgnoreReasons(ignoreReasons);
+	protected static void setLastIgnore(String ignoreReasons, boolean isNew) {
+		list.get(0).setIgnoreReasons(ignoreReasons, isNew);
 		if (listener != null)
 			listener.onListChange();
 	}
@@ -57,6 +58,7 @@ public class NotifyList extends ListView {
 	private static class NotifyItem {
 		private String title, message, ignoreReasons, time;
 		private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		private boolean silenced;
 		
 		private NotifyItem(String name, String msg) {
 			this.title = name;
@@ -75,7 +77,9 @@ public class NotifyList extends ListView {
 		private String getIgnoreReasons() {
 			return ignoreReasons;
 		}
-		protected void setIgnoreReasons(String reasons) {
+		
+		protected void setIgnoreReasons(String reasons, boolean isNew) {
+			silenced = !isNew;
 			ignoreReasons = reasons;
 		}
 		
@@ -125,15 +129,14 @@ public class NotifyList extends ListView {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			View view;
-			if (convertView == null)
+			View view = convertView;
+			if (view == null) {
 				view = mInflater.inflate(R.layout.notify_log_item, parent, false);
-			else view = convertView;
+			}
 			NotifyItem item = data.get(position);
-			TextView textView;
 			((TextView)view.findViewById(R.id.time)).setText(item.getTime());
 			((TextView)view.findViewById(R.id.title)).setText(item.getTitle());
-			textView = (TextView)view.findViewById(R.id.message);
+			TextView textView = (TextView)view.findViewById(R.id.message);
 			if (item.getMessage().length() != 0) {
 				textView.setText(item.getMessage());
 				textView.setVisibility(TextView.VISIBLE);
@@ -141,6 +144,8 @@ public class NotifyList extends ListView {
 			textView = (TextView)view.findViewById(R.id.ignore_reasons);
 			if (item.getIgnoreReasons() != null && item.getIgnoreReasons().length() != 0) {
 				textView.setText(item.getIgnoreReasons());
+				if (item.silenced) textView.setTextColor(Color.YELLOW);
+				else textView.setTextColor(Color.RED);
 				textView.setVisibility(TextView.VISIBLE);
 			} else textView.setVisibility(TextView.GONE);
 			return view;

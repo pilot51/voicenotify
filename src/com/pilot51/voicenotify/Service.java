@@ -172,7 +172,7 @@ public class Service extends AccessibilityService {
 		} else {
 			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
 			Log.i(Common.TAG, "Notification from " + label + " ignored for reason(s): " + reasons);
-			NotifyList.setLastIgnore(reasons);
+			NotifyList.setLastIgnore(reasons, true);
 			ignoreReasons.clear();
 		}
 		lastMsg = newMsg;
@@ -227,7 +227,7 @@ public class Service extends AccessibilityService {
 		if (!ignoreReasons.isEmpty()) {
 			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
 			Log.i(Common.TAG, "Notification ignored for reason(s): " + reasons);
-			if (isNew) NotifyList.setLastIgnore(reasons);
+			NotifyList.setLastIgnore(reasons, isNew);
 			ignoreReasons.clear();
 			return true;
 		}
@@ -300,7 +300,7 @@ public class Service extends AccessibilityService {
 			@Override
 			public void onShake() {
 				Log.i(Common.TAG, "TTS silenced by shake");
-				NotifyList.setLastIgnore(getString(R.string.reason_shake));
+				NotifyList.setLastIgnore(getString(R.string.reason_shake), false);
 				ttsHandler.sendEmptyMessage(STOP_SPEAK);
 			}
 		});
