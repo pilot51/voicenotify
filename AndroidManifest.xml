@@ -44,7 +44,9 @@
 				<action android:name="android.intent.action.MAIN"/>
 			</intent-filter>
 		</activity>
-		<service android:name="Service">
+		<service
+			android:name="Service"
+			android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
 			<intent-filter>
 				<action android:name="android.accessibilityservice.AccessibilityService"/>
 			</intent-filter>
