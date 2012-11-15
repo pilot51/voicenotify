@@ -46,14 +46,14 @@
 		android:summary="@string/tts_delay_summary"
 		android:dialogMessage="@string/tts_delay_dialog_msg"
 		android:digits="0123456789"
-		android:inputType="phone" />
+		android:inputType="number" />
 	<EditTextPreference
 		android:key="tts_repeat"
 		android:title="@string/tts_repeat"
 		android:summary="@string/tts_repeat_summary"
 		android:dialogMessage="@string/tts_repeat_dialog_msg"
 		android:digits="0123456789"
-		android:inputType="phone" />
+		android:inputType="number" />
 	<EditTextPreference
 		android:key="shake_threshold"
 		android:title="@string/shake_to_silence"
@@ -73,7 +73,7 @@
 		android:summary="@string/ignore_repeat_summary"
 		android:dialogMessage="@string/ignore_repeat_dialog_msg"
 		android:digits="0123456789"
-		android:inputType="phone"
+		android:inputType="number"
 		android:defaultValue="10" />
 	<Preference
 		android:key="device_state"
