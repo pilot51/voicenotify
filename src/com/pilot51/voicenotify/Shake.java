@@ -26,7 +26,7 @@ public class Shake implements SensorEventListener {
 	private SensorManager manager;
 	private Sensor sensor;
 	private OnShakeListener listener;
-	private static final int SHAKE_THRESHOLD = 800;
+	private int threshold;
 	private float lastX, lastY, lastZ;
 	private long lastUpdate;
 
@@ -36,6 +36,12 @@ public class Shake implements SensorEventListener {
 	}
 	
 	protected void enable() {
+		try {
+			threshold = Integer.parseInt(Common.prefs.getString("shake_threshold", null));
+		} catch (NumberFormatException e) {
+			// Don't enable if threshold setting is blank
+			return;
+		}
 		manager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
 	}
 	
@@ -61,7 +67,7 @@ public class Shake implements SensorEventListener {
 					y = event.values[SensorManager.DATA_Y],
 					z = event.values[SensorManager.DATA_Z],
 					speed = Math.abs(x + y + z - lastX - lastY - lastZ) / timeDiff * 10000;
-				if (speed > SHAKE_THRESHOLD && listener != null)
+				if (speed > threshold * 10 && listener != null)
 					listener.onShake();
 				lastX = x;
 				lastY = y;

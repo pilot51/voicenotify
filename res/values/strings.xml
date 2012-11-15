@@ -36,6 +36,9 @@
 	<string name="tts_repeat">TTS Repeat</string>
 	<string name="tts_repeat_summary">Continually repeat notifications over TTS until screen turns on.</string>
 	<string name="tts_repeat_dialog_msg">Notifications are repeated at the defined interval until the screen is turned on. Notifications created while the screen is on are not repeated.\n\nValue is in minutes. Blank or 0 to disable.</string>
+	<string name="shake_to_silence">Shake-To-Silence</string>
+	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence.</string>
+	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: 100\nBlank to disable.</string>
 	<string-array name="stream_name">
 		<item>Media</item>
 		<item>Notification</item>

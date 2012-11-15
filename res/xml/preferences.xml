@@ -55,6 +55,14 @@
 		android:digits="0123456789"
 		android:inputType="phone" />
 	<EditTextPreference
+		android:key="shake_threshold"
+		android:title="@string/shake_to_silence"
+		android:summary="@string/shake_to_silence_summary"
+		android:dialogMessage="@string/shake_to_silence_dialog_msg"
+		android:digits="0123456789"
+		android:inputType="number"
+		android:defaultValue="100" />
+	<EditTextPreference
 		android:key="ignore_strings"
 		android:title="@string/ignore_strings"
 		android:summary="@string/ignore_strings_summary"
