@@ -96,4 +96,18 @@
 	<string name="ignore_none">Ignore None</string>
 	<string name="is_ignored">is ignored</string>
 	<string name="is_not_ignored">is not ignored</string>
+	
+	<!-- Ignore/Silence reasons -->
+	<string name="reason_app">ignored app (pref.)</string>
+	<string name="reason_string">ignored string (pref.)</string>
+	<string name="reason_empty_msg">empty message</string>
+	<string name="reason_identical">identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds} (pref.)</string>
+	<string name="reason_quiet">quiet time (pref.)</string>
+	<string name="reason_silent">silent or vibrate mode (pref.)</string>
+	<string name="reason_call">active or ringing call</string>
+	<string name="reason_screen_off">screen off (pref.)</string>
+	<string name="reason_screen_on">screen on (pref.)</string>
+	<string name="reason_headset_off">headset off (pref.)</string>
+	<string name="reason_headset_on">headset on (pref.)</string>
+	<string name="reason_shake">Silenced by shake</string>
 </resources>

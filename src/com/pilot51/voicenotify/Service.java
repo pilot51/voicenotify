@@ -16,6 +16,7 @@
 
 package com.pilot51.voicenotify;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -127,11 +128,11 @@ public class Service extends AccessibilityService {
 			}
 		}
 		if (!AppList.getIsEnabled(pkgName))
-			ignoreReasons.add("ignored app (pref.)");
+			ignoreReasons.add(getString(R.string.reason_app));
 		if (stringIgnored)
-			ignoreReasons.add("ignored string (pref.)");
+			ignoreReasons.add(getString(R.string.reason_string));
 		if (event.getText().isEmpty())
-			ignoreReasons.add("empty message");
+			ignoreReasons.add(getString(R.string.reason_empty_msg));
 		int ignoreRepeat;
 		try {
 			ignoreRepeat = Integer.parseInt(Common.prefs.getString("ignore_repeat", null));
@@ -139,7 +140,7 @@ public class Service extends AccessibilityService {
 			ignoreRepeat = -1;
 		}
 		if (lastMsg.contentEquals(newMsg) && (ignoreRepeat == -1 || newMsgTime - lastMsgTime < ignoreRepeat * 1000))
-			ignoreReasons.add("identical message within " + (ignoreRepeat == -1 ? "infinite" : ignoreRepeat) + " seconds (pref.)");
+			ignoreReasons.add(MessageFormat.format(getString(R.string.reason_identical), ignoreRepeat));
 		if (ignoreReasons.isEmpty()) {
 			int delay = 0;
 			try {
@@ -200,28 +201,28 @@ public class Service extends AccessibilityService {
 			quietEnd = Common.prefs.getInt("quietEnd", 0);
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
 				| (quietEnd < quietStart & (quietStart <= calTime | calTime < quietEnd))) {
-			ignoreReasons.add("quiet time (pref.)");
+			ignoreReasons.add(getString(R.string.reason_quiet));
 		}
 		if ((audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
 				|| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
 				&& !Common.prefs.getBoolean(Common.SPEAK_SILENT_ON, false)) {
-			ignoreReasons.add("silent or vibrate mode (pref.)");
+			ignoreReasons.add(getString(R.string.reason_silent));
 		}
 		if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
 				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
-			ignoreReasons.add("active or ringing call");
+			ignoreReasons.add(getString(R.string.reason_call));
 		}
 		if (!isScreenOn() & !Common.prefs.getBoolean(Common.SPEAK_SCREEN_OFF, true)) {
-			ignoreReasons.add("screen off (pref.)");
+			ignoreReasons.add(getString(R.string.reason_screen_off));
 		}
 		if (isScreenOn() & !Common.prefs.getBoolean(Common.SPEAK_SCREEN_ON, true)) {
-			ignoreReasons.add("screen on (pref.)");
+			ignoreReasons.add(getString(R.string.reason_screen_on));
 		}
 		if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean(Common.SPEAK_HEADSET_OFF, true)) {
-			ignoreReasons.add("headset off (pref.)");
+			ignoreReasons.add(getString(R.string.reason_headset_off));
 		}
 		if ((isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean(Common.SPEAK_HEADSET_ON, true)) {
-			ignoreReasons.add("headset on (pref.)");
+			ignoreReasons.add(getString(R.string.reason_headset_on));
 		}
 		if (!ignoreReasons.isEmpty()) {
 			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
@@ -299,6 +300,7 @@ public class Service extends AccessibilityService {
 			@Override
 			public void onShake() {
 				Log.i(Common.TAG, "TTS silenced by shake");
+				NotifyList.setLastIgnore(getString(R.string.reason_shake));
 				ttsHandler.sendEmptyMessage(STOP_SPEAK);
 			}
 		});

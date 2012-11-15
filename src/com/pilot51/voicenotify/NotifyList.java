@@ -50,6 +50,8 @@ public class NotifyList extends ListView {
 	
 	protected static void setLastIgnore(String ignoreReasons) {
 		list.get(0).setIgnoreReasons(ignoreReasons);
+		if (listener != null)
+			listener.onListChange();
 	}
 	
 	private static class NotifyItem {
