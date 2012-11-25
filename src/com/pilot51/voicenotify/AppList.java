@@ -19,7 +19,6 @@ package com.pilot51.voicenotify;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import android.app.ListActivity;
 import android.content.Context;
@@ -47,7 +46,6 @@ public class AppList extends ListActivity {
 	private ListView lv;
 	private Adapter adapter;
 	private static ArrayList<App> apps;
-	private List<ApplicationInfo> installedApps;
 	private static boolean defEnable;
 	private static final int IGNORE_TOGGLE = 0, IGNORE_ALL = 1, IGNORE_NONE = 2;
 
@@ -78,12 +76,13 @@ public class AppList extends ListActivity {
 				PackageManager packMan = getPackageManager();
 				
 				// Remove uninstalled
-				for (App app : apps) {
+				for (int a = apps.size() - 1; a >= 0; a--) {
+					App app = apps.get(a);
 					try {
 						packMan.getApplicationInfo(app.getPackage(), 0);
 					} catch (NameNotFoundException e) {
 						app.remove();
-						apps.remove(app);
+						apps.remove(a);
 						runOnUiThread(new Runnable() {
 							public void run() {
 								adapter.setData(apps);
@@ -93,8 +92,7 @@ public class AppList extends ListActivity {
 				}
 				
 				// Add new
-				installedApps = packMan.getInstalledApplications(0);
-				inst:for (ApplicationInfo appInfo : installedApps) {
+				inst:for (ApplicationInfo appInfo : packMan.getInstalledApplications(0)) {
 					for (App app : apps) {
 						if (app.getPackage().equals(appInfo.packageName))
 							continue inst;
