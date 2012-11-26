@@ -27,8 +27,7 @@ public class Shake implements SensorEventListener {
 	private Sensor sensor;
 	private OnShakeListener listener;
 	private int threshold;
-	private float lastX, lastY, lastZ;
-	private long lastUpdate;
+	private float accel, accelCurrent, accelLast;
 
 	public Shake(Context c) {
 		manager = (SensorManager)c.getSystemService(Context.SENSOR_SERVICE);
@@ -36,13 +35,16 @@ public class Shake implements SensorEventListener {
 	}
 	
 	protected void enable() {
+		if (listener != null) return;
 		try {
 			threshold = Integer.parseInt(Common.prefs.getString("shake_threshold", null));
 		} catch (NumberFormatException e) {
 			// Don't enable if threshold setting is blank
 			return;
 		}
-		manager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_GAME);
+		manager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
+		accelCurrent = SensorManager.GRAVITY_EARTH;
+		accelLast = SensorManager.GRAVITY_EARTH;
 	}
 	
 	protected void disable() {
@@ -54,27 +56,19 @@ public class Shake implements SensorEventListener {
 	}
 
 	@Override
-	public void onAccuracyChanged(Sensor sensor, int accuracy) {
-	}
+	public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
 	@Override
 	public void onSensorChanged(SensorEvent event) {
-		if (event.sensor.equals(sensor)) {
-			long timeCur = System.currentTimeMillis(),
-				timeDiff = timeCur - lastUpdate;
-			if (timeCur - lastUpdate > 100) {
-				float x = event.values[SensorManager.DATA_X],
-					y = event.values[SensorManager.DATA_Y],
-					z = event.values[SensorManager.DATA_Z],
-					speed = Math.abs(x + y + z - lastX - lastY - lastZ) / timeDiff * 10000;
-				if (speed > threshold * 10 && listener != null)
-					listener.onShake();
-				lastX = x;
-				lastY = y;
-				lastZ = z;
-				lastUpdate = timeCur;
-			}
+		float x = event.values[0];
+		float y = event.values[1];
+		float z = event.values[2];
+		accelCurrent = (float)Math.sqrt(x * x + y * y + z * z);
+		accel = accel * 0.9f + accelCurrent - accelLast;
+		if (Math.abs(accel) > threshold / 10) {
+			listener.onShake();
 		}
+		accelLast = accelCurrent;
 	}
 
 	public interface OnShakeListener {
