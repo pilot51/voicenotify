@@ -35,7 +35,7 @@ public class Shake implements SensorEventListener {
 	}
 	
 	protected void enable() {
-		if (listener != null) return;
+		if (listener == null) return;
 		try {
 			threshold = Integer.parseInt(Common.prefs.getString("shake_threshold", null));
 		} catch (NumberFormatException e) {
