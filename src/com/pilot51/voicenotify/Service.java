@@ -39,6 +39,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.PowerManager;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnInitListener;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
@@ -61,28 +63,38 @@ public class Service extends AccessibilityService {
 	private HashMap<String, String> ttsParams = new HashMap<String, String>();
 	private ArrayList<String> ignoreReasons = new ArrayList<String>(),
 			repeatList = new ArrayList<String>();
-
+	private String lastQueueTime;
 	private Handler ttsHandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {
 			case SPEAK:
 				shake.enable();
+				ttsParams.clear();
 				boolean isNotificationStream = Common.prefs.getString("ttsStream", null).contentEquals("notification");
 				if (isNotificationStream)
 					ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
+				lastQueueTime = Long.toString(System.currentTimeMillis());
+				ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, lastQueueTime);
 				mTts.speak((String)message.obj, TextToSpeech.QUEUE_ADD, ttsParams);
-				if (isNotificationStream) {
-					ttsParams.clear();
-					mTts.speak(" ", TextToSpeech.QUEUE_ADD, null);
-				}
 				break;
 			case STOP_SPEAK:
-				shake.disable();
 				mTts.stop();
 				break;
 			case START_TTS:
-				mTts = new TextToSpeech(Service.this, null);
+				mTts = new TextToSpeech(Service.this, new OnInitListener() {
+					@Override
+					public void onInit(int status) {
+						mTts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener() {
+							@Override
+							public void onUtteranceCompleted(String utteranceId) {
+								if (utteranceId.equals(lastQueueTime)) {
+									shake.disable();
+								}
+							}
+						});
+					}
+				});
 				break;
 			case STOP_TTS:
 				mTts.shutdown();
