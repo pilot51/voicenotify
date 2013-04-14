@@ -26,6 +26,7 @@ import java.util.TimerTask;
 
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
+import android.app.Notification;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -72,8 +73,9 @@ public class Service extends AccessibilityService {
 				shake.enable();
 				ttsParams.clear();
 				boolean isNotificationStream = Common.prefs.getString("ttsStream", null).contentEquals("notification");
-				if (isNotificationStream)
+				if (isNotificationStream) {
 					ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
+				}
 				lastQueueTime = Long.toString(System.currentTimeMillis());
 				ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, lastQueueTime);
 				mTts.speak((String)message.obj, TextToSpeech.QUEUE_ADD, ttsParams);
@@ -102,9 +104,12 @@ public class Service extends AccessibilityService {
 			}
 		}
 	};
-
+	
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
+		if (!Common.prefs.getBoolean("toasts", false) && !(event.getParcelableData() instanceof Notification)) {
+			return;
+		}
 		long newMsgTime = System.currentTimeMillis();
 		PackageManager packMan = getPackageManager();
 		ApplicationInfo appInfo = new ApplicationInfo();
@@ -115,9 +120,11 @@ public class Service extends AccessibilityService {
 			e.printStackTrace();
 		}
 		StringBuilder notifyMsg = new StringBuilder();
-		if (!event.getText().isEmpty())
-			for (CharSequence subText : event.getText())
+		if (!event.getText().isEmpty()) {
+			for (CharSequence subText : event.getText()) {
 				notifyMsg.append(subText);
+			}
+		}
 		final String label = String.valueOf(appInfo.loadLabel(packMan)),
 			ttsStringPref = Common.prefs.getString("ttsString", null);
 		NotifyList.addNotification(label, notifyMsg.toString());
@@ -139,20 +146,24 @@ public class Service extends AccessibilityService {
 				}
 			}
 		}
-		if (!AppList.getIsEnabled(pkgName))
+		if (!AppList.getIsEnabled(pkgName)) {
 			ignoreReasons.add(getString(R.string.reason_app));
-		if (stringIgnored)
+		}
+		if (stringIgnored) {
 			ignoreReasons.add(getString(R.string.reason_string));
-		if (event.getText().isEmpty())
+		}
+		if (event.getText().isEmpty()) {
 			ignoreReasons.add(getString(R.string.reason_empty_msg));
+		}
 		int ignoreRepeat;
 		try {
 			ignoreRepeat = Integer.parseInt(Common.prefs.getString("ignore_repeat", null));
 		} catch (NumberFormatException e) {
 			ignoreRepeat = -1;
 		}
-		if (lastMsg.contentEquals(newMsg) && (ignoreRepeat == -1 || newMsgTime - lastMsgTime < ignoreRepeat * 1000))
+		if (lastMsg.contentEquals(newMsg) && (ignoreRepeat == -1 || newMsgTime - lastMsgTime < ignoreRepeat * 1000)) {
 			ignoreReasons.add(MessageFormat.format(getString(R.string.reason_identical), ignoreRepeat));
+		}
 		if (ignoreReasons.isEmpty()) {
 			int delay = 0;
 			try {
@@ -262,8 +273,7 @@ public class Service extends AccessibilityService {
 		private void checkInterval(int interval) {
 			if (this.interval != interval) {
 				cancel();
-				if (interval > 0)
-					repeater = new RepeatTimer(interval);
+				if (interval > 0) repeater = new RepeatTimer(interval);
 			}
 		}
 		
@@ -277,19 +287,19 @@ public class Service extends AccessibilityService {
 				speak(s, false);
 			}
 		}
-
+		
 		@Override
 		public boolean cancel() {
 			repeater = null;
 			return super.cancel();
 		}
 	}
-
+	
 	@Override
 	public void onInterrupt() {
 		ttsHandler.sendEmptyMessage(STOP_SPEAK);
 	}
-
+	
 	@Override
 	public void onServiceConnected() {
 		if (isInitialized) return;
@@ -318,7 +328,7 @@ public class Service extends AccessibilityService {
 		});
 		isInitialized = true;
 	}
-
+	
 	@Override
 	public boolean onUnbind(Intent intent) {
 		if (isInitialized) {
@@ -330,16 +340,18 @@ public class Service extends AccessibilityService {
 	}
 	
 	private boolean isScreenOn() {
-		if (android.os.Build.VERSION.SDK_INT >= 7)
+		if (android.os.Build.VERSION.SDK_INT >= 7) {
 			isScreenOn = CheckScreen.isScreenOn(this);
+		}
 		return isScreenOn;
 	}
 	
 	private static class CheckScreen {
 		private static PowerManager powerMan;
 		private static boolean isScreenOn(Context c) {
-			if (powerMan == null)
+			if (powerMan == null) {
 				powerMan = (PowerManager)c.getSystemService(Context.POWER_SERVICE);
+			}
 			return powerMan.isScreenOn();
 		}
 	}
@@ -348,18 +360,20 @@ public class Service extends AccessibilityService {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action.equals(Intent.ACTION_HEADSET_PLUG))
+			if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
 				isHeadsetPlugged = intent.getIntExtra("state", 0) == 1;
-			else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED))
+			} else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
 				isBluetoothConnected = true;
-			else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED))
+			} else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
 				isBluetoothConnected = false;
-			else if (action.equals(Intent.ACTION_SCREEN_ON))
+			} else if (action.equals(Intent.ACTION_SCREEN_ON)) {
 				isScreenOn = true;
-			else if (action.equals(Intent.ACTION_SCREEN_OFF))
+			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
 				isScreenOn = false;
-			if (mTts.isSpeaking() && ignore(false))
+			}
+			if (mTts.isSpeaking() && ignore(false)) {
 				ttsHandler.sendEmptyMessage(STOP_SPEAK);
+			}
 		}
 	}
 }

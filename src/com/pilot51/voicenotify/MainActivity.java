@@ -68,9 +68,10 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			pTTS = findPreference("ttsSettings");
 		Intent intent;
 		int sdkVer = android.os.Build.VERSION.SDK_INT;
-		if (sdkVer > 4)
+		if (sdkVer < 11) getPreferenceScreen().removePreference(findPreference("toasts"));
+		if (sdkVer > 4) {
 			pAccess.setIntent(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS));
-		else if (sdkVer == 4) {
+		} else if (sdkVer == 4) {
 			intent = new Intent(Intent.ACTION_MAIN);
 			intent.setClassName("com.android.settings", "com.android.settings.AccessibilitySettings");
 			pAccess.setIntent(intent);
@@ -80,17 +81,17 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			if (sdkVer >= 11 & sdkVer <= 13) {
 				intent.setAction(android.provider.Settings.ACTION_SETTINGS);
 				intent.putExtra(EXTRA_SHOW_FRAGMENT, "com.android.settings.TextToSpeechSettings");
-		        intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
+				intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
 			} else intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
 		} else if (isClassExist("com.android.settings.Settings$TextToSpeechSettingsActivity")) {
 			if (sdkVer == 14) {
 				intent.setAction(android.provider.Settings.ACTION_SETTINGS);
 				intent.putExtra(EXTRA_SHOW_FRAGMENT, "com.android.settings.tts.TextToSpeechSettings");
-		        intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
+				intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
 			} else intent.setClassName("com.android.settings", "com.android.settings.Settings$TextToSpeechSettingsActivity");
-		} else if (isClassExist("com.google.tv.settings.TextToSpeechSettingsTop"))
+		} else if (isClassExist("com.google.tv.settings.TextToSpeechSettingsTop")) {
 			intent.setClassName("com.google.tv.settings", "com.google.tv.settings.TextToSpeechSettingsTop");
-		else {
+		} else {
 			pTTS.setEnabled(false);
 			pTTS.setSummary(R.string.tts_settings_summary_fail);
 		}
@@ -122,8 +123,9 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			showDialog(DLG_QUIET_END);
 			return true;
 		} else if (preference == pTest) {
-			if (!AppList.getIsEnabled(getPackageName()))
+			if (!AppList.getIsEnabled(getPackageName())) {
 				Toast.makeText(this, getString(R.string.test_ignored), Toast.LENGTH_LONG).show();
+			}
 			new Timer().schedule(new TimerTask() {
 				@Override
 				public void run() {
@@ -151,28 +153,34 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		int i;
 		switch (id) {
 		case DLG_DEVICE_STATE:
-			final CharSequence[] items = MainActivity.this.getResources().getStringArray(R.array.device_states);
+			final CharSequence[] items = getResources().getStringArray(R.array.device_states);
 			return new AlertDialog.Builder(this)
 			.setTitle(R.string.device_state_dialog_title)
 			.setMultiChoiceItems(items,
-				new boolean[] {Common.prefs.getBoolean(Common.SPEAK_SCREEN_OFF, true), Common.prefs.getBoolean(Common.SPEAK_SCREEN_ON, true),
-					Common.prefs.getBoolean(Common.SPEAK_HEADSET_OFF, true), Common.prefs.getBoolean(Common.SPEAK_HEADSET_ON, true),
-					Common.prefs.getBoolean(Common.SPEAK_SILENT_ON, false)},
+				new boolean[] {
+					Common.prefs.getBoolean(Common.SPEAK_SCREEN_OFF, true),
+					Common.prefs.getBoolean(Common.SPEAK_SCREEN_ON, true),
+					Common.prefs.getBoolean(Common.SPEAK_HEADSET_OFF, true),
+					Common.prefs.getBoolean(Common.SPEAK_HEADSET_ON, true),
+					Common.prefs.getBoolean(Common.SPEAK_SILENT_ON, false)
+				},
 				new DialogInterface.OnMultiChoiceClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-						if (which == 0) // Screen off
+						if (which == 0) { // Screen off
 							Common.prefs.edit().putBoolean(Common.SPEAK_SCREEN_OFF, isChecked).commit();
-						else if (which == 1) // Screen on
+						} else if (which == 1) { // Screen on
 							Common.prefs.edit().putBoolean(Common.SPEAK_SCREEN_ON, isChecked).commit();
-						else if (which == 2) // Headset off
+						} else if (which == 2) { // Headset off
 							Common.prefs.edit().putBoolean(Common.SPEAK_HEADSET_OFF, isChecked).commit();
-						else if (which == 3) // Headset on
+						} else if (which == 3) { // Headset on
 							Common.prefs.edit().putBoolean(Common.SPEAK_HEADSET_ON, isChecked).commit();
-						else if (which == 4) // Silent/vibrate
+						} else if (which == 4) { // Silent/vibrate
 							Common.prefs.edit().putBoolean(Common.SPEAK_SILENT_ON, isChecked).commit();
+						}
 					}
-			}).create();
+				}
+			).create();
 		case DLG_QUIET_START:
 			i = Common.prefs.getInt("quietStart", 0);
 			return new TimePickerDialog(MainActivity.this, sTimeSetListener, i/60, i%60, false);
@@ -227,7 +235,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		}
 		return null;
 	}
-
+	
 	private TimePickerDialog.OnTimeSetListener sTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			Common.prefs.edit().putInt("quietStart", hourOfDay * 60 + minute).commit();
@@ -244,7 +252,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		super.onResume();
 		Common.prefs.registerOnSharedPreferenceChangeListener(this);
 	}
-
+	
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -252,7 +260,6 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	}
 	
 	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-		if (key.equals("ttsStream"))
-			common.setVolumeStream();
+		if (key.equals("ttsStream")) common.setVolumeStream();
 	}
 }

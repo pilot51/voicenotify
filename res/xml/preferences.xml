@@ -54,6 +54,10 @@
 		android:dialogMessage="@string/tts_repeat_dialog_msg"
 		android:digits="0123456789"
 		android:inputType="number" />
+	<CheckBoxPreference
+		android:key="toasts"
+		android:title="@string/speak_toasts"
+		android:summary="@string/speak_toasts_summary" />
 	<EditTextPreference
 		android:key="shake_threshold"
 		android:title="@string/shake_to_silence"
