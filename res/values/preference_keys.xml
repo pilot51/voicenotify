@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="key_accessibility">accessibility</string>
+	<string name="key_appList">appList</string>
+	<string name="key_ttsSettings">ttsSettings</string>
+	<string name="key_ttsString">ttsString</string>
+	<string name="key_ttsStream">ttsStream</string>
+	<string name="key_ttsDelay">ttsDelay</string>
+	<string name="key_tts_repeat">tts_repeat</string>
+	<string name="key_toasts">toasts</string>
+	<string name="key_shake_threshold">shake_threshold</string>
+	<string name="key_ignore_strings">ignore_strings</string>
+	<string name="key_ignore_repeat">ignore_repeat</string>
+	<string name="key_device_state">device_state</string>
+	<string name="key_quietStart">quietStart</string>
+	<string name="key_quietEnd">quietEnd</string>
+	<string name="key_test">test</string>
+	<string name="key_notify_log">notify_log</string>
+	<string name="key_support">support</string>
+</resources>

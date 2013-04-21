@@ -16,50 +16,50 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	<Preference
-		android:key="accessibility"
+		android:key="@string/key_accessibility"
 		android:title="@string/toggle"
 		android:summary="@string/toggle_summary" />
 	<Preference
-		android:key="appList"
+		android:key="@string/key_appList"
 		android:title="@string/app_list"
 		android:summary="@string/app_list_summary" />
 	<Preference
-		android:key="ttsSettings"
+		android:key="@string/key_ttsSettings"
 		android:title="@string/tts_settings"
 		android:summary="@string/tts_settings_summary" />
 	<EditTextPreference
-		android:key="ttsString"
+		android:key="@string/key_ttsString"
 		android:title="@string/tts_message"
 		android:summary="@string/tts_message_summary"
 		android:dialogMessage="@string/tts_message_dialog"
 		android:defaultValue="%t: %m" />
 	<ListPreference
-		android:key="ttsStream"
+		android:key="@string/key_ttsStream"
 		android:title="@string/tts_stream"
 		android:summary="@string/tts_stream_summary"
 		android:entries="@array/stream_name"
 		android:entryValues="@array/stream_value"
 		android:defaultValue="media" />
 	<EditTextPreference
-		android:key="ttsDelay"
+		android:key="@string/key_ttsDelay"
 		android:title="@string/tts_delay"
 		android:summary="@string/tts_delay_summary"
 		android:dialogMessage="@string/tts_delay_dialog_msg"
 		android:digits="0123456789"
 		android:inputType="number" />
 	<EditTextPreference
-		android:key="tts_repeat"
+		android:key="@string/key_tts_repeat"
 		android:title="@string/tts_repeat"
 		android:summary="@string/tts_repeat_summary"
 		android:dialogMessage="@string/tts_repeat_dialog_msg"
 		android:digits="0123456789"
 		android:inputType="number" />
 	<CheckBoxPreference
-		android:key="toasts"
+		android:key="@string/key_toasts"
 		android:title="@string/speak_toasts"
 		android:summary="@string/speak_toasts_summary" />
 	<EditTextPreference
-		android:key="shake_threshold"
+		android:key="@string/key_shake_threshold"
 		android:title="@string/shake_to_silence"
 		android:summary="@string/shake_to_silence_summary"
 		android:dialogMessage="@string/shake_to_silence_dialog_msg"
@@ -67,12 +67,12 @@
 		android:inputType="number"
 		android:defaultValue="100" />
 	<EditTextPreference
-		android:key="ignore_strings"
+		android:key="@string/key_ignore_strings"
 		android:title="@string/ignore_strings"
 		android:summary="@string/ignore_strings_summary"
 		android:dialogMessage="@string/ignore_strings_dialog_msg" />
 	<EditTextPreference
-		android:key="ignore_repeat"
+		android:key="@string/key_ignore_repeat"
 		android:title="@string/ignore_repeat"
 		android:summary="@string/ignore_repeat_summary"
 		android:dialogMessage="@string/ignore_repeat_dialog_msg"
@@ -80,27 +80,27 @@
 		android:inputType="number"
 		android:defaultValue="10" />
 	<Preference
-		android:key="device_state"
+		android:key="@string/key_device_state"
 		android:title="@string/device_state"
 		android:summary="@string/device_state_summary" />
 	<Preference
-		android:key="quietStart"
+		android:key="@string/key_quietStart"
 		android:title="@string/quiet_start"
 		android:summary="@string/quiet_start_summary" />
 	<Preference
-		android:key="quietEnd"
+		android:key="@string/key_quietEnd"
 		android:title="@string/quiet_end"
 		android:summary="@string/quiet_end_summary" />
 	<Preference
-		android:key="test"
+		android:key="@string/key_test"
 		android:title="@string/test"
 		android:summary="@string/test_summary" />
 	<Preference
-		android:key="notify_log"
+		android:key="@string/key_notify_log"
 		android:title="@string/notify_log"
 		android:summary="@string/notify_log_summary" />
 	<Preference
-		android:key="support"
+		android:key="@string/key_support"
 		android:title="@string/support"
 		android:summary="@string/support_summary" />
 </PreferenceScreen>

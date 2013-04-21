@@ -48,7 +48,7 @@ public class Database extends SQLiteOpenHelper {
 		CREATE_TBL_APPS = "create table if not exists " + TABLE_NAME + "(" + BaseColumns._ID
 			+ " integer primary key autoincrement, " + COLUMN_PACKAGE + " text not null, "
 			+ COLUMN_LABEL + " text not null, " + COLUMN_ENABLED + " integer);";
-
+	
 	protected Database(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
 		if (database != null) {
@@ -59,8 +59,9 @@ public class Database extends SQLiteOpenHelper {
 		this.context = context;
 		try {
 			if (!context.getDatabasePath(DB_NAME).exists()
-				&& new File(context.getFilesDir().toString() + File.separatorChar + OLD_FILE).exists())
-					upgradeOldIgnores();
+					&& new File(context.getFilesDir().toString() + File.separatorChar + OLD_FILE).exists()) {
+				upgradeOldIgnores();
+			}
 		} catch (Exception e) {
 			Log.w(Common.TAG, "Error checking for old ignores to be transferred to database.");
 			e.printStackTrace();
@@ -99,8 +100,7 @@ public class Database extends SQLiteOpenHelper {
 		for (String s : oldList) {
 			try {
 				appInfo = packMan.getApplicationInfo(s, PackageManager.GET_UNINSTALLED_PACKAGES);
-				newList.add(new AppList.App(appInfo.packageName,
-					String.valueOf(appInfo.loadLabel(packMan)),	false));
+				newList.add(new AppList.App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)), false));
 			} catch (NameNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -118,7 +118,8 @@ public class Database extends SQLiteOpenHelper {
 			list.add(new AppList.App(
 				cursor.getString(cursor.getColumnIndex(COLUMN_PACKAGE)),
 				cursor.getString(cursor.getColumnIndex(COLUMN_LABEL)),
-				cursor.getInt(cursor.getColumnIndex(COLUMN_ENABLED)) == 1));
+				cursor.getInt(cursor.getColumnIndex(COLUMN_ENABLED)) == 1
+			));
 		}
 		cursor.close();
 		db.close();
@@ -153,8 +154,9 @@ public class Database extends SQLiteOpenHelper {
 		values.put(COLUMN_LABEL,  app.getLabel());
 		values.put(COLUMN_ENABLED,  app.getEnabled() ? 1 : 0);
 		SQLiteDatabase db = database.getWritableDatabase();
-		if (db.update(TABLE_NAME, values, COLUMN_PACKAGE + " = ?", new String[] {app.getPackage()}) == 0)
+		if (db.update(TABLE_NAME, values, COLUMN_PACKAGE + " = ?", new String[] {app.getPackage()}) == 0) {
 			db.insert(TABLE_NAME, null, values);
+		}
 		db.close();
 	}
 	
@@ -184,7 +186,7 @@ public class Database extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		db.execSQL(CREATE_TBL_APPS);
 	}
-
+	
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {}
 }

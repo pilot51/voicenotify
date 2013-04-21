@@ -72,7 +72,7 @@ public class Service extends AccessibilityService {
 			case SPEAK:
 				shake.enable();
 				ttsParams.clear();
-				boolean isNotificationStream = Common.prefs.getString("ttsStream", null).contentEquals("notification");
+				boolean isNotificationStream = Common.prefs.getString(getString(R.string.key_ttsStream), null).contentEquals("notification");
 				if (isNotificationStream) {
 					ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
 				}
@@ -107,7 +107,7 @@ public class Service extends AccessibilityService {
 	
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
-		if (!Common.prefs.getBoolean("toasts", false) && !(event.getParcelableData() instanceof Notification)) {
+		if (!Common.prefs.getBoolean(getString(R.string.key_toasts), false) && !(event.getParcelableData() instanceof Notification)) {
 			return;
 		}
 		long newMsgTime = System.currentTimeMillis();
@@ -126,7 +126,7 @@ public class Service extends AccessibilityService {
 			}
 		}
 		final String label = String.valueOf(appInfo.loadLabel(packMan)),
-			ttsStringPref = Common.prefs.getString("ttsString", null);
+			ttsStringPref = Common.prefs.getString(getString(R.string.key_ttsString), null);
 		NotifyList.addNotification(label, notifyMsg.toString());
 		String newMsg;
 		try {
@@ -136,7 +136,7 @@ public class Service extends AccessibilityService {
 			e.printStackTrace();
 			newMsg = ttsStringPref;
 		}
-		final String[] ignoreStrings = Common.prefs.getString("ignore_strings", "").toLowerCase().split("\n");
+		final String[] ignoreStrings = Common.prefs.getString(getString(R.string.key_ignore_strings), "").toLowerCase().split("\n");
 		boolean stringIgnored = false;
 		if (ignoreStrings != null) {
 			for (String s : ignoreStrings) {
@@ -157,7 +157,7 @@ public class Service extends AccessibilityService {
 		}
 		int ignoreRepeat;
 		try {
-			ignoreRepeat = Integer.parseInt(Common.prefs.getString("ignore_repeat", null));
+			ignoreRepeat = Integer.parseInt(Common.prefs.getString(getString(R.string.key_ignore_repeat), null));
 		} catch (NumberFormatException e) {
 			ignoreRepeat = -1;
 		}
@@ -167,12 +167,12 @@ public class Service extends AccessibilityService {
 		if (ignoreReasons.isEmpty()) {
 			int delay = 0;
 			try {
-				delay = Integer.parseInt(Common.prefs.getString("ttsDelay", null));
+				delay = Integer.parseInt(Common.prefs.getString(getString(R.string.key_ttsDelay), null));
 			} catch (NumberFormatException e) {}
 			if (!isScreenOn()) {
 				int interval;
 				try {
-					interval = Integer.parseInt(Common.prefs.getString("tts_repeat", "0"));
+					interval = Integer.parseInt(Common.prefs.getString(getString(R.string.key_tts_repeat), "0"));
 				} catch (NumberFormatException e) {
 					interval = 0;
 				}
@@ -220,31 +220,31 @@ public class Service extends AccessibilityService {
 	private boolean ignore(boolean isNew) {
 		Calendar c = Calendar.getInstance();
 		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE),
-			quietStart = Common.prefs.getInt("quietStart", 0),
-			quietEnd = Common.prefs.getInt("quietEnd", 0);
+			quietStart = Common.prefs.getInt(getString(R.string.key_quietStart), 0),
+			quietEnd = Common.prefs.getInt(getString(R.string.key_quietEnd), 0);
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
 				| (quietEnd < quietStart & (quietStart <= calTime | calTime < quietEnd))) {
 			ignoreReasons.add(getString(R.string.reason_quiet));
 		}
 		if ((audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
 				|| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
-				&& !Common.prefs.getBoolean(Common.SPEAK_SILENT_ON, false)) {
+				&& !Common.prefs.getBoolean(Common.KEY_SPEAK_SILENT_ON, false)) {
 			ignoreReasons.add(getString(R.string.reason_silent));
 		}
 		if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
 				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
 			ignoreReasons.add(getString(R.string.reason_call));
 		}
-		if (!isScreenOn() & !Common.prefs.getBoolean(Common.SPEAK_SCREEN_OFF, true)) {
+		if (!isScreenOn() & !Common.prefs.getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true)) {
 			ignoreReasons.add(getString(R.string.reason_screen_off));
 		}
-		if (isScreenOn() & !Common.prefs.getBoolean(Common.SPEAK_SCREEN_ON, true)) {
+		if (isScreenOn() & !Common.prefs.getBoolean(Common.KEY_SPEAK_SCREEN_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_screen_on));
 		}
-		if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean(Common.SPEAK_HEADSET_OFF, true)) {
+		if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_off));
 		}
-		if ((isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean(Common.SPEAK_HEADSET_ON, true)) {
+		if ((isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_on));
 		}
 		if (!ignoreReasons.isEmpty()) {

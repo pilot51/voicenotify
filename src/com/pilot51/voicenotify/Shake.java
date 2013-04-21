@@ -23,13 +23,15 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 public class Shake implements SensorEventListener {
-	private SensorManager manager;
-	private Sensor sensor;
+	private final Context context;
+	private final SensorManager manager;
+	private final Sensor sensor;
 	private OnShakeListener listener;
 	private int threshold;
 	private float accel, accelCurrent, accelLast;
-
+	
 	public Shake(Context c) {
+		context = c;
 		manager = (SensorManager)c.getSystemService(Context.SENSOR_SERVICE);
 		sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	}
@@ -37,7 +39,7 @@ public class Shake implements SensorEventListener {
 	protected void enable() {
 		if (listener == null) return;
 		try {
-			threshold = Integer.parseInt(Common.prefs.getString("shake_threshold", null));
+			threshold = Integer.parseInt(Common.prefs.getString(context.getString(R.string.key_shake_threshold), null));
 		} catch (NumberFormatException e) {
 			// Don't enable if threshold setting is blank
 			return;
@@ -50,14 +52,14 @@ public class Shake implements SensorEventListener {
 	protected void disable() {
 		manager.unregisterListener(this);
 	}
-
+	
 	public void setOnShakeListener(OnShakeListener listener) {
 		this.listener = listener;
 	}
-
+	
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-
+	
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 		float x = event.values[0];
@@ -70,7 +72,7 @@ public class Shake implements SensorEventListener {
 		}
 		accelLast = accelCurrent;
 	}
-
+	
 	public interface OnShakeListener {
 		public void onShake();
 	}

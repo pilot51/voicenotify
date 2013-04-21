@@ -29,11 +29,11 @@ public class Common {
 	protected static SharedPreferences prefs;
 	/** Preference key name. */
 	protected static final String
-		SPEAK_SCREEN_OFF = "speakScreenOff",
-		SPEAK_SCREEN_ON = "speakScreenOn",
-		SPEAK_HEADSET_OFF = "speakHeadsetOff",
-		SPEAK_HEADSET_ON = "speakHeadsetOn",
-		SPEAK_SILENT_ON = "speakSilentOn";
+		KEY_SPEAK_SCREEN_OFF = "speakScreenOff",
+		KEY_SPEAK_SCREEN_ON = "speakScreenOn",
+		KEY_SPEAK_HEADSET_OFF = "speakHeadsetOff",
+		KEY_SPEAK_HEADSET_ON = "speakHeadsetOn",
+		KEY_SPEAK_SILENT_ON = "speakSilentOn";
 	
 	Common(Activity a) {
 		activity = a;
@@ -41,10 +41,12 @@ public class Common {
 		onStart();
 		setVolumeStream();
 	}
+	
 	Common(Context c) {
 		context = c;
 		onStart();
 	}
+	
 	void onStart() {
 		if (TAG == null) {
 			TAG = context.getString(R.string.app_name);
@@ -55,9 +57,11 @@ public class Common {
 	}
 	
 	protected void setVolumeStream() {
-		if (prefs.getString("ttsStream", null).contentEquals("media"))
+		String stream = prefs.getString(context.getString(R.string.key_ttsStream), "");
+		if (stream.contentEquals("media")) {
 			activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		else if (prefs.getString("ttsStream", null).contentEquals("notification"))
+		} else if (stream.contentEquals("notification")) {
 			activity.setVolumeControlStream(AudioManager.STREAM_NOTIFICATION);
+		}
 	}
 }

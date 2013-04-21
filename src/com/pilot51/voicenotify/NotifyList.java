@@ -33,7 +33,7 @@ public class NotifyList extends ListView {
 	private static ArrayList<NotifyItem> list = new ArrayList<NotifyItem>();
 	private Adapter adapter;
 	private static OnListChangeListener listener;
-
+	
 	public NotifyList(Context context) {
 		super(context);
 		setDivider(context.getResources().getDrawable(R.drawable.divider));
@@ -42,17 +42,20 @@ public class NotifyList extends ListView {
 	}
 	
 	protected static void addNotification(String title, String message) {
-		if (list.size() == 10)
+		if (list.size() == 10) {
 			list.remove(list.size() - 1);
+		}
 		list.add(0, new NotifyItem(title, message));
-		if (listener != null)
+		if (listener != null) {
 			listener.onListChange();
+		}
 	}
 	
 	protected static void setLastIgnore(String ignoreReasons, boolean isNew) {
 		list.get(0).setIgnoreReasons(ignoreReasons, isNew);
-		if (listener != null)
+		if (listener != null) {
 			listener.onListChange();
+		}
 	}
 	
 	private static class NotifyItem {
@@ -95,7 +98,7 @@ public class NotifyList extends ListView {
 	public class Adapter extends BaseAdapter {
 		private ArrayList<NotifyItem> data;
 		private LayoutInflater mInflater;
-
+		
 		public Adapter(Context context, ArrayList<NotifyItem> list) {
 			data = list;
 			mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -109,24 +112,24 @@ public class NotifyList extends ListView {
 		
 		@Override
 		public boolean isEnabled(int position) {
-		    return false; // Disable list item selector
+			return false; // Disable list item selector
 		}
-
+		
 		@Override
 		public int getCount() {
 			return data.size();
 		}
-
+		
 		@Override
 		public Object getItem(int position) {
 			return data.get(position);
 		}
-
+		
 		@Override
 		public long getItemId(int position) {
 			return position;
 		}
-
+		
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view = convertView;

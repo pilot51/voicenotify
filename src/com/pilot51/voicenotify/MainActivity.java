@@ -65,7 +65,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		pSupport.setOnPreferenceClickListener(this);
 		findPreference("appList").setIntent(new Intent(this, AppList.class));
 		Preference pAccess = findPreference("accessibility"),
-			pTTS = findPreference("ttsSettings");
+		           pTTS = findPreference("ttsSettings");
 		Intent intent;
 		int sdkVer = android.os.Build.VERSION.SDK_INT;
 		if (sdkVer < 11) getPreferenceScreen().removePreference(findPreference("toasts"));
@@ -158,34 +158,34 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			.setTitle(R.string.device_state_dialog_title)
 			.setMultiChoiceItems(items,
 				new boolean[] {
-					Common.prefs.getBoolean(Common.SPEAK_SCREEN_OFF, true),
-					Common.prefs.getBoolean(Common.SPEAK_SCREEN_ON, true),
-					Common.prefs.getBoolean(Common.SPEAK_HEADSET_OFF, true),
-					Common.prefs.getBoolean(Common.SPEAK_HEADSET_ON, true),
-					Common.prefs.getBoolean(Common.SPEAK_SILENT_ON, false)
+					Common.prefs.getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true),
+					Common.prefs.getBoolean(Common.KEY_SPEAK_SCREEN_ON, true),
+					Common.prefs.getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true),
+					Common.prefs.getBoolean(Common.KEY_SPEAK_HEADSET_ON, true),
+					Common.prefs.getBoolean(Common.KEY_SPEAK_SILENT_ON, false)
 				},
 				new DialogInterface.OnMultiChoiceClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 						if (which == 0) { // Screen off
-							Common.prefs.edit().putBoolean(Common.SPEAK_SCREEN_OFF, isChecked).commit();
+							Common.prefs.edit().putBoolean(Common.KEY_SPEAK_SCREEN_OFF, isChecked).commit();
 						} else if (which == 1) { // Screen on
-							Common.prefs.edit().putBoolean(Common.SPEAK_SCREEN_ON, isChecked).commit();
+							Common.prefs.edit().putBoolean(Common.KEY_SPEAK_SCREEN_ON, isChecked).commit();
 						} else if (which == 2) { // Headset off
-							Common.prefs.edit().putBoolean(Common.SPEAK_HEADSET_OFF, isChecked).commit();
+							Common.prefs.edit().putBoolean(Common.KEY_SPEAK_HEADSET_OFF, isChecked).commit();
 						} else if (which == 3) { // Headset on
-							Common.prefs.edit().putBoolean(Common.SPEAK_HEADSET_ON, isChecked).commit();
+							Common.prefs.edit().putBoolean(Common.KEY_SPEAK_HEADSET_ON, isChecked).commit();
 						} else if (which == 4) { // Silent/vibrate
-							Common.prefs.edit().putBoolean(Common.SPEAK_SILENT_ON, isChecked).commit();
+							Common.prefs.edit().putBoolean(Common.KEY_SPEAK_SILENT_ON, isChecked).commit();
 						}
 					}
 				}
 			).create();
 		case DLG_QUIET_START:
-			i = Common.prefs.getInt("quietStart", 0);
+			i = Common.prefs.getInt(getString(R.string.key_quietStart), 0);
 			return new TimePickerDialog(MainActivity.this, sTimeSetListener, i/60, i%60, false);
 		case DLG_QUIET_END:
-			i = Common.prefs.getInt("quietEnd", 0);
+			i = Common.prefs.getInt(getString(R.string.key_quietEnd), 0);
 			return new TimePickerDialog(MainActivity.this, eTimeSetListener, i/60, i%60, false);
 		case DLG_LOG:
 			return new AlertDialog.Builder(this)
@@ -238,12 +238,12 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	
 	private TimePickerDialog.OnTimeSetListener sTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			Common.prefs.edit().putInt("quietStart", hourOfDay * 60 + minute).commit();
+			Common.prefs.edit().putInt(getString(R.string.key_quietStart), hourOfDay * 60 + minute).commit();
 		}
 	};
 	private TimePickerDialog.OnTimeSetListener eTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			Common.prefs.edit().putInt("quietEnd", hourOfDay * 60 + minute).commit();
+			Common.prefs.edit().putInt(getString(R.string.key_quietEnd), hourOfDay * 60 + minute).commit();
 		}
 	};
 	
@@ -255,11 +255,11 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	
 	@Override
 	protected void onPause() {
-		super.onPause();
 		Common.prefs.unregisterOnSharedPreferenceChangeListener(this);
+		super.onPause();
 	}
 	
 	public void onSharedPreferenceChanged(SharedPreferences sp, String key) {
-		if (key.equals("ttsStream")) common.setVolumeStream();
+		if (key.equals(getString(R.string.key_ttsStream))) common.setVolumeStream();
 	}
 }
