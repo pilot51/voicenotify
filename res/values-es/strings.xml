@@ -88,9 +88,13 @@
 	<string name="error_market">Error: No se pudo encontrar la aplicación Market instalada</string>
 	<string name="error_email">Error: No se pudo encontrar una aplicación de email instalada</string>
 	
+	<!-- NotifyList.java -->
+	<string name="ignore">Ignorar</string>
+	<string name="unignore">No ignorar</string>
+	
 	<!-- AppList.java -->
 	<string name="ignore_all">Ignorar todo</string>
-	<string name="ignore_none">No ingorar ninguno</string>
+	<string name="ignore_none">No ignorar ninguno</string>
 	<string name="is_ignored">Ignorado</string>
 	<string name="is_not_ignored">No ignorado</string>
 </resources>

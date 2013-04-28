@@ -88,6 +88,10 @@
 	<string name="error_market">Errore: Non trovo Play Store</string>
 	<string name="error_email">Errore: non ho trovato un\'app per l\'email installata.</string>
 	
+	<!-- NotifyList.java -->
+	<string name="ignore">Ignora</string>
+	<string name="unignore">Non Ignora</string>
+	
 	<!-- AppList.java -->
 	<string name="ignore_all">Ignora Tutto</string>
 	<string name="ignore_none">Ignora Nulla</string>

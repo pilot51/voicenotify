@@ -113,7 +113,7 @@ public class Service extends AccessibilityService {
 		long newMsgTime = System.currentTimeMillis();
 		PackageManager packMan = getPackageManager();
 		ApplicationInfo appInfo = new ApplicationInfo();
-		String pkgName = String.valueOf(event.getPackageName());
+		String pkgName = event.getPackageName().toString();
 		try {
 			appInfo = packMan.getApplicationInfo(pkgName, 0);
 		} catch (NameNotFoundException e) {
@@ -127,7 +127,7 @@ public class Service extends AccessibilityService {
 		}
 		final String label = String.valueOf(appInfo.loadLabel(packMan)),
 			ttsStringPref = Common.prefs.getString(getString(R.string.key_ttsString), null);
-		NotifyList.addNotification(label, notifyMsg.toString());
+		NotifyList.addNotification(AppList.findApp(pkgName), notifyMsg.toString());
 		String newMsg;
 		try {
 			newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"), label, notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
@@ -178,9 +178,9 @@ public class Service extends AccessibilityService {
 				}
 				if (interval > 0) {
 					repeatList.add(newMsg);
-					if (repeater == null)
+					if (repeater == null) {
 						repeater = new RepeatTimer(interval);
-					else repeater.checkInterval(interval);
+					} else repeater.checkInterval(interval);
 				}
 			}
 			if (delay > 0) {
@@ -258,22 +258,23 @@ public class Service extends AccessibilityService {
 	}
 	
 	private class RepeatTimer extends TimerTask {
-		private int interval;
-		private RepeatTimer(int interval) {
-			this.interval = interval;
-			if (interval <= 0) return;
-			new Timer().schedule(this, interval * 60000, interval * 60000);
+		private int minuteInterval;
+		
+		private RepeatTimer(int minuteInterval) {
+			this.minuteInterval = minuteInterval;
+			if (minuteInterval <= 0) return;
+			new Timer().schedule(this, minuteInterval * 60000, minuteInterval * 60000);
 		}
 		
 		/**
 		 * If passed interval is different from current timer interval,
 		 *  cancels current timer and, if interval > 0, creates new instance with passed interval.
-		 * @param interval The interval to check against.
+		 * @param minuteInterval The interval to check against.
 		 */
-		private void checkInterval(int interval) {
-			if (this.interval != interval) {
+		private void checkInterval(int minuteInterval) {
+			if (this.minuteInterval != minuteInterval) {
 				cancel();
-				if (interval > 0) repeater = new RepeatTimer(interval);
+				if (minuteInterval > 0) repeater = new RepeatTimer(minuteInterval);
 			}
 		}
 		

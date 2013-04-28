@@ -88,6 +88,10 @@
 	<string name="error_market">Ошибка: Невозможно найти установленный Market.</string>
 	<string name="error_email">Ошибка: Невозможно найти установленный почтовый клиент.</string>
 	
+	<!-- NotifyList.java -->
+	<string name="ignore">Игнорировать</string>
+	<string name="unignore">Не игнорировать</string>
+	
 	<!-- AppList.java -->
 	<string name="ignore_all">Игнорировать всё.</string>
 	<string name="ignore_none">Ничего не игнорировать</string>

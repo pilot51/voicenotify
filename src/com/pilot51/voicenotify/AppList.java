@@ -54,23 +54,24 @@ public class AppList extends ListActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+		lv = getListView();
+		lv.setTextFilterEnabled(true);
+		adapter = new Adapter();
+		lv.setAdapter(adapter);
+		lv.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				setIgnore(position, IGNORE_TOGGLE);
+				adapter.notifyDataSetChanged();
+			}
+		});
 		defEnable = Common.prefs.getBoolean(KEY_DEFAULT_ENABLE, true);
 		new Thread(new Runnable() {
 			public void run() {
 				apps = Database.getApps();
 				runOnUiThread(new Runnable() {
 					public void run() {
-						lv = getListView();
-						lv.setTextFilterEnabled(true);
-						adapter = new Adapter(AppList.this, apps);
-						lv.setAdapter(adapter);
-						lv.setOnItemClickListener(new OnItemClickListener() {
-							@Override
-							public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-								setIgnore(position, IGNORE_TOGGLE);
-								adapter.notifyDataSetChanged();
-							}
-						});
+						adapter.setData(apps);
 						setProgressBarIndeterminateVisibility(true);
 					}
 				});
@@ -109,8 +110,8 @@ public class AppList extends ListActivity {
 				
 				Collections.sort(apps, new Comparator<App>() {
 					@Override
-					public int compare(App object1, App object2) {
-						return object1.label.compareToIgnoreCase(object2.label);
+					public int compare(App app1, App app2) {
+						return app1.getLabel().compareToIgnoreCase(app2.getLabel());
 					}
 				});
 				runOnUiThread(new Runnable() {
@@ -126,24 +127,41 @@ public class AppList extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, 1, 0, R.string.ignore_all);
-		menu.add(0, 2, 0, R.string.ignore_none);
+		menu.add(0, IGNORE_ALL, 0, R.string.ignore_all);
+		menu.add(0, IGNORE_NONE, 0, R.string.ignore_none);
 		return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case 1:
+		case IGNORE_ALL:
 			setDefaultEnable(false);
 			massIgnore(IGNORE_ALL);
 			return true;
-		case 2:
+		case IGNORE_NONE:
 			setDefaultEnable(true);
 			massIgnore(IGNORE_NONE);
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * @param pkg Package name used to find {@link App}.
+	 * @return Found {@link App}, null if not found in list.
+	 */
+	protected static App findApp(String pkg) {
+		if (apps == null) {
+			defEnable = Common.prefs.getBoolean(KEY_DEFAULT_ENABLE, true);
+			apps = Database.getApps();
+		}
+		for (App app : apps) {
+			if (app.getPackage().equals(pkg)) {
+				return app;
+			}
+		}
+		return null;
 	}
 	
 	private void massIgnore(int ignoreType) {
@@ -189,79 +207,42 @@ public class AppList extends ListActivity {
 		}
 		for (App app : apps) {
 			if (app.getPackage().equals(pkg)) {
-				return app.enabled;
+				return app.getEnabled();
 			}
 		}
 		return defEnable;
 	}
 	
-	protected static class App {
-		private String packageName, label;
-		private boolean enabled;
-		
-		protected App(String pkg, String name, boolean enable) {
-			packageName = pkg;
-			label = name;
-			enabled = enable;
-		}
-		
-		/**
-		 * Updates self in database.
-		 * @return This instance.
-		 */
-		private App updateDb() {
-			Database.updateApp(this);
-			return this;
-		}
-		
-		private void setEnabled(boolean enable, boolean updateDb) {
-			enabled = enable;
-			if (updateDb) Database.updateAppEnable(this);
-		}
-		
-		/** Removes self from database. */
-		private void remove() {
-			Database.removeApp(this);
-		}
-		
-		protected String getLabel() {
-			return label;
-		}
-		
-		protected String getPackage() {
-			return packageName;
-		}
-		
-		protected boolean getEnabled() {
-			return enabled;
-		}
-	}
-	
 	private class Adapter extends BaseAdapter implements Filterable {
-		private ArrayList<App> data = new ArrayList<App>();
+		private final ArrayList<App> baseData = new ArrayList<App>();
+		private final ArrayList<App> adapterData = new ArrayList<App>();
 		private LayoutInflater mInflater;
-		private SimpleFilter mFilter;
-		private ArrayList<App> mUnfilteredData;
+		private SimpleFilter filter;
 		
-		private Adapter(Context context, ArrayList<App> list) {
-			data.addAll(list);
-			mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		private Adapter() {
+			mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 		
 		private void setData(ArrayList<App> list) {
-			data.clear();
-			data.addAll(list);
+			baseData.clear();
+			baseData.addAll(list);
+			refresh();
+		}
+		
+		private void refresh() {
+			adapterData.clear();
+			adapterData.addAll(baseData);
 			notifyDataSetChanged();
 		}
 		
 		@Override
 		public int getCount() {
-			return data.size();
+			return adapterData.size();
 		}
 		
 		@Override
 		public Object getItem(int position) {
-			return data.get(position);
+			return adapterData.get(position);
 		}
 		
 		@Override
@@ -270,38 +251,33 @@ public class AppList extends ListActivity {
 		}
 		
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View view;
-			if (convertView == null) {
+		public View getView(int position, View view, ViewGroup parent) {
+			if (view == null) {
 				view = mInflater.inflate(R.layout.app_list_item, parent, false);
-			} else view = convertView;
-			((TextView)view.findViewById(R.id.text1)).setText(data.get(position).getLabel());
-			((TextView)view.findViewById(R.id.text2)).setText(data.get(position).getPackage());
-			((CheckBox)view.findViewById(R.id.checkbox)).setChecked(data.get(position).getEnabled());
+			}
+			((TextView)view.findViewById(R.id.text1)).setText(adapterData.get(position).getLabel());
+			((TextView)view.findViewById(R.id.text2)).setText(adapterData.get(position).getPackage());
+			((CheckBox)view.findViewById(R.id.checkbox)).setChecked(adapterData.get(position).getEnabled());
 			return view;
 		}
 		
 		@Override
 		public Filter getFilter() {
-			if (mFilter == null) mFilter = new SimpleFilter();
-			return mFilter;
+			if (filter == null) filter = new SimpleFilter();
+			return filter;
 		}
 		
 		private class SimpleFilter extends Filter {
 			@Override
 			protected FilterResults performFiltering(CharSequence prefix) {
 				FilterResults results = new FilterResults();
-				if (mUnfilteredData == null) {
-					mUnfilteredData = new ArrayList<App>(data);
-				}
 				if (prefix == null || prefix.length() == 0) {
-					ArrayList<App> list = mUnfilteredData;
-					results.values = list;
-					results.count = list.size();
+					results.values = baseData;
+					results.count = baseData.size();
 				} else {
 					String prefixString = prefix.toString().toLowerCase();
-					ArrayList<App> newValues = new ArrayList<App>(mUnfilteredData.size());
-					for (App app : mUnfilteredData) {
+					ArrayList<App> newValues = new ArrayList<App>();
+					for (App app : baseData) {
 						if (app.getLabel().toLowerCase().contains(prefixString)
 								|| app.getPackage().toLowerCase().contains(prefixString)) {
 							newValues.add(app);
@@ -316,7 +292,8 @@ public class AppList extends ListActivity {
 			@SuppressWarnings("unchecked")
 			@Override
 			protected void publishResults(CharSequence constraint, FilterResults results) {
-				data = (ArrayList<App>)results.values;
+				adapterData.clear();
+				adapterData.addAll((ArrayList<App>)results.values);
 				if (results.count > 0) notifyDataSetChanged();
 				else notifyDataSetInvalidated();
 			}

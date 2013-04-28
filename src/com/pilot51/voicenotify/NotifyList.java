@@ -20,7 +20,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +30,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class NotifyList extends ListView {
 	private static ArrayList<NotifyItem> list = new ArrayList<NotifyItem>();
@@ -36,16 +39,16 @@ public class NotifyList extends ListView {
 	
 	public NotifyList(Context context) {
 		super(context);
-		setDivider(context.getResources().getDrawable(R.drawable.divider));
-		adapter = new Adapter(getContext(), list);
+		setDivider(getResources().getDrawable(R.drawable.divider));
+		adapter = new Adapter(context, list);
 		setAdapter(adapter);
 	}
 	
-	protected static void addNotification(String title, String message) {
+	protected static void addNotification(App app, String message) {
 		if (list.size() == 10) {
 			list.remove(list.size() - 1);
 		}
-		list.add(0, new NotifyItem(title, message));
+		list.add(0, new NotifyItem(app, message));
 		if (listener != null) {
 			listener.onListChange();
 		}
@@ -59,18 +62,19 @@ public class NotifyList extends ListView {
 	}
 	
 	private static class NotifyItem {
-		private String title, message, ignoreReasons, time;
+		private App app;
+		private String message, ignoreReasons, time;
 		private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		private boolean silenced;
 		
-		private NotifyItem(String name, String msg) {
-			this.title = name;
-			this.message = msg;
+		private NotifyItem(App app, String message) {
+			this.app = app;
+			this.message = message;
 			time = sdf.format(Calendar.getInstance().getTime());
 		}
 		
-		private String getTitle() {
-			return title;
+		private App getApp() {
+			return app;
 		}
 		
 		private String getMessage() {
@@ -91,15 +95,15 @@ public class NotifyList extends ListView {
 		}
 	}
 	
-	public static interface OnListChangeListener {
+	private static interface OnListChangeListener {
 		public void onListChange();
 	}
 	
-	public class Adapter extends BaseAdapter {
+	private class Adapter extends BaseAdapter {
 		private ArrayList<NotifyItem> data;
 		private LayoutInflater mInflater;
 		
-		public Adapter(Context context, ArrayList<NotifyItem> list) {
+		private Adapter(Context context, ArrayList<NotifyItem> list) {
 			data = list;
 			mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			listener = new OnListChangeListener() {
@@ -108,11 +112,6 @@ public class NotifyList extends ListView {
 					notifyDataSetChanged();
 				}
 			};
-		}
-		
-		@Override
-		public boolean isEnabled(int position) {
-			return false; // Disable list item selector
 		}
 		
 		@Override
@@ -136,9 +135,9 @@ public class NotifyList extends ListView {
 			if (view == null) {
 				view = mInflater.inflate(R.layout.notify_log_item, parent, false);
 			}
-			NotifyItem item = data.get(position);
+			final NotifyItem item = data.get(position);
 			((TextView)view.findViewById(R.id.time)).setText(item.getTime());
-			((TextView)view.findViewById(R.id.title)).setText(item.getTitle());
+			((TextView)view.findViewById(R.id.title)).setText(item.getApp().getLabel());
 			TextView textView = (TextView)view.findViewById(R.id.message);
 			if (item.getMessage().length() != 0) {
 				textView.setText(item.getMessage());
@@ -151,6 +150,30 @@ public class NotifyList extends ListView {
 				else textView.setTextColor(Color.RED);
 				textView.setVisibility(TextView.VISIBLE);
 			} else textView.setVisibility(TextView.GONE);
+			view.setOnLongClickListener(new OnLongClickListener() {
+				@Override
+				public boolean onLongClick(View v) {
+					String action = item.getApp().getEnabled()
+					                ? getResources().getString(R.string.ignore)
+					                : getResources().getString(R.string.unignore);
+					new AlertDialog.Builder(getContext())
+					.setTitle(action + " " + item.getApp().getLabel() + "?")
+					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							item.getApp().setEnabled(!item.getApp().getEnabled(), true);
+							Toast.makeText(getContext(), item.getApp().getLabel() + " "
+							                             + getResources().getString(item.getApp().getEnabled()
+							                                                        ? R.string.is_not_ignored
+							                                                        : R.string.is_ignored),
+							               Toast.LENGTH_SHORT).show();
+						}
+					})
+					.setNegativeButton(android.R.string.no, null)
+					.show();
+					return false;
+				}
+			});
 			return view;
 		}
 	}

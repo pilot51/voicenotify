@@ -94,13 +94,13 @@ public class Database extends SQLiteOpenHelper {
 			Log.e(Common.TAG, "Error: Failed to read ignored_apps");
 			e.printStackTrace();
 		}
-		ArrayList<AppList.App> newList = new ArrayList<AppList.App>();
+		ArrayList<App> newList = new ArrayList<App>();
 		PackageManager packMan = context.getPackageManager();
 		ApplicationInfo appInfo;
 		for (String s : oldList) {
 			try {
 				appInfo = packMan.getApplicationInfo(s, PackageManager.GET_UNINSTALLED_PACKAGES);
-				newList.add(new AppList.App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)), false));
+				newList.add(new App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)), false));
 			} catch (NameNotFoundException e) {
 				e.printStackTrace();
 			}
@@ -110,12 +110,12 @@ public class Database extends SQLiteOpenHelper {
 	}
 	
 	/** @return A new ArrayList containing all apps from the database. */
-	protected static synchronized ArrayList<AppList.App> getApps() {
+	protected static synchronized ArrayList<App> getApps() {
 		SQLiteDatabase db = database.getReadableDatabase();
 		Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, COLUMN_LABEL + " COLLATE NOCASE");
-		ArrayList<AppList.App> list = new ArrayList<AppList.App>();
+		ArrayList<App> list = new ArrayList<App>();
 		while (cursor.moveToNext()) {
-			list.add(new AppList.App(
+			list.add(new App(
 				cursor.getString(cursor.getColumnIndex(COLUMN_PACKAGE)),
 				cursor.getString(cursor.getColumnIndex(COLUMN_LABEL)),
 				cursor.getInt(cursor.getColumnIndex(COLUMN_ENABLED)) == 1
@@ -130,11 +130,11 @@ public class Database extends SQLiteOpenHelper {
 	 * Clears and sets all apps in database.
 	 * @param list The list of apps to add in the database.
 	 */
-	protected static synchronized void setApps(ArrayList<AppList.App> list) {
+	protected static synchronized void setApps(ArrayList<App> list) {
 		SQLiteDatabase db = database.getWritableDatabase();
 		db.delete(TABLE_NAME, null, null);
 		ContentValues values;
-		for (AppList.App app : list) {
+		for (App app : list) {
 			values = new ContentValues();
 			values.put(COLUMN_PACKAGE,  app.getPackage());
 			values.put(COLUMN_LABEL,  app.getLabel());
@@ -148,7 +148,7 @@ public class Database extends SQLiteOpenHelper {
 	 * Updates app in database matching package name or adds if no match found.
 	 * @param app The app to add or update in the database.
 	 */
-	protected static synchronized void updateApp(AppList.App app) {
+	protected static synchronized void updateApp(App app) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_PACKAGE,  app.getPackage());
 		values.put(COLUMN_LABEL,  app.getLabel());
@@ -164,7 +164,7 @@ public class Database extends SQLiteOpenHelper {
 	 * Updates enabled value of app in database matching package name.
 	 * @param app The app to update in the database.
 	 */
-	protected static synchronized void updateAppEnable(AppList.App app) {
+	protected static synchronized void updateAppEnable(App app) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_ENABLED,  app.getEnabled() ? 1 : 0);
 		SQLiteDatabase db = database.getWritableDatabase();
@@ -176,7 +176,7 @@ public class Database extends SQLiteOpenHelper {
 	 * Removes app from database matching package name.
 	 * @param app The app to remove from the database.
 	 */
-	protected static synchronized void removeApp(AppList.App app) {
+	protected static synchronized void removeApp(App app) {
 		SQLiteDatabase db = database.getWritableDatabase();
 		db.delete(TABLE_NAME, COLUMN_PACKAGE + " = ?", new String[] {app.getPackage()});
 		db.close();
