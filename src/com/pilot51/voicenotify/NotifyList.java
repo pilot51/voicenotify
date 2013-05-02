@@ -23,6 +23,7 @@ import java.util.Calendar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,13 +34,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class NotifyList extends ListView {
+	private Resources res;
 	private static ArrayList<NotifyItem> list = new ArrayList<NotifyItem>();
 	private Adapter adapter;
 	private static OnListChangeListener listener;
 	
 	public NotifyList(Context context) {
 		super(context);
-		setDivider(getResources().getDrawable(R.drawable.divider));
+		res = getResources();
+		setDivider(res.getDrawable(R.drawable.divider));
 		adapter = new Adapter(context, list);
 		setAdapter(adapter);
 	}
@@ -153,23 +156,23 @@ public class NotifyList extends ListView {
 			view.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View v) {
-					String action = item.getApp().getEnabled()
-					                ? getResources().getString(R.string.ignore)
-					                : getResources().getString(R.string.unignore);
 					new AlertDialog.Builder(getContext())
-					.setTitle(action + " " + item.getApp().getLabel() + "?")
-					.setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+					.setTitle(res.getString(item.getApp().getEnabled()
+					                        ? R.string.ignore_app
+					                        : R.string.unignore_app,
+					                        item.getApp().getLabel()))
+					.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 						@Override
 						public void onClick(DialogInterface dialog, int which) {
 							item.getApp().setEnabled(!item.getApp().getEnabled(), true);
-							Toast.makeText(getContext(), item.getApp().getLabel() + " "
-							                             + getResources().getString(item.getApp().getEnabled()
-							                                                        ? R.string.is_not_ignored
-							                                                        : R.string.is_ignored),
+							Toast.makeText(getContext(), res.getString(item.getApp().getEnabled()
+							                                           ? R.string.app_is_not_ignored
+							                                           : R.string.app_is_ignored,
+							                                           item.getApp().getLabel()),
 							               Toast.LENGTH_SHORT).show();
 						}
 					})
-					.setNegativeButton(android.R.string.no, null)
+					.setNegativeButton(android.R.string.cancel, null)
 					.show();
 					return false;
 				}

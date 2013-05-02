@@ -16,6 +16,10 @@
 <resources>
 	<string name="app_name">Notificación por voz</string>
 	
+	<!-- Used by multiple files -->
+	<string name="app_is_ignored">Ignorado %s</string>
+	<string name="app_is_not_ignored">No ignorado %s</string>
+	
 	<!-- service_config.xml -->
 	<string name="service_desc">Lee la barra de notificaciones con Texto-a-Voz</string>
 	
@@ -89,12 +93,11 @@
 	<string name="error_email">Error: No se pudo encontrar una aplicación de email instalada</string>
 	
 	<!-- NotifyList.java -->
-	<string name="ignore">Ignorar</string>
-	<string name="unignore">No ignorar</string>
+	<string name="yes">Sí</string>
+	<string name="ignore_app">Ignorar %s?</string>
+	<string name="unignore_app">No ignorar %s?</string>
 	
 	<!-- AppList.java -->
 	<string name="ignore_all">Ignorar todo</string>
 	<string name="ignore_none">No ignorar ninguno</string>
-	<string name="is_ignored">Ignorado</string>
-	<string name="is_not_ignored">No ignorado</string>
 </resources>

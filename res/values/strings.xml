@@ -16,6 +16,10 @@
 <resources>
 	<string name="app_name">Voice Notify</string>
 	
+	<!-- Used by multiple files -->
+	<string name="app_is_ignored">%s is ignored</string>
+	<string name="app_is_not_ignored">%s is not ignored</string>
+	
 	<!-- service_config.xml -->
 	<string name="service_desc">Reads status bar notifications with Text-To-Speech.</string>
 	
@@ -94,14 +98,13 @@
 	<string name="error_email">Error: Unable to find an installed email app.</string>
 	
 	<!-- NotifyList.java -->
-	<string name="ignore">Ignore</string>
-	<string name="unignore">Unignore</string>
+	<string name="yes">Yes</string>
+	<string name="ignore_app">Ignore %s?</string>
+	<string name="unignore_app">Unignore %s?</string>
 	
 	<!-- AppList.java -->
 	<string name="ignore_all">Ignore All</string>
 	<string name="ignore_none">Ignore None</string>
-	<string name="is_ignored">is ignored</string>
-	<string name="is_not_ignored">is not ignored</string>
 	
 	<!-- Ignore/Silence reasons -->
 	<string name="reason_app">ignored app (pref.)</string>

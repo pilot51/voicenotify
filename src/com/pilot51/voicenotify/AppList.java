@@ -184,12 +184,12 @@ public class AppList extends ListActivity {
 		if (!app.getEnabled() & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_NONE)) {
 			app.setEnabled(true, ignoreType == IGNORE_TOGGLE);
 			if (ignoreType == IGNORE_TOGGLE) {
-				Toast.makeText(this, app.getLabel() + " " + getString(R.string.is_not_ignored), Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, getString(R.string.app_is_not_ignored, app.getLabel()), Toast.LENGTH_SHORT).show();
 			}
 		} else if (app.getEnabled() & (ignoreType == IGNORE_TOGGLE | ignoreType == IGNORE_ALL)) {
 			app.setEnabled(false, ignoreType == IGNORE_TOGGLE);
 			if (ignoreType == IGNORE_TOGGLE) {
-				Toast.makeText(this, app.getLabel() + " " + getString(R.string.is_ignored), Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, getString(R.string.app_is_ignored, app.getLabel()), Toast.LENGTH_SHORT).show();
 			}
 		}
 	}

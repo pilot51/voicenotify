@@ -16,6 +16,10 @@
 <resources>
 	<string name="app_name">Уведомления Голосом</string>
 	
+	<!-- Used by multiple files -->
+	<string name="app_is_ignored">%s игнорируется</string>
+	<string name="app_is_not_ignored">%s не игнорируется</string>
+	
 	<!-- service_config.xml -->
 	<string name="service_desc">Читать текст из строки уведомлений с помощью Text-To-Speech.</string>
 	
@@ -89,12 +93,11 @@
 	<string name="error_email">Ошибка: Невозможно найти установленный почтовый клиент.</string>
 	
 	<!-- NotifyList.java -->
-	<string name="ignore">Игнорировать</string>
-	<string name="unignore">Не игнорировать</string>
+	<string name="yes">Да</string>
+	<string name="ignore_app">Игнорировать %s?</string>
+	<string name="unignore_app">Не игнорировать %s?</string>
 	
 	<!-- AppList.java -->
 	<string name="ignore_all">Игнорировать всё.</string>
 	<string name="ignore_none">Ничего не игнорировать</string>
-	<string name="is_ignored">- игнорируется</string>
-	<string name="is_not_ignored">- не игнорируется</string>
 </resources>
