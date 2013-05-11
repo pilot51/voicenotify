@@ -38,6 +38,7 @@ public class NotifyList extends ListView {
 	private static ArrayList<NotifyItem> list = new ArrayList<NotifyItem>();
 	private Adapter adapter;
 	private static OnListChangeListener listener;
+	private static final int HISTORY_LIMIT = 20;
 	
 	public NotifyList(Context context) {
 		super(context);
@@ -48,7 +49,7 @@ public class NotifyList extends ListView {
 	}
 	
 	protected static void addNotification(App app, String message) {
-		if (list.size() == 10) {
+		if (list.size() == HISTORY_LIMIT) {
 			list.remove(list.size() - 1);
 		}
 		list.add(0, new NotifyItem(app, message));

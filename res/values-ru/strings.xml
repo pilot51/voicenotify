@@ -77,7 +77,7 @@
 	<!-- MainActivity.java and preferences.xml -->
 	<string name="test">Тест</string>
 	<string name="notify_log">Лог уведомлений</string>
-	<string name="notify_log_summary">Список последних 10-ти уведомлений. Отображается имя приложения, текст уведомления, и причины игнорирования.</string>
+	<string name="notify_log_summary">Список последних 20-ти уведомлений. Отображается имя приложения, текст уведомления, и причины игнорирования.</string>
 	<string name="support">Поддержать \'Уведомления голосом\'</string>
 	
 	<!-- MainActivity.java -->

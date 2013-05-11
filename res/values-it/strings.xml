@@ -77,7 +77,7 @@
 	<!-- MainActivity.java and preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Registro Notifiche</string>
-	<string name="notify_log_summary">Elenco delle ultime 10 notifiche. Mostra ora, nome dell\'app, messaggio e motivi per l\'ignoro.</string>
+	<string name="notify_log_summary">Elenco delle ultime 20 notifiche. Mostra ora, nome dell\'app, messaggio e motivi per l\'ignoro.</string>
 	<string name="support">Sostieni Voice Notify</string>
 	
 	<!-- MainActivity.java -->
