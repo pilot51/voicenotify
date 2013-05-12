@@ -32,6 +32,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
@@ -127,21 +128,23 @@ public class AppList extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
-		menu.add(0, IGNORE_ALL, 0, R.string.ignore_all);
-		menu.add(0, IGNORE_NONE, 0, R.string.ignore_none);
+		getMenuInflater().inflate(R.menu.app_list, menu);
 		return true;
 	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case IGNORE_ALL:
+		case R.id.ignore_all:
 			setDefaultEnable(false);
 			massIgnore(IGNORE_ALL);
 			return true;
-		case IGNORE_NONE:
+		case R.id.ignore_none:
 			setDefaultEnable(true);
 			massIgnore(IGNORE_NONE);
+			return true;
+		case R.id.filter:
+			((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0, 0);
 			return true;
 		}
 		return false;
