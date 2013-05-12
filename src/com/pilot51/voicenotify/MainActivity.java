@@ -43,7 +43,7 @@ import android.widget.Toast;
 
 public class MainActivity extends PreferenceActivity implements OnPreferenceClickListener, OnSharedPreferenceChangeListener {
 	private Common common;
-	private Preference pDeviceState, pQuietStart, pQuietEnd, pTest, pNotifyLog, pSupport;
+	private Preference pAccess, pDeviceState, pQuietStart, pQuietEnd, pTest, pNotifyLog, pSupport;
 	private static final int DLG_DEVICE_STATE = 0, DLG_QUIET_START = 1, DLG_QUIET_END = 2, DLG_LOG = 3, DLG_SUPPORT = 4;
 	
 	@Override
@@ -51,6 +51,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		super.onCreate(savedInstanceState);
 		common = new Common(this);
 		addPreferencesFromResource(R.xml.preferences);
+		pAccess = findPreference("accessibility");
 		pDeviceState = findPreference("device_state");
 		pDeviceState.setOnPreferenceClickListener(this);
 		pQuietStart = findPreference("quietStart");
@@ -64,8 +65,6 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		pSupport = findPreference("support");
 		pSupport.setOnPreferenceClickListener(this);
 		findPreference("appList").setIntent(new Intent(this, AppList.class));
-		Preference pAccess = findPreference("accessibility"),
-		           pTTS = findPreference("ttsSettings");
 		Intent intent;
 		int sdkVer = android.os.Build.VERSION.SDK_INT;
 		if (sdkVer < 11) getPreferenceScreen().removePreference(findPreference("toasts"));
@@ -76,6 +75,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			intent.setClassName("com.android.settings", "com.android.settings.AccessibilitySettings");
 			pAccess.setIntent(intent);
 		}
+		Preference pTTS = findPreference("ttsSettings");
 		intent = new Intent(Intent.ACTION_MAIN);
 		if (isClassExist("com.android.settings.TextToSpeechSettings")) {
 			if (sdkVer >= 11 & sdkVer <= 13) {
@@ -251,6 +251,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	protected void onResume() {
 		super.onResume();
 		Common.prefs.registerOnSharedPreferenceChangeListener(this);
+		pAccess.setTitle(Service.isRunning() ? R.string.service_enabled : R.string.service_disabled);
 	}
 	
 	@Override

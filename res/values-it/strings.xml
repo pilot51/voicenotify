@@ -24,8 +24,7 @@
 	<string name="service_desc">Leggi le notifiche della status bar con la sintesi vocale.</string>
 	
 	<!-- preferences.xml -->
-	<string name="toggle">Attiva/Disattiva</string>
-	<string name="toggle_summary">Apre le opzioni di Accesso Facilitato di Android.</string>
+	<string name="accessibility_summary">Apre le opzioni di Accesso Facilitato di Android.</string>
 	<string name="tts_settings">Impostazioni Sintesi Vocale</string>
 	<string name="tts_settings_summary">Apre le impostazioni di Sintesi Vocale di Android.</string>
 	<string name="tts_settings_summary_fail">Impostazioni di sintesi vocale non trovate! Se figurano nel dispositivo (come dovrebbero), informa lo sviluppatore.</string>

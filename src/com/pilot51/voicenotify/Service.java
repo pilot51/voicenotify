@@ -48,24 +48,23 @@ import android.view.accessibility.AccessibilityEvent;
 
 public class Service extends AccessibilityService {
 	private String lastMsg = "";
-	private static final int
-		SPEAK = 1,
-		STOP_SPEAK = 2,
-		START_TTS = 3,
-		STOP_TTS = 4;
+	private static final int SPEAK = 1,
+	                         STOP_SPEAK = 2,
+	                         START_TTS = 3,
+	                         STOP_TTS = 4;
 	private long lastMsgTime;
 	private TextToSpeech mTts;
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
-	private HeadsetReceiver headsetReceiver = new HeadsetReceiver();
+	private final HeadsetReceiver headsetReceiver = new HeadsetReceiver();
 	private RepeatTimer repeater;
 	private Shake shake;
-	private boolean isInitialized, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
-	private HashMap<String, String> ttsParams = new HashMap<String, String>();
-	private ArrayList<String> ignoreReasons = new ArrayList<String>(),
+	private static boolean isInitialized, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
+	private final HashMap<String, String> ttsParams = new HashMap<String, String>();
+	private final ArrayList<String> ignoreReasons = new ArrayList<String>(),
 			repeatList = new ArrayList<String>();
 	private String lastQueueTime;
-	private Handler ttsHandler = new Handler() {
+	private final Handler ttsHandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
 			switch (message.what) {
@@ -338,6 +337,10 @@ public class Service extends AccessibilityService {
 			isInitialized = false;
 		}
 		return false;
+	}
+	
+	static boolean isRunning() {
+		return isInitialized;
 	}
 	
 	private boolean isScreenOn() {

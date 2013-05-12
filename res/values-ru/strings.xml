@@ -24,8 +24,7 @@
 	<string name="service_desc">Читать текст из строки уведомлений с помощью Text-To-Speech.</string>
 	
 	<!-- preferences.xml -->
-	<string name="toggle">Включить / Выключить</string>
-	<string name="toggle_summary">Открыть настройки спец.возможностей Android.</string>
+	<string name="accessibility_summary">Открыть настройки спец.возможностей Android.</string>
 	<string name="tts_settings">Настройки TTS</string>
 	<string name="tts_settings_summary">Открыть настройки Text-To-Speech.</string>
 	<string name="tts_settings_summary_fail">Невозможно найти настройки TTS. Если TTS установлено на вашем устройстве, пожалуйста свяжитесь с производителем.</string>

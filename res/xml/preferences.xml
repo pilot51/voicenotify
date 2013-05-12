@@ -17,8 +17,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	<Preference
 		android:key="@string/key_accessibility"
-		android:title="@string/toggle"
-		android:summary="@string/toggle_summary" />
+		android:summary="@string/accessibility_summary" />
 	<Preference
 		android:key="@string/key_appList"
 		android:title="@string/app_list"
