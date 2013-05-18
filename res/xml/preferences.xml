@@ -16,8 +16,7 @@
 <PreferenceScreen
 	xmlns:android="http://schemas.android.com/apk/res/android">
 	<Preference
-		android:key="@string/key_accessibility"
-		android:summary="@string/accessibility_summary" />
+		android:key="@string/key_status" />
 	<Preference
 		android:key="@string/key_appList"
 		android:title="@string/app_list"

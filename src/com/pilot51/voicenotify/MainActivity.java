@@ -41,42 +41,68 @@ import android.preference.PreferenceActivity;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.pilot51.voicenotify.Service.OnStatusChangeListener;
+
 public class MainActivity extends PreferenceActivity implements OnPreferenceClickListener, OnSharedPreferenceChangeListener {
 	private Common common;
-	private Preference pAccess, pDeviceState, pQuietStart, pQuietEnd, pTest, pNotifyLog, pSupport;
+	private Preference pStatus, pDeviceState, pQuietStart, pQuietEnd, pTest, pNotifyLog, pSupport;
 	private static final int DLG_DEVICE_STATE = 0, DLG_QUIET_START = 1, DLG_QUIET_END = 2, DLG_LOG = 3, DLG_SUPPORT = 4;
+	private OnStatusChangeListener statusListener = new OnStatusChangeListener() {
+		@Override
+		public void onStatusChanged() {
+			updateStatus();
+		}
+	};
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		common = new Common(this);
 		addPreferencesFromResource(R.xml.preferences);
-		pAccess = findPreference("accessibility");
-		pDeviceState = findPreference("device_state");
+		pStatus = findPreference(getString(R.string.key_status));
+		pStatus.setOnPreferenceClickListener(this);
+		pDeviceState = findPreference(getString(R.string.key_device_state));
 		pDeviceState.setOnPreferenceClickListener(this);
-		pQuietStart = findPreference("quietStart");
+		pQuietStart = findPreference(getString(R.string.key_quietStart));
 		pQuietStart.setOnPreferenceClickListener(this);
-		pQuietEnd = findPreference("quietEnd");
+		pQuietEnd = findPreference(getString(R.string.key_quietEnd));
 		pQuietEnd.setOnPreferenceClickListener(this);
-		pTest = findPreference("test");
+		pTest = findPreference(getString(R.string.key_test));
 		pTest.setOnPreferenceClickListener(this);
-		pNotifyLog = findPreference("notify_log");
+		pNotifyLog = findPreference(getString(R.string.key_notify_log));
 		pNotifyLog.setOnPreferenceClickListener(this);
-		pSupport = findPreference("support");
+		pSupport = findPreference(getString(R.string.key_support));
 		pSupport.setOnPreferenceClickListener(this);
-		findPreference("appList").setIntent(new Intent(this, AppList.class));
-		Intent intent;
-		int sdkVer = android.os.Build.VERSION.SDK_INT;
-		if (sdkVer < 11) getPreferenceScreen().removePreference(findPreference("toasts"));
-		if (sdkVer > 4) {
-			pAccess.setIntent(new Intent(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS));
-		} else if (sdkVer == 4) {
-			intent = new Intent(Intent.ACTION_MAIN);
-			intent.setClassName("com.android.settings", "com.android.settings.AccessibilitySettings");
-			pAccess.setIntent(intent);
+		findPreference(getString(R.string.key_appList)).setIntent(new Intent(this, AppList.class));
+		Preference pTTS = findPreference(getString(R.string.key_ttsSettings));
+		Intent ttsIntent = getTtsIntent();
+		if (ttsIntent != null) {
+			pTTS.setIntent(ttsIntent);
+		} else {
+			pTTS.setEnabled(false);
+			pTTS.setSummary(R.string.tts_settings_summary_fail);
 		}
-		Preference pTTS = findPreference("ttsSettings");
-		intent = new Intent(Intent.ACTION_MAIN);
+		if (android.os.Build.VERSION.SDK_INT < 11) {
+			getPreferenceScreen().removePreference(findPreference(getString(R.string.key_toasts)));
+		}
+		updateStatus();
+	}
+	
+	static Intent getAccessibilityIntent() {
+		Intent intent = new Intent();
+		int sdkVer = android.os.Build.VERSION.SDK_INT;
+		if (sdkVer > 4) {
+			intent.setAction(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
+		} else if (sdkVer == 4) {
+			intent.setAction(Intent.ACTION_MAIN);
+			intent.setClassName("com.android.settings", "com.android.settings.AccessibilitySettings");
+		}
+		return intent;
+	}
+	
+	private Intent getTtsIntent() {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		int sdkVer = android.os.Build.VERSION.SDK_INT;
 		if (isClassExist("com.android.settings.TextToSpeechSettings")) {
 			if (sdkVer >= 11 & sdkVer <= 13) {
 				intent.setAction(android.provider.Settings.ACTION_SETTINGS);
@@ -91,11 +117,8 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			} else intent.setClassName("com.android.settings", "com.android.settings.Settings$TextToSpeechSettingsActivity");
 		} else if (isClassExist("com.google.tv.settings.TextToSpeechSettingsTop")) {
 			intent.setClassName("com.google.tv.settings", "com.google.tv.settings.TextToSpeechSettingsTop");
-		} else {
-			pTTS.setEnabled(false);
-			pTTS.setSummary(R.string.tts_settings_summary_fail);
-		}
-		if (pTTS.isEnabled()) pTTS.setIntent(intent);
+		} else return null;
+		return intent;
 	}
 	
 	private boolean isClassExist(String name) {
@@ -113,7 +136,10 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	
 	@Override
 	public boolean onPreferenceClick(Preference preference) {
-		if (preference == pDeviceState) {
+		if (preference == pStatus && Service.isRunning() && Service.isSuspended()) {
+			Service.toggleSuspend();
+			return true;
+		} else if (preference == pDeviceState) {
 			showDialog(DLG_DEVICE_STATE);
 			return true;
 		} else if (preference == pQuietStart) {
@@ -141,6 +167,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			return true;
 		} else if (preference == pNotifyLog) {
 			showDialog(DLG_LOG);
+			return true;
 		} else if (preference == pSupport) {
 			showDialog(DLG_SUPPORT);
 			return true;
@@ -183,10 +210,10 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			).create();
 		case DLG_QUIET_START:
 			i = Common.prefs.getInt(getString(R.string.key_quietStart), 0);
-			return new TimePickerDialog(MainActivity.this, sTimeSetListener, i/60, i%60, false);
+			return new TimePickerDialog(this, sTimeSetListener, i/60, i%60, false);
 		case DLG_QUIET_END:
 			i = Common.prefs.getInt(getString(R.string.key_quietEnd), 0);
-			return new TimePickerDialog(MainActivity.this, eTimeSetListener, i/60, i%60, false);
+			return new TimePickerDialog(this, eTimeSetListener, i/60, i%60, false);
 		case DLG_LOG:
 			return new AlertDialog.Builder(this)
 			.setTitle(R.string.notify_log)
@@ -247,15 +274,28 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		}
 	};
 	
+	private void updateStatus() {
+		if (Service.isSuspended()) {
+			pStatus.setTitle(R.string.service_suspended);
+			pStatus.setSummary(R.string.status_summary_suspended);
+			pStatus.setIntent(null);
+		} else {
+			pStatus.setTitle(Service.isRunning() ? R.string.service_running : R.string.service_disabled);
+			pStatus.setSummary(R.string.status_summary_accessibility);
+			pStatus.setIntent(getAccessibilityIntent());
+		}
+	}
+	
 	@Override
 	protected void onResume() {
 		super.onResume();
 		Common.prefs.registerOnSharedPreferenceChangeListener(this);
-		pAccess.setTitle(Service.isRunning() ? R.string.service_enabled : R.string.service_disabled);
+		Service.registerOnStatusChangeListener(statusListener);
 	}
 	
 	@Override
 	protected void onPause() {
+		Service.unregisterOnStatusChangeListener(statusListener);
 		Common.prefs.unregisterOnSharedPreferenceChangeListener(this);
 		super.onPause();
 	}

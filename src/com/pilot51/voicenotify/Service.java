@@ -59,11 +59,18 @@ public class Service extends AccessibilityService {
 	private final HeadsetReceiver headsetReceiver = new HeadsetReceiver();
 	private RepeatTimer repeater;
 	private Shake shake;
-	private static boolean isInitialized, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
+	private static boolean isInitialized, isSuspended, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
 	private final HashMap<String, String> ttsParams = new HashMap<String, String>();
 	private final ArrayList<String> ignoreReasons = new ArrayList<String>(),
 			repeatList = new ArrayList<String>();
 	private String lastQueueTime;
+	private OnStatusChangeListener statusListener = new OnStatusChangeListener() {
+		@Override
+		public void onStatusChanged() {
+			sendBroadcast(new Intent(getApplicationContext(), WidgetProvider.class)
+			              .setAction(WidgetProvider.ACTION_UPDATE));
+		}
+	};
 	private final Handler ttsHandler = new Handler() {
 		@Override
 		public void handleMessage(Message message) {
@@ -144,6 +151,9 @@ public class Service extends AccessibilityService {
 					break;
 				}
 			}
+		}
+		if (isSuspended) {
+			ignoreReasons.add(getString(R.string.reason_suspended));
 		}
 		if (!AppList.getIsEnabled(pkgName)) {
 			ignoreReasons.add(getString(R.string.reason_app));
@@ -326,7 +336,8 @@ public class Service extends AccessibilityService {
 				ttsHandler.sendEmptyMessage(STOP_SPEAK);
 			}
 		});
-		isInitialized = true;
+		registerOnStatusChangeListener(statusListener);
+		setInitialized(true);
 	}
 	
 	@Override
@@ -334,13 +345,50 @@ public class Service extends AccessibilityService {
 		if (isInitialized) {
 			ttsHandler.sendEmptyMessage(STOP_TTS);
 			unregisterReceiver(headsetReceiver);
-			isInitialized = false;
+			setInitialized(false);
+			unregisterOnStatusChangeListener(statusListener);
 		}
 		return false;
 	}
 	
+	private static final ArrayList<OnStatusChangeListener> statusListeners = new ArrayList<OnStatusChangeListener>();
+	static void registerOnStatusChangeListener(OnStatusChangeListener listener) {
+		statusListeners.add(listener);
+	}
+	static void unregisterOnStatusChangeListener(OnStatusChangeListener listener) {
+		statusListeners.remove(listener);
+	}
+	interface OnStatusChangeListener {
+		/**
+		 * Called when the service status has changed.
+		 * @see Service#isRunning()
+		 * @see Service#isSuspended()
+		 */
+		void onStatusChanged();
+	}
+	private static void onStatusChanged() {
+		for (OnStatusChangeListener l : statusListeners) {
+			l.onStatusChanged();
+		}
+	}
+	
 	static boolean isRunning() {
 		return isInitialized;
+	}
+	
+	private void setInitialized(boolean initialized) {
+		isInitialized = initialized;
+		onStatusChanged();
+	}
+	
+	static boolean isSuspended() {
+		return isSuspended;
+	}
+	
+	static boolean toggleSuspend() {
+		isSuspended ^= true;
+		onStatusChanged();
+		return isSuspended;
 	}
 	
 	private boolean isScreenOn() {

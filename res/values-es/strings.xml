@@ -24,7 +24,6 @@
 	<string name="service_desc">Lee la barra de notificaciones con Texto-a-Voz</string>
 	
 	<!-- preferences.xml -->
-	<string name="accessibility_summary">Abrir configuración de accesibilidad de Android</string>
 	<string name="tts_settings">Configuración de TTS (Texto a voz)</string>
 	<string name="tts_settings_summary">Abrir configuración de Texto-a-Voz de Android</string>
 	<string name="tts_settings_summary_fail">No se encontró el menú de configuración de TTS! Si está seguro de que se encuentra instalado en el dispositivo, (debería estarlo) por favor contacte al desarrollador de la aplicación</string>
@@ -80,6 +79,7 @@
 	<string name="support">Dar soporte a Notificación por voz</string>
 	
 	<!-- MainActivity.java -->
+	<string name="status_summary_accessibility">Abrir configuración de accesibilidad de Android</string>
 	<string name="test_notify_msg">Ésta es una notificación de prueba</string>
 	<string-array name="support_items">
 		<item>Donar (PayPal)</item>

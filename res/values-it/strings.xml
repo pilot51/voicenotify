@@ -24,7 +24,6 @@
 	<string name="service_desc">Leggi le notifiche della status bar con la sintesi vocale.</string>
 	
 	<!-- preferences.xml -->
-	<string name="accessibility_summary">Apre le opzioni di Accesso Facilitato di Android.</string>
 	<string name="tts_settings">Impostazioni Sintesi Vocale</string>
 	<string name="tts_settings_summary">Apre le impostazioni di Sintesi Vocale di Android.</string>
 	<string name="tts_settings_summary_fail">Impostazioni di sintesi vocale non trovate! Se figurano nel dispositivo (come dovrebbero), informa lo sviluppatore.</string>
@@ -80,6 +79,7 @@
 	<string name="support">Sostieni Voice Notify</string>
 	
 	<!-- MainActivity.java -->
+	<string name="status_summary_accessibility">Apre le opzioni di Accesso Facilitato di Android.</string>
 	<string name="test_notify_msg">Questa notifica è un test.</string>
 	<string-array name="support_items">
 		<item>Dona (PayPal)</item>

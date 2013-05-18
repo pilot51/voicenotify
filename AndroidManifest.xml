@@ -55,5 +55,15 @@
 				android:name="android.accessibilityservice"
 				android:resource="@xml/service_config"/>
 		</service>
+		<receiver android:name="WidgetProvider">
+			<intent-filter>
+				<action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+				<action android:name="voicenotify.widget.TOGGLE"/>
+				<action android:name="voicenotify.widget.UPDATE"/>
+			</intent-filter>
+			<meta-data
+				android:name="android.appwidget.provider"
+				android:resource="@xml/appwidget_info"/>
+		</receiver>
 	</application>
 </manifest>
