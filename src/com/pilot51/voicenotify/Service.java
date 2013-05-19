@@ -36,8 +36,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
-import android.os.Handler;
-import android.os.Message;
 import android.os.PowerManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -48,66 +46,24 @@ import android.view.accessibility.AccessibilityEvent;
 
 public class Service extends AccessibilityService {
 	private String lastMsg = "";
-	private static final int SPEAK = 1,
-	                         STOP_SPEAK = 2,
-	                         START_TTS = 3,
-	                         STOP_TTS = 4;
 	private long lastMsgTime;
 	private TextToSpeech mTts;
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
-	private final HeadsetReceiver headsetReceiver = new HeadsetReceiver();
+	private final DeviceStateReceiver stateReceiver = new DeviceStateReceiver();
 	private RepeatTimer repeater;
 	private Shake shake;
 	private static boolean isInitialized, isSuspended, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
 	private final HashMap<String, String> ttsParams = new HashMap<String, String>();
 	private final ArrayList<String> ignoreReasons = new ArrayList<String>(),
-			repeatList = new ArrayList<String>();
+	                                repeatList = new ArrayList<String>();
 	private String lastQueueTime;
 	private OnStatusChangeListener statusListener = new OnStatusChangeListener() {
 		@Override
 		public void onStatusChanged() {
+			if (isSuspended && mTts != null) mTts.stop();
 			sendBroadcast(new Intent(getApplicationContext(), WidgetProvider.class)
 			              .setAction(WidgetProvider.ACTION_UPDATE));
-		}
-	};
-	private final Handler ttsHandler = new Handler() {
-		@Override
-		public void handleMessage(Message message) {
-			switch (message.what) {
-			case SPEAK:
-				shake.enable();
-				ttsParams.clear();
-				boolean isNotificationStream = Common.prefs.getString(getString(R.string.key_ttsStream), null).contentEquals("notification");
-				if (isNotificationStream) {
-					ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
-				}
-				lastQueueTime = Long.toString(System.currentTimeMillis());
-				ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, lastQueueTime);
-				mTts.speak((String)message.obj, TextToSpeech.QUEUE_ADD, ttsParams);
-				break;
-			case STOP_SPEAK:
-				mTts.stop();
-				break;
-			case START_TTS:
-				mTts = new TextToSpeech(Service.this, new OnInitListener() {
-					@Override
-					public void onInit(int status) {
-						mTts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener() {
-							@Override
-							public void onUtteranceCompleted(String utteranceId) {
-								if (utteranceId.equals(lastQueueTime)) {
-									shake.disable();
-								}
-							}
-						});
-					}
-				});
-				break;
-			case STOP_TTS:
-				mTts.shutdown();
-				break;
-			}
 		}
 	};
 	
@@ -132,7 +88,7 @@ public class Service extends AccessibilityService {
 			}
 		}
 		final String label = String.valueOf(appInfo.loadLabel(packMan)),
-			ttsStringPref = Common.prefs.getString(getString(R.string.key_ttsString), null);
+		             ttsStringPref = Common.prefs.getString(getString(R.string.key_ttsString), null);
 		NotifyList.addNotification(AppList.findApp(pkgName), notifyMsg.toString());
 		String newMsg;
 		try {
@@ -216,9 +172,35 @@ public class Service extends AccessibilityService {
 	 * @param msg The string to be spoken.
 	 * @param isNew True if notification is new, otherwise false if it is being repeated.
 	 */
-	private void speak(String msg, boolean isNew) {
+	private void speak(final String msg, boolean isNew) {
 		if (ignore(isNew)) return;
-		ttsHandler.obtainMessage(SPEAK, msg).sendToTarget();
+		shake.enable();
+		ttsParams.clear();
+		if (Common.prefs.getString(getString(R.string.key_ttsStream), null).contentEquals("notification")) {
+			ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
+		}
+		lastQueueTime = Long.toString(System.currentTimeMillis());
+		ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, lastQueueTime);
+		if (mTts == null) {
+			mTts = new TextToSpeech(Service.this, new OnInitListener() {
+				@Override
+				public void onInit(int status) {
+					mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
+					mTts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener() {
+						@Override
+						public void onUtteranceCompleted(String utteranceId) {
+							if (utteranceId.equals(lastQueueTime)) {
+								shake.disable();
+								mTts.shutdown();
+								mTts = null;
+							}
+						}
+					});
+				}
+			});
+		} else {
+			mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
+		}
 	}
 	
 	/**
@@ -307,14 +289,13 @@ public class Service extends AccessibilityService {
 	
 	@Override
 	public void onInterrupt() {
-		ttsHandler.sendEmptyMessage(STOP_SPEAK);
+		if (mTts != null) mTts.stop();
 	}
 	
 	@Override
 	public void onServiceConnected() {
 		if (isInitialized) return;
 		new Common(this);
-		ttsHandler.sendEmptyMessage(START_TTS);
 		AccessibilityServiceInfo info = new AccessibilityServiceInfo();
 		info.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
 		info.feedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
@@ -326,14 +307,14 @@ public class Service extends AccessibilityService {
 		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 		filter.addAction(Intent.ACTION_SCREEN_ON);
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
-		registerReceiver(headsetReceiver, filter);
+		registerReceiver(stateReceiver, filter);
 		shake = new Shake(this);
 		shake.setOnShakeListener(new Shake.OnShakeListener() {
 			@Override
 			public void onShake() {
 				Log.i(Common.TAG, "TTS silenced by shake");
 				NotifyList.setLastIgnore(getString(R.string.reason_shake), false);
-				ttsHandler.sendEmptyMessage(STOP_SPEAK);
+				if (mTts != null) mTts.stop();
 			}
 		});
 		registerOnStatusChangeListener(statusListener);
@@ -343,8 +324,8 @@ public class Service extends AccessibilityService {
 	@Override
 	public boolean onUnbind(Intent intent) {
 		if (isInitialized) {
-			ttsHandler.sendEmptyMessage(STOP_TTS);
-			unregisterReceiver(headsetReceiver);
+			if (mTts != null) mTts.stop();
+			unregisterReceiver(stateReceiver);
 			setInitialized(false);
 			unregisterOnStatusChangeListener(statusListener);
 		}
@@ -408,7 +389,7 @@ public class Service extends AccessibilityService {
 		}
 	}
 	
-	private class HeadsetReceiver extends BroadcastReceiver {
+	private class DeviceStateReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
@@ -423,8 +404,8 @@ public class Service extends AccessibilityService {
 			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
 				isScreenOn = false;
 			}
-			if (mTts.isSpeaking() && ignore(false)) {
-				ttsHandler.sendEmptyMessage(STOP_SPEAK);
+			if (mTts != null && ignore(false)) {
+				mTts.stop();
 			}
 		}
 	}
