@@ -256,6 +256,12 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 								Toast.makeText(getBaseContext(), R.string.error_email, Toast.LENGTH_LONG).show();
 							}
 							break;
+						case 3: // Translations
+							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://getlocalization.com/voicenotify")));
+							break;
+						case 4: // Source Code
+							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/pilot51/voicenotify")));
+							break;
 					}
 				}
 			}).create();

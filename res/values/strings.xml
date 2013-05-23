@@ -94,6 +94,8 @@
 		<item>Donate (PayPal)</item>
 		<item>Rate/Comment</item>
 		<item>Contact Developer</item>
+		<item>Translations</item>
+		<item>Source Code</item>
 	</string-array>
 	<string name="dev_email">pilota51@gmail.com</string>
 	<string name="email_subject">Contacting about Voice Notify</string>
