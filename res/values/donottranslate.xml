@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="stream_value_media">media</string>
+	<string name="stream_value_notification">notification</string>
+	<string-array name="stream_value">
+		<item>@string/stream_value_media</item>
+		<item>@string/stream_value_notification</item>
+	</string-array>
+	
+	<!-- Preference keys -->
 	<string name="key_status">status</string>
 	<string name="key_appList">appList</string>
 	<string name="key_ttsSettings">ttsSettings</string>

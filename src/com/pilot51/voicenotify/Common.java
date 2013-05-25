@@ -56,11 +56,11 @@ public class Common {
 		}
 	}
 	
-	protected void setVolumeStream() {
+	void setVolumeStream() {
 		String stream = prefs.getString(context.getString(R.string.key_ttsStream), "");
-		if (stream.contentEquals("media")) {
+		if (stream.contentEquals(activity.getString(R.string.stream_value_media))) {
 			activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		} else if (stream.contentEquals("notification")) {
+		} else if (stream.contentEquals(activity.getString(R.string.stream_value_notification))) {
 			activity.setVolumeControlStream(AudioManager.STREAM_NOTIFICATION);
 		}
 	}

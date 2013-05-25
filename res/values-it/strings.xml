@@ -42,10 +42,6 @@
 		<item>Media</item>
 		<item>Notifica</item>
 	</string-array>
-	<string-array name="stream_value">
-		<item>media</item>
-		<item>notifica</item>
-	</string-array>
 	<string name="ignore_strings">Ignora Testo</string>
 	<string name="ignore_strings_summary">Ignora le notifiche in base al testo contenuto nel messaggio.</string>
 	<string name="ignore_strings_dialog_msg">Separa le varie immissioni iniziando una nuova riga.</string>

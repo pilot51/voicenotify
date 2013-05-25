@@ -49,21 +49,17 @@
 		<item>Media</item>
 		<item>Notification</item>
 	</string-array>
-	<string-array name="stream_value">
-		<item>media</item>
-		<item>notification</item>
-	</string-array>
 	<string name="ignore_strings">Ignore Text</string>
-	<string name="ignore_strings_summary">Ignore notifications according to text contained in message.</string>
+	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message.</string>
 	<string name="ignore_strings_dialog_msg">Separate individual entries with a new line.</string>
 	<string name="device_state">Device States</string>
 	<string name="device_state_summary">Select whether to speak during certain device states.</string>
 	<string name="device_state_dialog_title">Speak during these device states</string>
 	<string-array name="device_states">
-		<item>Screen off</item>
-		<item>Screen on</item>
-		<item>Headset off</item>
-		<item>Headset on</item>
+		<item>Screen Off</item>
+		<item>Screen On</item>
+		<item>Headset Off</item>
+		<item>Headset On</item>
 		<item>Silent/Vibrate</item>
 	</string-array>
 	<string name="ignore_repeat">Ignore Repeats</string>
@@ -113,17 +109,17 @@
 	<string name="filter">Filter</string>
 	
 	<!-- Ignore/Silence reasons -->
-	<string name="reason_app">ignored app (pref.)</string>
-	<string name="reason_string">ignored string (pref.)</string>
-	<string name="reason_empty_msg">empty message</string>
-	<string name="reason_identical">identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds} (pref.)</string>
-	<string name="reason_quiet">quiet time (pref.)</string>
-	<string name="reason_silent">silent or vibrate mode (pref.)</string>
-	<string name="reason_call">active or ringing call</string>
-	<string name="reason_screen_off">screen off (pref.)</string>
-	<string name="reason_screen_on">screen on (pref.)</string>
-	<string name="reason_headset_off">headset off (pref.)</string>
-	<string name="reason_headset_on">headset on (pref.)</string>
+	<string name="reason_app">Ignored app</string>
+	<string name="reason_string">Ignored text</string>
+	<string name="reason_empty_msg">Empty message</string>
+	<string name="reason_identical">Identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+	<string name="reason_quiet">Quiet time</string>
+	<string name="reason_silent">Silent or vibrate mode</string>
+	<string name="reason_call">Active or ringing call</string>
+	<string name="reason_screen_off">Screen off</string>
+	<string name="reason_screen_on">Screen on</string>
+	<string name="reason_headset_off">Headset off</string>
+	<string name="reason_headset_on">Headset on</string>
 	<string name="reason_shake">Silenced by shake</string>
 	<string name="reason_suspended">VN suspended by widget</string>
 </resources>

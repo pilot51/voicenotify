@@ -42,10 +42,6 @@
 		<item>Мультимедиа</item>
 		<item>Уведомления</item>
 	</string-array>
-	<string-array name="stream_value">
-		<item>мультимедиа</item>
-		<item>уведомления</item>
-	</string-array>
 	<string name="ignore_strings">Игнорирование текста</string>
 	<string name="ignore_strings_summary">Игнорировать сообщения содержащие определённый текст.</string>
 	<string name="ignore_strings_dialog_msg">Разделяйте текстовые фрагменты переходом на новую строку.</string>
