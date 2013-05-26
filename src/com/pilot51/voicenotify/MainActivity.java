@@ -33,6 +33,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
@@ -249,6 +250,18 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 							iEmail.setType("plain/text");
 							iEmail.putExtra(Intent.EXTRA_EMAIL, new String[] {getString(R.string.dev_email)});
 							iEmail.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject));
+							String version = null;
+							try {
+								version = getPackageManager().getPackageInfo(getPackageName(), 0).versionName;
+							} catch (NameNotFoundException e) {
+								e.printStackTrace();
+							}
+							iEmail.putExtra(Intent.EXTRA_TEXT,
+							                getString(R.string.email_body,
+							                          version,
+							                          android.os.Build.VERSION.RELEASE,
+							                          android.os.Build.ID,
+							                          android.os.Build.MANUFACTURER + " " + android.os.Build.BRAND + " " + android.os.Build.MODEL));
 							try {
 								startActivity(iEmail);
 							} catch (ActivityNotFoundException e) {
