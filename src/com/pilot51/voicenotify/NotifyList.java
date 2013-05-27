@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -107,13 +108,17 @@ public class NotifyList extends ListView {
 		private ArrayList<NotifyItem> data;
 		private LayoutInflater mInflater;
 		
-		private Adapter(Context context, ArrayList<NotifyItem> list) {
+		private Adapter(final Context context, ArrayList<NotifyItem> list) {
 			data = list;
 			mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			listener = new OnListChangeListener() {
 				@Override
 				public void onListChange() {
-					notifyDataSetChanged();
+					((Activity)context).runOnUiThread(new Runnable() {
+						public void run() {
+							notifyDataSetChanged();
+						}
+					});
 				}
 			};
 		}
