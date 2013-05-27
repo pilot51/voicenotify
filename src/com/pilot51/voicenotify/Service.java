@@ -145,7 +145,7 @@ public class Service extends AccessibilityService {
 					public void run() {
 						speak(msg, true);
 					}
-				}, delay * 1000);
+				}, delay * 1000L);
 			} else speak(newMsg, true);
 		} else {
 			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
