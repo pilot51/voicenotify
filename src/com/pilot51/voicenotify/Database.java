@@ -35,6 +35,7 @@ import android.provider.BaseColumns;
 import android.util.Log;
 
 public class Database extends SQLiteOpenHelper {
+	private static String TAG = Database.class.getSimpleName();
 	private Context context;
 	private static Database database;
 	private static final int DB_VERSION = 1;
@@ -49,27 +50,35 @@ public class Database extends SQLiteOpenHelper {
 			+ " integer primary key autoincrement, " + COLUMN_PACKAGE + " text not null, "
 			+ COLUMN_LABEL + " text not null, " + COLUMN_ENABLED + " integer);";
 	
-	Database(Context context) {
+	private Database(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
-		if (database != null) {
-			Log.w(Common.TAG, "Database already initialized!");
-			return;
-		}
-		database = this;
-		this.context = context;
+		this.context = context.getApplicationContext();
 		try {
 			if (!context.getDatabasePath(DB_NAME).exists()
 					&& new File(context.getFilesDir().toString() + File.separatorChar + OLD_FILE).exists()) {
 				upgradeOldIgnores();
 			}
 		} catch (Exception e) {
-			Log.w(Common.TAG, "Error checking for old ignores to be transferred to database.");
+			Log.w(TAG, "Error checking for old ignores to be transferred to database.");
 			e.printStackTrace();
 		}
 	}
 	
-	/** @return Previously initialized static instance of this class. */
+	/**
+	 * Initializes database if not already initialized.<br />
+	 * Call {@link #getInstance()} to get the static instance.
+	 */
+	static void init(Context context) {
+		if (database != null) {
+			Log.w(TAG, "Database already initialized!");
+		} else database = new Database(context);
+	}
+	
+	/** @return Previously initialized static Database instance or null if {@link #init(Context)} has not been called. */
 	static Database getInstance() {
+		if (database == null) {
+			Log.w(TAG, "Database not initialized!");
+		}
 		return database;
 	}
 	
@@ -86,12 +95,12 @@ public class Database extends SQLiteOpenHelper {
 			try {
 				oldList = (ArrayList<String>)in.readObject();
 			} catch (ClassNotFoundException e) {
-				Log.e(Common.TAG, "Error: Failed to read ignored_apps - Data appears corrupt");
+				Log.e(TAG, "Error: Failed to read ignored_apps - Data appears corrupt");
 				e.printStackTrace();
 			}
 			in.close();
 		} catch (IOException e) {
-			Log.e(Common.TAG, "Error: Failed to read ignored_apps");
+			Log.e(TAG, "Error: Failed to read ignored_apps");
 			e.printStackTrace();
 		}
 		ArrayList<App> newList = new ArrayList<App>();

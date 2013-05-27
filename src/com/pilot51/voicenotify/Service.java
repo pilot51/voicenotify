@@ -32,9 +32,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.media.AudioManager;
 import android.os.PowerManager;
 import android.speech.tts.TextToSpeech;
@@ -45,6 +42,7 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 
 public class Service extends AccessibilityService {
+	private static String TAG = Service.class.getSimpleName();
 	private String lastMsg = "";
 	private long lastMsgTime;
 	private TextToSpeech mTts;
@@ -69,36 +67,28 @@ public class Service extends AccessibilityService {
 	
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
-		if (!Common.prefs.getBoolean(getString(R.string.key_toasts), false) && !(event.getParcelableData() instanceof Notification)) {
+		if (!Common.getPrefs(this).getBoolean(getString(R.string.key_toasts), false) && !(event.getParcelableData() instanceof Notification)) {
 			return;
 		}
 		long newMsgTime = System.currentTimeMillis();
-		PackageManager packMan = getPackageManager();
-		ApplicationInfo appInfo = new ApplicationInfo();
-		String pkgName = event.getPackageName().toString();
-		try {
-			appInfo = packMan.getApplicationInfo(pkgName, 0);
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-		}
 		StringBuilder notifyMsg = new StringBuilder();
 		if (!event.getText().isEmpty()) {
 			for (CharSequence subText : event.getText()) {
 				notifyMsg.append(subText);
 			}
 		}
-		final String label = appInfo.loadLabel(packMan).toString(),
-		             ttsStringPref = Common.prefs.getString(getString(R.string.key_ttsString), null);
-		NotifyList.addNotification(AppList.findOrAddApp(pkgName, this), notifyMsg.toString());
+		final String ttsStringPref = Common.getPrefs(this).getString(getString(R.string.key_ttsString), null);
+		App app = AppList.findOrAddApp(event.getPackageName().toString(), this);
+		NotifyList.addNotification(app, notifyMsg.toString());
 		String newMsg;
 		try {
-			newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"), label, notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
+			newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"), app.getLabel(), notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
 		} catch(IllegalFormatException e) {
-			Log.w(Common.TAG, "Error formatting custom TTS string!");
+			Log.w(TAG, "Error formatting custom TTS string!");
 			e.printStackTrace();
 			newMsg = ttsStringPref;
 		}
-		final String[] ignoreStrings = Common.prefs.getString(getString(R.string.key_ignore_strings), "").toLowerCase().split("\n");
+		final String[] ignoreStrings = Common.getPrefs(this).getString(getString(R.string.key_ignore_strings), "").toLowerCase().split("\n");
 		boolean stringIgnored = false;
 		if (ignoreStrings != null) {
 			for (String s : ignoreStrings) {
@@ -111,7 +101,7 @@ public class Service extends AccessibilityService {
 		if (isSuspended) {
 			ignoreReasons.add(getString(R.string.reason_suspended));
 		}
-		if (!AppList.getIsEnabled(pkgName)) {
+		if (!app.getEnabled()) {
 			ignoreReasons.add(getString(R.string.reason_app));
 		}
 		if (stringIgnored) {
@@ -122,7 +112,7 @@ public class Service extends AccessibilityService {
 		}
 		int ignoreRepeat;
 		try {
-			ignoreRepeat = Integer.parseInt(Common.prefs.getString(getString(R.string.key_ignore_repeat), null));
+			ignoreRepeat = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_ignore_repeat), null));
 		} catch (NumberFormatException e) {
 			ignoreRepeat = -1;
 		}
@@ -132,12 +122,12 @@ public class Service extends AccessibilityService {
 		if (ignoreReasons.isEmpty()) {
 			int delay = 0;
 			try {
-				delay = Integer.parseInt(Common.prefs.getString(getString(R.string.key_ttsDelay), null));
+				delay = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_ttsDelay), null));
 			} catch (NumberFormatException e) {}
 			if (!isScreenOn()) {
 				int interval;
 				try {
-					interval = Integer.parseInt(Common.prefs.getString(getString(R.string.key_tts_repeat), "0"));
+					interval = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_tts_repeat), "0"));
 				} catch (NumberFormatException e) {
 					interval = 0;
 				}
@@ -159,7 +149,7 @@ public class Service extends AccessibilityService {
 			} else speak(newMsg, true);
 		} else {
 			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
-			Log.i(Common.TAG, "Notification from " + label + " ignored for reason(s): " + reasons);
+			Log.i(TAG, "Notification from " + app.getLabel() + " ignored for reason(s): " + reasons);
 			NotifyList.setLastIgnore(reasons, true);
 			ignoreReasons.clear();
 		}
@@ -176,7 +166,7 @@ public class Service extends AccessibilityService {
 		if (ignore(isNew)) return;
 		shake.enable();
 		ttsParams.clear();
-		if (Common.prefs.getString(getString(R.string.key_ttsStream), null).contentEquals("notification")) {
+		if (Common.getPrefs(this).getString(getString(R.string.key_ttsStream), null).contentEquals("notification")) {
 			ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
 		}
 		lastQueueTime = Long.toString(System.currentTimeMillis());
@@ -211,36 +201,36 @@ public class Service extends AccessibilityService {
 	private boolean ignore(boolean isNew) {
 		Calendar c = Calendar.getInstance();
 		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE),
-			quietStart = Common.prefs.getInt(getString(R.string.key_quietStart), 0),
-			quietEnd = Common.prefs.getInt(getString(R.string.key_quietEnd), 0);
+			quietStart = Common.getPrefs(this).getInt(getString(R.string.key_quietStart), 0),
+			quietEnd = Common.getPrefs(this).getInt(getString(R.string.key_quietEnd), 0);
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
 				| (quietEnd < quietStart & (quietStart <= calTime | calTime < quietEnd))) {
 			ignoreReasons.add(getString(R.string.reason_quiet));
 		}
 		if ((audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
 				|| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
-				&& !Common.prefs.getBoolean(Common.KEY_SPEAK_SILENT_ON, false)) {
+				&& !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SILENT_ON, false)) {
 			ignoreReasons.add(getString(R.string.reason_silent));
 		}
 		if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
 				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
 			ignoreReasons.add(getString(R.string.reason_call));
 		}
-		if (!isScreenOn() & !Common.prefs.getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true)) {
+		if (!isScreenOn() & !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true)) {
 			ignoreReasons.add(getString(R.string.reason_screen_off));
 		}
-		if (isScreenOn() & !Common.prefs.getBoolean(Common.KEY_SPEAK_SCREEN_ON, true)) {
+		if (isScreenOn() & !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SCREEN_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_screen_on));
 		}
-		if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
+		if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_off));
 		}
-		if ((isHeadsetPlugged | isBluetoothConnected) & !Common.prefs.getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
+		if ((isHeadsetPlugged | isBluetoothConnected) & !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_on));
 		}
 		if (!ignoreReasons.isEmpty()) {
 			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
-			Log.i(Common.TAG, "Notification ignored for reason(s): " + reasons);
+			Log.i(TAG, "Notification ignored for reason(s): " + reasons);
 			NotifyList.setLastIgnore(reasons, isNew);
 			ignoreReasons.clear();
 			return true;
@@ -295,7 +285,7 @@ public class Service extends AccessibilityService {
 	@Override
 	public void onServiceConnected() {
 		if (isInitialized) return;
-		new Common(this);
+		Common.init(this);
 		AccessibilityServiceInfo info = new AccessibilityServiceInfo();
 		info.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
 		info.feedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
@@ -312,7 +302,7 @@ public class Service extends AccessibilityService {
 		shake.setOnShakeListener(new Shake.OnShakeListener() {
 			@Override
 			public void onShake() {
-				Log.i(Common.TAG, "TTS silenced by shake");
+				Log.i(TAG, "TTS silenced by shake");
 				NotifyList.setLastIgnore(getString(R.string.reason_shake), false);
 				if (mTts != null) mTts.stop();
 			}

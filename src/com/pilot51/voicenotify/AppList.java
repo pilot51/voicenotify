@@ -54,6 +54,7 @@ public class AppList extends ListActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Common.init(this);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		lv = getListView();
 		lv.setTextFilterEnabled(true);
@@ -66,7 +67,7 @@ public class AppList extends ListActivity {
 				adapter.notifyDataSetChanged();
 			}
 		});
-		defEnable = Common.prefs.getBoolean(KEY_DEFAULT_ENABLE, true);
+		defEnable = Common.getPrefs(this).getBoolean(KEY_DEFAULT_ENABLE, true);
 		new Thread(new Runnable() {
 			public void run() {
 				apps = Database.getApps();
@@ -152,12 +153,12 @@ public class AppList extends ListActivity {
 	
 	/**
 	 * @param pkg Package name used to find {@link App} in current list or create a new one from system.
-	 * @param ctx Context required to get package manager for searching system.
+	 * @param ctx Context required to get default enabled preference and to get package manager for searching system.
 	 * @return Found or created {@link App}, otherwise null if app not found on system.
 	 */
 	static App findOrAddApp(String pkg, Context ctx) {
 		if (apps == null) {
-			defEnable = Common.prefs.getBoolean(KEY_DEFAULT_ENABLE, true);
+			defEnable = Common.getPrefs(ctx).getBoolean(KEY_DEFAULT_ENABLE, true);
 			apps = Database.getApps();
 		}
 		for (App app : apps) {
@@ -209,20 +210,7 @@ public class AppList extends ListActivity {
 	/** Set the default enabled value for new apps. */
 	private void setDefaultEnable(boolean enable) {
 		defEnable = enable;
-		Common.prefs.edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).commit();
-	}
-	
-	static boolean getIsEnabled(String pkg) {
-		if (apps == null) {
-			defEnable = Common.prefs.getBoolean(KEY_DEFAULT_ENABLE, true);
-			apps = Database.getApps();
-		}
-		for (App app : apps) {
-			if (app.getPackage().equals(pkg)) {
-				return app.getEnabled();
-			}
-		}
-		return defEnable;
+		Common.getPrefs(this).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).commit();
 	}
 	
 	private class Adapter extends BaseAdapter implements Filterable {

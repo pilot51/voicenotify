@@ -39,7 +39,7 @@ public class Shake implements SensorEventListener {
 	void enable() {
 		if (listener == null) return;
 		try {
-			threshold = Integer.parseInt(Common.prefs.getString(context.getString(R.string.key_shake_threshold), null));
+			threshold = Integer.parseInt(Common.getPrefs(context).getString(context.getString(R.string.key_shake_threshold), null));
 		} catch (NumberFormatException e) {
 			// Don't enable if threshold setting is blank
 			return;

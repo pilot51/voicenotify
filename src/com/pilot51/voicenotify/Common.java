@@ -23,45 +23,58 @@ import android.media.AudioManager;
 import android.preference.PreferenceManager;
 
 public class Common {
-	protected static String TAG;
-	private Activity activity;
-	private Context context;
-	protected static SharedPreferences prefs;
+	private static SharedPreferences prefs;
 	/** Preference key name. */
-	protected static final String
+	static final String
 		KEY_SPEAK_SCREEN_OFF = "speakScreenOff",
 		KEY_SPEAK_SCREEN_ON = "speakScreenOn",
 		KEY_SPEAK_HEADSET_OFF = "speakHeadsetOff",
 		KEY_SPEAK_HEADSET_ON = "speakHeadsetOn",
 		KEY_SPEAK_SILENT_ON = "speakSilentOn";
 	
-	Common(Activity a) {
-		activity = a;
-		context = a;
-		onStart();
-		setVolumeStream();
+	private Common() {}
+	
+	/**
+	 * Initializes default {@link SharedPreferences} and {@link Database} if needed and sets volume control stream.
+	 */
+	static void init(Activity activity) {
+		init(activity.getApplicationContext());
+		setVolumeStream(activity);
 	}
 	
-	Common(Context c) {
-		context = c;
-		onStart();
-	}
-	
-	void onStart() {
-		if (TAG == null) {
-			TAG = context.getString(R.string.app_name);
+	/**
+	 * Initializes default {@link SharedPreferences} and {@link Database} if needed.
+	 */
+	static void init(Context context) {
+		if (prefs == null) {
 			PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
 			prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
-			new Database(context);
+		}
+		if (Database.getInstance() == null) {
+			Database.init(context);
 		}
 	}
 	
-	void setVolumeStream() {
-		String stream = prefs.getString(context.getString(R.string.key_ttsStream), "");
-		if (stream.contentEquals(activity.getString(R.string.stream_value_media))) {
+	/**
+	 * Sets the volume control stream defined in preferences.
+	 */
+	static void setVolumeStream(Activity activity) {
+		String stream = getPrefs(activity).getString(activity.getString(R.string.key_ttsStream), "");
+		if (stream.equals(activity.getString(R.string.stream_value_media))) {
 			activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		} else if (stream.contentEquals(activity.getString(R.string.stream_value_notification))) {
+		} else if (stream.equals(activity.getString(R.string.stream_value_notification))) {
 			activity.setVolumeControlStream(AudioManager.STREAM_NOTIFICATION);
 		}
+	}
+	
+	/**
+	 * @param context Context used to get a default {@link SharedPreferences} instance if we don't already have one.
+	 * @return A default {@link SharedPreferences} instance.
+	 */
+	static SharedPreferences getPrefs(Context context) {
+		if (prefs == null) {
+			prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		}
+		return prefs;
 	}
 }

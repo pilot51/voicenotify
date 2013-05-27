@@ -41,9 +41,6 @@
 		<activity
 			android:name="AppList"
 			android:configChanges="keyboardHidden|orientation">
-			<intent-filter>
-				<action android:name="android.intent.action.MAIN"/>
-			</intent-filter>
 		</activity>
 		<service
 			android:name="Service"
