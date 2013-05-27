@@ -87,9 +87,9 @@ public class Service extends AccessibilityService {
 				notifyMsg.append(subText);
 			}
 		}
-		final String label = String.valueOf(appInfo.loadLabel(packMan)),
+		final String label = appInfo.loadLabel(packMan).toString(),
 		             ttsStringPref = Common.prefs.getString(getString(R.string.key_ttsString), null);
-		NotifyList.addNotification(AppList.findApp(pkgName), notifyMsg.toString());
+		NotifyList.addNotification(AppList.findOrAddApp(pkgName, this), notifyMsg.toString());
 		String newMsg;
 		try {
 			newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"), label, notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));

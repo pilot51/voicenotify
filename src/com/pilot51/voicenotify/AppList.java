@@ -151,10 +151,11 @@ public class AppList extends ListActivity {
 	}
 	
 	/**
-	 * @param pkg Package name used to find {@link App}.
-	 * @return Found {@link App}, null if not found in list.
+	 * @param pkg Package name used to find {@link App} in current list or create a new one from system.
+	 * @param ctx Context required to get package manager for searching system.
+	 * @return Found or created {@link App}, otherwise null if app not found on system.
 	 */
-	protected static App findApp(String pkg) {
+	static App findOrAddApp(String pkg, Context ctx) {
 		if (apps == null) {
 			defEnable = Common.prefs.getBoolean(KEY_DEFAULT_ENABLE, true);
 			apps = Database.getApps();
@@ -164,7 +165,15 @@ public class AppList extends ListActivity {
 				return app;
 			}
 		}
-		return null;
+		try {
+			PackageManager packMan = ctx.getPackageManager();
+			App app = new App(pkg, packMan.getApplicationInfo(pkg, 0).loadLabel(packMan).toString(), defEnable);
+			Database.addOrUpdateApp(app);
+			return app;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	private void massIgnore(int ignoreType) {
@@ -203,7 +212,7 @@ public class AppList extends ListActivity {
 		Common.prefs.edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).commit();
 	}
 	
-	protected static boolean getIsEnabled(String pkg) {
+	static boolean getIsEnabled(String pkg) {
 		if (apps == null) {
 			defEnable = Common.prefs.getBoolean(KEY_DEFAULT_ENABLE, true);
 			apps = Database.getApps();

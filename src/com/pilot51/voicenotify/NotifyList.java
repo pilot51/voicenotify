@@ -40,7 +40,7 @@ public class NotifyList extends ListView {
 	private static OnListChangeListener listener;
 	private static final int HISTORY_LIMIT = 20;
 	
-	public NotifyList(Context context) {
+	NotifyList(Context context) {
 		super(context);
 		res = getResources();
 		setDivider(res.getDrawable(R.drawable.divider));
@@ -48,7 +48,7 @@ public class NotifyList extends ListView {
 		setAdapter(adapter);
 	}
 	
-	protected static void addNotification(App app, String message) {
+	static void addNotification(App app, String message) {
 		if (list.size() == HISTORY_LIMIT) {
 			list.remove(list.size() - 1);
 		}
@@ -58,7 +58,7 @@ public class NotifyList extends ListView {
 		}
 	}
 	
-	protected static void setLastIgnore(String ignoreReasons, boolean isNew) {
+	static void setLastIgnore(String ignoreReasons, boolean isNew) {
 		list.get(0).setIgnoreReasons(ignoreReasons, isNew);
 		if (listener != null) {
 			listener.onListChange();
@@ -89,7 +89,7 @@ public class NotifyList extends ListView {
 			return ignoreReasons;
 		}
 		
-		protected void setIgnoreReasons(String reasons, boolean isNew) {
+		void setIgnoreReasons(String reasons, boolean isNew) {
 			silenced = !isNew;
 			ignoreReasons = reasons;
 		}
@@ -100,7 +100,7 @@ public class NotifyList extends ListView {
 	}
 	
 	private static interface OnListChangeListener {
-		public void onListChange();
+		void onListChange();
 	}
 	
 	private class Adapter extends BaseAdapter {

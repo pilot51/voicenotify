@@ -49,7 +49,7 @@ public class Database extends SQLiteOpenHelper {
 			+ " integer primary key autoincrement, " + COLUMN_PACKAGE + " text not null, "
 			+ COLUMN_LABEL + " text not null, " + COLUMN_ENABLED + " integer);";
 	
-	protected Database(Context context) {
+	Database(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
 		if (database != null) {
 			Log.w(Common.TAG, "Database already initialized!");
@@ -69,13 +69,13 @@ public class Database extends SQLiteOpenHelper {
 	}
 	
 	/** @return Previously initialized static instance of this class. */
-	protected static Database getInstance() {
+	static Database getInstance() {
 		return database;
 	}
 	
 	/** Copies ignores from old file to database and deletes old file. */
 	@SuppressWarnings("unchecked")
-	private void upgradeOldIgnores() {
+	void upgradeOldIgnores() {
 		ArrayList<String> oldList = new ArrayList<String>();
 		FileInputStream file = null;
 		try {
@@ -110,7 +110,7 @@ public class Database extends SQLiteOpenHelper {
 	}
 	
 	/** @return A new ArrayList containing all apps from the database. */
-	protected static synchronized ArrayList<App> getApps() {
+	static synchronized ArrayList<App> getApps() {
 		SQLiteDatabase db = database.getReadableDatabase();
 		Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, COLUMN_LABEL + " COLLATE NOCASE");
 		ArrayList<App> list = new ArrayList<App>();
@@ -130,7 +130,7 @@ public class Database extends SQLiteOpenHelper {
 	 * Clears and sets all apps in database.
 	 * @param list The list of apps to add in the database.
 	 */
-	protected static synchronized void setApps(ArrayList<App> list) {
+	static synchronized void setApps(ArrayList<App> list) {
 		SQLiteDatabase db = database.getWritableDatabase();
 		db.delete(TABLE_NAME, null, null);
 		ContentValues values;
@@ -148,7 +148,7 @@ public class Database extends SQLiteOpenHelper {
 	 * Updates app in database matching package name or adds if no match found.
 	 * @param app The app to add or update in the database.
 	 */
-	protected static synchronized void updateApp(App app) {
+	static synchronized void addOrUpdateApp(App app) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_PACKAGE,  app.getPackage());
 		values.put(COLUMN_LABEL,  app.getLabel());
@@ -164,7 +164,7 @@ public class Database extends SQLiteOpenHelper {
 	 * Updates enabled value of app in database matching package name.
 	 * @param app The app to update in the database.
 	 */
-	protected static synchronized void updateAppEnable(App app) {
+	static synchronized void updateAppEnable(App app) {
 		ContentValues values = new ContentValues();
 		values.put(COLUMN_ENABLED,  app.getEnabled() ? 1 : 0);
 		SQLiteDatabase db = database.getWritableDatabase();
@@ -176,7 +176,7 @@ public class Database extends SQLiteOpenHelper {
 	 * Removes app from database matching package name.
 	 * @param app The app to remove from the database.
 	 */
-	protected static synchronized void removeApp(App app) {
+	static synchronized void removeApp(App app) {
 		SQLiteDatabase db = database.getWritableDatabase();
 		db.delete(TABLE_NAME, COLUMN_PACKAGE + " = ?", new String[] {app.getPackage()});
 		db.close();

@@ -20,7 +20,7 @@ public class App {
 	private String packageName, label;
 	private boolean enabled;
 	
-	protected App(String pkg, String name, boolean enable) {
+	App(String pkg, String name, boolean enable) {
 		packageName = pkg;
 		label = name;
 		enabled = enable;
@@ -30,30 +30,30 @@ public class App {
 	 * Updates self in database.
 	 * @return This instance.
 	 */
-	protected App updateDb() {
-		Database.updateApp(this);
+	App updateDb() {
+		Database.addOrUpdateApp(this);
 		return this;
 	}
 	
-	protected void setEnabled(boolean enable, boolean updateDb) {
+	void setEnabled(boolean enable, boolean updateDb) {
 		enabled = enable;
 		if (updateDb) Database.updateAppEnable(this);
 	}
 	
 	/** Removes self from database. */
-	protected void remove() {
+	void remove() {
 		Database.removeApp(this);
 	}
 	
-	protected String getLabel() {
+	String getLabel() {
 		return label;
 	}
 	
-	protected String getPackage() {
+	String getPackage() {
 		return packageName;
 	}
 	
-	protected boolean getEnabled() {
+	boolean getEnabled() {
 		return enabled;
 	}
 }

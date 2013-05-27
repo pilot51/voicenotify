@@ -30,13 +30,13 @@ public class Shake implements SensorEventListener {
 	private int threshold;
 	private float accel, accelCurrent, accelLast;
 	
-	public Shake(Context c) {
+	Shake(Context c) {
 		context = c;
 		manager = (SensorManager)c.getSystemService(Context.SENSOR_SERVICE);
 		sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	}
 	
-	protected void enable() {
+	void enable() {
 		if (listener == null) return;
 		try {
 			threshold = Integer.parseInt(Common.prefs.getString(context.getString(R.string.key_shake_threshold), null));
@@ -49,11 +49,11 @@ public class Shake implements SensorEventListener {
 		accelLast = SensorManager.GRAVITY_EARTH;
 	}
 	
-	protected void disable() {
+	void disable() {
 		manager.unregisterListener(this);
 	}
 	
-	public void setOnShakeListener(OnShakeListener listener) {
+	void setOnShakeListener(OnShakeListener listener) {
 		this.listener = listener;
 	}
 	
@@ -73,7 +73,7 @@ public class Shake implements SensorEventListener {
 		accelLast = accelCurrent;
 	}
 	
-	public interface OnShakeListener {
-		public void onShake();
+	interface OnShakeListener {
+		void onShake();
 	}
 }
