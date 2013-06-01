@@ -50,6 +50,9 @@ public class AppList extends ListActivity {
 	private static boolean defEnable;
 	private static final String KEY_DEFAULT_ENABLE = "defEnable";
 	private static final int IGNORE_TOGGLE = 0, IGNORE_ALL = 1, IGNORE_NONE = 2;
+	private static final Object SYNC_APPS = new Object();
+	private static OnListUpdateListener listener;
+	private static boolean isUpdating;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +62,25 @@ public class AppList extends ListActivity {
 		lv = getListView();
 		lv.setTextFilterEnabled(true);
 		adapter = new Adapter();
+		listener = new OnListUpdateListener() {
+			@Override
+			public void onListUpdated() {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						adapter.setData(apps);
+					}
+				});
+			}
+			@Override
+			public void onShowProgress(final boolean show) {
+				runOnUiThread(new Runnable() {
+					public void run() {
+						setProgressBarIndeterminateVisibility(show);
+					}
+				});
+				if (!show) listener = null;
+			}
+		};
 		lv.setAdapter(adapter);
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
@@ -68,60 +90,66 @@ public class AppList extends ListActivity {
 			}
 		});
 		defEnable = Common.getPrefs(this).getBoolean(KEY_DEFAULT_ENABLE, true);
+		updateAppsList();
+	}
+	
+	private interface OnListUpdateListener {
+		void onListUpdated();
+		void onShowProgress(boolean show);
+	}
+	private static void onListUpdated() {
+		if (listener != null) listener.onListUpdated();
+	}
+	private static void showProgress(boolean show) {
+		isUpdating = show;
+		if (listener != null) listener.onShowProgress(show);
+	}
+	
+	private void updateAppsList() {
+		if (isUpdating) {
+			showProgress(true);
+			return;
+		}
 		new Thread(new Runnable() {
 			public void run() {
-				apps = Database.getApps();
-				runOnUiThread(new Runnable() {
-					public void run() {
-						adapter.setData(apps);
-						setProgressBarIndeterminateVisibility(true);
-					}
-				});
-				PackageManager packMan = getPackageManager();
-				
-				// Remove uninstalled
-				for (int a = apps.size() - 1; a >= 0; a--) {
-					App app = apps.get(a);
-					try {
-						packMan.getApplicationInfo(app.getPackage(), 0);
-					} catch (NameNotFoundException e) {
-						app.remove();
-						apps.remove(a);
-						runOnUiThread(new Runnable() {
-							public void run() {
-								adapter.setData(apps);
-							}
-						});
-					}
-				}
-				
-				// Add new
-				inst:for (ApplicationInfo appInfo : packMan.getInstalledApplications(0)) {
-					for (App app : apps) {
-						if (app.getPackage().equals(appInfo.packageName)) {
-							continue inst;
+				showProgress(true);
+				synchronized (SYNC_APPS) {
+					apps = Database.getApps();
+					onListUpdated();
+					PackageManager packMan = getPackageManager();
+					
+					// Remove uninstalled
+					for (int a = apps.size() - 1; a >= 0; a--) {
+						App app = apps.get(a);
+						try {
+							packMan.getApplicationInfo(app.getPackage(), 0);
+						} catch (NameNotFoundException e) {
+							app.remove();
+							apps.remove(a);
+							onListUpdated();
 						}
 					}
-					apps.add(new App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)), defEnable).updateDb());
-					runOnUiThread(new Runnable() {
-						public void run() {
-							adapter.setData(apps);
+					
+					// Add new
+					inst:for (ApplicationInfo appInfo : packMan.getInstalledApplications(0)) {
+						for (App app : apps) {
+							if (app.getPackage().equals(appInfo.packageName)) {
+								continue inst;
+							}
+						}
+						apps.add(new App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)), defEnable).updateDb());
+						onListUpdated();
+					}
+					
+					Collections.sort(apps, new Comparator<App>() {
+						@Override
+						public int compare(App app1, App app2) {
+							return app1.getLabel().compareToIgnoreCase(app2.getLabel());
 						}
 					});
 				}
-				
-				Collections.sort(apps, new Comparator<App>() {
-					@Override
-					public int compare(App app1, App app2) {
-						return app1.getLabel().compareToIgnoreCase(app2.getLabel());
-					}
-				});
-				runOnUiThread(new Runnable() {
-					public void run() {
-						adapter.setData(apps);
-						setProgressBarIndeterminateVisibility(false);
-					}
-				});
+				onListUpdated();
+				showProgress(false);
 			}
 		}).start();
 	}
@@ -157,23 +185,25 @@ public class AppList extends ListActivity {
 	 * @return Found or created {@link App}, otherwise null if app not found on system.
 	 */
 	static App findOrAddApp(String pkg, Context ctx) {
-		if (apps == null) {
-			defEnable = Common.getPrefs(ctx).getBoolean(KEY_DEFAULT_ENABLE, true);
-			apps = Database.getApps();
-		}
-		for (App app : apps) {
-			if (app.getPackage().equals(pkg)) {
-				return app;
+		synchronized (SYNC_APPS) {
+			if (apps == null) {
+				defEnable = Common.getPrefs(ctx).getBoolean(KEY_DEFAULT_ENABLE, true);
+				apps = Database.getApps();
 			}
-		}
-		try {
-			PackageManager packMan = ctx.getPackageManager();
-			App app = new App(pkg, packMan.getApplicationInfo(pkg, 0).loadLabel(packMan).toString(), defEnable);
-			Database.addOrUpdateApp(app);
-			return app;
-		} catch (NameNotFoundException e) {
-			e.printStackTrace();
-			return null;
+			for (App app : apps) {
+				if (app.getPackage().equals(pkg)) {
+					return app;
+				}
+			}
+			try {
+				PackageManager packMan = ctx.getPackageManager();
+				App app = new App(pkg, packMan.getApplicationInfo(pkg, 0).loadLabel(packMan).toString(), defEnable);
+				apps.add(app.updateDb());
+				return app;
+			} catch (NameNotFoundException e) {
+				e.printStackTrace();
+				return null;
+			}
 		}
 	}
 	
