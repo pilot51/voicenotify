@@ -45,7 +45,6 @@ import android.widget.Toast;
 import com.pilot51.voicenotify.Service.OnStatusChangeListener;
 
 public class MainActivity extends PreferenceActivity implements OnPreferenceClickListener, OnSharedPreferenceChangeListener {
-	private static String TAG = MainActivity.class.getSimpleName();
 	private Preference pStatus, pDeviceState, pQuietStart, pQuietEnd, pTest, pNotifyLog, pSupport;
 	private static final int DLG_DEVICE_STATE = 0, DLG_QUIET_START = 1, DLG_QUIET_END = 2, DLG_LOG = 3, DLG_SUPPORT = 4;
 	private OnStatusChangeListener statusListener = new OnStatusChangeListener() {
@@ -160,7 +159,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 						getString(R.string.test_notify_msg), System.currentTimeMillis());
 					notification.defaults |= Notification.DEFAULT_SOUND;
 					notification.flags |= Notification.FLAG_AUTO_CANCEL;
-					notification.setLatestEventInfo(MainActivity.this, TAG, getString(R.string.test),
+					notification.setLatestEventInfo(MainActivity.this, getString(R.string.app_name), getString(R.string.test),
 						PendingIntent.getActivity(MainActivity.this, 0, getIntent(), 0));
 					((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, notification);
 				}
