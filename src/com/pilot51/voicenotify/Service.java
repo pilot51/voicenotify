@@ -116,7 +116,7 @@ public class Service extends AccessibilityService {
 		} catch (NumberFormatException e) {
 			ignoreRepeat = -1;
 		}
-		if (lastMsg.contentEquals(newMsg) && (ignoreRepeat == -1 || newMsgTime - lastMsgTime < ignoreRepeat * 1000)) {
+		if (lastMsg.equals(newMsg) && (ignoreRepeat == -1 || newMsgTime - lastMsgTime < ignoreRepeat * 1000)) {
 			ignoreReasons.add(MessageFormat.format(getString(R.string.reason_identical), ignoreRepeat));
 		}
 		if (ignoreReasons.isEmpty()) {
@@ -135,7 +135,7 @@ public class Service extends AccessibilityService {
 					repeatList.add(newMsg);
 					if (repeater == null) {
 						repeater = new RepeatTimer(interval);
-					} else repeater.checkInterval(interval);
+					}
 				}
 			}
 			if (delay > 0) {
@@ -166,7 +166,8 @@ public class Service extends AccessibilityService {
 		if (ignore(isNew)) return;
 		shake.enable();
 		ttsParams.clear();
-		if (Common.getPrefs(this).getString(getString(R.string.key_ttsStream), null).contentEquals("notification")) {
+		if (Common.getPrefs(this).getString(getString(R.string.key_ttsStream), null)
+				.equals(getString(R.string.stream_value_notification))) {
 			ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
 		}
 		lastQueueTime = Long.toString(System.currentTimeMillis());
@@ -239,32 +240,14 @@ public class Service extends AccessibilityService {
 	}
 	
 	private class RepeatTimer extends TimerTask {
-		private int minuteInterval;
-		
 		private RepeatTimer(int minuteInterval) {
-			this.minuteInterval = minuteInterval;
 			if (minuteInterval <= 0) return;
-			new Timer().schedule(this, minuteInterval * 60000, minuteInterval * 60000);
-		}
-		
-		/**
-		 * If passed interval is different from current timer interval,
-		 *  cancels current timer and, if interval > 0, creates new instance with passed interval.
-		 * @param minuteInterval The interval to check against.
-		 */
-		private void checkInterval(int minuteInterval) {
-			if (this.minuteInterval != minuteInterval) {
-				cancel();
-				if (minuteInterval > 0) repeater = new RepeatTimer(minuteInterval);
-			}
+			long interval = minuteInterval * 60000L;
+			new Timer().schedule(this, interval, interval);
 		}
 		
 		@Override
 		public void run() {
-			if (isScreenOn()) {
-				repeatList.clear();
-				cancel();
-			}
 			for (String s : repeatList) {
 				speak(s, false);
 			}
@@ -391,6 +374,10 @@ public class Service extends AccessibilityService {
 				isBluetoothConnected = false;
 			} else if (action.equals(Intent.ACTION_SCREEN_ON)) {
 				isScreenOn = true;
+				if (repeater != null) {
+					repeater.cancel();
+					repeatList.clear();
+				}
 			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
 				isScreenOn = false;
 			}
