@@ -72,13 +72,13 @@ public class AppList extends ListActivity {
 				});
 			}
 			@Override
-			public void onShowProgress(final boolean show) {
+			public void onUpdateCompleted() {
 				runOnUiThread(new Runnable() {
 					public void run() {
-						setProgressBarIndeterminateVisibility(show);
+						setProgressBarIndeterminateVisibility(false);
 					}
 				});
-				if (!show) listener = null;
+				listener = null;
 			}
 		};
 		lv.setAdapter(adapter);
@@ -95,27 +95,25 @@ public class AppList extends ListActivity {
 	
 	private interface OnListUpdateListener {
 		void onListUpdated();
-		void onShowProgress(boolean show);
+		void onUpdateCompleted();
 	}
 	private static void onListUpdated() {
 		if (listener != null) listener.onListUpdated();
 	}
-	private static void showProgress(boolean show) {
-		isUpdating = show;
-		if (listener != null) listener.onShowProgress(show);
-	}
 	
 	private void updateAppsList() {
+		setProgressBarIndeterminateVisibility(true);
 		if (isUpdating) {
-			showProgress(true);
+			adapter.setData(apps);
 			return;
 		}
+		isUpdating = true;
 		new Thread(new Runnable() {
 			public void run() {
-				showProgress(true);
 				synchronized (SYNC_APPS) {
 					apps = Database.getApps();
 					onListUpdated();
+					final boolean isFirstLoad = apps.isEmpty();
 					PackageManager packMan = getPackageManager();
 					
 					// Remove uninstalled
@@ -124,7 +122,7 @@ public class AppList extends ListActivity {
 						try {
 							packMan.getApplicationInfo(app.getPackage(), 0);
 						} catch (NameNotFoundException e) {
-							app.remove();
+							if (!isFirstLoad) app.remove();
 							apps.remove(a);
 							onListUpdated();
 						}
@@ -137,8 +135,10 @@ public class AppList extends ListActivity {
 								continue inst;
 							}
 						}
-						apps.add(new App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)), defEnable).updateDb());
+						App app = new App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)), defEnable);
+						apps.add(app);
 						onListUpdated();
+						if (!isFirstLoad) app.updateDb();
 					}
 					
 					Collections.sort(apps, new Comparator<App>() {
@@ -147,9 +147,11 @@ public class AppList extends ListActivity {
 							return app1.getLabel().compareToIgnoreCase(app2.getLabel());
 						}
 					});
+					onListUpdated();
+					if (isFirstLoad) Database.setApps(apps);
 				}
-				onListUpdated();
-				showProgress(false);
+				isUpdating = false;
+				if (listener != null) listener.onUpdateCompleted();
 			}
 		}).start();
 	}
