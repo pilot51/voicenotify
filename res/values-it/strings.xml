@@ -19,11 +19,13 @@
 	<!-- Used by multiple files -->
 	<string name="app_is_ignored">%s verrà ignorato</string>
 	<string name="app_is_not_ignored">%s non verrà ignorato</string>
+	<string name="service_running">VN service is running</string>
+	<string name="service_suspended">VN service is suspended</string>
 	
-	<!-- service_config.xml -->
+	<!-- xml/service_config.xml -->
 	<string name="service_desc">Leggi le notifiche della status bar con la sintesi vocale.</string>
 	
-	<!-- preferences.xml -->
+	<!-- xml/preferences.xml -->
 	<string name="tts_settings">Impostazioni Sintesi Vocale</string>
 	<string name="tts_settings_summary">Apre le impostazioni di Sintesi Vocale di Android.</string>
 	<string name="tts_settings_summary_fail">Impostazioni di sintesi vocale non trovate! Se figurano nel dispositivo (come dovrebbero), informa lo sviluppatore.</string>
@@ -38,6 +40,11 @@
 	<string name="tts_repeat">Ripeti Sintesi Vocale</string>
 	<string name="tts_repeat_summary">Continua a ripetere la notifica con la sintesi vocale fino all\'accensione dello schermo.</string>
 	<string name="tts_repeat_dialog_msg">Le notifiche vengono ripetute a intervalli impostati fino all\'accensione dello schermo. Le notifiche ricevute con lo schermo acceso non vengono ripetute.\n\nValore in minuti. Lasciare vuoto o 0 per disattivare.</string>
+	<string name="speak_toasts">Speak Toasts</string>
+	<string name="speak_toasts_summary">Also speak toast (bubble) notifications.</string>
+	<string name="shake_to_silence">Shake-To-Silence</string>
+	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence.</string>
+	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: 100\nBlank to disable.</string>
 	<string-array name="stream_name">
 		<item>Media</item>
 		<item>Notifica</item>
@@ -49,10 +56,10 @@
 	<string name="device_state_summary">Scegli se annunciare durante determinati stati.</string>
 	<string name="device_state_dialog_title">Annuncia con questi stati del dispositivo</string>
 	<string-array name="device_states">
-		<item>Schermo spento</item>
-		<item>Schermo acceso</item>
-		<item>Cuffie scollegate</item>
-		<item>Cuffie collegate</item>
+		<item>Schermo Spento</item>
+		<item>Schermo Acceso</item>
+		<item>Cuffie Scollegate</item>
+		<item>Cuffie Collegate</item>
 		<item>Silenzioso/Vibrazione</item>
 	</string-array>
 	<string name="ignore_repeat">Ignora Ripetizioni</string>
@@ -68,22 +75,27 @@
 	<string name="test_ignored">Voice Notify è stato ignorato nell\' Elenco App.\nIl test verrà eseguito ma non si sentirà alcun annuncio.</string>
 	<string name="support_summary">Dona, vota, commenta o contatta lo sviluppatore per problemi e consigli.</string>
 	
-	<!-- MainActivity.java and preferences.xml -->
+	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Registro Notifiche</string>
 	<string name="notify_log_summary">Elenco delle ultime 20 notifiche. Mostra ora, nome dell\'app, messaggio e motivi per l\'ignoro.</string>
 	<string name="support">Sostieni Voice Notify</string>
 	
 	<!-- MainActivity.java -->
+	<string name="service_disabled">VN service is disabled</string>
 	<string name="status_summary_accessibility">Apre le opzioni di Accesso Facilitato di Android.</string>
+	<string name="status_summary_suspended">Select to activate VN.</string>
 	<string name="test_notify_msg">Questa notifica è un test.</string>
 	<string-array name="support_items">
 		<item>Dona (PayPal)</item>
 		<item>Vota/Commenta</item>
 		<item>Contatta Sviluppatore</item>
+		<item>Translations</item>
+		<item>Source Code</item>
 	</string-array>
 	<string name="dev_email">pilota51@gmail.com</string>
 	<string name="email_subject">Contatto per Voice Notify</string>
+	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
 	<string name="error_market">Errore: Non trovo Play Store</string>
 	<string name="error_email">Errore: non ho trovato un\'app per l\'email installata.</string>
 	
@@ -92,7 +104,23 @@
 	<string name="ignore_app">Ignora %s?</string>
 	<string name="unignore_app">Non Ignora %s?</string>
 	
-	<!-- AppList.java -->
+	<!-- menu/app_list.xml-->
 	<string name="ignore_all">Ignora Tutto</string>
 	<string name="ignore_none">Ignora Nulla</string>
+	<string name="filter">Filter</string>
+	
+	<!-- Ignore/Silence reasons -->
+	<string name="reason_app">Ignored app</string>
+	<string name="reason_string">Ignored text</string>
+	<string name="reason_empty_msg">Empty message</string>
+	<string name="reason_identical">Identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+	<string name="reason_quiet">Quiet time</string>
+	<string name="reason_silent">Silent or vibrate mode</string>
+	<string name="reason_call">Active or ringing call</string>
+	<string name="reason_screen_off">Screen off</string>
+	<string name="reason_screen_on">Screen on</string>
+	<string name="reason_headset_off">Headset off</string>
+	<string name="reason_headset_on">Headset on</string>
+	<string name="reason_shake">Silenced by shake</string>
+	<string name="reason_suspended">VN suspended by widget</string>
 </resources>

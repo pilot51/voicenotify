@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2012 Mark Injerd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+	<string name="app_name">Voice Notify</string>
+	
+	<!-- Used by multiple files -->
+	<string name="app_is_ignored">%s est ignoré</string>
+	<string name="app_is_not_ignored">%s n\'est pas ignoré</string>
+	<string name="service_running">Services VN en cours d\'exécution</string>
+	<string name="service_suspended">Le service VN est suspendu</string>
+	
+	<!-- xml/service_config.xml -->
+	<string name="service_desc">Lit les notifications de la bar de statut avec la synthèse vocale.</string>
+	
+	<!-- xml/preferences.xml -->
+	<string name="tts_settings">Paramètres de synthèse vocale.</string>
+	<string name="tts_settings_summary">Ouvrir les paramètres de synthèse vocale d\'Android.</string>
+	<string name="tts_settings_summary_fail">Paramètres de synthèse vocale introuvables ! S\'ils existent sur voter appareil (ce qui devrait être le cas), veuillez s\'il vous plaît contacter le développeur.</string>
+	<string name="tts_message">Message de la synthèse vocale.</string>
+	<string name="tts_message_summary">Personnaliser la façon dont la synthèse vocale énonce les notifications.</string>
+	<string name="tts_message_dialog">%t = Titre de l\'application\n%m = Message de notification</string>
+	<string name="tts_stream">Flux audio de la synthèse vocale</string>
+	<string name="tts_stream_summary">Choisir le flux audio que la synthèse vocale doit utiliser.</string>
+	<string name="tts_delay">Délai avant que l\'annonce vocale ne démarre</string>
+	<string name="tts_delay_summary">Choisir la durée (en seconde) du délai de l\'annonce vocale après la réception de la notification. </string>
+	<string name="tts_delay_dialog_msg">Nombre de seconde à attendre après la réception de la notification avant le démarrage de l\'annonce vocale.</string>
+	<string name="tts_repeat">Répétition de la synthèse vocale.</string>
+	<string name="tts_repeat_summary">Répéter continuellement les notifications par la synthèse vocale jusqu\'à ce que l\'écran s\'allume.</string>
+	<string name="tts_repeat_dialog_msg">Les notifications seront répétées après l\'intervalle de temps défini jusqu\'à ce que l\'écran s\'allume. Les notifications créés pendant que l\'écran est allumé ne seront pas répétées.\nLes valeurs sont en minutes. Vide ou 0 le désactive.</string>
+	<string name="speak_toasts">Bulle de notification</string>
+	<string name="speak_toasts_summary">Encore une bulle de notification</string>
+	<string name="shake_to_silence">Sécouer-Pour-Silence</string>
+	<string name="shake_to_silence_summary">Ajuster le seuil de sensibilité du Sécouer-Pour-Silence</string>
+	<string name="shake_to_silence_dialog_msg">Les valeurs les plus faibles sont plus sensibles.\n\nPar défaut: 100\nVide pour désactiver.</string>
+	<string-array name="stream_name">
+		<item>Média</item>
+		<item>Notification</item>
+	</string-array>
+	<string name="ignore_strings">Texte à ignorer</string>
+	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message.</string>
+	<string name="ignore_strings_dialog_msg">Séparer les entrées individuelles par une nouvelle ligne.</string>
+	<string name="device_state">Etat de l\'appareil</string>
+	<string name="device_state_summary">Choisir à quel moment utiliser l\'annonce vocale selon le statut de l\'appareil.</string>
+	<string name="device_state_dialog_title">Utiliser l\'annonce vocale si :</string>
+	<string-array name="device_states">
+		<item>Screen Off</item>
+		<item>Screen On</item>
+		<item>Headset Off</item>
+		<item>Headset On</item>
+		<item>Silencieux/Vibreur</item>
+	</string-array>
+	<string name="ignore_repeat">Ignorer la répétition</string>
+	<string name="ignore_repeat_summary">Ignorer les notifications identiques suivantes dans un temps donné.</string>
+	<string name="ignore_repeat_dialog_msg">Définir le nombre de secondes qui doivent s\'écouler depuis la dernière notification avant une répétition.\nLes répétitions ignorées réinitialisent le compteur et les notifications différentes l’arrêtent.\nVide = infini.</string>
+	<string name="app_list">Liste des applications</string>
+	<string name="app_list_summary">Liste des applications installées qui peuvent être ignorées.</string>
+	<string name="quiet_start">Début du mode silencieux</string>
+	<string name="quiet_start_summary">Ne pas utiliser les annonces vocales après cette heure.\nMettre la même heure que celle de fin pour désactiver.</string>
+	<string name="quiet_end">Fin du mode silencieux</string>
+	<string name="quiet_end_summary">Ne pas utiliser les annonces vocales avant cette heure.\nMettre la même heure que celle de début pour désactiver.</string>
+	<string name="test_summary">Envoyer une notification (débute après 5 secondes) pour tester les paramètres actuels.</string>
+	<string name="test_ignored">Voice Notify est ignoré dans la liste des applications.\nLe test va s’effectuer mais la notification ne sera pas lue.</string>
+	<string name="support_summary">Faire un don, noter/commenter ou contacter le développeur pour faire part de problèmes ou suggestions.</string>
+	
+	<!-- MainActivity.java and xml/preferences.xml -->
+	<string name="test">Test</string>
+	<string name="notify_log">Journaux des notifications</string>
+	<string name="notify_log_summary">Liste des 20 dernières notifications. Heure d\'affichage, nom de l\'application, message, et les raisons d\'ignorer</string>
+	<string name="support">Soutenir Voice Notify</string>
+	
+	<!-- MainActivity.java -->
+	<string name="service_disabled">Service VN désactivé</string>
+	<string name="status_summary_accessibility">Ouvrir les paramètres d\'accessibilité d\'Android pour activer ou désactiver VN.</string>
+	<string name="status_summary_suspended">Selectionner pour activer le VN</string>
+	<string name="test_notify_msg">Ceci est un test de notification.</string>
+	<string-array name="support_items">
+		<item>Faire un don (PayPal)</item>
+		<item>Noter/Commenter</item>
+		<item>Contacter le développeur</item>
+		<item>Translations</item>
+		<item>Source Code</item>
+	</string-array>
+	<string name="dev_email">pilota51@gmail.com</string>
+	<string name="email_subject">Contact au sujet de Voice Notify</string>
+	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
+	<string name="error_market">Erreur : impossible de trouver Play Store.</string>
+	<string name="error_email">Erreur : impossible de trouver un client d\'email installé.</string>
+	
+	<!-- NotifyList.java -->
+	<string name="yes">Oui</string>
+	<string name="ignore_app">Ignorer %s?</string>
+	<string name="unignore_app">Ne pas ignorer %s?</string>
+	
+	<!-- menu/app_list.xml-->
+	<string name="ignore_all">Tout ignorer</string>
+	<string name="ignore_none">Ne rien ignorer</string>
+	<string name="filter">Filtre</string>
+	
+	<!-- Ignore/Silence reasons -->
+	<string name="reason_app">Ignored app</string>
+	<string name="reason_string">Ignored text</string>
+	<string name="reason_empty_msg">Empty message</string>
+	<string name="reason_identical">Identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+	<string name="reason_quiet">Quiet time</string>
+	<string name="reason_silent">Silent or vibrate mode</string>
+	<string name="reason_call">Active or ringing call</string>
+	<string name="reason_screen_off">Screen off</string>
+	<string name="reason_screen_on">Screen on</string>
+	<string name="reason_headset_off">Headset off</string>
+	<string name="reason_headset_on">Headset on</string>
+	<string name="reason_shake">Silencieux par secouement</string>
+	<string name="reason_suspended">VN suspendu par le widget</string>
+</resources>

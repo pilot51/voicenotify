@@ -14,18 +14,20 @@
      limitations under the License.
 -->
 <resources>
-	<string name="app_name">Уведомления Голосом</string>
+	<string name="app_name">Уведомления голосом</string>
 	
 	<!-- Used by multiple files -->
-	<string name="app_is_ignored">%s игнорируется</string>
-	<string name="app_is_not_ignored">%s не игнорируется</string>
+	<string name="app_is_ignored">%s игнорировано</string>
+	<string name="app_is_not_ignored">%s не игнорированно</string>
+	<string name="service_running">Сервис Уведомлений Голосом, активен.</string>
+	<string name="service_suspended">Сервис Уведомлений Голосом приостановлен.</string>
 	
-	<!-- service_config.xml -->
+	<!-- xml/service_config.xml -->
 	<string name="service_desc">Читать текст из строки уведомлений с помощью Text-To-Speech.</string>
 	
-	<!-- preferences.xml -->
+	<!-- xml/preferences.xml -->
 	<string name="tts_settings">Настройки TTS</string>
-	<string name="tts_settings_summary">Открыть настройки Text-To-Speech.</string>
+	<string name="tts_settings_summary">Открыть системные настройки Text-To-Speech.</string>
 	<string name="tts_settings_summary_fail">Невозможно найти настройки TTS. Если TTS установлено на вашем устройстве, пожалуйста свяжитесь с производителем.</string>
 	<string name="tts_message">Текст сообщения TTS</string>
 	<string name="tts_message_summary">Настроить как TTS будет произносить уведомления.</string>
@@ -38,21 +40,26 @@
 	<string name="tts_repeat">Повторение TTS</string>
 	<string name="tts_repeat_summary">Позволяет циклично повторять уведомления TTS при включенном экране.</string>
 	<string name="tts_repeat_dialog_msg">Уведомления будут повторятся, указанный интервал, пока экран остается включенным. Уведомления появившиеся в то время пока экран был включен, не повторяются.\n\nЗначение в минутах. Оставьте поле пустым или введите 0, для отключения.</string>
+	<string name="speak_toasts">Говорить "тосты"</string>
+	<string name="speak_toasts_summary">Так-же проговаривать "тосты" (всплывающие уведомления)</string>
+	<string name="shake_to_silence">Потрясти-для-тишины</string>
+	<string name="shake_to_silence_summary">Настроить порог чувствительности функции "Потрясти-для-тишины"</string>
+	<string name="shake_to_silence_dialog_msg">Низкие значения - более высокая чувствительность.\n\nПо умолчанию: 100\nОставьте поле пустым, для отключения функции.</string>
 	<string-array name="stream_name">
 		<item>Мультимедиа</item>
 		<item>Уведомления</item>
 	</string-array>
 	<string name="ignore_strings">Игнорирование текста</string>
-	<string name="ignore_strings_summary">Игнорировать сообщения содержащие определённый текст.</string>
+	<string name="ignore_strings_summary">Игнорировать уведомления, содержащие определенный текст.</string>
 	<string name="ignore_strings_dialog_msg">Разделяйте текстовые фрагменты переходом на новую строку.</string>
 	<string name="device_state">Состояния устройства</string>
 	<string name="device_state_summary">Позволяет выбрать: при каких состояниях устройства приложение будет активно.</string>
 	<string name="device_state_dialog_title">Произносить напоминания в следующих состояниях:</string>
 	<string-array name="device_states">
-		<item>Экран выключен</item>
-		<item>Экран включен</item>
-		<item>Гарнитура отключена</item>
-		<item>Гарнитура подключена</item>
+		<item>Экран выкл.</item>
+		<item>Экран вкл.</item>
+		<item>Гарнитура выкл.</item>
+		<item>Гарнитура вкл.</item>
 		<item>Без звука / Вибрация</item>
 	</string-array>
 	<string name="ignore_repeat">Игнорирование повторений</string>
@@ -68,22 +75,27 @@
 	<string name="test_ignored">приложение \'Уведомления голосом\' не выбрано в Cписке обрабатываемых приложений.\nТест будет запущен, но уведомление не будет произнесено.</string>
 	<string name="support_summary">Сделать пожертвование, выставить рейтинг / комментировать приложение, либо связаться с разработчиком, для обсуждения неполадок, или внесения идей и предложений для дальнейшей разработки.</string>
 	
-	<!-- MainActivity.java and preferences.xml -->
+	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Тест</string>
 	<string name="notify_log">Лог уведомлений</string>
-	<string name="notify_log_summary">Список последних 20-ти уведомлений. Отображается имя приложения, текст уведомления, и причины игнорирования.</string>
+	<string name="notify_log_summary">Отобразить 20 последних уведомлений. Отображает: время, название приложения и причины игнорирования.</string>
 	<string name="support">Поддержать \'Уведомления голосом\'</string>
 	
 	<!-- MainActivity.java -->
-	<string name="status_summary_accessibility">Открыть настройки спец.возможностей Android.</string>
+	<string name="service_disabled">Сервис Уведомлений Голосом деактивирован.</string>
+	<string name="status_summary_accessibility">Открыть настройки "Специальных возможностей" чтобы вкл. или откл. доступ Уведомлений Голосом.</string>
+	<string name="status_summary_suspended">Выберите для активации Уведомлений Голосом.</string>
 	<string name="test_notify_msg">Это тестовое уведомление. Проверка настроек.</string>
 	<string-array name="support_items">
 		<item>Сделать пожертвование (PayPal)</item>
 		<item>Выставить рейтинг / Комментировать приложение</item>
 		<item>Связаться с разработчиком</item>
+		<item>Переводы</item>
+		<item>Исходный Код</item>
 	</string-array>
 	<string name="dev_email">pilota51@gmail.com</string>
 	<string name="email_subject">Связь с разработчиком \'Уведомлений голосом\'</string>
+	<string name="email_body">\n\nVN версия: %1$s\nверсия Android: %2$s\nномер билда Android: %3$s\nУстройство: %4$s\n</string>
 	<string name="error_market">Ошибка: Невозможно найти установленный Market.</string>
 	<string name="error_email">Ошибка: Невозможно найти установленный почтовый клиент.</string>
 	
@@ -92,7 +104,23 @@
 	<string name="ignore_app">Игнорировать %s?</string>
 	<string name="unignore_app">Не игнорировать %s?</string>
 	
-	<!-- AppList.java -->
+	<!-- menu/app_list.xml-->
 	<string name="ignore_all">Игнорировать всё.</string>
 	<string name="ignore_none">Ничего не игнорировать</string>
+	<string name="filter">Фильтр</string>
+	
+	<!-- Ignore/Silence reasons -->
+	<string name="reason_app">Игнорируемое приложение</string>
+	<string name="reason_string">Игнорируемый текст</string>
+	<string name="reason_empty_msg">Пустое сообщение</string>
+	<string name="reason_identical">Идентичное сообщение через {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+	<string name="reason_quiet">Тихое время</string>
+	<string name="reason_silent">Тихий режим или режим вибрации</string>
+	<string name="reason_call">Активный или звонящий вызов</string>
+	<string name="reason_screen_off">Экран выкл.</string>
+	<string name="reason_screen_on">Экран вкл.</string>
+	<string name="reason_headset_off">Гарнитура выкл.</string>
+	<string name="reason_headset_on">Гарнитура вкл.</string>
+	<string name="reason_shake">звук отключен после встряски</string>
+	<string name="reason_suspended">Уведомления Голосом приостановлены с помощью виджета.</string>
 </resources>

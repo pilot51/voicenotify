@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2012 Mark Injerd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+	<string name="app_name">Voice Notify</string>
+	
+	<!-- Used by multiple files -->
+	<string name="app_is_ignored">%s is ignored</string>
+	<string name="app_is_not_ignored">%s is not ignored</string>
+	<string name="service_running">VN service is running</string>
+	<string name="service_suspended">VN service is suspended</string>
+	
+	<!-- xml/service_config.xml -->
+	<string name="service_desc">Liest Statuszeilen-Benachrichtigungen mittels Text-zu-Sprache (TTS) vor.</string>
+	
+	<!-- xml/preferences.xml -->
+	<string name="tts_settings">Sprachausgabe Einstellungen</string>
+	<string name="tts_settings_summary">Open the Android Text-To-Speech settings.</string>
+	<string name="tts_settings_summary_fail">Kann Text-zu-Sprache Einstellungen nicht finden! Wenn es auf Deinem Gerät existiert (das sollte es), kontaktiere bitte den Entwickler.</string>
+	<string name="tts_message">gesprochene Benachrichtigung</string>
+	<string name="tts_message_summary">Passe die Art und Weise an, wie Benachrichtigungen ausgesprochen werden sollen.</string>
+	<string name="tts_message_dialog">%t = Titel der Anwendung\n%m = Inhalt der Benachrichtigung</string>
+	<string name="tts_stream">Sprachausgabekanal (Stream)</string>
+	<string name="tts_stream_summary">Wähle den Kanal über den die gesprochene Benachrichtigung ausgegeben werden soll.</string>
+	<string name="tts_delay">Verzögerung der Sprachausgabe</string>
+	<string name="tts_delay_summary">Warte \'x\' Sekunden bis eine Benachrichtigung ausgesprochen wird.</string>
+	<string name="tts_delay_dialog_msg">Anzahl der Sekunden um die die Sprachausgabe verzögert werden soll.</string>
+	<string name="tts_repeat">Sprachausgabe wiederholen</string>
+	<string name="tts_repeat_summary">Wiederhole die Sprachausgabe so lange, bis der Bildschirm eingeschaltet wird.</string>
+	<string name="tts_repeat_dialog_msg">Benachrichtigungen werden im definierten Zeitraum wiederholt (Wert in Minuten), bis der Bildschirm eingeschaltet wird. Benachrichtigungen die erscheinen während der Bildschirm eingeschaltet ist, werden nicht wiederholt.\n Leer lassen oder 0 eingeben um Wiederholung zu deaktivieren.</string>
+	<string name="speak_toasts">Speak Toasts</string>
+	<string name="speak_toasts_summary">Also speak toast (bubble) notifications.</string>
+	<string name="shake_to_silence">Shake-To-Silence</string>
+	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence.</string>
+	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: 100\nBlank to disable.</string>
+	<string-array name="stream_name">
+		<item>Medien</item>
+		<item>Benachrichtigung</item>
+	</string-array>
+	<string name="ignore_strings">ignorierter Text</string>
+	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message.</string>
+	<string name="ignore_strings_dialog_msg">Trenne einzelne Einträge durch eine neue Zeile.</string>
+	<string name="device_state">Gerätezustände</string>
+	<string name="device_state_summary">In welchem Gerätezustand sollen Benachrichtigungen ausgesprochen werden?</string>
+	<string name="device_state_dialog_title">Sprich, wenn folgende Bedingungen erfüllt sind:</string>
+	<string-array name="device_states">
+		<item>Screen Off</item>
+		<item>Screen On</item>
+		<item>Headset Off</item>
+		<item>Headset On</item>
+		<item>Stumm/Vibration</item>
+	</string-array>
+	<string name="ignore_repeat">Ignoriere sich wiederholende Benachrichtigungen</string>
+	<string name="ignore_repeat_summary">Ignoriere aufeinanderfolgende, identische Benachrichtigungen in einem bestimmten Zeitraum.</string>
+	<string name="ignore_repeat_dialog_msg">Stelle den Zeitraum ein (in Sekunden), in dem wiederholte Benachrichtigungen ignoriert werden sollen.\nJede ignorierte Benachrichtigung in diesem Zeitraum lässt die Wartezeit von vorn beginnen. Bei neuen Benachrichtigungen entfällt die Wartezeit.\nleer = Wartezeit wird auf \'unendlich\' gesetzt.</string>
+	<string name="app_list">Liste der Anwendungen</string>
+	<string name="app_list_summary">Entferne Apps für die keine Sprachausgabe erfolgen soll.</string>
+	<string name="quiet_start">Beginn der Ruhezeit</string>
+	<string name="quiet_start_summary">Keine Sprachausgabe nach dieser Uhrzeit.\nStell den gleichen Wert wie bei \'Ende der Ruhezeit\' ein um keine Ruhezeit festzulegen.</string>
+	<string name="quiet_end">Ende der Ruhezeit</string>
+	<string name="quiet_end_summary">Keine Sprachausgabe vor dieser Uhrzeit.\nStell den gleichen Wert wie bei \'Beginn der Ruhezeit\' ein um keine Ruhezeit festzulegen.</string>
+	<string name="test_summary">Erzeuge eine Benachrichtigung (5 Sekunden verzögert) um die aktuellen Einstellungen zu testen.</string>
+	<string name="test_ignored">Voice Notify wurde in der Liste der Anwendungen abgewählt und wird daher ignoriert.\nDie Testbenachrichtigung wird ausgelöst, aber nicht gesprochen.</string>
+	<string name="support_summary">Spende, bewerte/kommentiere oder nimm bei Problemen oder für Verbesserungsvorschläge Kontakt mit dem Entwickler auf.</string>
+	
+	<!-- MainActivity.java and xml/preferences.xml -->
+	<string name="test">Testen</string>
+	<string name="notify_log">Benachrichtigungsprotokoll</string>
+	<string name="notify_log_summary">List last 20 notifications. Displays time, app name, message, and ignore reasons.</string>
+	<string name="support">Unterstütze Voice Notify</string>
+	
+	<!-- MainActivity.java -->
+	<string name="service_disabled">VN service is disabled</string>
+	<string name="status_summary_accessibility">Open the Android Accessibility settings to enable or disable VN.</string>
+	<string name="status_summary_suspended">Select to activate VN.</string>
+	<string name="test_notify_msg">Dies ist eine Test-Benachrichtigung.</string>
+	<string-array name="support_items">
+		<item>Spenden (PayPal)</item>
+		<item>Bewerte/Kommentiere</item>
+		<item>Entwickler kontaktieren</item>
+		<item>Translations</item>
+		<item>Source Code</item>
+	</string-array>
+	<string name="dev_email">pilota51@gmail.com</string>
+	<string name="email_subject">Contacting about Voice Notify</string>
+	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
+	<string name="error_market">Fehler: Google Play Store ist nicht installiert.</string>
+	<string name="error_email">Fehler: Konnte keine E-Mail Anwendung finden.</string>
+	
+	<!-- NotifyList.java -->
+	<string name="yes">Yes</string>
+	<string name="ignore_app">Ignore %s?</string>
+	<string name="unignore_app">Unignore %s?</string>
+	
+	<!-- menu/app_list.xml-->
+	<string name="ignore_all">alle ignorieren</string>
+	<string name="ignore_none">keine ignorieren</string>
+	<string name="filter">Filter</string>
+	
+	<!-- Ignore/Silence reasons -->
+	<string name="reason_app">Ignored app</string>
+	<string name="reason_string">Ignored text</string>
+	<string name="reason_empty_msg">Empty message</string>
+	<string name="reason_identical">Identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+	<string name="reason_quiet">Quiet time</string>
+	<string name="reason_silent">Silent or vibrate mode</string>
+	<string name="reason_call">Active or ringing call</string>
+	<string name="reason_screen_off">Screen off</string>
+	<string name="reason_screen_on">Screen on</string>
+	<string name="reason_headset_off">Headset off</string>
+	<string name="reason_headset_on">Headset on</string>
+	<string name="reason_shake">Silenced by shake</string>
+	<string name="reason_suspended">VN suspended by widget</string>
+</resources>

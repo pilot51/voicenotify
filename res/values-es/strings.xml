@@ -19,11 +19,13 @@
 	<!-- Used by multiple files -->
 	<string name="app_is_ignored">Ignorado %s</string>
 	<string name="app_is_not_ignored">No ignorado %s</string>
+	<string name="service_running">VN service is running</string>
+	<string name="service_suspended">VN service is suspended</string>
 	
-	<!-- service_config.xml -->
+	<!-- xml/service_config.xml -->
 	<string name="service_desc">Lee la barra de notificaciones con Texto-a-Voz</string>
 	
-	<!-- preferences.xml -->
+	<!-- xml/preferences.xml -->
 	<string name="tts_settings">Configuración de TTS (Texto a voz)</string>
 	<string name="tts_settings_summary">Abrir configuración de Texto-a-Voz de Android</string>
 	<string name="tts_settings_summary_fail">No se encontró el menú de configuración de TTS! Si está seguro de que se encuentra instalado en el dispositivo, (debería estarlo) por favor contacte al desarrollador de la aplicación</string>
@@ -38,6 +40,11 @@
 	<string name="tts_repeat">Repetición de Texto-a-Voz</string>
 	<string name="tts_repeat_summary">Repetir las notificaciones con Texto-a-Voz hasta que la pantalla se encienda</string>
 	<string name="tts_repeat_dialog_msg">Las notificaciones se repiten al intervalo de tiempo definido hasta que la pantalla se encienda. Las notificaciones generadas mientras la pantalla se encuentra encendida no se repiten.\n\nEl valor se encuentra en minutos. Dejar en blanco o colocar 0 para desactivar.</string>
+	<string name="speak_toasts">Speak Toasts</string>
+	<string name="speak_toasts_summary">Also speak toast (bubble) notifications.</string>
+	<string name="shake_to_silence">Shake-To-Silence</string>
+	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence.</string>
+	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: 100\nBlank to disable.</string>
 	<string-array name="stream_name">
 		<item>Medios</item>
 		<item>Notificación</item>
@@ -49,10 +56,10 @@
 	<string name="device_state_summary">Selecciona si se debe hablar durante según el estado en el que se encuentra el dispositivo</string>
 	<string name="device_state_dialog_title">Hablar durante los siguientes estados del dispositivo</string>
 	<string-array name="device_states">
-		<item>Pantalla apagada</item>
-		<item>Pantalla encendida</item>
-		<item>Auriculares desconectados</item>
-		<item>Auriculares conectados</item>
+		<item>Pantalla Apagada</item>
+		<item>Pantalla Encendida</item>
+		<item>Auriculares Desconectados</item>
+		<item>Auriculares Conectados</item>
 		<item>Silencio/Vibración</item>
 	</string-array>
 	<string name="ignore_repeat">Ignorar repeticiones</string>
@@ -68,22 +75,27 @@
 	<string name="test_ignored">Notificación por voz ha sido ignorada en el listado de aplicaciones.\n La prueba se realizará, pero no habrá notificación hablada</string>
 	<string name="support_summary">Donar, calificar/comentar, o contactar al desarrollador de la aplicación por problemas o sugerencias</string>
 	
-	<!-- MainActivity.java and preferences.xml -->
+	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Prueba</string>
 	<string name="notify_log">Registro de notificaciones</string>
 	<string name="notify_log_summary">Lista las 20 últimas notificaciones. Muestra la hora, el nombre de la aplicación, el mensaje y las razones por las que pudo ser ignorado</string>
 	<string name="support">Dar soporte a Notificación por voz</string>
 	
 	<!-- MainActivity.java -->
+	<string name="service_disabled">VN service is disabled</string>
 	<string name="status_summary_accessibility">Abrir configuración de accesibilidad de Android</string>
+	<string name="status_summary_suspended">Select to activate VN.</string>
 	<string name="test_notify_msg">Ésta es una notificación de prueba</string>
 	<string-array name="support_items">
 		<item>Donar (PayPal)</item>
 		<item>Calificar/Comentar</item>
 		<item>Contactar al Desarrollador</item>
+		<item>Translations</item>
+		<item>Source Code</item>
 	</string-array>
 	<string name="dev_email">pilota51@gmail.com</string>
 	<string name="email_subject">Contacto sobre Notificación por voz</string>
+	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
 	<string name="error_market">Error: No se pudo encontrar la aplicación Market instalada</string>
 	<string name="error_email">Error: No se pudo encontrar una aplicación de email instalada</string>
 	
@@ -92,7 +104,23 @@
 	<string name="ignore_app">Ignorar %s?</string>
 	<string name="unignore_app">No ignorar %s?</string>
 	
-	<!-- AppList.java -->
+	<!-- menu/app_list.xml-->
 	<string name="ignore_all">Ignorar todo</string>
 	<string name="ignore_none">No ignorar ninguno</string>
+	<string name="filter">Filter</string>
+	
+	<!-- Ignore/Silence reasons -->
+	<string name="reason_app">Ignored app</string>
+	<string name="reason_string">Ignored text</string>
+	<string name="reason_empty_msg">Empty message</string>
+	<string name="reason_identical">Identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+	<string name="reason_quiet">Quiet time</string>
+	<string name="reason_silent">Silent or vibrate mode</string>
+	<string name="reason_call">Active or ringing call</string>
+	<string name="reason_screen_off">Screen off</string>
+	<string name="reason_screen_on">Screen on</string>
+	<string name="reason_headset_off">Headset off</string>
+	<string name="reason_headset_on">Headset on</string>
+	<string name="reason_shake">Silenced by shake</string>
+	<string name="reason_suspended">VN suspended by widget</string>
 </resources>

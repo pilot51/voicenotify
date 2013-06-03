@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2012 Mark Injerd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+	<string name="app_name">Voice Notify</string>
+	
+	<!-- Used by multiple files -->
+	<string name="app_is_ignored">%s is ignored</string>
+	<string name="app_is_not_ignored">%s is not ignored</string>
+	<string name="service_running">VN service is running</string>
+	<string name="service_suspended">VN service is suspended</string>
+	
+	<!-- xml/service_config.xml -->
+	<string name="service_desc">A státusz üzenetek felolvasása.</string>
+	
+	<!-- xml/preferences.xml -->
+	<string name="tts_settings">Szövegfelolvasó Beállítás</string>
+	<string name="tts_settings_summary">Open the Android Text-To-Speech settings.</string>
+	<string name="tts_settings_summary_fail">Szövefelolvasó nincs telepítve Ha biztos vagy benne, hogy létezik, kérlek vedd fel a kapcsolatot a fejlesztővel.</string>
+	<string name="tts_message">Mit Mondjak?</string>
+	<string name="tts_message_summary">Mit mondjak?</string>
+	<string name="tts_message_dialog">%t = programnév\n%m = üzenet</string>
+	<string name="tts_stream">Szövegfelolvasó Hangkimenet</string>
+	<string name="tts_stream_summary">Melyik hangkimenetet használjam?</string>
+	<string name="tts_delay">Beszéd Késleltetés</string>
+	<string name="tts_delay_summary">Add meg másodpercben mennyi legyen a várakozás a megszólalásig.</string>
+	<string name="tts_delay_dialog_msg">Hány másodpercig várjak a megszólalással?</string>
+	<string name="tts_repeat">Az Üzenet Ismétlése</string>
+	<string name="tts_repeat_summary">Folyamatos ismétlés amíg a képernyő ki van kapcsolva.</string>
+	<string name="tts_repeat_dialog_msg">Addig ismétli amíg a beállított értékkel amíg a képernyő ki van kapcsolva.\nPercekben kell megadni. Ha 0 vagy üres akkor a funkció kikapcsolva.</string>
+	<string name="speak_toasts">Speak Toasts</string>
+	<string name="speak_toasts_summary">Also speak toast (bubble) notifications.</string>
+	<string name="shake_to_silence">Shake-To-Silence</string>
+	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence.</string>
+	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: 100\nBlank to disable.</string>
+	<string-array name="stream_name">
+		<item>Média</item>
+		<item>Üzenet</item>
+	</string-array>
+	<string name="ignore_strings">Szövegek, Amit Nem Mondok.</string>
+	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message.</string>
+	<string name="ignore_strings_dialog_msg">Írj új sorba minden szövegrészt.</string>
+	<string name="device_state">Beszélő Állapotok</string>
+	<string name="device_state_summary">Válaszd ki, hogy mikor kell beszélnem?</string>
+	<string name="device_state_dialog_title">Jelöld be, hogy mikor kell beszélnem.</string>
+	<string-array name="device_states">
+		<item>Screen Off</item>
+		<item>Screen On</item>
+		<item>Headset Off</item>
+		<item>Headset On</item>
+		<item>Néma és rezgő módban</item>
+	</string-array>
+	<string name="ignore_repeat">Ismétlések</string>
+	<string name="ignore_repeat_summary">Add meg, hogy hány másodpercen belül ne ismételjem ugyanazt az eseményt.</string>
+	<string name="ignore_repeat_dialog_msg">Add meg másodpercben, hogy ha ugyanattól a programtól több üzenet érkezik, hány másodpercen túl beszéljek újra.</string>
+	<string name="app_list">Program Lista</string>
+	<string name="app_list_summary">Jelöld be melyik program üzeneteit kezeljem.</string>
+	<string name="quiet_start">Néma Időszak Kezdete</string>
+	<string name="quiet_start_summary">Ha egyforma időket adsz meg, akkor a csendes üzemmód kikapcsolódik.</string>
+	<string name="quiet_end">Csendes Időszak Vége</string>
+	<string name="quiet_end_summary">Ha egyforma időket adsz meg\nakkor a csendes üzemmód kikapcsolódik.</string>
+	<string name="test_summary">Teszt üzenet elküldése (késleltetve 5 másodperccel).</string>
+	<string name="test_ignored">A Voice Notify inaktív a programlistában.\nÍgy a tesztüzenet nem fog megszólalni.</string>
+	<string name="support_summary">Adomány, értékelés, kapcsolat a fejlesztővel. Problémák, javaslatok.</string>
+	
+	<!-- MainActivity.java and xml/preferences.xml -->
+	<string name="test">Teszt</string>
+	<string name="notify_log">Üzenet Események</string>
+	<string name="notify_log_summary">List last 20 notifications. Displays time, app name, message, and ignore reasons.</string>
+	<string name="support">Támogatás</string>
+	
+	<!-- MainActivity.java -->
+	<string name="service_disabled">VN service is disabled</string>
+	<string name="status_summary_accessibility">Open the Android Accessibility settings to enable or disable VN.</string>
+	<string name="status_summary_suspended">Select to activate VN.</string>
+	<string name="test_notify_msg">Ez egy tesztüzenet.</string>
+	<string-array name="support_items">
+		<item>Adomány (PayPal)</item>
+		<item>Értékelés és megjegyzések</item>
+		<item>Kapcsolat a fejlesztővel</item>
+		<item>Translations</item>
+		<item>Source Code</item>
+	</string-array>
+	<string name="dev_email">pilota51@gmail.com</string>
+	<string name="email_subject">Kapcsolat a Voice Notify fejlesztőjével</string>
+	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
+	<string name="error_market">Error: Nem találom az installált verziót.</string>
+	<string name="error_email">Error: Nem találok levelezőprogramot.</string>
+	
+	<!-- NotifyList.java -->
+	<string name="yes">Yes</string>
+	<string name="ignore_app">Ignore %s?</string>
+	<string name="unignore_app">Unignore %s?</string>
+	
+	<!-- menu/app_list.xml-->
+	<string name="ignore_all">Az összes ki</string>
+	<string name="ignore_none">Az összes be</string>
+	<string name="filter">Filter</string>
+	
+	<!-- Ignore/Silence reasons -->
+	<string name="reason_app">Ignored app</string>
+	<string name="reason_string">Ignored text</string>
+	<string name="reason_empty_msg">Empty message</string>
+	<string name="reason_identical">Identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+	<string name="reason_quiet">Quiet time</string>
+	<string name="reason_silent">Silent or vibrate mode</string>
+	<string name="reason_call">Active or ringing call</string>
+	<string name="reason_screen_off">Screen off</string>
+	<string name="reason_screen_on">Screen on</string>
+	<string name="reason_headset_off">Headset off</string>
+	<string name="reason_headset_on">Headset on</string>
+	<string name="reason_shake">Silenced by shake</string>
+	<string name="reason_suspended">VN suspended by widget</string>
+</resources>
