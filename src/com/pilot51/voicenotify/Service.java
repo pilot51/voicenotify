@@ -33,6 +33,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.os.Handler;
 import android.os.PowerManager;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -56,6 +57,7 @@ public class Service extends AccessibilityService {
 	private final ArrayList<String> ignoreReasons = new ArrayList<String>(),
 	                                repeatList = new ArrayList<String>();
 	private String lastQueueTime;
+	private Handler handler = new Handler();
 	private OnStatusChangeListener statusListener = new OnStatusChangeListener() {
 		@Override
 		public void onStatusChanged() {
@@ -143,7 +145,12 @@ public class Service extends AccessibilityService {
 				new Timer().schedule(new TimerTask() {
 					@Override
 					public void run() {
-						speak(msg, true);
+						handler.post(new Runnable() {
+							@Override
+							public void run() {
+								speak(msg, true);
+							}
+						});
 					}
 				}, delay * 1000L);
 			} else speak(newMsg, true);
@@ -248,9 +255,14 @@ public class Service extends AccessibilityService {
 		
 		@Override
 		public void run() {
-			for (String s : repeatList) {
-				speak(s, false);
-			}
+			handler.post(new Runnable() {
+				@Override
+				public void run() {
+					for (String s : repeatList) {
+						speak(s, false);
+					}
+				}
+			});
 		}
 		
 		@Override
