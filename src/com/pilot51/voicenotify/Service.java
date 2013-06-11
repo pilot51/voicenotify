@@ -167,7 +167,7 @@ public class Service extends AccessibilityService {
 	/**
 	 * Sends msg to TTS if ignore condition is not met.
 	 * @param msg The string to be spoken.
-	 * @param isNew True if notification is new, otherwise false if it is being repeated.
+	 * @param isNew True if the notification was just received, otherwise false if it is being repeated.
 	 */
 	private void speak(final String msg, boolean isNew) {
 		if (ignore(isNew)) return;
@@ -203,7 +203,7 @@ public class Service extends AccessibilityService {
 	
 	/**
 	 * Checks for any notification-independent ignore states.
-	 * @param isNew True if notification is new, otherwise false if it is being repeated.
+	 * @param isNew True for a notification that was just received, otherwise false.
 	 * @returns True if an ignore condition is met, false otherwise.
 	 */
 	private boolean ignore(boolean isNew) {
@@ -378,6 +378,7 @@ public class Service extends AccessibilityService {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
+			boolean interruptIfIgnored = true;
 			if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
 				isHeadsetPlugged = intent.getIntExtra("state", 0) == 1;
 			} else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
@@ -390,10 +391,12 @@ public class Service extends AccessibilityService {
 					repeater.cancel();
 					repeatList.clear();
 				}
+				interruptIfIgnored = false;
 			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
 				isScreenOn = false;
+				interruptIfIgnored = false;
 			}
-			if (mTts != null && ignore(false)) {
+			if (interruptIfIgnored && mTts != null && ignore(false)) {
 				mTts.stop();
 			}
 		}
