@@ -50,14 +50,14 @@
 		<item>Notification</item>
 	</string-array>
 	<string name="ignore_strings">Texte à ignorer</string>
-	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message.</string>
+	<string name="ignore_strings_summary">Ignorer les notifications qui contiennent certains textes dans le message</string>
 	<string name="ignore_strings_dialog_msg">Séparer les entrées individuelles par une nouvelle ligne.</string>
 	<string name="device_state">Etat de l\'appareil</string>
 	<string name="device_state_summary">Choisir à quel moment utiliser l\'annonce vocale selon le statut de l\'appareil.</string>
 	<string name="device_state_dialog_title">Utiliser l\'annonce vocale si :</string>
 	<string-array name="device_states">
-		<item>Screen Off</item>
-		<item>Screen On</item>
+		<item>Ecran éteint</item>
+		<item>Ecran allumé</item>
 		<item>Headset Off</item>
 		<item>Headset On</item>
 		<item>Silencieux/Vibreur</item>
@@ -90,8 +90,8 @@
 		<item>Faire un don (PayPal)</item>
 		<item>Noter/Commenter</item>
 		<item>Contacter le développeur</item>
-		<item>Translations</item>
-		<item>Source Code</item>
+		<item>Traductions</item>
+		<item>Code source</item>
 	</string-array>
 	<string name="dev_email">pilota51@gmail.com</string>
 	<string name="email_subject">Contact au sujet de Voice Notify</string>
@@ -110,17 +110,17 @@
 	<string name="filter">Filtre</string>
 	
 	<!-- Ignore/Silence reasons -->
-	<string name="reason_app">Ignored app</string>
-	<string name="reason_string">Ignored text</string>
-	<string name="reason_empty_msg">Empty message</string>
+	<string name="reason_app">Ignorer application</string>
+	<string name="reason_string">Ignorer texte</string>
+	<string name="reason_empty_msg">Message vide</string>
 	<string name="reason_identical">Identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
 	<string name="reason_quiet">Quiet time</string>
-	<string name="reason_silent">Silent or vibrate mode</string>
+	<string name="reason_silent">Mode silencieux ou vibreur</string>
 	<string name="reason_call">Active or ringing call</string>
-	<string name="reason_screen_off">Screen off</string>
-	<string name="reason_screen_on">Screen on</string>
-	<string name="reason_headset_off">Headset off</string>
-	<string name="reason_headset_on">Headset on</string>
+	<string name="reason_screen_off">Ecran éteint</string>
+	<string name="reason_screen_on">Ecran allumé</string>
+	<string name="reason_headset_off">Ecouteurs éteints</string>
+	<string name="reason_headset_on">Ecouteurs allumés</string>
 	<string name="reason_shake">Silencieux par secouement</string>
 	<string name="reason_suspended">VN suspendu par le widget</string>
 </resources>
