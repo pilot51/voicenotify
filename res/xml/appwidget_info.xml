@@ -3,4 +3,8 @@
 	android:initialLayout="@layout/appwidget"
 	android:previewImage="@drawable/icon"
 	android:resizeMode="none"
-	android:updatePeriodMillis="0"/>
+	android:updatePeriodMillis="0"
+	android:minHeight="40dp"
+	android:minResizeHeight="40dp"
+	android:minResizeWidth="40dp"
+	android:minWidth="40dp"/>
