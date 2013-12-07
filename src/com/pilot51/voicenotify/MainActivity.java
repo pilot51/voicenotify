@@ -85,7 +85,6 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		if (android.os.Build.VERSION.SDK_INT < 11) {
 			getPreferenceScreen().removePreference(findPreference(getString(R.string.key_toasts)));
 		}
-		updateStatus();
 	}
 	
 	static Intent getAccessibilityIntent() {
@@ -309,6 +308,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		super.onResume();
 		Common.getPrefs(this).registerOnSharedPreferenceChangeListener(this);
 		Service.registerOnStatusChangeListener(statusListener);
+		updateStatus();
 	}
 	
 	@Override
