@@ -25,4 +25,5 @@
 	<string name="key_test">test</string>
 	<string name="key_notify_log">notify_log</string>
 	<string name="key_support">support</string>
+	<string name="key_audio_focus">audio_focus</string>
 </resources>

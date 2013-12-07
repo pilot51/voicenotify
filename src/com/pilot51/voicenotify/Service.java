@@ -47,6 +47,7 @@ public class Service extends AccessibilityService {
 	private String lastMsg = "";
 	private long lastMsgTime;
 	private TextToSpeech mTts;
+    private boolean shouldRequestFocus;
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
 	private final DeviceStateReceiver stateReceiver = new DeviceStateReceiver();
@@ -66,7 +67,7 @@ public class Service extends AccessibilityService {
 			              .setAction(WidgetProvider.ACTION_UPDATE));
 		}
 	};
-	
+
 	@Override
 	public void onAccessibilityEvent(AccessibilityEvent event) {
 		if (!Common.getPrefs(this).getBoolean(getString(R.string.key_toasts), false) && !(event.getParcelableData() instanceof Notification)) {
@@ -179,15 +180,22 @@ public class Service extends AccessibilityService {
 		}
 		lastQueueTime = Long.toString(System.currentTimeMillis());
 		ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, lastQueueTime);
+        shouldRequestFocus = Common.getPrefs(this).getBoolean(getString(R.string.key_audio_focus), false);
 		if (mTts == null) {
 			mTts = new TextToSpeech(Service.this, new OnInitListener() {
 				@Override
 				public void onInit(int status) {
+                    if(shouldRequestFocus){
+                        audioMan.requestAudioFocus(null, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+                    }
 					mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
 					mTts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener() {
 						@Override
 						public void onUtteranceCompleted(String utteranceId) {
 							if (utteranceId.equals(lastQueueTime)) {
+                                if(shouldRequestFocus){
+                                    audioMan.abandonAudioFocus(null);
+                                }
 								shake.disable();
 								mTts.shutdown();
 								mTts = null;
@@ -363,7 +371,7 @@ public class Service extends AccessibilityService {
 		}
 		return isScreenOn;
 	}
-	
+
 	private static class CheckScreen {
 		private static PowerManager powerMan;
 		private static boolean isScreenOn(Context c) {
