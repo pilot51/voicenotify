@@ -86,13 +86,15 @@
 	<string name="status_summary_accessibility">Открыть настройки "Специальных возможностей" чтобы вкл. или откл. доступ Уведомлений Голосом.</string>
 	<string name="status_summary_suspended">Выберите для активации Уведомлений Голосом.</string>
 	<string name="test_notify_msg">Это тестовое уведомление. Проверка настроек.</string>
+	<string name="donate">Сделать пожертвование</string>
 	<string-array name="support_items">
-		<item>Сделать пожертвование (PayPal)</item>
+		<item>@string/donate</item>
 		<item>Выставить рейтинг / Комментировать приложение</item>
 		<item>Связаться с разработчиком</item>
 		<item>Переводы</item>
 		<item>Исходный Код</item>
 	</string-array>
+	<string name="donate_wallet_title">Сделать пожертвование - Google Wallet</string>
 	<string name="dev_email">pilota51@gmail.com</string>
 	<string name="email_subject">Связь с разработчиком \'Уведомлений голосом\'</string>
 	<string name="email_body">\n\nVN версия: %1$s\nверсия Android: %2$s\nномер билда Android: %3$s\nУстройство: %4$s\n</string>
