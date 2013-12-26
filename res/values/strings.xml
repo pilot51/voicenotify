@@ -51,6 +51,9 @@
 	</string-array>
 	<string name="ignore_strings">Ignore Text</string>
 	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message.</string>
+	<string name="ignore_empty">Ignore Empty</string>
+	<string name="ignore_empty_summary_on">Notifications without a message will not be spoken.</string>
+	<string name="ignore_empty_summary_off">Notifications without a message will be spoken as \"Notification from [app name].\"</string>
 	<string name="ignore_strings_dialog_msg">Separate individual entries with a new line.</string>
 	<string name="device_state">Device States</string>
 	<string name="device_state_summary">Select whether to speak during certain device states.</string>
@@ -109,6 +112,9 @@
 	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
 	<string name="error_market">Error: Unable to find Market installed.</string>
 	<string name="error_email">Error: Unable to find an installed email app.</string>
+	
+	<!-- Service.java -->
+	<string name="notification_from">Notification from %s.</string>
 	
 	<!-- NotifyList.java -->
 	<string name="yes">Yes</string>

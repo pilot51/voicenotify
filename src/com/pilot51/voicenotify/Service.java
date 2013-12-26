@@ -85,7 +85,12 @@ public class Service extends AccessibilityService {
 		NotifyList.addNotification(app, notifyMsg.toString());
 		String newMsg;
 		try {
-			newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"), app.getLabel(), notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
+			if (event.getText().isEmpty()) {
+				newMsg = getString(R.string.notification_from, app.getLabel());
+			} else {
+				newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"),
+				                       app.getLabel(), notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
+			}
 		} catch(IllegalFormatException e) {
 			Log.w(TAG, "Error formatting custom TTS string!");
 			e.printStackTrace();
@@ -110,7 +115,7 @@ public class Service extends AccessibilityService {
 		if (stringIgnored) {
 			ignoreReasons.add(getString(R.string.reason_string));
 		}
-		if (event.getText().isEmpty()) {
+		if (event.getText().isEmpty() && Common.getPrefs(this).getBoolean(getString(R.string.key_ignore_empty), false)) {
 			ignoreReasons.add(getString(R.string.reason_empty_msg));
 		}
 		int ignoreRepeat;
