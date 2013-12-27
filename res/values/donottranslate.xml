@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="stream_value_media">media</string>
-	<string name="stream_value_notification">notification</string>
 	<string-array name="stream_value">
-		<item>@string/stream_value_media</item>
-		<item>@string/stream_value_notification</item>
+		<item>3</item>
+		<item>5</item>
+		<item>0</item>
+		<item>2</item>
+		<item>4</item>
 	</string-array>
 	
 	<!-- Preference keys -->

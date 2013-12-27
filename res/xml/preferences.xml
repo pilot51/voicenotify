@@ -37,7 +37,7 @@
 		android:summary="@string/tts_stream_summary"
 		android:entries="@array/stream_name"
 		android:entryValues="@array/stream_value"
-		android:defaultValue="media" />
+		android:defaultValue="3" />
 	<EditTextPreference
 		android:key="@string/key_ttsDelay"
 		android:title="@string/tts_delay"

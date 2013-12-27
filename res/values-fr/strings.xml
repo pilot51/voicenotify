@@ -48,6 +48,9 @@
 	<string-array name="stream_name">
 		<item>Média</item>
 		<item>Notification</item>
+		<item>Voice</item>
+		<item>Ring</item>
+		<item>Alarm</item>
 	</string-array>
 	<string name="ignore_strings">Texte à ignorer</string>
 	<string name="ignore_strings_summary">Ignorer les notifications qui contiennent certains textes dans le message</string>

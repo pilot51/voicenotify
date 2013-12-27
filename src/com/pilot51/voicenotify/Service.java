@@ -179,10 +179,7 @@ public class Service extends AccessibilityService {
 		if (ignore(isNew)) return;
 		shake.enable();
 		ttsParams.clear();
-		if (Common.getPrefs(this).getString(getString(R.string.key_ttsStream), null)
-				.equals(getString(R.string.stream_value_notification))) {
-			ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
-		}
+		ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(Common.getSelectedAudioStream(this)));
 		lastQueueTime = Long.toString(System.currentTimeMillis());
 		ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, lastQueueTime);
         shouldRequestFocus = Common.getPrefs(this).getBoolean(getString(R.string.key_audio_focus), false);
