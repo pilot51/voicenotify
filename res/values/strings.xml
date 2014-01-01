@@ -118,6 +118,7 @@
 	
 	<!-- Service.java -->
 	<string name="notification_from">Notification from %s.</string>
+	<string name="error_tts_init">Error: Could not initialize TTS!</string>
 	
 	<!-- NotifyList.java -->
 	<string name="yes">Yes</string>
