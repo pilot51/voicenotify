@@ -13,8 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<PreferenceScreen
-	xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<Preference
 		android:key="@string/key_status" />
 	<Preference
@@ -56,10 +55,11 @@
 		android:key="@string/key_toasts"
 		android:title="@string/speak_toasts"
 		android:summary="@string/speak_toasts_summary" />
-    <CheckBoxPreference
-        android:key="@string/key_audio_focus"
-        android:title="@string/audio_focus"
-        android:summary="@string/audio_focus_summary" />
+	<CheckBoxPreference
+		android:key="@string/key_audio_focus"
+		android:title="@string/audio_focus"
+		android:summary="@string/audio_focus_summary"
+		android:defaultValue="true" />
 	<EditTextPreference
 		android:key="@string/key_shake_threshold"
 		android:title="@string/shake_to_silence"
@@ -77,7 +77,8 @@
 		android:key="@string/key_ignore_empty"
 		android:title="@string/ignore_empty"
 		android:summaryOn="@string/ignore_empty_summary_on"
-		android:summaryOff="@string/ignore_empty_summary_off" />
+		android:summaryOff="@string/ignore_empty_summary_off"
+		android:defaultValue="true" />
 	<EditTextPreference
 		android:key="@string/key_ignore_repeat"
 		android:title="@string/ignore_repeat"

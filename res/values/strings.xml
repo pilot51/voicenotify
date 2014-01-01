@@ -79,9 +79,9 @@
 	<string name="quiet_end_summary">Don\'t speak before this time.\nLeave the same as start to disable.</string>
 	<string name="test_summary">Post a notification (delayed 5 seconds) to test current settings.</string>
 	<string name="test_ignored">Voice Notify is ignored in App List.\nTest will run, but notification will not be spoken.</string>
-	<string name="support_summary">Donate, rate/comment, or contact the developer with problems or suggestions.</string>
-    <string name="audio_focus">Pause/dim media</string>
-    <string name="audio_focus_summary">Request other media to pause/dim when speaking</string>
+	<string name="support_summary">Donate, rate/comment, translations, source code, or contact the developer.</string>
+	<string name="audio_focus">Pause/dim media</string>
+	<string name="audio_focus_summary">Request other media to pause/dim when speaking</string>
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Test</string>
