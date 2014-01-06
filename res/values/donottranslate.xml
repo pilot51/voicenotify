@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="stream_value_media">media</string>
-	<string name="stream_value_notification">notification</string>
 	<string-array name="stream_value">
-		<item>@string/stream_value_media</item>
-		<item>@string/stream_value_notification</item>
+		<item>3</item>
+		<item>5</item>
+		<item>0</item>
+		<item>2</item>
+		<item>4</item>
 	</string-array>
 	
 	<!-- Preference keys -->
@@ -18,6 +19,7 @@
 	<string name="key_toasts">toasts</string>
 	<string name="key_shake_threshold">shake_threshold</string>
 	<string name="key_ignore_strings">ignore_strings</string>
+	<string name="key_ignore_empty">ignore_empty</string>
 	<string name="key_ignore_repeat">ignore_repeat</string>
 	<string name="key_device_state">device_state</string>
 	<string name="key_quietStart">quietStart</string>
@@ -25,4 +27,5 @@
 	<string name="key_test">test</string>
 	<string name="key_notify_log">notify_log</string>
 	<string name="key_support">support</string>
+	<string name="key_audio_focus">audio_focus</string>
 </resources>

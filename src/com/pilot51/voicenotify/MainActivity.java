@@ -26,6 +26,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -46,7 +47,12 @@ import com.pilot51.voicenotify.Service.OnStatusChangeListener;
 
 public class MainActivity extends PreferenceActivity implements OnPreferenceClickListener, OnSharedPreferenceChangeListener {
 	private Preference pStatus, pDeviceState, pQuietStart, pQuietEnd, pTest, pNotifyLog, pSupport;
-	private static final int DLG_DEVICE_STATE = 0, DLG_QUIET_START = 1, DLG_QUIET_END = 2, DLG_LOG = 3, DLG_SUPPORT = 4;
+	private static final int DLG_DEVICE_STATE = 0,
+	                         DLG_QUIET_START = 1,
+	                         DLG_QUIET_END = 2,
+	                         DLG_LOG = 3,
+	                         DLG_SUPPORT = 4,
+	                         DLG_DONATE = 5;
 	private OnStatusChangeListener statusListener = new OnStatusChangeListener() {
 		@Override
 		public void onStatusChanged() {
@@ -85,7 +91,6 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		if (android.os.Build.VERSION.SDK_INT < 11) {
 			getPreferenceScreen().removePreference(findPreference(getString(R.string.key_toasts)));
 		}
-		updateStatus();
 	}
 	
 	static Intent getAccessibilityIntent() {
@@ -231,8 +236,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 				public void onClick(DialogInterface dialog, int item) {
 					switch (item) {
 						case 0: // Donate
-							startActivity(new Intent(Intent.ACTION_VIEW,
-								Uri.parse("https://paypal.com/cgi-bin/webscr?cmd=_donations&business=pilota51%40gmail%2ecom&lc=US&item_name=Voice%20Notify&no_note=0&no_shipping=1&currency_code=USD")));
+							showDialog(DLG_DONATE);
 							break;
 						case 1: // Rate/Comment
 							Intent iMarket = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.pilot51.voicenotify"));
@@ -277,8 +281,63 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 					}
 				}
 			}).create();
+		case DLG_DONATE:
+			return new AlertDialog.Builder(this)
+			.setTitle(R.string.donate)
+			.setItems(R.array.donate_services, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int item) {
+					switch (item) {
+						case 0: // Google Wallet
+							showWalletDialog();
+							break;
+						case 1: // PayPal
+							startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://paypal.com/cgi-bin/webscr?"
+									+ "cmd=_donations&business=pilota51%40gmail%2ecom&lc=US&item_name=Voice%20Notify&"
+									+ "no_note=0&no_shipping=1&currency_code=USD")));
+							break;
+					}
+				}
+			}).create();
 		}
 		return null;
+	}
+	
+	private void showWalletDialog() {
+		final Intent walletIntent = getWalletIntent();
+		AlertDialog.Builder dlg = new AlertDialog.Builder(this)
+		.setTitle(R.string.donate_wallet_title)
+		.setMessage(R.string.donate_wallet_message)
+		.setNegativeButton(android.R.string.cancel, null);
+		if (walletIntent != null) {
+			dlg.setPositiveButton(R.string.donate_wallet_launch_app, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					startActivity(walletIntent);
+				}
+			});
+		} else {
+			dlg.setPositiveButton(R.string.donate_wallet_launch_web, new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://wallet.google.com/manage/#sendMoney:")));
+				}
+			});
+		}
+		dlg.show();
+	}
+	
+	/**
+	 * @return The intent for Google Wallet, otherwise null if installation is not found.
+	 */
+	private Intent getWalletIntent() {
+		try {
+			getPackageManager().getPackageInfo("com.google.android.apps.walletnfcrel", PackageManager.GET_ACTIVITIES);
+			return new Intent(Intent.ACTION_MAIN)
+			       .setComponent(new ComponentName("com.google.android.apps.walletnfcrel",
+			                                       "com.google.android.apps.wallet.WalletRootActivity"));
+		} catch (PackageManager.NameNotFoundException e) {
+			return null;
+		}
 	}
 	
 	private TimePickerDialog.OnTimeSetListener sTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
@@ -309,6 +368,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		super.onResume();
 		Common.getPrefs(this).registerOnSharedPreferenceChangeListener(this);
 		Service.registerOnStatusChangeListener(statusListener);
+		updateStatus();
 	}
 	
 	@Override

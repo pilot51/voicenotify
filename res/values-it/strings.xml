@@ -17,10 +17,10 @@
 	<string name="app_name">Voice Notify</string>
 	
 	<!-- Used by multiple files -->
-	<string name="app_is_ignored">%s verrà ignorato</string>
-	<string name="app_is_not_ignored">%s non verrà ignorato</string>
-	<string name="service_running">VN service is running</string>
-	<string name="service_suspended">VN service is suspended</string>
+	<string name="app_is_ignored">%s viene ignorato</string>
+	<string name="app_is_not_ignored">%s non viene ignorato</string>
+	<string name="service_running">Il Servizio VN E\' Avviato</string>
+	<string name="service_suspended">Il Servizio VN E\' Sospeso</string>
 	
 	<!-- xml/service_config.xml -->
 	<string name="service_desc">Leggi le notifiche della status bar con la sintesi vocale.</string>
@@ -28,29 +28,35 @@
 	<!-- xml/preferences.xml -->
 	<string name="tts_settings">Impostazioni Sintesi Vocale</string>
 	<string name="tts_settings_summary">Apre le impostazioni di Sintesi Vocale di Android.</string>
-	<string name="tts_settings_summary_fail">Impostazioni di sintesi vocale non trovate! Se figurano nel dispositivo (come dovrebbero), informa lo sviluppatore.</string>
+	<string name="tts_settings_summary_fail">Impostazioni di sintesi vocale non trovate! Se figurano correttamente nel dispositivo, informa lo sviluppatore.</string>
 	<string name="tts_message">Messaggio Sintesi Vocale</string>
 	<string name="tts_message_summary">Personalizza la sintesi vocale delle notifiche.</string>
-	<string name="tts_message_dialog">%t = Titolo (nome) app\n%m = Messaggio (contenuto) della notifica</string>
+	<string name="tts_message_dialog">%t = Titolo/nome app\n%m = Messaggio/contenuto della notifica</string>
 	<string name="tts_stream">Flusso Audio Sintesi Vocale</string>
-	<string name="tts_stream_summary">Scegli in quale flusso audio riprodurre la sintesi vocale.</string>
+	<string name="tts_stream_summary">Scegli attraverso quale flusso audio riprodurre la sintesi vocale.</string>
 	<string name="tts_delay">Ritardo Sintesi Vocale</string>
-	<string name="tts_delay_summary">Ritarda la sintesi vocale di alcuni secondi dopo la ricezione della notifica.</string>
-	<string name="tts_delay_dialog_msg">Quanti secondi attendere dalla ricezione della notifica prima di annunciarla.</string>
+	<string name="tts_delay_summary">Ritarda la sintesi vocale di alcuni secondi rispetto alla ricezione della notifica.</string>
+	<string name="tts_delay_dialog_msg">Quanti secondi attendere dalla ricezione della notifica prima di annunciarla?</string>
 	<string name="tts_repeat">Ripeti Sintesi Vocale</string>
 	<string name="tts_repeat_summary">Continua a ripetere la notifica con la sintesi vocale fino all\'accensione dello schermo.</string>
-	<string name="tts_repeat_dialog_msg">Le notifiche vengono ripetute a intervalli impostati fino all\'accensione dello schermo. Le notifiche ricevute con lo schermo acceso non vengono ripetute.\n\nValore in minuti. Lasciare vuoto o 0 per disattivare.</string>
-	<string name="speak_toasts">Speak Toasts</string>
-	<string name="speak_toasts_summary">Also speak toast (bubble) notifications.</string>
-	<string name="shake_to_silence">Shake-To-Silence</string>
-	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence.</string>
-	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: 100\nBlank to disable.</string>
+	<string name="tts_repeat_dialog_msg">Le notifiche vengono ripetute a intervalli impostati fino all\'accensione dello schermo. Le notifiche ricevute con lo schermo acceso non verranno ripetute.\nValore in minuti, lasciare vuoto o 0 per disattivare.</string>
+	<string name="speak_toasts">Leggi Toast</string>
+	<string name="speak_toasts_summary">Legge anche le notifiche dei toast.</string>
+	<string name="shake_to_silence">Scuoti-Per-Zittire</string>
+	<string name="shake_to_silence_summary">Regola la soglia di sensibilità dello Scuoti-Per-Zittire.</string>
+	<string name="shake_to_silence_dialog_msg">La sensibilità aumenta alzando i valori.\n\nDefault: 100\nLascia vuoto per disabilitare.</string>
 	<string-array name="stream_name">
 		<item>Media</item>
 		<item>Notifica</item>
+		<item>Voce</item>
+		<item>Suoneria</item>
+		<item>Sveglia</item>
 	</string-array>
-	<string name="ignore_strings">Ignora Testo</string>
-	<string name="ignore_strings_summary">Ignora le notifiche in base al testo contenuto nel messaggio.</string>
+	<string name="ignore_strings">Messaggi Da Ignorare</string>
+	<string name="ignore_strings_summary">Ignora le notifiche che contengono determinate parole nel messaggio</string>
+	<string name="ignore_empty">Ignora Notifiche Nulle</string>
+	<string name="ignore_empty_summary_on">Le notifiche senza un messaggio non veranno annunciate.</string>
+	<string name="ignore_empty_summary_off">Le notifiche senza messaggio verranno annuncite come \"Notifica da [app name].\"</string>
 	<string name="ignore_strings_dialog_msg">Separa le varie immissioni iniziando una nuova riga.</string>
 	<string name="device_state">Stati Dispositivo</string>
 	<string name="device_state_summary">Scegli se annunciare durante determinati stati.</string>
@@ -58,7 +64,7 @@
 	<string-array name="device_states">
 		<item>Schermo Spento</item>
 		<item>Schermo Acceso</item>
-		<item>Cuffie Scollegate</item>
+		<item>Cuffie Non Collegate</item>
 		<item>Cuffie Collegate</item>
 		<item>Silenzioso/Vibrazione</item>
 	</string-array>
@@ -73,54 +79,69 @@
 	<string name="quiet_end_summary">Non annunciare prima dell\'ora indicata.\nImposta inizio e fine alla stessa ora per disabilitarlo.</string>
 	<string name="test_summary">Invia una notifica (con 5 secondi di ritardo) per provare le impostazioni.</string>
 	<string name="test_ignored">Voice Notify è stato ignorato nell\' Elenco App.\nIl test verrà eseguito ma non si sentirà alcun annuncio.</string>
-	<string name="support_summary">Dona, vota, commenta o contatta lo sviluppatore per problemi e consigli.</string>
+	<string name="support_summary">Effettua una donazione, valuta o commenta, traduzioni, codice sorgente o contatta lo sviluppatore.</string>
+	<string name="audio_focus">Metti in pausa/abbassa volume</string>
+	<string name="audio_focus_summary">Abbassa o toglie il volume della traccia in esecuzione durante la notifica</string>
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Registro Notifiche</string>
-	<string name="notify_log_summary">Elenco delle ultime 20 notifiche. Mostra ora, nome dell\'app, messaggio e motivi per l\'ignoro.</string>
+	<string name="notify_log_summary">Elenco delle ultime 20 notifiche. Completo di ora, nome della app, messaggio e motivi dell\'eventuale ignoro.</string>
 	<string name="support">Sostieni Voice Notify</string>
 	
 	<!-- MainActivity.java -->
-	<string name="service_disabled">VN service is disabled</string>
-	<string name="status_summary_accessibility">Apre le opzioni di Accesso Facilitato di Android.</string>
-	<string name="status_summary_suspended">Select to activate VN.</string>
+	<string name="service_disabled">Il Servizio VN Non E\' Abilitato</string>
+	<string name="status_summary_accessibility">Apre le impostazioni di Acesso Facilitato di Android per abilitare o disabilitare VN.</string>
+	<string name="status_summary_suspended">Seleziona per attivare VN.</string>
 	<string name="test_notify_msg">Questa notifica è un test.</string>
+	<string name="donate">Fai una donazione</string>
 	<string-array name="support_items">
-		<item>Dona (PayPal)</item>
+		<item>@string/donate</item>
 		<item>Vota/Commenta</item>
 		<item>Contatta Sviluppatore</item>
-		<item>Translations</item>
-		<item>Source Code</item>
+		<item>Traduzioni</item>
+		<item>Codice sorgente</item>
 	</string-array>
+	<string-array name="donate_services">
+		<item>Google Wallet</item>
+		<item>PayPal</item>
+	</string-array>
+	<string name="donate_wallet_title">Fai una donazione tramite Google Wallet</string>
+	<string name="donate_wallet_message">Se vuoi fare una donazione tramite Google Wallet, usa la funzione Invia Denaro a pilota51@gmail.com.\n\nGrazie di aver scelto Voice Notify e di volerlo supportare!</string>
+	<string name="donate_wallet_launch_app">Lancia App Wallet</string>
+	<string name="donate_wallet_launch_web">Apri Sito Wallet</string>
 	<string name="dev_email">pilota51@gmail.com</string>
 	<string name="email_subject">Contatto per Voice Notify</string>
-	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
+	<string name="email_body">\n\nVersione VN: %1$s\nVersione Android: %2$s\nBuild Android numero: %3$s\nDispositivo: %4$s\n</string>
 	<string name="error_market">Errore: Non trovo Play Store</string>
 	<string name="error_email">Errore: non ho trovato un\'app per l\'email installata.</string>
 	
+	<!-- Service.java -->
+	<string name="notification_from">Notifica da %s.</string>
+	<string name="error_tts_init">Errore: impossibile inizializzare TTS!</string>
+	
 	<!-- NotifyList.java -->
 	<string name="yes">Sì</string>
-	<string name="ignore_app">Ignora %s?</string>
-	<string name="unignore_app">Non Ignora %s?</string>
+	<string name="ignore_app">Vuoi ignorare %s?</string>
+	<string name="unignore_app">Vuoi considerare %s?</string>
 	
 	<!-- menu/app_list.xml-->
 	<string name="ignore_all">Ignora Tutto</string>
 	<string name="ignore_none">Ignora Nulla</string>
-	<string name="filter">Filter</string>
+	<string name="filter">Filtro</string>
 	
 	<!-- Ignore/Silence reasons -->
-	<string name="reason_app">Ignored app</string>
-	<string name="reason_string">Ignored text</string>
-	<string name="reason_empty_msg">Empty message</string>
-	<string name="reason_identical">Identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
-	<string name="reason_quiet">Quiet time</string>
-	<string name="reason_silent">Silent or vibrate mode</string>
-	<string name="reason_call">Active or ringing call</string>
-	<string name="reason_screen_off">Screen off</string>
-	<string name="reason_screen_on">Screen on</string>
-	<string name="reason_headset_off">Headset off</string>
-	<string name="reason_headset_on">Headset on</string>
-	<string name="reason_shake">Silenced by shake</string>
-	<string name="reason_suspended">VN suspended by widget</string>
+	<string name="reason_app">App ignorata</string>
+	<string name="reason_string">Testo ignorato</string>
+	<string name="reason_empty_msg">Messaggio vuoto</string>
+	<string name="reason_identical">Messaggio identico entro {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+	<string name="reason_quiet">Ora del Silenzio</string>
+	<string name="reason_silent">Modalità silenziosa o vibrazione</string>
+	<string name="reason_call">Chiamata attiva o in arrivo</string>
+	<string name="reason_screen_off">Schermo spento</string>
+	<string name="reason_screen_on">Schermo acceso</string>
+	<string name="reason_headset_off">Cuffie non collegate</string>
+	<string name="reason_headset_on">Cuffie collegate</string>
+	<string name="reason_shake">Zittito su movimento</string>
+	<string name="reason_suspended">VN sospeso dalla widget</string>
 </resources>

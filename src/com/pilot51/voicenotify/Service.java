@@ -41,12 +41,14 @@ import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.Toast;
 
 public class Service extends AccessibilityService {
 	private static String TAG = Service.class.getSimpleName();
 	private String lastMsg = "";
 	private long lastMsgTime;
 	private TextToSpeech mTts;
+	private boolean isTtsInitializing, shouldRequestFocus;
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
 	private final DeviceStateReceiver stateReceiver = new DeviceStateReceiver();
@@ -84,7 +86,12 @@ public class Service extends AccessibilityService {
 		NotifyList.addNotification(app, notifyMsg.toString());
 		String newMsg;
 		try {
-			newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"), app.getLabel(), notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
+			if (event.getText().isEmpty()) {
+				newMsg = getString(R.string.notification_from, app.getLabel());
+			} else {
+				newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"),
+				                       app.getLabel(), notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
+			}
 		} catch(IllegalFormatException e) {
 			Log.w(TAG, "Error formatting custom TTS string!");
 			e.printStackTrace();
@@ -109,7 +116,7 @@ public class Service extends AccessibilityService {
 		if (stringIgnored) {
 			ignoreReasons.add(getString(R.string.reason_string));
 		}
-		if (event.getText().isEmpty()) {
+		if (event.getText().isEmpty() && Common.getPrefs(this).getBoolean(getString(R.string.key_ignore_empty), false)) {
 			ignoreReasons.add(getString(R.string.reason_empty_msg));
 		}
 		int ignoreRepeat;
@@ -171,34 +178,61 @@ public class Service extends AccessibilityService {
 	 */
 	private void speak(final String msg, boolean isNew) {
 		if (ignore(isNew)) return;
-		shake.enable();
-		ttsParams.clear();
-		if (Common.getPrefs(this).getString(getString(R.string.key_ttsStream), null)
-				.equals(getString(R.string.stream_value_notification))) {
-			ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM, String.valueOf(AudioManager.STREAM_NOTIFICATION));
-		}
-		lastQueueTime = Long.toString(System.currentTimeMillis());
-		ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, lastQueueTime);
-		if (mTts == null) {
-			mTts = new TextToSpeech(Service.this, new OnInitListener() {
-				@Override
-				public void onInit(int status) {
-					mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
-					mTts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener() {
+		new Thread(new Runnable() {
+			@Override
+			public void run() {
+				while (isTtsInitializing) {
+					try {
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+				shake.enable();
+				ttsParams.clear();
+				ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
+						Integer.toString(Common.getSelectedAudioStream(getApplicationContext())));
+				lastQueueTime = Long.toString(System.currentTimeMillis());
+				ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, lastQueueTime);
+				shouldRequestFocus = Common.getPrefs(getApplicationContext())
+						.getBoolean(getString(R.string.key_audio_focus), false);
+				if (mTts == null) {
+					isTtsInitializing = true;
+					mTts = new TextToSpeech(getApplicationContext(), new OnInitListener() {
 						@Override
-						public void onUtteranceCompleted(String utteranceId) {
-							if (utteranceId.equals(lastQueueTime)) {
-								shake.disable();
-								mTts.shutdown();
-								mTts = null;
+						public void onInit(int status) {
+							if (status == TextToSpeech.ERROR) {
+								Log.w(TAG, getString(R.string.error_tts_init));
+								Toast.makeText(getApplicationContext(), R.string.error_tts_init, Toast.LENGTH_LONG).show();
+								isTtsInitializing = false;
+								return;
 							}
+							if (shouldRequestFocus) {
+								audioMan.requestAudioFocus(null, AudioManager.STREAM_MUSIC,
+										AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+							}
+							mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
+							mTts.setOnUtteranceCompletedListener(new OnUtteranceCompletedListener() {
+								@Override
+								public void onUtteranceCompleted(String utteranceId) {
+									if (utteranceId.equals(lastQueueTime)) {
+										if (shouldRequestFocus) {
+											audioMan.abandonAudioFocus(null);
+										}
+										shake.disable();
+										mTts.shutdown();
+										mTts = null;
+									}
+								}
+							});
+							isTtsInitializing = false;
 						}
 					});
+				} else {
+					mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
 				}
-			});
-		} else {
-			mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
-		}
+			}
+		}).start();
 	}
 	
 	/**
@@ -212,7 +246,7 @@ public class Service extends AccessibilityService {
 			quietStart = Common.getPrefs(this).getInt(getString(R.string.key_quietStart), 0),
 			quietEnd = Common.getPrefs(this).getInt(getString(R.string.key_quietEnd), 0);
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
-				| (quietEnd < quietStart & (quietStart <= calTime | calTime < quietEnd))) {
+				|| (quietEnd < quietStart && (quietStart <= calTime || calTime < quietEnd))) {
 			ignoreReasons.add(getString(R.string.reason_quiet));
 		}
 		if ((audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
@@ -220,20 +254,19 @@ public class Service extends AccessibilityService {
 				&& !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SILENT_ON, false)) {
 			ignoreReasons.add(getString(R.string.reason_silent));
 		}
-		if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK
-				| telephony.getCallState() == TelephonyManager.CALL_STATE_RINGING) {
+		if (telephony.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
 			ignoreReasons.add(getString(R.string.reason_call));
 		}
-		if (!isScreenOn() & !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true)) {
+		if (!isScreenOn() && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true)) {
 			ignoreReasons.add(getString(R.string.reason_screen_off));
 		}
-		if (isScreenOn() & !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SCREEN_ON, true)) {
+		if (isScreenOn() && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SCREEN_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_screen_on));
 		}
-		if (!(isHeadsetPlugged | isBluetoothConnected) & !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
+		if (!(isHeadsetPlugged || isBluetoothConnected) && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_off));
 		}
-		if ((isHeadsetPlugged | isBluetoothConnected) & !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
+		if ((isHeadsetPlugged || isBluetoothConnected) && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_on));
 		}
 		if (!ignoreReasons.isEmpty()) {
@@ -315,6 +348,12 @@ public class Service extends AccessibilityService {
 			unregisterOnStatusChangeListener(statusListener);
 		}
 		return false;
+	}
+	
+	@Override
+	public void onDestroy() {
+		if (mTts != null) mTts.shutdown();
+		super.onDestroy();
 	}
 	
 	private static final ArrayList<OnStatusChangeListener> statusListeners = new ArrayList<OnStatusChangeListener>();

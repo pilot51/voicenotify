@@ -48,6 +48,9 @@
 	<string-array name="stream_name">
 		<item>Medios</item>
 		<item>Notificación</item>
+		<item>Voice</item>
+		<item>Ring</item>
+		<item>Alarm</item>
 	</string-array>
 	<string name="ignore_strings">Ignorar texto</string>
 	<string name="ignore_strings_summary">Ignorar las notificaciones de acuerdo al texto contenido en el mensaje</string>
@@ -86,13 +89,15 @@
 	<string name="status_summary_accessibility">Abrir configuración de accesibilidad de Android</string>
 	<string name="status_summary_suspended">Select to activate VN.</string>
 	<string name="test_notify_msg">Ésta es una notificación de prueba</string>
+	<string name="donate">Donar</string>
 	<string-array name="support_items">
-		<item>Donar (PayPal)</item>
+		<item>@string/donate</item>
 		<item>Calificar/Comentar</item>
 		<item>Contactar al Desarrollador</item>
 		<item>Translations</item>
 		<item>Source Code</item>
 	</string-array>
+	<string name="donate_wallet_title">Donar - Google Wallet</string>
 	<string name="dev_email">pilota51@gmail.com</string>
 	<string name="email_subject">Contacto sobre Notificación por voz</string>
 	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>

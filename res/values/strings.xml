@@ -48,9 +48,15 @@
 	<string-array name="stream_name">
 		<item>Media</item>
 		<item>Notification</item>
+		<item>Voice</item>
+		<item>Ring</item>
+		<item>Alarm</item>
 	</string-array>
 	<string name="ignore_strings">Ignore Text</string>
 	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message.</string>
+	<string name="ignore_empty">Ignore Empty</string>
+	<string name="ignore_empty_summary_on">Notifications without a message will not be spoken.</string>
+	<string name="ignore_empty_summary_off">Notifications without a message will be spoken as \"Notification from [app name].\"</string>
 	<string name="ignore_strings_dialog_msg">Separate individual entries with a new line.</string>
 	<string name="device_state">Device States</string>
 	<string name="device_state_summary">Select whether to speak during certain device states.</string>
@@ -73,7 +79,9 @@
 	<string name="quiet_end_summary">Don\'t speak before this time.\nLeave the same as start to disable.</string>
 	<string name="test_summary">Post a notification (delayed 5 seconds) to test current settings.</string>
 	<string name="test_ignored">Voice Notify is ignored in App List.\nTest will run, but notification will not be spoken.</string>
-	<string name="support_summary">Donate, rate/comment, or contact the developer with problems or suggestions.</string>
+	<string name="support_summary">Donate, rate/comment, translations, source code, or contact the developer.</string>
+	<string name="audio_focus">Pause/dim media</string>
+	<string name="audio_focus_summary">Request other media to pause/dim when speaking</string>
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Test</string>
@@ -86,18 +94,31 @@
 	<string name="status_summary_accessibility">Open the Android Accessibility settings to enable or disable VN.</string>
 	<string name="status_summary_suspended">Select to activate VN.</string>
 	<string name="test_notify_msg">This is a test notification.</string>
+	<string name="donate">Donate</string>
 	<string-array name="support_items">
-		<item>Donate (PayPal)</item>
+		<item>@string/donate</item>
 		<item>Rate/Comment</item>
 		<item>Contact Developer</item>
 		<item>Translations</item>
 		<item>Source Code</item>
 	</string-array>
+	<string-array name="donate_services">
+		<item>Google Wallet</item>
+		<item>PayPal</item>
+	</string-array>
+	<string name="donate_wallet_title">Donate - Google Wallet</string>
+	<string name="donate_wallet_message">If you would like to donate via Google Wallet, simply use the Send Money feature and address it to pilota51@gmail.com.\n\nThank you for using and supporting Voice Notify!</string>
+	<string name="donate_wallet_launch_app">Launch Wallet App</string>
+	<string name="donate_wallet_launch_web">Open Wallet Website</string>
 	<string name="dev_email">pilota51@gmail.com</string>
 	<string name="email_subject">Contacting about Voice Notify</string>
 	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
 	<string name="error_market">Error: Unable to find Market installed.</string>
 	<string name="error_email">Error: Unable to find an installed email app.</string>
+	
+	<!-- Service.java -->
+	<string name="notification_from">Notification from %s.</string>
+	<string name="error_tts_init">Error: Could not initialize TTS!</string>
 	
 	<!-- NotifyList.java -->
 	<string name="yes">Yes</string>

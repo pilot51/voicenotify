@@ -49,6 +49,7 @@ public class Common {
 		if (prefs == null) {
 			PreferenceManager.setDefaultValues(context, R.xml.preferences, true);
 			prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+			convertOldStreamPref(context);
 		}
 		if (Database.getInstance() == null) {
 			Database.init(context);
@@ -56,15 +57,36 @@ public class Common {
 	}
 	
 	/**
+	 * If necessary, converts audio stream preference from obsolete word string to integer string.
+	 * @since v1.0.11
+	 */
+	private static void convertOldStreamPref(Context c) {
+		String currentStream = prefs.getString(c.getString(R.string.key_ttsStream), null);
+		try {
+			Integer.parseInt(currentStream);
+		} catch (NumberFormatException e) {
+			int newStream = AudioManager.STREAM_MUSIC;
+			if (currentStream != null && currentStream.equals("notification")) {
+				newStream = AudioManager.STREAM_NOTIFICATION;
+			}
+			prefs.edit().putString(c.getString(R.string.key_ttsStream), Integer.toString(newStream)).commit();
+		}
+	}
+	
+	/**
 	 * Sets the volume control stream defined in preferences.
 	 */
 	static void setVolumeStream(Activity activity) {
-		String stream = getPrefs(activity).getString(activity.getString(R.string.key_ttsStream), "");
-		if (stream.equals(activity.getString(R.string.stream_value_media))) {
-			activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-		} else if (stream.equals(activity.getString(R.string.stream_value_notification))) {
-			activity.setVolumeControlStream(AudioManager.STREAM_NOTIFICATION);
-		}
+		activity.setVolumeControlStream(getSelectedAudioStream(activity));
+	}
+	
+	/**
+	 * @param c Context used to get the preference key name from resources.
+	 * @return The selected audio stream matching the STREAM_ constant from {@link AudioManager}.
+	 */
+	static int getSelectedAudioStream(Context c) {
+		return Integer.parseInt(prefs.getString(c.getString(R.string.key_ttsStream),
+		                                        Integer.toString(AudioManager.STREAM_MUSIC)));
 	}
 	
 	/**
