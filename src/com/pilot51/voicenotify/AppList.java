@@ -85,7 +85,7 @@ public class AppList extends ListActivity {
 		lv.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				setIgnore(position, IGNORE_TOGGLE);
+				setIgnore((App)adapter.getItem(position), IGNORE_TOGGLE);
 				adapter.notifyDataSetChanged();
 			}
 		});
@@ -219,10 +219,6 @@ public class AppList extends ListActivity {
 				Database.setApps(apps);
 			}
 		}).start();
-	}
-	
-	private void setIgnore(int position, int ignoreType) {
-		setIgnore(apps.get(position), ignoreType);
 	}
 	
 	private void setIgnore(App app, int ignoreType) {
