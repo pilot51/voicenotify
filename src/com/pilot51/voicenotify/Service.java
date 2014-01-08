@@ -29,7 +29,6 @@ import android.media.AudioManager;
 import android.os.Handler;
 import android.os.PowerManager;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.UtteranceProgressListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
@@ -71,6 +70,24 @@ public class Service extends AccessibilityService {
         mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
+                if (status == TextToSpeech.ERROR) {
+                    Log.w(TAG, getString(R.string.error_tts_init));
+                    Toast.makeText(getApplicationContext(), R.string.error_tts_init, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                mTts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
+                    @Override
+                    public void onUtteranceCompleted(String utteranceId) {
+                        messageStatuses.poll();
+                        if (messageStatuses.isEmpty()) {
+                            if (shouldRequestFocus) {
+                                audioMan.abandonAudioFocus(null);
+                            }
+                            shake.disable();
+                        }
+                    }
+                });
+                /* added in API 15 (4.0.3).  Once enough users are on that version to justify it, uncomment this block, as onUtteranceCompletedListener is now deprecated
                 mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override
                     public void onStart(String utteranceId) {
@@ -93,6 +110,7 @@ public class Service extends AccessibilityService {
                         Toast.makeText(getApplicationContext(), R.string.error_tts_init, Toast.LENGTH_LONG).show();
                     }
                 });
+                */
             }
         });
         super.onCreate();
