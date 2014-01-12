@@ -36,6 +36,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -46,6 +47,7 @@ import android.widget.Toast;
 import com.pilot51.voicenotify.Service.OnStatusChangeListener;
 
 public class MainActivity extends PreferenceActivity implements OnPreferenceClickListener, OnSharedPreferenceChangeListener {
+	private static final int SDK_VERSION = Build.VERSION.SDK_INT;
 	private Preference pStatus, pDeviceState, pQuietStart, pQuietEnd, pTest, pNotifyLog, pSupport;
 	private static final int DLG_DEVICE_STATE = 0,
 	                         DLG_QUIET_START = 1,
@@ -88,17 +90,19 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			pTTS.setEnabled(false);
 			pTTS.setSummary(R.string.tts_settings_summary_fail);
 		}
-		if (android.os.Build.VERSION.SDK_INT < 11) {
+		if (SDK_VERSION < 11) {
 			getPreferenceScreen().removePreference(findPreference(getString(R.string.key_toasts)));
+			if (SDK_VERSION < 8) {
+				getPreferenceScreen().removePreference(findPreference(getString(R.string.key_audio_focus)));
+			}
 		}
 	}
 	
 	static Intent getAccessibilityIntent() {
 		Intent intent = new Intent();
-		int sdkVer = android.os.Build.VERSION.SDK_INT;
-		if (sdkVer > 4) {
+		if (SDK_VERSION > 4) {
 			intent.setAction(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-		} else if (sdkVer == 4) {
+		} else if (SDK_VERSION == 4) {
 			intent.setAction(Intent.ACTION_MAIN);
 			intent.setClassName("com.android.settings", "com.android.settings.AccessibilitySettings");
 		}
@@ -107,15 +111,14 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	
 	private Intent getTtsIntent() {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
-		int sdkVer = android.os.Build.VERSION.SDK_INT;
 		if (isClassExist("com.android.settings.TextToSpeechSettings")) {
-			if (sdkVer >= 11 & sdkVer <= 13) {
+			if (SDK_VERSION >= 11 && SDK_VERSION <= 13) {
 				intent.setAction(android.provider.Settings.ACTION_SETTINGS);
 				intent.putExtra(EXTRA_SHOW_FRAGMENT, "com.android.settings.TextToSpeechSettings");
 				intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
 			} else intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
 		} else if (isClassExist("com.android.settings.Settings$TextToSpeechSettingsActivity")) {
-			if (sdkVer == 14) {
+			if (SDK_VERSION == 14) {
 				intent.setAction(android.provider.Settings.ACTION_SETTINGS);
 				intent.putExtra(EXTRA_SHOW_FRAGMENT, "com.android.settings.tts.TextToSpeechSettings");
 				intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
@@ -262,9 +265,9 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 							iEmail.putExtra(Intent.EXTRA_TEXT,
 							                getString(R.string.email_body,
 							                          version,
-							                          android.os.Build.VERSION.RELEASE,
-							                          android.os.Build.ID,
-							                          android.os.Build.MANUFACTURER + " " + android.os.Build.BRAND + " " + android.os.Build.MODEL));
+							                          Build.VERSION.RELEASE,
+							                          Build.ID,
+							                          Build.MANUFACTURER + " " + Build.BRAND + " " + Build.MODEL));
 							try {
 								startActivity(iEmail);
 							} catch (ActivityNotFoundException e) {
