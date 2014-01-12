@@ -107,7 +107,7 @@
 		<item>PayPal</item>
 	</string-array>
 	<string name="donate_wallet_title">Donate - Google Wallet</string>
-	<string name="donate_wallet_message">If you would like to donate via Google Wallet, simply use the Send Money feature and address it to pilota51@gmail.com.\n\nThank you for using and supporting Voice Notify!</string>
+	<string name="donate_wallet_message">If you are in the United States and would like to donate via Google Wallet, simply use the Send Money feature and address it to pilota51@gmail.com.\nUnfortunately, Send Money is not available outside the US.\n\nThank you for using and supporting Voice Notify!</string>
 	<string name="donate_wallet_launch_app">Launch Wallet App</string>
 	<string name="donate_wallet_launch_web">Open Wallet Website</string>
 	<string name="dev_email">pilota51@gmail.com</string>
