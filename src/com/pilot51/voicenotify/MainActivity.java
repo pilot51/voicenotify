@@ -355,7 +355,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	};
 	
 	private void updateStatus() {
-		if (Service.isSuspended()) {
+		if (Service.isSuspended() && Service.isRunning()) {
 			pStatus.setTitle(R.string.service_suspended);
 			pStatus.setSummary(R.string.status_summary_suspended);
 			pStatus.setIntent(null);
