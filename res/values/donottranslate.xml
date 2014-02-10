@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+	<string name="dev_email">pilota51@gmail.com</string>
+	
+	<!-- Forcing English for user visible support email strings -->
+	<string name="email_subject">Contacting about Voice Notify</string>
+	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
+	
 	<string-array name="stream_value">
 		<item>3</item>
 		<item>5</item>
