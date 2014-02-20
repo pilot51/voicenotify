@@ -343,7 +343,7 @@ public class Service extends AccessibilityService {
 		Common.init(this);
 		AccessibilityServiceInfo info = new AccessibilityServiceInfo();
 		info.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
-		info.feedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
+		info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
 		setServiceInfo(info);
 		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
