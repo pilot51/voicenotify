@@ -55,7 +55,7 @@ public class Service extends AccessibilityService {
 	private final DeviceStateReceiver stateReceiver = new DeviceStateReceiver();
 	private RepeatTimer repeater;
 	private Shake shake;
-	private static boolean isInitialized, isSuspended, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
+	private static boolean isInitialized, isSuspended, isScreenOn;
 	private final ArrayList<String> ignoreReasons = new ArrayList<String>(),
 	                                repeatList = new ArrayList<String>();
     /**
@@ -260,6 +260,7 @@ public class Service extends AccessibilityService {
         //not used anywhere, but has to be set to get the UtteranceProgressListener to trigger its submethods
         ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, Long.toString(System.currentTimeMillis()));
         mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
+		Log.i(TAG, "Notification spoken: " + msg);
     }
 
     /**
@@ -269,6 +270,7 @@ public class Service extends AccessibilityService {
 	 */
 	private boolean ignore(boolean isNew) {
 		Calendar c = Calendar.getInstance();
+		AudioManager am = (AudioManager) this.getSystemService(Context.AUDIO_SERVICE);
 		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE),
 			quietStart = Common.getPrefs(this).getInt(getString(R.string.key_quietStart), 0),
 			quietEnd = Common.getPrefs(this).getInt(getString(R.string.key_quietEnd), 0);
@@ -290,10 +292,10 @@ public class Service extends AccessibilityService {
 		if (isScreenOn() && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SCREEN_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_screen_on));
 		}
-		if (!(isHeadsetPlugged || isBluetoothConnected) && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
+		if (!(am.isBluetoothA2dpOn() || am.isWiredHeadsetOn()) && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_off));
 		}
-		if ((isHeadsetPlugged || isBluetoothConnected) && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
+		if ((am.isBluetoothA2dpOn() || am.isWiredHeadsetOn()) && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_on));
 		}
 		if (!ignoreReasons.isEmpty()) {
@@ -462,13 +464,7 @@ public class Service extends AccessibilityService {
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			boolean interruptIfIgnored = true;
-			if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
-				isHeadsetPlugged = intent.getIntExtra("state", 0) == 1;
-			} else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
-				isBluetoothConnected = true;
-			} else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
-				isBluetoothConnected = false;
-			} else if (action.equals(Intent.ACTION_SCREEN_ON)) {
+			if (action.equals(Intent.ACTION_SCREEN_ON)) {
 				isScreenOn = true;
 				if (repeater != null) {
 					repeater.cancel();
