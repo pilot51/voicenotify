@@ -35,6 +35,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.media.AudioTrack;
 import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -290,10 +291,10 @@ public class Service extends AccessibilityService {
 		if (isScreenOn() && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SCREEN_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_screen_on));
 		}
-		if (!(isHeadsetPlugged || isBluetoothConnected) && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
+		if (!isHeadsetOn() && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_off));
 		}
-		if ((isHeadsetPlugged || isBluetoothConnected) && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
+		if (isHeadsetOn() && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_on));
 		}
 		if (!ignoreReasons.isEmpty()) {
@@ -432,6 +433,17 @@ public class Service extends AccessibilityService {
 			isScreenOn = CheckScreen.isScreenOn(this);
 		}
 		return isScreenOn;
+	}
+
+	@SuppressLint("NewApi")
+	private boolean isHeadsetOn() {
+		if (Build.VERSION.SDK_INT >= 5) {
+			return (audioMan.isBluetoothA2dpOn() || audioMan.isWiredHeadsetOn());
+		}
+		else
+		{
+			return (isHeadsetPlugged || isBluetoothConnected);
+		}
 	}
 
 	@SuppressLint("NewApi")
