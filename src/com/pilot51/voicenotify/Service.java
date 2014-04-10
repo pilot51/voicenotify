@@ -17,12 +17,7 @@
 package com.pilot51.voicenotify;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.IllegalFormatException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import android.accessibilityservice.AccessibilityService;
@@ -30,12 +25,8 @@ import android.accessibilityservice.AccessibilityServiceInfo;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.bluetooth.BluetoothDevice;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.*;
 import android.media.AudioManager;
-import android.media.AudioTrack;
 import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -50,7 +41,7 @@ public class Service extends AccessibilityService {
 	private String lastMsg = "";
 	private long lastMsgTime;
 	private TextToSpeech mTts;
-	private boolean shouldRequestFocus;
+    private int audioFocusRequestLevel;
 	private AudioManager audioMan;
 	private TelephonyManager telephony;
 	private final DeviceStateReceiver stateReceiver = new DeviceStateReceiver();
@@ -91,8 +82,8 @@ public class Service extends AccessibilityService {
                     public void onUtteranceCompleted(String utteranceId) {
                         messageStatuses.poll();
                         if (messageStatuses.isEmpty()) {
-							if (Build.VERSION.SDK_INT >= 8 && shouldRequestFocus) {
-								AudioFocus.abandonFocus(audioMan);
+							if (Build.VERSION.SDK_INT >= 8 && audioFocusRequestLevel != 0) {
+                                audioMan.abandonAudioFocus(null);
 							}
                             shake.disable();
                         }
@@ -240,11 +231,11 @@ public class Service extends AccessibilityService {
         if (ignore(isNew)) return;
         if (messageStatuses.isEmpty()) { //if there are no messages in the queue, start up shake detection and audio focus requesting
             shake.enable();
-            shouldRequestFocus = Common.getPrefs(getApplicationContext())
-                    .getBoolean(getString(R.string.key_audio_focus), false);
-			if (Build.VERSION.SDK_INT >= 8 && shouldRequestFocus) {
-				AudioFocus.requestFocus(audioMan);
-			}
+            //in an extremely questionable programming decision, you can't have integer values attached to string keys in preferences, so I have store my int values as strings, and convert them back here
+            audioFocusRequestLevel = Integer.parseInt(Common.getPrefs(getApplicationContext()).getString(getString(R.string.key_audio_focus), "0"));
+			if (Build.VERSION.SDK_INT >= 8 && audioFocusRequestLevel != 0) {
+                audioMan.requestAudioFocus(null, AudioManager.STREAM_MUSIC, audioFocusRequestLevel);
+            }
         }
         //regardless, add the message to the queue, parallelling the TextToSpeech queue since we can't access it.
         try {
@@ -457,19 +448,7 @@ public class Service extends AccessibilityService {
 		}
 	}
 
-	@SuppressLint("NewApi")
-	private static class AudioFocus {
-		private static void abandonFocus(AudioManager audioMan) {
-			audioMan.abandonAudioFocus(null);
-		}
-
-		private static void requestFocus(AudioManager audioMan) {
-			audioMan.requestAudioFocus(null, AudioManager.STREAM_MUSIC,
-					AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
-		}
-	}
-
-	private class DeviceStateReceiver extends BroadcastReceiver {
+    private class DeviceStateReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();

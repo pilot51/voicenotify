@@ -82,6 +82,11 @@
 	<string name="support_summary">Donate, rate/comment, translations, source code, or contact the developer.</string>
 	<string name="audio_focus">Pause/dim media</string>
 	<string name="audio_focus_summary">Request other media to pause/dim when speaking</string>
+    <string-array name="audio_focus_name">
+        <item>None</item>
+        <item>Pause</item>
+        <item>Dim</item>
+    </string-array>
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Test</string>
