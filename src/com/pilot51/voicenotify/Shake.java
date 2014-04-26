@@ -27,8 +27,8 @@ public class Shake implements SensorEventListener {
 	private final SensorManager manager;
 	private final Sensor sensor;
 	private OnShakeListener listener;
-	private int threshold;
-	private float accel, accelCurrent, accelLast;
+	private int threshold, overThresholdCount;
+	private float accelCurrent, accelLast;
 	
 	Shake(Context c) {
 		context = c;
@@ -45,12 +45,13 @@ public class Shake implements SensorEventListener {
 			return;
 		}
 		manager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL);
-		accelCurrent = SensorManager.GRAVITY_EARTH;
-		accelLast = SensorManager.GRAVITY_EARTH;
 	}
 	
 	void disable() {
 		manager.unregisterListener(this);
+		accelCurrent = 0;
+		accelLast = 0;
+		overThresholdCount = 0;
 	}
 	
 	void setOnShakeListener(OnShakeListener listener) {
@@ -66,9 +67,14 @@ public class Shake implements SensorEventListener {
 		float y = event.values[1];
 		float z = event.values[2];
 		accelCurrent = (float)Math.sqrt(x * x + y * y + z * z);
-		accel = accel * 0.9f + accelCurrent - accelLast;
-		if (Math.abs(accel) > threshold / 10) {
-			listener.onShake();
+		float accel = accelCurrent - accelLast;
+		if (accelLast != 0 && Math.abs(accel) > threshold / 10) {
+			overThresholdCount++;
+			if (overThresholdCount >= 2) {
+				listener.onShake();
+			}
+		} else {
+			overThresholdCount = 0;
 		}
 		accelLast = accelCurrent;
 	}
