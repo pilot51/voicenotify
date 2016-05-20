@@ -47,8 +47,8 @@ import android.widget.Toast;
 
 public class Service extends AccessibilityService {
 	private static String TAG = Service.class.getSimpleName();
-	private String lastMsg = "";
-	private long lastMsgTime;
+	private java.util.Map<String, String> lastMsg = new HashMap<String, String>();
+	private java.util.Map<String,Long> lastMsgTime = new HashMap<String,Long>();
 	private TextToSpeech mTts;
 	private boolean shouldRequestFocus;
 	private AudioManager audioMan;
@@ -183,8 +183,10 @@ public class Service extends AccessibilityService {
 		} catch (NumberFormatException e) {
 			ignoreRepeat = -1;
 		}
-		if (lastMsg.equals(newMsg) && (ignoreRepeat == -1 || newMsgTime - lastMsgTime < ignoreRepeat * 1000)) {
-			ignoreReasons.add(MessageFormat.format(getString(R.string.reason_identical), ignoreRepeat));
+		if (lastMsg.containsKey(app.getLabel())) {
+			if (lastMsg.get(app.getLabel()).equals(newMsg) && (ignoreRepeat == -1 || newMsgTime - lastMsgTime.get(app.getLabel()) < ignoreRepeat * 1000)) {
+				ignoreReasons.add(MessageFormat.format(getString(R.string.reason_identical), ignoreRepeat));
+			}
 		}
 		if (ignoreReasons.isEmpty()) {
 			int delay = 0;
@@ -208,8 +210,14 @@ public class Service extends AccessibilityService {
             if(delay < 0){ //just in case we get a weird value, don't want to try to make the Timer wait for negative time
                 delay = 0;
             }
-            final String msg = newMsg;
-            new Timer().schedule(new TimerTask() {
+			int max_length=Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_max_length), "0"));
+			final String msg;
+			if (max_length > 0) {
+				msg = newMsg.substring(0, Math.min(max_length, newMsg.length()));
+			} else {
+				msg = newMsg;
+			}
+			new Timer().schedule(new TimerTask() {
                 @Override
                 public void run() {
                     handler.post(new Runnable() {
@@ -220,14 +228,14 @@ public class Service extends AccessibilityService {
                     });
                 }
             }, delay * 1000L); //a delay of 0 works fine, and means that all speak calls anywhere are running in their own thread and not blocking.
+			lastMsg.put(app.getLabel(),newMsg);
+			lastMsgTime.put(app.getLabel(),newMsgTime);
 		} else {
 			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
 			Log.i(TAG, "Notification from " + app.getLabel() + " ignored for reason(s): " + reasons);
 			NotifyList.setLastIgnore(reasons, true);
 			ignoreReasons.clear();
 		}
-		lastMsg = newMsg;
-		lastMsgTime = newMsgTime;
 	}
 
     /**

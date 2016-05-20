@@ -87,6 +87,14 @@
 		android:digits="0123456789"
 		android:inputType="number"
 		android:defaultValue="10" />
+	<EditTextPreference
+		android:key="@string/key_max_length"
+		android:title="Maximum Message"
+		android:summary="Maximum message length to speak, larger messages will be truncated."
+		android:dialogMessage="Maximum message length to speak, larger messages will be truncated."
+		android:digits="0123456789"
+		android:inputType="number"
+		android:defaultValue="100" />
 	<Preference
 		android:key="@string/key_device_state"
 		android:title="@string/device_state"
