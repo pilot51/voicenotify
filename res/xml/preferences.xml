@@ -55,12 +55,14 @@
 		android:key="@string/key_toasts"
 		android:title="@string/speak_toasts"
 		android:summary="@string/speak_toasts_summary" />
-	<CheckBoxPreference
+	<ListPreference
 		android:key="@string/key_audio_focus"
 		android:title="@string/audio_focus"
 		android:summary="@string/audio_focus_summary"
-		android:defaultValue="true" />
-	<EditTextPreference
+        android:entries="@array/audio_focus_name"
+        android:entryValues="@array/audio_focus_value"
+		android:defaultValue="0" />
+    <EditTextPreference
 		android:key="@string/key_shake_threshold"
 		android:title="@string/shake_to_silence"
 		android:summary="@string/shake_to_silence_summary"
