@@ -61,6 +61,7 @@ public class AppList extends ListActivity {
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		lv = getListView();
 		lv.setTextFilterEnabled(true);
+		lv.setFastScrollEnabled(true);
 		adapter = new Adapter();
 		listener = new OnListUpdateListener() {
 			@Override
