@@ -71,6 +71,9 @@
 	<string name="ignore_repeat">Ignore Repeats</string>
 	<string name="ignore_repeat_summary">Ignore subsequent identical notifications within a set time.</string>
 	<string name="ignore_repeat_dialog_msg">Set number of seconds that must pass since last notification before a repeat can be spoken.\nIgnored repeats reset the count and different notifications clear it.\nBlank = infinite.</string>
+	<string name="max_length">Maximum Message"</string>
+	<string name="max_length_summary">Maximum message length to speak, larger messages will be truncated.</string>
+	<string name="max_length_dialog_msg">Maximum message length to speak, larger messages will be truncated.</string>
 	<string name="app_list">App List</string>
 	<string name="app_list_summary">List installed apps which can be ignored.</string>
 	<string name="quiet_start">Quiet Time Start</string>

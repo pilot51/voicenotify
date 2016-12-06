@@ -27,6 +27,7 @@
 	<string name="key_ignore_strings">ignore_strings</string>
 	<string name="key_ignore_empty">ignore_empty</string>
 	<string name="key_ignore_repeat">ignore_repeat</string>
+	<string name="key_max_length">key_max_length</string>
 	<string name="key_device_state">device_state</string>
 	<string name="key_quietStart">quietStart</string>
 	<string name="key_quietEnd">quietEnd</string>
