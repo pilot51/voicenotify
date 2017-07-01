@@ -18,9 +18,13 @@ package com.pilot51.voicenotify;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -159,13 +163,22 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			new Timer().schedule(new TimerTask() {
 				@Override
 				public void run() {
-/*
+					/*
 					NotificationCompat.Builder mBuilder =
 							new NotificationCompat.Builder(this)
 									.setSmallIcon(R.drawable.icon)
 									.setContentTitle(R.string.test_notify_msg)
 									.setContentText(R.string.test_notify_msg);
 					Intent resultIntent = new Intent(MainActivity.this, MainActivity.class);
+					*/
+					/*
+					Notification notification = new Notification(R.drawable.icon,
+							getString(R.string.test_notify_msg), System.currentTimeMillis());
+					notification.defaults |= Notification.DEFAULT_SOUND;
+					notification.flags |= Notification.FLAG_AUTO_CANCEL;
+					notification.setLatestEventInfo(MainActivity.this, getString(R.string.app_name), getString(R.string.test),
+							PendingIntent.getActivity(MainActivity.this, 0, getIntent(), 0));
+					((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, notification);
 					*/
 				}
 			}, 5000);

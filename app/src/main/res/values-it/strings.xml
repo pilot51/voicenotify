@@ -96,7 +96,7 @@
 	<string name="test_notify_msg">Questa notifica è un test.</string>
 	<string name="donate">Fai una donazione</string>
 	<string-array name="support_items">
-		<item>@string/donate</item>
+		<item>Donazione</item>
 		<item>Vota/Commenta</item>
 		<item>Contatta Sviluppatore</item>
 		<item>Traduzioni</item>

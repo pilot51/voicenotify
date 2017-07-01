@@ -107,9 +107,10 @@
 		<item>PayPal</item>
 	</string-array>
 	<string name="donate_wallet_title">Пожертвовать - кошелек Google</string>
+	
 	<string name="donate_wallet_launch_app">Открыть кошелек</string>
 	<string name="donate_wallet_launch_web">Открыть кошелек в браузере</string>
-	<string name="error_market">Ошибка: Невозможно найти установленный Google Play Store.</string>
+	
 	<string name="error_email">Ошибка: Не удалось найти установленный почтовый клиент.</string>
 	
 	<!-- Service.java -->

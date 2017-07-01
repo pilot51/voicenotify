@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 24
     buildToolsVersion "25.0.0"
 
     defaultConfig {
         applicationId "com.pilot51.voicenotify"
         minSdkVersion 8
-        targetSdkVersion 23
+        targetSdkVersion 24
     }
 
     buildTypes {
