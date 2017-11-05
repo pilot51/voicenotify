@@ -22,7 +22,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-public class Shake implements SensorEventListener {
+class Shake implements SensorEventListener {
 	private final Context context;
 	private final SensorManager manager;
 	private final Sensor sensor;

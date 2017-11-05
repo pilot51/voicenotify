@@ -16,8 +16,8 @@
 
 package com.pilot51.voicenotify;
 
-public class App {
-	private String packageName, label;
+class App {
+	private final String packageName, label;
 	private boolean enabled;
 	
 	App(String pkg, String name, boolean enable) {

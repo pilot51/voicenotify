@@ -22,7 +22,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.preference.PreferenceManager;
 
-public class Common {
+class Common {
 	private static SharedPreferences prefs;
 	/** Preference key name. */
 	static final String

@@ -16,18 +16,8 @@
 
 package com.pilot51.voicenotify;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.IllegalFormatException;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.LinkedBlockingQueue;
-
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -35,7 +25,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.media.AudioTrack;
 import android.os.Build;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -45,10 +34,20 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.IllegalFormatException;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
+import java.util.concurrent.LinkedBlockingQueue;
+
 public class Service extends AccessibilityService {
-	private static String TAG = Service.class.getSimpleName();
-	private java.util.Map<String, String> lastMsg = new HashMap<String, String>();
-	private java.util.Map<String,Long> lastMsgTime = new HashMap<String,Long>();
+	private static final String TAG = Service.class.getSimpleName();
+	private final Map<String, String> lastMsg = new HashMap<>();
+	private final Map<String, Long> lastMsgTime = new HashMap<>();
 	private TextToSpeech mTts;
 	private boolean shouldRequestFocus;
 	private AudioManager audioMan;
@@ -56,18 +55,18 @@ public class Service extends AccessibilityService {
 	private final DeviceStateReceiver stateReceiver = new DeviceStateReceiver();
 	private RepeatTimer repeater;
 	private Shake shake;
-	private static boolean isInitialized, isSuspended, isScreenOn, isHeadsetPlugged, isBluetoothConnected;
-	private final ArrayList<String> ignoreReasons = new ArrayList<String>(),
-	                                repeatList = new ArrayList<String>();
+	private static boolean isInitialized, isSuspended, isScreenOn;
+	private final ArrayList<String> ignoreReasons = new ArrayList<>(),
+	                                repeatList = new ArrayList<>();
     /**
      * this is used to determine if we are the first, middle, or last thing to be spoken at the moment, for enabling/disabling shake and audio focus request
      * entries are added right before the call to speak and removed by onDone in the utteranceProgressListener
      * if the list is empty when we enqueue a message, we trigger shaking and audio focus requesting
      * if the list is empty when we finish speaking a message, we untrigger them.
      */
-    private LinkedBlockingQueue<Boolean> messageStatuses = new LinkedBlockingQueue<Boolean>();
-	private Handler handler = new Handler();
-	private OnStatusChangeListener statusListener = new OnStatusChangeListener() {
+    private final LinkedBlockingQueue<Boolean> messageStatuses = new LinkedBlockingQueue<>();
+	private final Handler handler = new Handler();
+	private final OnStatusChangeListener statusListener = new OnStatusChangeListener() {
 		@Override
 		public void onStatusChanged() {
 			if (isSuspended && mTts != null) mTts.stop();
@@ -148,7 +147,7 @@ public class Service extends AccessibilityService {
 				newMsg = getString(R.string.notification_from, app.getLabel());
 			} else {
 				newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"),
-				                       app.getLabel(), notifyMsg.toString().replaceAll("[\\|\\[\\]\\{\\}\\*<>]+", " "));
+				                       app.getLabel(), notifyMsg.toString().replaceAll("[|\\[\\]{}*<>]+", " "));
 			}
 		} catch(IllegalFormatException e) {
 			Log.w(TAG, "Error formatting custom TTS string!");
@@ -192,7 +191,9 @@ public class Service extends AccessibilityService {
 			int delay = 0;
 			try {
 				delay = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_ttsDelay), null));
-			} catch (NumberFormatException e) {}
+			} catch (NumberFormatException e) {
+				e.printStackTrace();
+			}
 			if (!isScreenOn()) {
 				int interval;
 				try {
@@ -231,7 +232,7 @@ public class Service extends AccessibilityService {
 			lastMsg.put(app.getLabel(),newMsg);
 			lastMsgTime.put(app.getLabel(),newMsgTime);
 		} else {
-			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
+			String reasons = ignoreReasons.toString().replaceAll("[\\[\\]]", "");
 			Log.i(TAG, "Notification from " + app.getLabel() + " ignored for reason(s): " + reasons);
 			NotifyList.setLastIgnore(reasons, true);
 			ignoreReasons.clear();
@@ -262,7 +263,7 @@ public class Service extends AccessibilityService {
             return;
         }
         //once the message is in our queue, send it to the real one with the necessary parameters
-        final HashMap<String, String> ttsParams = new HashMap<String, String>();
+        final HashMap<String, String> ttsParams = new HashMap<>();
         //needed because we want to apply stream changes immediately
         ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
                       Integer.toString(Common.getSelectedAudioStream(getApplicationContext())));
@@ -274,7 +275,7 @@ public class Service extends AccessibilityService {
     /**
 	 * Checks for any notification-independent ignore states.
 	 * @param isNew True for a notification that was just received, otherwise false.
-	 * @returns True if an ignore condition is met, false otherwise.
+	 * @return True if an ignore condition is met, false otherwise.
 	 */
 	private boolean ignore(boolean isNew) {
 		Calendar c = Calendar.getInstance();
@@ -306,7 +307,7 @@ public class Service extends AccessibilityService {
 			ignoreReasons.add(getString(R.string.reason_headset_on));
 		}
 		if (!ignoreReasons.isEmpty()) {
-			String reasons = ignoreReasons.toString().replaceAll("\\[|\\]", "");
+			String reasons = ignoreReasons.toString().replaceAll("[\\[\\]]", "");
 			Log.i(TAG, "Notification ignored for reason(s): " + reasons);
 			NotifyList.setLastIgnore(reasons, isNew);
 			ignoreReasons.clear();
@@ -396,7 +397,7 @@ public class Service extends AccessibilityService {
 		super.onDestroy();
 	}
 
-	private static final ArrayList<OnStatusChangeListener> statusListeners = new ArrayList<OnStatusChangeListener>();
+	private static final ArrayList<OnStatusChangeListener> statusListeners = new ArrayList<>();
 	static void registerOnStatusChangeListener(OnStatusChangeListener listener) {
 		statusListeners.add(listener);
 	}
@@ -437,24 +438,14 @@ public class Service extends AccessibilityService {
 	}
 
 	private boolean isScreenOn() {
-		if (Build.VERSION.SDK_INT >= 7) {
-			isScreenOn = CheckScreen.isScreenOn(this);
-		}
+		isScreenOn = CheckScreen.isScreenOn(this);
 		return isScreenOn;
 	}
 
-	@SuppressLint("NewApi")
 	private boolean isHeadsetOn() {
-		if (Build.VERSION.SDK_INT >= 5) {
-			return (audioMan.isBluetoothA2dpOn() || audioMan.isWiredHeadsetOn());
-		}
-		else
-		{
-			return (isHeadsetPlugged || isBluetoothConnected);
-		}
+		return (audioMan.isBluetoothA2dpOn() || audioMan.isWiredHeadsetOn());
 	}
 
-	@SuppressLint("NewApi")
 	private static class CheckScreen {
 		private static PowerManager powerMan;
 		private static boolean isScreenOn(Context c) {
@@ -465,7 +456,6 @@ public class Service extends AccessibilityService {
 		}
 	}
 
-	@SuppressLint("NewApi")
 	private static class AudioFocus {
 		private static void abandonFocus(AudioManager audioMan) {
 			audioMan.abandonAudioFocus(null);
@@ -482,22 +472,19 @@ public class Service extends AccessibilityService {
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			boolean interruptIfIgnored = true;
-			if (action.equals(Intent.ACTION_HEADSET_PLUG)) {
-				isHeadsetPlugged = intent.getIntExtra("state", 0) == 1;
-			} else if (action.equals(BluetoothDevice.ACTION_ACL_CONNECTED)) {
-				isBluetoothConnected = true;
-			} else if (action.equals(BluetoothDevice.ACTION_ACL_DISCONNECTED)) {
-				isBluetoothConnected = false;
-			} else if (action.equals(Intent.ACTION_SCREEN_ON)) {
-				isScreenOn = true;
-				if (repeater != null) {
-					repeater.cancel();
-					repeatList.clear();
-				}
-				interruptIfIgnored = false;
-			} else if (action.equals(Intent.ACTION_SCREEN_OFF)) {
-				isScreenOn = false;
-				interruptIfIgnored = false;
+			switch (action) {
+				case Intent.ACTION_SCREEN_ON:
+					isScreenOn = true;
+					if (repeater != null) {
+						repeater.cancel();
+						repeatList.clear();
+					}
+					interruptIfIgnored = false;
+					break;
+				case Intent.ACTION_SCREEN_OFF:
+					isScreenOn = false;
+					interruptIfIgnored = false;
+					break;
 			}
 			if (interruptIfIgnored && mTts != null && ignore(false)) {
 				mTts.stop();

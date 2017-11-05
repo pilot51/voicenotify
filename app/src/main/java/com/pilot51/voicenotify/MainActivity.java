@@ -18,13 +18,9 @@ package com.pilot51.voicenotify;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -55,7 +51,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	                         DLG_LOG = 3,
 	                         DLG_SUPPORT = 4,
 	                         DLG_DONATE = 5;
-	private OnStatusChangeListener statusListener = new OnStatusChangeListener() {
+	private final OnStatusChangeListener statusListener = new OnStatusChangeListener() {
 		@Override
 		public void onStatusChanged() {
 			updateStatus();
@@ -138,7 +134,9 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 					if (pkgInfo.activities[n].name.equals(name)) return true;
 				}
 			}
-		} catch (PackageManager.NameNotFoundException e) {}
+		} catch (PackageManager.NameNotFoundException e) {
+			e.printStackTrace();
+		}
 		return false;
 	}
 	
@@ -353,12 +351,12 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 		}
 	}
 	
-	private TimePickerDialog.OnTimeSetListener sTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+	private final TimePickerDialog.OnTimeSetListener sTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			Common.getPrefs(MainActivity.this).edit().putInt(getString(R.string.key_quietStart), hourOfDay * 60 + minute).commit();
 		}
 	};
-	private TimePickerDialog.OnTimeSetListener eTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+	private final TimePickerDialog.OnTimeSetListener eTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
 			Common.getPrefs(MainActivity.this).edit().putInt(getString(R.string.key_quietEnd), hourOfDay * 60 + minute).commit();
 		}

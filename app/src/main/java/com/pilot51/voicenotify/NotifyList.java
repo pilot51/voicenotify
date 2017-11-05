@@ -16,10 +16,6 @@
 
 package com.pilot51.voicenotify;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
@@ -34,10 +30,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+
 public class NotifyList extends ListView {
-	private Resources res;
-	private static ArrayList<NotifyItem> list = new ArrayList<NotifyItem>();
-	private Adapter adapter;
+	private final Resources res;
+	private static final ArrayList<NotifyItem> list = new ArrayList<>();
 	private static OnListChangeListener listener;
 	private static final int HISTORY_LIMIT = 20;
 	
@@ -45,7 +44,7 @@ public class NotifyList extends ListView {
 		super(context);
 		res = getResources();
 		setDivider(res.getDrawable(R.drawable.divider));
-		adapter = new Adapter(context, list);
+		Adapter adapter = new Adapter();
 		setAdapter(adapter);
 	}
 	
@@ -68,9 +67,11 @@ public class NotifyList extends ListView {
 	}
 	
 	private static class NotifyItem {
-		private App app;
-		private String message, ignoreReasons, time;
-		private SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		private final App app;
+		private final String message;
+		private String ignoreReasons;
+		private final String time;
+		private final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		private boolean silenced;
 		
 		private NotifyItem(App app, String message) {
@@ -101,21 +102,19 @@ public class NotifyList extends ListView {
 		}
 	}
 	
-	private static interface OnListChangeListener {
+	private interface OnListChangeListener {
 		void onListChange();
 	}
 	
 	private class Adapter extends BaseAdapter {
-		private ArrayList<NotifyItem> data;
-		private LayoutInflater mInflater;
+		private final LayoutInflater mInflater;
 		
-		private Adapter(final Context context, ArrayList<NotifyItem> list) {
-			data = list;
-			mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		private Adapter() {
+			mInflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 			listener = new OnListChangeListener() {
 				@Override
 				public void onListChange() {
-					((Activity)context).runOnUiThread(new Runnable() {
+					((Activity)getContext()).runOnUiThread(new Runnable() {
 						public void run() {
 							notifyDataSetChanged();
 						}
@@ -126,12 +125,12 @@ public class NotifyList extends ListView {
 		
 		@Override
 		public int getCount() {
-			return data.size();
+			return list.size();
 		}
 		
 		@Override
 		public Object getItem(int position) {
-			return data.get(position);
+			return list.get(position);
 		}
 		
 		@Override
@@ -145,15 +144,15 @@ public class NotifyList extends ListView {
 			if (view == null) {
 				view = mInflater.inflate(R.layout.notify_log_item, parent, false);
 			}
-			final NotifyItem item = data.get(position);
+			final NotifyItem item = list.get(position);
 			((TextView)view.findViewById(R.id.time)).setText(item.getTime());
 			((TextView)view.findViewById(R.id.title)).setText(item.getApp().getLabel());
-			TextView textView = (TextView)view.findViewById(R.id.message);
+			TextView textView = view.findViewById(R.id.message);
 			if (item.getMessage().length() != 0) {
 				textView.setText(item.getMessage());
 				textView.setVisibility(TextView.VISIBLE);
 			} else textView.setVisibility(TextView.GONE);
-			textView = (TextView)view.findViewById(R.id.ignore_reasons);
+			textView = view.findViewById(R.id.ignore_reasons);
 			if (item.getIgnoreReasons() != null && item.getIgnoreReasons().length() != 0) {
 				textView.setText(item.getIgnoreReasons());
 				if (item.silenced) textView.setTextColor(Color.YELLOW);

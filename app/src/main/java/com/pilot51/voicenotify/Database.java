@@ -16,13 +16,6 @@
 
 package com.pilot51.voicenotify;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -34,9 +27,16 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 import android.util.Log;
 
-public class Database extends SQLiteOpenHelper {
-	private static String TAG = Database.class.getSimpleName();
-	private Context context;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
+
+class Database extends SQLiteOpenHelper {
+	private static final String TAG = Database.class.getSimpleName();
+	private final Context context;
 	private static Database database;
 	private static final int DB_VERSION = 1;
 	private static final String
@@ -84,12 +84,14 @@ public class Database extends SQLiteOpenHelper {
 	
 	/** Copies ignores from old file to database and deletes old file. */
 	@SuppressWarnings("unchecked")
-	void upgradeOldIgnores() {
-		ArrayList<String> oldList = new ArrayList<String>();
+	private void upgradeOldIgnores() {
+		ArrayList<String> oldList = new ArrayList<>();
 		FileInputStream file = null;
 		try {
 			file = context.openFileInput(OLD_FILE);
-		} catch (FileNotFoundException e) {}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		try {
 			ObjectInputStream in = new ObjectInputStream(file);
 			try {
@@ -103,7 +105,7 @@ public class Database extends SQLiteOpenHelper {
 			Log.e(TAG, "Error: Failed to read ignored_apps");
 			e.printStackTrace();
 		}
-		ArrayList<App> newList = new ArrayList<App>();
+		ArrayList<App> newList = new ArrayList<>();
 		PackageManager packMan = context.getPackageManager();
 		ApplicationInfo appInfo;
 		for (String s : oldList) {
@@ -122,7 +124,7 @@ public class Database extends SQLiteOpenHelper {
 	static synchronized ArrayList<App> getApps() {
 		SQLiteDatabase db = database.getReadableDatabase();
 		Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, COLUMN_LABEL + " COLLATE NOCASE");
-		ArrayList<App> list = new ArrayList<App>();
+		ArrayList<App> list = new ArrayList<>();
 		while (cursor.moveToNext()) {
 			list.add(new App(
 				cursor.getString(cursor.getColumnIndex(COLUMN_PACKAGE)),

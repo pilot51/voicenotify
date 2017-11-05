@@ -16,10 +16,6 @@
 
 package com.pilot51.voicenotify;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
@@ -43,8 +39,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
 public class AppList extends ListActivity {
-	private ListView lv;
 	private Adapter adapter;
 	private static ArrayList<App> apps;
 	private static boolean defEnable;
@@ -59,7 +58,7 @@ public class AppList extends ListActivity {
 		super.onCreate(savedInstanceState);
 		Common.init(this);
 		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		lv = getListView();
+		ListView lv = getListView();
 		lv.setTextFilterEnabled(true);
 		lv.setFastScrollEnabled(true);
 		adapter = new Adapter();
@@ -243,9 +242,9 @@ public class AppList extends ListActivity {
 	}
 	
 	private class Adapter extends BaseAdapter implements Filterable {
-		private final ArrayList<App> baseData = new ArrayList<App>();
-		private final ArrayList<App> adapterData = new ArrayList<App>();
-		private LayoutInflater mInflater;
+		private final ArrayList<App> baseData = new ArrayList<>();
+		private final ArrayList<App> adapterData = new ArrayList<>();
+		private final LayoutInflater mInflater;
 		private SimpleFilter filter;
 		
 		private Adapter() {
@@ -305,7 +304,7 @@ public class AppList extends ListActivity {
 					results.count = baseData.size();
 				} else {
 					String prefixString = prefix.toString().toLowerCase();
-					ArrayList<App> newValues = new ArrayList<App>();
+					ArrayList<App> newValues = new ArrayList<>();
 					for (App app : baseData) {
 						if (app.getLabel().toLowerCase().contains(prefixString)
 								|| app.getPackage().toLowerCase().contains(prefixString)) {

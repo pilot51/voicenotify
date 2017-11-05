@@ -10,15 +10,15 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 public class WidgetProvider extends AppWidgetProvider {
-	static final String ACTION_TOGGLE = "voicenotify.widget.TOGGLE",
-	                    ACTION_UPDATE = "voicenotify.widget.UPDATE";
+	private static final String ACTION_TOGGLE = "voicenotify.widget.TOGGLE";
+	static final String ACTION_UPDATE = "voicenotify.widget.UPDATE";
 	
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		for (int i = 0; i < appWidgetIds.length; i++) {
+		for (int appWidgetId : appWidgetIds) {
 			RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget);
 			updateViews(context, views);
-			appWidgetManager.updateAppWidget(appWidgetIds[i], views);
+			appWidgetManager.updateAppWidget(appWidgetId, views);
 		}
 	}
 	
