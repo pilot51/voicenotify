@@ -30,14 +30,10 @@
             <emptyLine />
           </value>
         </option>
-        <option name="RIGHT_MARGIN" value="100" />
         <AndroidXmlCodeStyleSettings>
           <option name="USE_CUSTOM_SETTINGS" value="true" />
         </AndroidXmlCodeStyleSettings>
         <Objective-C-extensions>
-          <option name="GENERATE_INSTANCE_VARIABLES_FOR_PROPERTIES" value="ASK" />
-          <option name="RELEASE_STYLE" value="IVAR" />
-          <option name="TYPE_QUALIFIERS_PLACEMENT" value="BEFORE" />
           <file>
             <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Import" />
             <option name="com.jetbrains.cidr.lang.util.OCDeclarationKind" value="Macro" />
@@ -63,14 +59,16 @@
           </extensions>
         </Objective-C-extensions>
         <XML>
-          <option name="XML_KEEP_LINE_BREAKS" value="false" />
-          <option name="XML_ALIGN_ATTRIBUTES" value="false" />
           <option name="XML_SPACE_INSIDE_EMPTY_TAG" value="true" />
+          <option name="XML_LEGACY_SETTINGS_IMPORTED" value="true" />
         </XML>
         <codeStyleSettings language="JAVA">
+          <option name="SPACE_AFTER_TYPE_CAST" value="false" />
+          <option name="SPACE_BEFORE_ARRAY_INITIALIZER_LBRACE" value="true" />
           <indentOptions>
             <option name="USE_TAB_CHARACTER" value="true" />
             <option name="SMART_TABS" value="true" />
+            <option name="KEEP_INDENTS_ON_EMPTY_LINES" value="true" />
           </indentOptions>
         </codeStyleSettings>
         <codeStyleSettings language="XML">
@@ -79,6 +77,7 @@
             <option name="CONTINUATION_INDENT_SIZE" value="4" />
             <option name="USE_TAB_CHARACTER" value="true" />
             <option name="SMART_TABS" value="true" />
+            <option name="KEEP_INDENTS_ON_EMPTY_LINES" value="true" />
           </indentOptions>
           <arrangement>
             <rules>
@@ -234,6 +233,6 @@
         </codeStyleSettings>
       </value>
     </option>
-    <option name="USE_PER_PROJECT_SETTINGS" value="true" />
+    <option name="PREFERRED_PROJECT_CODE_STYLE" value="Custom" />
   </component>
 </project>

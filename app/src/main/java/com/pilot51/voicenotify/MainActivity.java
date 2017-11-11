@@ -18,9 +18,13 @@ package com.pilot51.voicenotify;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,6 +38,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.support.v4.app.NotificationCompat;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -158,28 +163,36 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			if (!AppList.findOrAddApp(getPackageName(), this).getEnabled()) {
 				Toast.makeText(this, getString(R.string.test_ignored), Toast.LENGTH_LONG).show();
 			}
-			new Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					/*
-					NotificationCompat.Builder mBuilder =
-							new NotificationCompat.Builder(this)
-									.setSmallIcon(R.drawable.icon)
-									.setContentTitle(R.string.test_notify_msg)
-									.setContentText(R.string.test_notify_msg);
-					Intent resultIntent = new Intent(MainActivity.this, MainActivity.class);
-					*/
-					/*
-					Notification notification = new Notification(R.drawable.icon,
-							getString(R.string.test_notify_msg), System.currentTimeMillis());
-					notification.defaults |= Notification.DEFAULT_SOUND;
-					notification.flags |= Notification.FLAG_AUTO_CANCEL;
-					notification.setLatestEventInfo(MainActivity.this, getString(R.string.app_name), getString(R.string.test),
-							PendingIntent.getActivity(MainActivity.this, 0, getIntent(), 0));
-					((NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE)).notify(0, notification);
-					*/
-				}
-			}, 5000);
+			final NotificationManager notificationManager = (NotificationManager)getSystemService(Context.NOTIFICATION_SERVICE);
+			if (notificationManager != null) {
+				new Timer().schedule(new TimerTask() {
+					@Override
+					public void run() {
+						String id = "test";
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+							NotificationChannel channel = notificationManager.getNotificationChannel(id);
+							if (channel == null) {
+								channel = new NotificationChannel(id, getString(R.string.test), NotificationManager.IMPORTANCE_LOW);
+								channel.setDescription(getString(R.string.notification_channel_desc));
+								notificationManager.createNotificationChannel(channel);
+							}
+						}
+						PendingIntent pi = PendingIntent.getActivity(MainActivity.this,
+								0, getIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
+						NotificationCompat.Builder builder =
+								new NotificationCompat.Builder(MainActivity.this, id)
+										.setAutoCancel(true)
+										.setContentIntent(pi)
+										.setSmallIcon(R.drawable.icon)
+										.setTicker(getString(R.string.test_ticker))
+										.setSubText(getString(R.string.test_subtext))
+										.setContentTitle(getString(R.string.test_content_title))
+										.setContentText(getString(R.string.test_content_text))
+										.setContentInfo(getString(R.string.test_content_info));
+						notificationManager.notify(0, builder.build());
+					}
+				}, 5000);
+			}
 			return true;
 		} else if (preference == pNotifyLog) {
 			showDialog(DLG_LOG);
