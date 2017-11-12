@@ -29,27 +29,24 @@
 		android:icon="@drawable/icon"
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme">
-		<activity android:name="MainActivity">
+		<activity android:name=".MainActivity">
 			<intent-filter>
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
 		</activity>
 		<activity
-			android:name="AppList"
+			android:name=".AppList"
 			android:configChanges="keyboardHidden|orientation">
 		</activity>
 		<service
-			android:name="Service"
-			android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
+			android:name=".Service"
+			android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE">
 			<intent-filter>
-				<action android:name="android.accessibilityservice.AccessibilityService"/>
+				<action android:name="android.service.notification.NotificationListenerService"/>
 			</intent-filter>
-			<meta-data
-				android:name="android.accessibilityservice"
-				android:resource="@xml/service_config"/>
 		</service>
-		<receiver android:name="WidgetProvider">
+		<receiver android:name=".WidgetProvider">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
 				<action android:name="voicenotify.widget.TOGGLE"/>

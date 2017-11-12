@@ -22,7 +22,6 @@
 	<string name="key_ttsStream">ttsStream</string>
 	<string name="key_ttsDelay">ttsDelay</string>
 	<string name="key_tts_repeat">tts_repeat</string>
-	<string name="key_toasts">toasts</string>
 	<string name="key_shake_threshold">shake_threshold</string>
 	<string name="key_ignore_strings">ignore_strings</string>
 	<string name="key_ignore_empty">ignore_empty</string>

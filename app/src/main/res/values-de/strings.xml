@@ -40,8 +40,6 @@
 	<string name="tts_repeat">Sprachausgabe wiederholen</string>
 	<string name="tts_repeat_summary">Wiederhole die Sprachausgabe so lange, bis der Bildschirm eingeschaltet wird.</string>
 	<string name="tts_repeat_dialog_msg">Benachrichtigungen werden im definierten Zeitraum wiederholt (Wert in Minuten), bis der Bildschirm eingeschaltet wird. Benachrichtigungen die erscheinen während der Bildschirm eingeschaltet ist, werden nicht wiederholt.\n Leer lassen oder 0 eingeben um Wiederholung zu deaktivieren.</string>
-	<string name="speak_toasts">Toasts anzeigen</string>
-	<string name="speak_toasts_summary">Auch toast Benachrichtigugen sprechen.</string>
 	<string name="shake_to_silence">Schütteln für stumm schalten</string>
 	<string name="shake_to_silence_summary">Empfindlichkeit der Shake-To-Silence Funktion einstellen.</string>
 	<string name="shake_to_silence_dialog_msg">Je kleiner der Wert, desto höher ist die Empfindlichkeit.\n\nStandard: 100\nEin leeres Feld deaktiviert diese Funktion.</string>
@@ -91,9 +89,7 @@
 	
 	<!-- MainActivity.java -->
 	<string name="service_disabled">VN Service ist deaktiviert</string>
-	<string name="status_summary_accessibility">Android Bedienungshilfen Einstellungen öffnen, um VN zu aktivieren oder deaktivieren.</string>
 	<string name="status_summary_suspended">Tippe zum aktivieren von VN</string>
-	<string name="test_notify_msg">Dies ist eine Test-Benachrichtigung.</string>
 	<string name="donate">Spenden</string>
 	<string-array name="support_items">
 		<item>@string/donate</item>

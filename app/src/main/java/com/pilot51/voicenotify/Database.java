@@ -65,21 +65,12 @@ class Database extends SQLiteOpenHelper {
 	}
 	
 	/**
-	 * Initializes database if not already initialized.<br />
-	 * Call {@link #getInstance()} to get the static instance.
+	 * Initializes database if not already initialized.
 	 */
 	static void init(Context context) {
-		if (database != null) {
-			Log.w(TAG, "Database already initialized!");
-		} else database = new Database(context);
-	}
-	
-	/** @return Previously initialized static Database instance or null if {@link #init(Context)} has not been called. */
-	static Database getInstance() {
 		if (database == null) {
-			Log.w(TAG, "Database not initialized!");
+			database = new Database(context);
 		}
-		return database;
 	}
 	
 	/** Copies ignores from old file to database and deletes old file. */

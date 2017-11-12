@@ -40,8 +40,6 @@
 	<string name="tts_repeat">Répétition de la synthèse vocale.</string>
 	<string name="tts_repeat_summary">Répéter continuellement les notifications par la synthèse vocale jusqu\'à ce que l\'écran s\'allume.</string>
 	<string name="tts_repeat_dialog_msg">Les notifications seront répétées après l\'intervalle de temps défini jusqu\'à ce que l\'écran s\'allume. Les notifications créés pendant que l\'écran est allumé ne seront pas répétées.\nLes valeurs sont en minutes. Vide ou 0 le désactive.</string>
-	<string name="speak_toasts">Bulle de notification</string>
-	<string name="speak_toasts_summary">Encore une bulle de notification</string>
 	<string name="shake_to_silence">Sécouer-Pour-Silence</string>
 	<string name="shake_to_silence_summary">Ajuster le seuil de sensibilité du Sécouer-Pour-Silence</string>
 	<string name="shake_to_silence_dialog_msg">Les valeurs les plus faibles sont plus sensibles.\n\nPar défaut: 100\nVide pour désactiver.</string>
@@ -91,9 +89,7 @@
 	
 	<!-- MainActivity.java -->
 	<string name="service_disabled">Service VN désactivé</string>
-	<string name="status_summary_accessibility">Ouvrir les paramètres d\'accessibilité d\'Android pour activer ou désactiver VN.</string>
 	<string name="status_summary_suspended">Selectionner pour activer le VN</string>
-	<string name="test_notify_msg">Ceci est un test de notification.</string>
 	
 	<string-array name="support_items">
 		<item>@string/donate</item>

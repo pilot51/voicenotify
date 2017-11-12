@@ -52,10 +52,6 @@
 		android:digits="0123456789"
 		android:inputType="number" />
 	<CheckBoxPreference
-		android:key="@string/key_toasts"
-		android:title="@string/speak_toasts"
-		android:summary="@string/speak_toasts_summary" />
-	<CheckBoxPreference
 		android:key="@string/key_audio_focus"
 		android:title="@string/audio_focus"
 		android:summary="@string/audio_focus_summary"

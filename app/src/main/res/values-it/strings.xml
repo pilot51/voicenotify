@@ -40,8 +40,6 @@
 	<string name="tts_repeat">Ripeti Sintesi Vocale</string>
 	<string name="tts_repeat_summary">Continua a ripetere la notifica con la sintesi vocale fino all\'accensione dello schermo.</string>
 	<string name="tts_repeat_dialog_msg">Le notifiche vengono ripetute a intervalli impostati fino all\'accensione dello schermo. Le notifiche ricevute con lo schermo acceso non verranno ripetute.\nValore in minuti, lasciare vuoto o 0 per disattivare.</string>
-	<string name="speak_toasts">Leggi Toast</string>
-	<string name="speak_toasts_summary">Legge anche le notifiche dei toast.</string>
 	<string name="shake_to_silence">Scuoti-Per-Zittire</string>
 	<string name="shake_to_silence_summary">Regola la soglia di sensibilità dello Scuoti-Per-Zittire.</string>
 	<string name="shake_to_silence_dialog_msg">La sensibilità aumenta alzando i valori.\n\nDefault: 100\nLascia vuoto per disabilitare.</string>
@@ -91,9 +89,7 @@
 	
 	<!-- MainActivity.java -->
 	<string name="service_disabled">Il Servizio VN Non E\' Abilitato</string>
-	<string name="status_summary_accessibility">Apre le impostazioni di Acesso Facilitato di Android per abilitare o disabilitare VN.</string>
 	<string name="status_summary_suspended">Seleziona per attivare VN.</string>
-	<string name="test_notify_msg">Questa notifica è un test.</string>
 	<string name="donate">Fai una donazione</string>
 	<string-array name="support_items">
 		<item>Donazione</item>

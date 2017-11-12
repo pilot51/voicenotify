@@ -40,8 +40,6 @@
 	<string name="tts_repeat">Повторение TTS</string>
 	<string name="tts_repeat_summary">Повторять уведомления пока экран не будет включен.</string>
 	<string name="tts_repeat_dialog_msg">Интервал повтора уведомлений при выключенном экране. При включенном экране уведомления не повторяются.\n\nЗначение в минутах. Оставьте поле пустым или введите 0 для отключения.</string>
-	<string name="speak_toasts">Говорить "тосты"</string>
-	<string name="speak_toasts_summary">Так-же проговаривать "тосты" (всплывающие уведомления)</string>
 	<string name="shake_to_silence">Потрясти-для-тишины</string>
 	<string name="shake_to_silence_summary">Настроить порог чувствительности функции "Потрясти-для-тишины"</string>
 	<string name="shake_to_silence_dialog_msg">Низкие значения - более высокая чувствительность.\n\nПо умолчанию: 100\nОставьте поле пустым, для отключения функции.</string>
@@ -91,9 +89,7 @@
 	
 	<!-- MainActivity.java -->
 	<string name="service_disabled">Сервис Уведомлений Голосом остановлен</string>
-	<string name="status_summary_accessibility">Открыть настройки Специальных возможностей для включения или отключения Уведомлений Голосом.</string>
 	<string name="status_summary_suspended">Выберите для активации Уведомлений Голосом.</string>
-	<string name="test_notify_msg">Это тестовое уведомление. Проверка настроек.</string>
 	<string name="donate">Пожертвовать</string>
 	<string-array name="support_items">
 		<item>@string/donate</item>

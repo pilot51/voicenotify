@@ -16,8 +16,6 @@
 
 package com.pilot51.voicenotify;
 
-import android.accessibilityservice.AccessibilityService;
-import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Notification;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -25,13 +23,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
-import android.os.Build;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.PowerManager;
+import android.service.notification.NotificationListenerService;
+import android.service.notification.StatusBarNotification;
 import android.speech.tts.TextToSpeech;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.accessibility.AccessibilityEvent;
 import android.widget.Toast;
 
 import java.text.MessageFormat;
@@ -44,7 +44,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Service extends AccessibilityService {
+public class Service extends NotificationListenerService {
 	private static final String TAG = Service.class.getSimpleName();
 	private final Map<String, String> lastMsg = new HashMap<>();
 	private final Map<String, Long> lastMsgTime = new HashMap<>();
@@ -90,7 +90,7 @@ public class Service extends AccessibilityService {
                     public void onUtteranceCompleted(String utteranceId) {
                         messageStatuses.poll();
                         if (messageStatuses.isEmpty()) {
-							if (Build.VERSION.SDK_INT >= 8 && shouldRequestFocus) {
+							if (shouldRequestFocus) {
 								AudioFocus.abandonFocus(audioMan);
 							}
                             shake.disable();
@@ -126,28 +126,24 @@ public class Service extends AccessibilityService {
         super.onCreate();
     }
 
-    @Override
-	public synchronized void onAccessibilityEvent(AccessibilityEvent event) {
-		if (!Common.getPrefs(this).getBoolean(getString(R.string.key_toasts), false) && !(event.getParcelableData() instanceof Notification)) {
-			return;
-		}
+	@Override
+	public void onNotificationPosted(StatusBarNotification sbn) {
+		Notification notification = sbn.getNotification();
 		long newMsgTime = System.currentTimeMillis();
 		StringBuilder notifyMsg = new StringBuilder();
-		if (!event.getText().isEmpty()) {
-			for (CharSequence subText : event.getText()) {
-				notifyMsg.append(subText);
-			}
+		if (!TextUtils.isEmpty(notification.tickerText)) {
+			notifyMsg.append(notification.tickerText);
 		}
 		final String ttsStringPref = Common.getPrefs(this).getString(getString(R.string.key_ttsString), null);
-		App app = AppList.findOrAddApp(event.getPackageName().toString(), this);
+		App app = AppList.findOrAddApp(sbn.getPackageName(), this);
 		NotifyList.addNotification(app, notifyMsg.toString());
 		String newMsg;
 		try {
-			if (event.getText().isEmpty()) {
+			if (TextUtils.isEmpty(notification.tickerText)) {
 				newMsg = getString(R.string.notification_from, app.getLabel());
 			} else {
 				newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"),
-				                       app.getLabel(), notifyMsg.toString().replaceAll("[|\\[\\]{}*<>]+", " "));
+						app.getLabel(), notifyMsg.toString().replaceAll("[|\\[\\]{}*<>]+", " "));
 			}
 		} catch(IllegalFormatException e) {
 			Log.w(TAG, "Error formatting custom TTS string!");
@@ -156,12 +152,10 @@ public class Service extends AccessibilityService {
 		}
 		final String[] ignoreStrings = Common.getPrefs(this).getString(getString(R.string.key_ignore_strings), "").toLowerCase().split("\n");
 		boolean stringIgnored = false;
-		if (ignoreStrings != null) {
-			for (String s : ignoreStrings) {
-				if (s.length() != 0 && notifyMsg.toString().toLowerCase().contains(s)) {
-					stringIgnored = true;
-					break;
-				}
+		for (String s : ignoreStrings) {
+			if (s.length() != 0 && notifyMsg.toString().toLowerCase().contains(s)) {
+				stringIgnored = true;
+				break;
 			}
 		}
 		if (isSuspended) {
@@ -173,7 +167,8 @@ public class Service extends AccessibilityService {
 		if (stringIgnored) {
 			ignoreReasons.add(getString(R.string.reason_string));
 		}
-		if (event.getText().isEmpty() && Common.getPrefs(this).getBoolean(getString(R.string.key_ignore_empty), false)) {
+		if (TextUtils.isEmpty(notification.tickerText)
+				&& Common.getPrefs(this).getBoolean(getString(R.string.key_ignore_empty), false)) {
 			ignoreReasons.add(getString(R.string.reason_empty_msg));
 		}
 		int ignoreRepeat;
@@ -208,27 +203,27 @@ public class Service extends AccessibilityService {
 					}
 				}
 			}
-            if(delay < 0){ //just in case we get a weird value, don't want to try to make the Timer wait for negative time
-                delay = 0;
-            }
-			int max_length=Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_max_length), "0"));
+			if (delay < 0) { // Just in case we get a weird value, don't want to try to make the Timer wait for negative time
+				delay = 0;
+			}
+			int maxLength = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_max_length), "0"));
 			final String msg;
-			if (max_length > 0) {
-				msg = newMsg.substring(0, Math.min(max_length, newMsg.length()));
+			if (maxLength > 0) {
+				msg = newMsg.substring(0, Math.min(maxLength, newMsg.length()));
 			} else {
 				msg = newMsg;
 			}
 			new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    handler.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            speak(msg, true);
-                        }
-                    });
-                }
-            }, delay * 1000L); //a delay of 0 works fine, and means that all speak calls anywhere are running in their own thread and not blocking.
+				@Override
+				public void run() {
+					handler.post(new Runnable() {
+						@Override
+						public void run() {
+							speak(msg, true);
+						}
+					});
+				}
+			}, delay * 1000L); // A delay of 0 works fine, and means that all speak calls anywhere are running in their own thread and not blocking.
 			lastMsg.put(app.getLabel(),newMsg);
 			lastMsgTime.put(app.getLabel(),newMsgTime);
 		} else {
@@ -237,6 +232,10 @@ public class Service extends AccessibilityService {
 			NotifyList.setLastIgnore(reasons, true);
 			ignoreReasons.clear();
 		}
+	}
+
+	@Override
+	public void onNotificationRemoved(StatusBarNotification sbn) {
 	}
 
     /**
@@ -251,7 +250,7 @@ public class Service extends AccessibilityService {
             shake.enable();
             shouldRequestFocus = Common.getPrefs(getApplicationContext())
                     .getBoolean(getString(R.string.key_audio_focus), false);
-			if (Build.VERSION.SDK_INT >= 8 && shouldRequestFocus) {
+			if (shouldRequestFocus) {
 				AudioFocus.requestFocus(audioMan);
 			}
         }
@@ -341,20 +340,11 @@ public class Service extends AccessibilityService {
 			return super.cancel();
 		}
 	}
-
+	
 	@Override
-	public void onInterrupt() {
-		if (mTts != null) mTts.stop();
-	}
-
-	@Override
-	public void onServiceConnected() {
-		if (isInitialized) return;
+	public IBinder onBind(Intent intent) {
+		if (isInitialized) return super.onBind(intent);
 		Common.init(this);
-		AccessibilityServiceInfo info = new AccessibilityServiceInfo();
-		info.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
-		info.feedbackType = AccessibilityServiceInfo.FEEDBACK_GENERIC;
-		setServiceInfo(info);
 		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 		IntentFilter filter =  new IntentFilter(Intent.ACTION_HEADSET_PLUG);
@@ -374,8 +364,9 @@ public class Service extends AccessibilityService {
 		});
 		registerOnStatusChangeListener(statusListener);
 		setInitialized(true);
+		return super.onBind(intent);
 	}
-
+	
 	@Override
 	public boolean onUnbind(Intent intent) {
 		if (isInitialized) {

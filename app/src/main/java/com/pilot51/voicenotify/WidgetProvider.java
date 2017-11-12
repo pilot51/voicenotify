@@ -64,7 +64,7 @@ public class WidgetProvider extends AppWidgetProvider {
 				views.setImageViewResource(R.id.button, R.drawable.widget_running);
 			}
 		} else {
-			pendingIntent = PendingIntent.getActivity(context, 0, MainActivity.getAccessibilityIntent(), 0);
+			pendingIntent = PendingIntent.getActivity(context, 0, MainActivity.getNotificationListenerSettingsIntent(), 0);
 			views.setImageViewResource(R.id.button, R.drawable.widget_disabled);
 		}
 		views.setOnClickPendingIntent(R.id.button, pendingIntent);

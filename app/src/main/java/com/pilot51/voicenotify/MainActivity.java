@@ -38,7 +38,9 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -48,7 +50,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends PreferenceActivity implements OnPreferenceClickListener, OnSharedPreferenceChangeListener {
-	private static final int SDK_VERSION = Build.VERSION.SDK_INT;
 	private Preference pStatus, pDeviceState, pQuietStart, pQuietEnd, pTest, pNotifyLog, pSupport;
 	private static final int DLG_DEVICE_STATE = 0,
 	                         DLG_QUIET_START = 1,
@@ -91,39 +92,22 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			pTTS.setEnabled(false);
 			pTTS.setSummary(R.string.tts_settings_summary_fail);
 		}
-		if (SDK_VERSION < 11) {
-			getPreferenceScreen().removePreference(findPreference(getString(R.string.key_toasts)));
-			if (SDK_VERSION < 8) {
-				getPreferenceScreen().removePreference(findPreference(getString(R.string.key_audio_focus)));
-			}
-		}
 	}
 	
-	static Intent getAccessibilityIntent() {
-		Intent intent = new Intent();
-		if (SDK_VERSION > 4) {
-			intent.setAction(android.provider.Settings.ACTION_ACCESSIBILITY_SETTINGS);
-		} else if (SDK_VERSION == 4) {
-			intent.setAction(Intent.ACTION_MAIN);
-			intent.setClassName("com.android.settings", "com.android.settings.AccessibilitySettings");
+	static Intent getNotificationListenerSettingsIntent() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+			return new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+		} else {
+			return new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
 		}
-		return intent;
 	}
 	
 	private Intent getTtsIntent() {
 		Intent intent = new Intent(Intent.ACTION_MAIN);
 		if (isClassExist("com.android.settings.TextToSpeechSettings")) {
-			if (SDK_VERSION >= 11 && SDK_VERSION <= 13) {
-				intent.setAction(android.provider.Settings.ACTION_SETTINGS);
-				intent.putExtra(EXTRA_SHOW_FRAGMENT, "com.android.settings.TextToSpeechSettings");
-				intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
-			} else intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
+			intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings");
 		} else if (isClassExist("com.android.settings.Settings$TextToSpeechSettingsActivity")) {
-			if (SDK_VERSION == 14) {
-				intent.setAction(android.provider.Settings.ACTION_SETTINGS);
-				intent.putExtra(EXTRA_SHOW_FRAGMENT, "com.android.settings.tts.TextToSpeechSettings");
-				intent.putExtra(EXTRA_SHOW_FRAGMENT_ARGUMENTS, intent.getExtras());
-			} else intent.setClassName("com.android.settings", "com.android.settings.Settings$TextToSpeechSettingsActivity");
+			intent.setClassName("com.android.settings", "com.android.settings.Settings$TextToSpeechSettingsActivity");
 		} else if (isClassExist("com.google.tv.settings.TextToSpeechSettingsTop")) {
 			intent.setClassName("com.google.tv.settings", "com.google.tv.settings.TextToSpeechSettingsTop");
 		} else return null;
@@ -382,8 +366,12 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			pStatus.setIntent(null);
 		} else {
 			pStatus.setTitle(Service.isRunning() ? R.string.service_running : R.string.service_disabled);
-			pStatus.setSummary(R.string.status_summary_accessibility);
-			pStatus.setIntent(getAccessibilityIntent());
+			if (NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext()).contains(getPackageName())) {
+				pStatus.setSummary(R.string.status_summary_notification_access_enabled);
+			} else {
+				pStatus.setSummary(R.string.status_summary_notification_access_disabled);
+			}
+			pStatus.setIntent(getNotificationListenerSettingsIntent());
 		}
 	}
 	

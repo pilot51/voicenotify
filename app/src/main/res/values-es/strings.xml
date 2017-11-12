@@ -40,8 +40,6 @@
 	<string name="tts_repeat">Repetición de Texto-a-Voz</string>
 	<string name="tts_repeat_summary">Repetir las notificaciones con Texto-a-Voz hasta que la pantalla se encienda</string>
 	<string name="tts_repeat_dialog_msg">Las notificaciones se repiten al intervalo de tiempo definido hasta que la pantalla se encienda. Las notificaciones generadas mientras la pantalla se encuentra encendida no se repiten.\n\nEl valor se encuentra en minutos. Dejar en blanco o colocar 0 para desactivar.</string>
-	<string name="speak_toasts">Hablar Tostadas</string>
-	<string name="speak_toasts_summary">También hablar notificaciones tostadas (burbujas).</string>
 	<string name="shake_to_silence">Sacudir-Para-Silencio</string>
 	<string name="shake_to_silence_summary">Ajusta la sensibilidad del Sacudir-Para-Silencio.</string>
 	<string name="shake_to_silence_dialog_msg">Valores inferiores son más sensibles.\n\nDefecto: 100\nDejar en blanco para deshabilitar.</string>
@@ -91,9 +89,7 @@
 	
 	<!-- MainActivity.java -->
 	<string name="service_disabled">Servicio de Notificación por Voz está desactivado.</string>
-	<string name="status_summary_accessibility">Abre la configuración de Accesibilidad de Android para habilitar o deshabilitar el Servicio de Notificación por Voz.</string>
 	<string name="status_summary_suspended">Selecciona para activar Servicio de Notificación por Voz.</string>
-	<string name="test_notify_msg">Ésta es una notificación de prueba</string>
 	<string name="donate">Donar</string>
 	<string-array name="support_items">
 		<item>@string/donate</item>

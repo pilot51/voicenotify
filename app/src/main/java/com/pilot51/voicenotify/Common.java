@@ -51,9 +51,7 @@ class Common {
 			prefs = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
 			convertOldStreamPref(context);
 		}
-		if (Database.getInstance() == null) {
-			Database.init(context);
-		}
+		Database.init(context);
 	}
 	
 	/**

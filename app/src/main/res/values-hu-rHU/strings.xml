@@ -92,9 +92,6 @@
 	<!-- MainActivity.java -->
 	
 	
-	
-	<string name="test_notify_msg">Ez egy tesztüzenet.</string>
-	
 	<string-array name="support_items">
 		<item>@string/donate</item>
 		<item>Értékelés és megjegyzések</item>
