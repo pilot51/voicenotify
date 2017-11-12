@@ -23,7 +23,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -327,7 +326,7 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 			dlg.setPositiveButton(R.string.donate_wallet_launch_web, new DialogInterface.OnClickListener() {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
-					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://wallet.google.com/manage/#sendMoney:")));
+					startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://wallet.google.com")));
 				}
 			});
 		}
@@ -338,11 +337,11 @@ public class MainActivity extends PreferenceActivity implements OnPreferenceClic
 	 * @return The intent for Google Wallet, otherwise null if installation is not found.
 	 */
 	private Intent getWalletIntent() {
+		String walletPackage = "com.google.android.apps.gmoney";
+		PackageManager pm = getPackageManager();
 		try {
-			getPackageManager().getPackageInfo("com.google.android.apps.walletnfcrel", PackageManager.GET_ACTIVITIES);
-			return new Intent(Intent.ACTION_MAIN)
-			       .setComponent(new ComponentName("com.google.android.apps.walletnfcrel",
-			                                       "com.google.android.apps.wallet.WalletRootActivity"));
+			pm.getPackageInfo(walletPackage, PackageManager.GET_ACTIVITIES);
+			return pm.getLaunchIntentForPackage(walletPackage);
 		} catch (PackageManager.NameNotFoundException e) {
 			return null;
 		}
