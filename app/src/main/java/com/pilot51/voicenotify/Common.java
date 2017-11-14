@@ -18,9 +18,12 @@ package com.pilot51.voicenotify;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.os.Build;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 
 class Common {
 	private static SharedPreferences prefs;
@@ -96,5 +99,13 @@ class Common {
 			prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		}
 		return prefs;
+	}
+	
+	static Intent getNotificationListenerSettingsIntent() {
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+			return new Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS);
+		} else {
+			return new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
+		}
 	}
 }
