@@ -29,6 +29,7 @@ import android.os.PowerManager;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.UtteranceProgressListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
@@ -75,56 +76,42 @@ public class Service extends NotificationListenerService {
 		}
 	};
 
-    @Override
-    public void onCreate() {
-        mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status == TextToSpeech.ERROR) {
-                    Log.w(TAG, getString(R.string.error_tts_init));
-                    Toast.makeText(getApplicationContext(), R.string.error_tts_init, Toast.LENGTH_LONG).show();
-                    return;
-                }
-                mTts.setOnUtteranceCompletedListener(new TextToSpeech.OnUtteranceCompletedListener() {
-                    @Override
-                    public void onUtteranceCompleted(String utteranceId) {
-                        messageStatuses.poll();
-                        if (messageStatuses.isEmpty()) {
+	@Override
+	public void onCreate() {
+		mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+			@Override
+			public void onInit(int status) {
+				if (status == TextToSpeech.ERROR) {
+					Log.w(TAG, getString(R.string.error_tts_init));
+					Toast.makeText(getApplicationContext(), R.string.error_tts_init, Toast.LENGTH_LONG).show();
+					return;
+				}
+				mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
+					@Override
+					public void onStart(String utteranceId) {
+					}
+
+					@Override
+					public void onDone(String utteranceId) {
+						messageStatuses.poll();
+						if(messageStatuses.isEmpty()){
 							if (shouldRequestFocus) {
-								AudioFocus.abandonFocus(audioMan);
+								audioMan.abandonAudioFocus(null);
 							}
-                            shake.disable();
-                        }
-                    }
-                });
-                /* added in API 15 (4.0.3).  Once enough users are on that version to justify it, uncomment this block, as onUtteranceCompletedListener is now deprecated
-                mTts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
-                    @Override
-                    public void onStart(String utteranceId) {
-                    }
+							shake.disable();
+						}
+					}
 
-                    @Override
-                    public void onDone(String utteranceId) {
-                        messageStatuses.poll();
-                        if(messageStatuses.isEmpty()){
-                            if (shouldRequestFocus) {
-                                audioMan.abandonAudioFocus(null);
-                            }
-                            shake.disable();
-                        }
-                    }
-
-                    @Override
-                    public void onError(String utteranceId) {
-                        Log.w(TAG, getString(R.string.error_tts_init));
-                        Toast.makeText(getApplicationContext(), R.string.error_tts_init, Toast.LENGTH_LONG).show();
-                    }
-                });
-                */
-            }
-        });
-        super.onCreate();
-    }
+					@Override
+					public void onError(String utteranceId) {
+						Log.w(TAG, getString(R.string.error_tts_init));
+						Toast.makeText(getApplicationContext(), R.string.error_tts_init, Toast.LENGTH_LONG).show();
+					}
+				});
+			}
+		});
+		super.onCreate();
+	}
 
 	@Override
 	public void onNotificationPosted(StatusBarNotification sbn) {
