@@ -16,6 +16,7 @@
 
 package com.pilot51.voicenotify;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -23,6 +24,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -47,8 +49,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Service extends NotificationListenerService {
 	private static final String TAG = Service.class.getSimpleName();
-	private final Map<String, String> lastMsg = new HashMap<>();
-	private final Map<String, Long> lastMsgTime = new HashMap<>();
+	private final Map<App, String> lastMsg = new HashMap<>();
+	private final Map<App, Long> lastMsgTime = new HashMap<>();
 	private TextToSpeech mTts;
 	private boolean shouldRequestFocus;
 	private AudioManager audioMan;
@@ -116,31 +118,52 @@ public class Service extends NotificationListenerService {
 	@Override
 	public void onNotificationPosted(StatusBarNotification sbn) {
 		Notification notification = sbn.getNotification();
-		long newMsgTime = System.currentTimeMillis();
-		StringBuilder notifyMsg = new StringBuilder();
-		if (!TextUtils.isEmpty(notification.tickerText)) {
-			notifyMsg.append(notification.tickerText);
-		}
-		final String ttsStringPref = Common.getPrefs(this).getString(getString(R.string.key_ttsString), null);
+		long msgTime = System.currentTimeMillis();
+		String ticker = notification.tickerText != null ? notification.tickerText.toString() : null;
+		// Suppressing lint because documentation says extras added in API 19 when actually added in API 18.
+		// See reported issue: https://issuetracker.google.com/issues/69396548
+		@SuppressLint("InlinedApi") Bundle extras = notification.extras;
+		@SuppressLint("InlinedApi") String subtext = extras.getString(Notification.EXTRA_SUB_TEXT);
+		@SuppressLint("InlinedApi") String contentTitle = extras.getString(Notification.EXTRA_TITLE);
+		@SuppressLint("InlinedApi") String contentText = extras.getString(Notification.EXTRA_TEXT);
+		@SuppressLint("InlinedApi") String contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT);
+		final String ttsStringPref = Common.getPrefs(this).getString(getString(R.string.key_ttsString), "");
 		App app = AppList.findOrAddApp(sbn.getPackageName(), this);
-		NotifyList.addNotification(app, notifyMsg.toString());
-		String newMsg;
+		String ttsUnformattedMsg = ttsStringPref
+				.replace("%a", "%1$s") // App Label
+				.replace("%t", "%2$s") // Ticker
+				.replace("%s", "%3$s") // Subtext
+				.replace("%c", "%4$s") // Content Title
+				.replace("%m", "%5$s") // Content Text
+				.replace("%i", "%6$s"); // Content Info Text
+		String ttsMsg = null;
 		try {
-			if (TextUtils.isEmpty(notification.tickerText)) {
-				newMsg = getString(R.string.notification_from, app.getLabel());
-			} else {
-				newMsg = String.format(ttsStringPref.replace("%t", "%1$s").replace("%m", "%2$s"),
-						app.getLabel(), notifyMsg.toString().replaceAll("[|\\[\\]{}*<>]+", " "));
-			}
+			ttsMsg = String.format(ttsUnformattedMsg,
+					app == null ? "" : app.getLabel(),
+					ticker == null ? "" : ticker.replaceAll("[|\\[\\]{}*<>]+", " "),
+					subtext == null ? "" : subtext,
+					contentTitle == null ? "" : contentTitle,
+					contentText == null ? "" : contentText,
+					contentInfoText == null ? "" : contentInfoText);
 		} catch(IllegalFormatException e) {
 			Log.w(TAG, "Error formatting custom TTS string!");
 			e.printStackTrace();
-			newMsg = ttsStringPref;
 		}
+		if (app != null && (ttsMsg == null || ttsMsg.equals(app.getLabel()))) {
+			ttsMsg = getString(R.string.notification_from, app.getLabel());
+		}
+		StringBuilder logBuilder = new StringBuilder();
+		for (String s : new String[] {ticker, subtext, contentTitle, contentText, contentInfoText}) {
+			if (!TextUtils.isEmpty(s)) {
+				if (logBuilder.length() > 0) logBuilder.append("\n");
+				logBuilder.append(s);
+			}
+		}
+		NotifyList.addNotification(app, logBuilder.toString());
 		final String[] ignoreStrings = Common.getPrefs(this).getString(getString(R.string.key_ignore_strings), "").toLowerCase().split("\n");
 		boolean stringIgnored = false;
 		for (String s : ignoreStrings) {
-			if (s.length() != 0 && notifyMsg.toString().toLowerCase().contains(s)) {
+			if (s.length() != 0 && ttsMsg != null && ttsMsg.toLowerCase().contains(s)) {
 				stringIgnored = true;
 				break;
 			}
@@ -148,43 +171,28 @@ public class Service extends NotificationListenerService {
 		if (isSuspended) {
 			ignoreReasons.add(getString(R.string.reason_suspended));
 		}
-		if (!app.getEnabled()) {
+		if (app != null && !app.getEnabled()) {
 			ignoreReasons.add(getString(R.string.reason_app));
 		}
 		if (stringIgnored) {
 			ignoreReasons.add(getString(R.string.reason_string));
 		}
-		if (TextUtils.isEmpty(notification.tickerText)
+		if (TextUtils.isEmpty(ttsMsg)
 				&& Common.getPrefs(this).getBoolean(getString(R.string.key_ignore_empty), false)) {
 			ignoreReasons.add(getString(R.string.reason_empty_msg));
 		}
-		int ignoreRepeat;
-		try {
-			ignoreRepeat = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_ignore_repeat), null));
-		} catch (NumberFormatException e) {
-			ignoreRepeat = -1;
-		}
-		if (lastMsg.containsKey(app.getLabel())) {
-			if (lastMsg.get(app.getLabel()).equals(newMsg) && (ignoreRepeat == -1 || newMsgTime - lastMsgTime.get(app.getLabel()) < ignoreRepeat * 1000)) {
+		int ignoreRepeat = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_ignore_repeat), "-1"));
+		if (lastMsg.containsKey(app)) {
+			if (lastMsg.get(app).equals(ttsMsg) && (ignoreRepeat == -1 || msgTime - lastMsgTime.get(app) < ignoreRepeat * 1000)) {
 				ignoreReasons.add(MessageFormat.format(getString(R.string.reason_identical), ignoreRepeat));
 			}
 		}
 		if (ignoreReasons.isEmpty()) {
-			int delay = 0;
-			try {
-				delay = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_ttsDelay), null));
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
+			int delay = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_ttsDelay), "0"));
 			if (!isScreenOn()) {
-				int interval;
-				try {
-					interval = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_tts_repeat), "0"));
-				} catch (NumberFormatException e) {
-					interval = 0;
-				}
+				int interval = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_tts_repeat), "0"));
 				if (interval > 0) {
-					repeatList.add(newMsg);
+					repeatList.add(ttsMsg);
 					if (repeater == null) {
 						repeater = new RepeatTimer(interval);
 					}
@@ -195,10 +203,10 @@ public class Service extends NotificationListenerService {
 			}
 			int maxLength = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_max_length), "0"));
 			final String msg;
-			if (maxLength > 0) {
-				msg = newMsg.substring(0, Math.min(maxLength, newMsg.length()));
+			if (ttsMsg != null && maxLength > 0) {
+				msg = ttsMsg.substring(0, Math.min(maxLength, ttsMsg.length()));
 			} else {
-				msg = newMsg;
+				msg = ttsMsg;
 			}
 			new Timer().schedule(new TimerTask() {
 				@Override
@@ -211,11 +219,11 @@ public class Service extends NotificationListenerService {
 					});
 				}
 			}, delay * 1000L); // A delay of 0 works fine, and means that all speak calls anywhere are running in their own thread and not blocking.
-			lastMsg.put(app.getLabel(),newMsg);
-			lastMsgTime.put(app.getLabel(),newMsgTime);
+			lastMsg.put(app, ttsMsg);
+			lastMsgTime.put(app, msgTime);
 		} else {
 			String reasons = ignoreReasons.toString().replaceAll("[\\[\\]]", "");
-			Log.i(TAG, "Notification from " + app.getLabel() + " ignored for reason(s): " + reasons);
+			Log.i(TAG, "Notification from " + (app != null ? app.getLabel() : null) + " ignored for reason(s): " + reasons);
 			NotifyList.setLastIgnore(reasons, true);
 			ignoreReasons.clear();
 		}
