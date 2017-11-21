@@ -130,12 +130,12 @@ public class Service extends NotificationListenerService {
 		final String ttsStringPref = Common.getPrefs(this).getString(getString(R.string.key_ttsString), "");
 		App app = AppList.findOrAddApp(sbn.getPackageName(), this);
 		String ttsUnformattedMsg = ttsStringPref
-				.replace("%a", "%1$s") // App Label
-				.replace("%t", "%2$s") // Ticker
-				.replace("%s", "%3$s") // Subtext
-				.replace("%c", "%4$s") // Content Title
-				.replace("%m", "%5$s") // Content Text
-				.replace("%i", "%6$s"); // Content Info Text
+				.replace("#a", "%1$s") // App Label
+				.replace("#t", "%2$s") // Ticker
+				.replace("#s", "%3$s") // Subtext
+				.replace("#c", "%4$s") // Content Title
+				.replace("#m", "%5$s") // Content Text
+				.replace("#i", "%6$s"); // Content Info Text
 		String ttsMsg = null;
 		try {
 			ttsMsg = String.format(ttsUnformattedMsg,

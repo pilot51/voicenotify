@@ -36,6 +36,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
@@ -96,6 +97,11 @@ public class MainActivity extends PreferenceActivity {
 			} else {
 				pTTS.setEnabled(false);
 				pTTS.setSummary(R.string.tts_settings_summary_fail);
+			}
+			EditTextPreference pTtsString = (EditTextPreference)findPreference(getString(R.string.key_ttsString));
+			if (pTtsString.getText().contains("%")) {
+				Toast.makeText(getActivity(), R.string.tts_message_reset_default, Toast.LENGTH_LONG).show();
+				pTtsString.setText(getString(R.string.ttsString_default_value));
 			}
 		}
 		

@@ -31,7 +31,7 @@
 	<string name="tts_settings_summary_fail">Unable to find TTS settings! If it exists on your device (it should), please contact the developer.</string>
 	<string name="tts_message">TTS Message</string>
 	<string name="tts_message_summary">Customize how Text-To-Speech says notifications.</string>
-	<string name="tts_message_dialog">%a = App title\n%t = Ticker\n%s = Subtext\n%c = Content title\n%m = Content message\n%i = Content info\n\nDefault:\n%a. %c. %m.</string>
+	<string name="tts_message_dialog">#a = App title\n#t = Ticker\n#s = Subtext\n#c = Content title\n#m = Content message\n#i = Content info\n\nDefault:\n#a. #c. #m.</string>
 	<string name="tts_stream">TTS Audio Stream</string>
 	<string name="tts_stream_summary">Choose the audio stream that Text-To-Speech plays through.</string>
 	<string name="tts_delay">TTS Delay</string>
@@ -96,11 +96,11 @@
 	<string name="status_summary_notification_access_disabled">Open the Android notification access settings to enable VN</string>
 	<string name="status_summary_suspended">Select to activate VN.</string>
 	<string name="notification_channel_desc">Used for test notification</string>
-	<string name="test_ticker">Test Ticker</string>
-	<string name="test_content_title">Test Content Title</string>
-	<string name="test_content_text">Test Content Text</string>
-	<string name="test_subtext">Test Subtext</string>
-	<string name="test_content_info">Test Content Info</string>
+	<string name="test_ticker">This is the ticker message</string>
+	<string name="test_subtext">The Subtext</string>
+	<string name="test_content_title">Content Title</string>
+	<string name="test_content_text">This is the content message.</string>
+	<string name="test_content_info">Content Info</string>
 	<string name="donate">Donate</string>
 	<string-array name="support_items">
 		<item>@string/donate</item>
@@ -119,6 +119,7 @@
 	<string name="donate_wallet_launch_web">Open Wallet Website</string>
 	<string name="error_market">Error: Unable to find Google Play Store installed.</string>
 	<string name="error_email">Error: Unable to find an installed email app.</string>
+	<string name="tts_message_reset_default">TTS Message setting updated to new default value</string>
 	
 	<!-- Service.java -->
 	<string name="notification_from">Notification from %s.</string>

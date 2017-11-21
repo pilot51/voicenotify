@@ -29,7 +29,7 @@
 		android:title="@string/tts_message"
 		android:summary="@string/tts_message_summary"
 		android:dialogMessage="@string/tts_message_dialog"
-		android:defaultValue="%a. %ct. %cx." />
+		android:defaultValue="@string/ttsString_default_value" />
 	<ListPreference
 		android:key="@string/key_ttsStream"
 		android:title="@string/tts_stream"

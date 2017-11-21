@@ -14,6 +14,8 @@
 		<item>4</item>
 	</string-array>
 	
+	<string name="ttsString_default_value">#a. #c. #m.</string>
+	
 	<!-- Preference keys -->
 	<string name="key_status">status</string>
 	<string name="key_appList">appList</string>
