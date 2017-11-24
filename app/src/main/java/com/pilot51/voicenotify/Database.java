@@ -18,29 +18,17 @@ package com.pilot51.voicenotify;
 
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
-import android.util.Log;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 class Database extends SQLiteOpenHelper {
-	private static final String TAG = Database.class.getSimpleName();
-	private final Context context;
 	private static Database database;
 	private static final int DB_VERSION = 1;
 	private static final String
-		OLD_FILE = "ignored_apps",
 		DB_NAME = "apps.db",
 		TABLE_NAME = "apps",
 		COLUMN_PACKAGE = "package",
@@ -52,63 +40,15 @@ class Database extends SQLiteOpenHelper {
 	
 	private Database(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
-		this.context = context.getApplicationContext();
-		try {
-			if (!context.getDatabasePath(DB_NAME).exists()
-					&& new File(context.getFilesDir().toString() + File.separatorChar + OLD_FILE).exists()) {
-				upgradeOldIgnores();
-			}
-		} catch (Exception e) {
-			Log.w(TAG, "Error checking for old ignores to be transferred to database.");
-			e.printStackTrace();
-		}
 	}
 	
 	/**
-	 * Initializes database if not already initialized.
+	 * Initializes database object if not already initialized.
 	 */
 	static void init(Context context) {
 		if (database == null) {
 			database = new Database(context);
 		}
-	}
-	
-	/** Copies ignores from old file to database and deletes old file. */
-	@SuppressWarnings("unchecked")
-	private void upgradeOldIgnores() {
-		ArrayList<String> oldList = new ArrayList<>();
-		FileInputStream file = null;
-		try {
-			file = context.openFileInput(OLD_FILE);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-		try {
-			ObjectInputStream in = new ObjectInputStream(file);
-			try {
-				oldList = (ArrayList<String>)in.readObject();
-			} catch (ClassNotFoundException e) {
-				Log.e(TAG, "Error: Failed to read ignored_apps - Data appears corrupt");
-				e.printStackTrace();
-			}
-			in.close();
-		} catch (IOException e) {
-			Log.e(TAG, "Error: Failed to read ignored_apps");
-			e.printStackTrace();
-		}
-		ArrayList<App> newList = new ArrayList<>();
-		PackageManager packMan = context.getPackageManager();
-		ApplicationInfo appInfo;
-		for (String s : oldList) {
-			try {
-				appInfo = packMan.getApplicationInfo(s, PackageManager.GET_UNINSTALLED_PACKAGES);
-				newList.add(new App(appInfo.packageName, String.valueOf(appInfo.loadLabel(packMan)), false));
-			} catch (NameNotFoundException e) {
-				e.printStackTrace();
-			}
-		}
-		setApps(newList);
-		context.deleteFile(OLD_FILE);
 	}
 	
 	/** @return A new ArrayList containing all apps from the database. */

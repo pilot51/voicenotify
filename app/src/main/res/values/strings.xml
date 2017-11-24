@@ -26,22 +26,28 @@
 	<string name="service_desc">Reads status bar notifications with Text-To-Speech.</string>
 	
 	<!-- xml/preferences.xml -->
+	<string name="app_list">App List</string>
+	<string name="app_list_summary">List installed apps which can be ignored</string>
+	<string name="tts">Text-To-Speech</string>
+	<string name="tts_summary">Configure Text-To-Speech behavior</string>
 	<string name="tts_settings">TTS Settings</string>
-	<string name="tts_settings_summary">Open the Android Text-To-Speech settings.</string>
+	<string name="tts_settings_summary">Open the Android Text-To-Speech settings</string>
 	<string name="tts_settings_summary_fail">Unable to find TTS settings! If it exists on your device (it should), please contact the developer.</string>
 	<string name="tts_message">TTS Message</string>
-	<string name="tts_message_summary">Customize how Text-To-Speech says notifications.</string>
+	<string name="tts_message_summary">Customize how Text-To-Speech says notifications</string>
 	<string name="tts_message_dialog">#a = App title\n#t = Ticker\n#s = Subtext\n#c = Content title\n#m = Content message\n#i = Content info\n\nDefault:\n#a. #c. #m.</string>
 	<string name="tts_stream">TTS Audio Stream</string>
-	<string name="tts_stream_summary">Choose the audio stream that Text-To-Speech plays through.</string>
+	<string name="tts_stream_summary">Choose the audio stream that Text-To-Speech plays through</string>
 	<string name="tts_delay">TTS Delay</string>
-	<string name="tts_delay_summary">Delay TTS a set number of seconds after notification.</string>
+	<string name="tts_delay_summary">Delay TTS a set number of seconds after notification</string>
 	<string name="tts_delay_dialog_msg">Number of seconds to wait after notification before speaking.</string>
 	<string name="tts_repeat">TTS Repeat</string>
-	<string name="tts_repeat_summary">Continually repeat notifications over TTS until screen turns on.</string>
+	<string name="tts_repeat_summary">Continually repeat notifications over TTS until screen turns on</string>
 	<string name="tts_repeat_dialog_msg">Notifications are repeated at the defined interval until the screen is turned on. Notifications created while the screen is on are not repeated.\n\nValue is in minutes. Blank or 0 to disable.</string>
+	<string name="audio_focus">Pause/dim media</string>
+	<string name="audio_focus_summary">Request other media to pause/dim when speaking</string>
 	<string name="shake_to_silence">Shake-To-Silence</string>
-	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence.</string>
+	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence</string>
 	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: 100\nBlank to disable.</string>
 	<string-array name="stream_name">
 		<item>Media</item>
@@ -51,13 +57,19 @@
 		<item>Alarm</item>
 	</string-array>
 	<string name="ignore_strings">Ignore Text</string>
-	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message.</string>
-	<string name="ignore_empty">Ignore Empty</string>
-	<string name="ignore_empty_summary_on">Notifications without a message will not be spoken.</string>
-	<string name="ignore_empty_summary_off">Notifications without a message will be spoken as \"Notification from [app name].\"</string>
+	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message</string>
 	<string name="ignore_strings_dialog_msg">Separate individual entries with a new line.</string>
+	<string name="ignore_empty">Ignore Empty</string>
+	<string name="ignore_empty_summary_on">Notifications without a message will not be spoken</string>
+	<string name="ignore_empty_summary_off">Notifications without a message will be spoken as \"Notification from [app name].\"</string>
+	<string name="ignore_repeat">Ignore Repeats</string>
+	<string name="ignore_repeat_summary">Ignore subsequent identical notifications within a set time</string>
+	<string name="ignore_repeat_dialog_msg">Set number of seconds that must pass since last notification before a repeat can be spoken.\nIgnored repeats reset the count and different notifications clear it.\nBlank = infinite.</string>
+	<string name="max_length">Maximum Message</string>
+	<string name="max_length_summary">Maximum message length to speak. Larger messages will be truncated.</string>
+	<string name="max_length_dialog_msg">Maximum message length to speak\nLarger messages will be truncated.</string>
 	<string name="device_state">Device States</string>
-	<string name="device_state_summary">Select whether to speak during certain device states.</string>
+	<string name="device_state_summary">Select whether to speak during certain device states</string>
 	<string name="device_state_dialog_title">Speak during these device states</string>
 	<string-array name="device_states">
 		<item>Screen Off</item>
@@ -66,28 +78,18 @@
 		<item>Headset On</item>
 		<item>Silent/Vibrate</item>
 	</string-array>
-	<string name="ignore_repeat">Ignore Repeats</string>
-	<string name="ignore_repeat_summary">Ignore subsequent identical notifications within a set time.</string>
-	<string name="ignore_repeat_dialog_msg">Set number of seconds that must pass since last notification before a repeat can be spoken.\nIgnored repeats reset the count and different notifications clear it.\nBlank = infinite.</string>
-	<string name="max_length">Maximum Message"</string>
-	<string name="max_length_summary">Maximum message length to speak, larger messages will be truncated.</string>
-	<string name="max_length_dialog_msg">Maximum message length to speak, larger messages will be truncated.</string>
-	<string name="app_list">App List</string>
-	<string name="app_list_summary">List installed apps which can be ignored.</string>
 	<string name="quiet_start">Quiet Time Start</string>
 	<string name="quiet_start_summary">Don\'t speak after this time.\nLeave the same as end to disable.</string>
 	<string name="quiet_end">Quiet Time End</string>
 	<string name="quiet_end_summary">Don\'t speak before this time.\nLeave the same as start to disable.</string>
-	<string name="test_summary">Post a notification (delayed 5 seconds) to test current settings.</string>
+	<string name="test_summary">Post a notification (delayed 5 seconds) to test current settings</string>
 	<string name="test_ignored">Voice Notify is ignored in App List.\nTest will run, but notification will not be spoken.</string>
-	<string name="support_summary">Donate, rate/comment, translations, source code, or contact the developer.</string>
-	<string name="audio_focus">Pause/dim media</string>
-	<string name="audio_focus_summary">Request other media to pause/dim when speaking</string>
+	<string name="notify_log_summary">List last 20 notifications.\nDisplays time, app name, message, and ignore reasons.</string>
+	<string name="support_summary">Donate, rate/comment, translations, source code, or contact the developer</string>
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Notification Log</string>
-	<string name="notify_log_summary">List last 20 notifications. Displays time, app name, message, and ignore reasons.</string>
 	<string name="support">Support Voice Notify</string>
 	
 	<!-- MainActivity.java -->

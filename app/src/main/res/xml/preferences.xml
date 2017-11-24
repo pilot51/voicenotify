@@ -20,37 +20,41 @@
 		android:key="@string/key_appList"
 		android:title="@string/app_list"
 		android:summary="@string/app_list_summary" />
-	<Preference
-		android:key="@string/key_ttsSettings"
-		android:title="@string/tts_settings"
-		android:summary="@string/tts_settings_summary" />
-	<EditTextPreference
-		android:key="@string/key_ttsString"
-		android:title="@string/tts_message"
-		android:summary="@string/tts_message_summary"
-		android:dialogMessage="@string/tts_message_dialog"
-		android:defaultValue="@string/ttsString_default_value" />
-	<ListPreference
-		android:key="@string/key_ttsStream"
-		android:title="@string/tts_stream"
-		android:summary="@string/tts_stream_summary"
-		android:entries="@array/stream_name"
-		android:entryValues="@array/stream_value"
-		android:defaultValue="3" />
-	<EditTextPreference
-		android:key="@string/key_ttsDelay"
-		android:title="@string/tts_delay"
-		android:summary="@string/tts_delay_summary"
-		android:dialogMessage="@string/tts_delay_dialog_msg"
-		android:digits="0123456789"
-		android:inputType="number" />
-	<EditTextPreference
-		android:key="@string/key_tts_repeat"
-		android:title="@string/tts_repeat"
-		android:summary="@string/tts_repeat_summary"
-		android:dialogMessage="@string/tts_repeat_dialog_msg"
-		android:digits="0123456789"
-		android:inputType="number" />
+	<PreferenceScreen
+		android:title="@string/tts"
+		android:summary="@string/tts_summary">
+		<Preference
+			android:key="@string/key_ttsSettings"
+			android:title="@string/tts_settings"
+			android:summary="@string/tts_settings_summary" />
+		<EditTextPreference
+			android:key="@string/key_ttsString"
+			android:title="@string/tts_message"
+			android:summary="@string/tts_message_summary"
+			android:dialogMessage="@string/tts_message_dialog"
+			android:defaultValue="@string/ttsString_default_value" />
+		<ListPreference
+			android:key="@string/key_ttsStream"
+			android:title="@string/tts_stream"
+			android:summary="@string/tts_stream_summary"
+			android:entries="@array/stream_name"
+			android:entryValues="@array/stream_value"
+			android:defaultValue="3" />
+		<EditTextPreference
+			android:key="@string/key_ttsDelay"
+			android:title="@string/tts_delay"
+			android:summary="@string/tts_delay_summary"
+			android:dialogMessage="@string/tts_delay_dialog_msg"
+			android:digits="0123456789"
+			android:inputType="number" />
+		<EditTextPreference
+			android:key="@string/key_tts_repeat"
+			android:title="@string/tts_repeat"
+			android:summary="@string/tts_repeat_summary"
+			android:dialogMessage="@string/tts_repeat_dialog_msg"
+			android:digits="0123456789"
+			android:inputType="number" />
+	</PreferenceScreen>
 	<CheckBoxPreference
 		android:key="@string/key_audio_focus"
 		android:title="@string/audio_focus"
@@ -85,9 +89,9 @@
 		android:defaultValue="10" />
 	<EditTextPreference
 		android:key="@string/key_max_length"
-		android:title="Maximum Message"
-		android:summary="Maximum message length to speak, larger messages will be truncated."
-		android:dialogMessage="Maximum message length to speak, larger messages will be truncated."
+		android:title="@string/max_length"
+		android:summary="@string/max_length_summary"
+		android:dialogMessage="@string/max_length_dialog_msg"
 		android:digits="0123456789"
 		android:inputType="number"
 		android:defaultValue="100" />
