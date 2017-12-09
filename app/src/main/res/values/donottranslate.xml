@@ -21,6 +21,7 @@
 	<string name="key_appList">appList</string>
 	<string name="key_ttsSettings">ttsSettings</string>
 	<string name="key_ttsString">ttsString</string>
+	<string name="key_ttsTextReplace">ttsTextReplace</string>
 	<string name="key_ttsStream">ttsStream</string>
 	<string name="key_ttsDelay">ttsDelay</string>
 	<string name="key_tts_repeat">tts_repeat</string>

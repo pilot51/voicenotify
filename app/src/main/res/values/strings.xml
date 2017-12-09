@@ -22,9 +22,6 @@
 	<string name="service_running">VN service is running</string>
 	<string name="service_suspended">VN service is suspended</string>
 	
-	<!-- xml/service_config.xml -->
-	<string name="service_desc">Reads status bar notifications with Text-To-Speech.</string>
-	
 	<!-- xml/preferences.xml -->
 	<string name="app_list">App List</string>
 	<string name="app_list_summary">List installed apps which can be ignored</string>
@@ -36,6 +33,9 @@
 	<string name="tts_message">TTS Message</string>
 	<string name="tts_message_summary">Customize how Text-To-Speech says notifications</string>
 	<string name="tts_message_dialog">#a = App title\n#t = Ticker\n#s = Subtext\n#c = Content title\n#m = Content message\n#i = Content info\n\nDefault:\n#a. #c. #m.</string>
+	<string name="tts_text_replace">TTS Text Replacement</string>
+	<string name="tts_text_replace_summary">Customize how Text-To-Speech speaks</string>
+	<string name="tts_text_replace_dialog">Substitute text to be spoken, allowing you to customize how Text-To-Speech pronounces words or replace text for any other reason.\n\nText to replace is case insensitive.</string>
 	<string name="tts_stream">TTS Audio Stream</string>
 	<string name="tts_stream_summary">Choose the audio stream that Text-To-Speech plays through</string>
 	<string name="tts_delay">TTS Delay</string>
@@ -86,6 +86,13 @@
 	<string name="test_ignored">Voice Notify is ignored in App List.\nTest will run, but notification will not be spoken.</string>
 	<string name="notify_log_summary">List last 20 notifications.\nDisplays time, app name, message, and ignore reasons.</string>
 	<string name="support_summary">Donate, rate/comment, translations, source code, or contact the developer</string>
+	
+	<!-- TextReplacePreference.java -->
+	<string name="text_replace_error_duplicate">Duplicate! Will not be saved.</string>
+	
+	<!-- text_replace_row.xml -->
+	<string name="text_to_replace">Text to replace</string>
+	<string name="replacement_text">Replacement text</string>
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Test</string>

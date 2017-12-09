@@ -23,11 +23,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
+import android.preference.PreferenceManager;
 import android.service.notification.NotificationListenerService;
 import android.service.notification.StatusBarNotification;
 import android.speech.tts.TextToSpeech;
@@ -35,6 +37,7 @@ import android.speech.tts.UtteranceProgressListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.Toast;
 
 import java.text.MessageFormat;
@@ -42,13 +45,16 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.IllegalFormatException;
+import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.regex.Pattern;
 
 public class Service extends NotificationListenerService {
 	private static final String TAG = Service.class.getSimpleName();
+	private SharedPreferences prefs;
 	private final Map<App, String> lastMsg = new HashMap<>();
 	private final Map<App, Long> lastMsgTime = new HashMap<>();
 	private TextToSpeech mTts;
@@ -80,6 +86,7 @@ public class Service extends NotificationListenerService {
 
 	@Override
 	public void onCreate() {
+		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		mTts = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
 			@Override
 			public void onInit(int status) {
@@ -127,7 +134,7 @@ public class Service extends NotificationListenerService {
 		@SuppressLint("InlinedApi") String contentTitle = extras.getString(Notification.EXTRA_TITLE);
 		@SuppressLint("InlinedApi") String contentText = extras.getString(Notification.EXTRA_TEXT);
 		@SuppressLint("InlinedApi") String contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT);
-		final String ttsStringPref = Common.getPrefs(this).getString(getString(R.string.key_ttsString), "");
+		final String ttsStringPref = prefs.getString(getString(R.string.key_ttsString), "");
 		App app = AppList.findOrAddApp(sbn.getPackageName(), this);
 		String ttsUnformattedMsg = ttsStringPref
 				.replace("#a", "%1$s") // App Label
@@ -152,6 +159,13 @@ public class Service extends NotificationListenerService {
 		if (app != null && (ttsMsg == null || ttsMsg.equals(app.getLabel()))) {
 			ttsMsg = getString(R.string.notification_from, app.getLabel());
 		}
+		if (!TextUtils.isEmpty(ttsMsg)) {
+			String ttsTextReplace = prefs.getString(getString(R.string.key_ttsTextReplace), null);
+			List<Pair<String, String>> textReplaceList = TextReplacePreference.convertStringToList(ttsTextReplace);
+			for (Pair<String, String> pair : textReplaceList) {
+				ttsMsg = ttsMsg.replaceAll("(?i)" + Pattern.quote(pair.first), pair.second);
+			}
+		}
 		StringBuilder logBuilder = new StringBuilder();
 		for (String s : new String[] {ticker, subtext, contentTitle, contentText, contentInfoText}) {
 			if (!TextUtils.isEmpty(s)) {
@@ -160,7 +174,7 @@ public class Service extends NotificationListenerService {
 			}
 		}
 		NotifyList.addNotification(app, logBuilder.toString());
-		final String[] ignoreStrings = Common.getPrefs(this).getString(getString(R.string.key_ignore_strings), "").toLowerCase().split("\n");
+		final String[] ignoreStrings = prefs.getString(getString(R.string.key_ignore_strings), "").toLowerCase().split("\n");
 		boolean stringIgnored = false;
 		for (String s : ignoreStrings) {
 			if (s.length() != 0 && ttsMsg != null && ttsMsg.toLowerCase().contains(s)) {
@@ -178,19 +192,19 @@ public class Service extends NotificationListenerService {
 			ignoreReasons.add(getString(R.string.reason_string));
 		}
 		if (TextUtils.isEmpty(ttsMsg)
-				&& Common.getPrefs(this).getBoolean(getString(R.string.key_ignore_empty), false)) {
+				&& prefs.getBoolean(getString(R.string.key_ignore_empty), false)) {
 			ignoreReasons.add(getString(R.string.reason_empty_msg));
 		}
-		int ignoreRepeat = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_ignore_repeat), "-1"));
+		int ignoreRepeat = Integer.parseInt(prefs.getString(getString(R.string.key_ignore_repeat), "-1"));
 		if (lastMsg.containsKey(app)) {
 			if (lastMsg.get(app).equals(ttsMsg) && (ignoreRepeat == -1 || msgTime - lastMsgTime.get(app) < ignoreRepeat * 1000)) {
 				ignoreReasons.add(MessageFormat.format(getString(R.string.reason_identical), ignoreRepeat));
 			}
 		}
 		if (ignoreReasons.isEmpty()) {
-			int delay = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_ttsDelay), "0"));
+			int delay = Integer.parseInt(prefs.getString(getString(R.string.key_ttsDelay), "0"));
 			if (!isScreenOn()) {
-				int interval = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_tts_repeat), "0"));
+				int interval = Integer.parseInt(prefs.getString(getString(R.string.key_tts_repeat), "0"));
 				if (interval > 0) {
 					repeatList.add(ttsMsg);
 					if (repeater == null) {
@@ -201,7 +215,7 @@ public class Service extends NotificationListenerService {
 			if (delay < 0) { // Just in case we get a weird value, don't want to try to make the Timer wait for negative time
 				delay = 0;
 			}
-			int maxLength = Integer.parseInt(Common.getPrefs(this).getString(getString(R.string.key_max_length), "0"));
+			int maxLength = Integer.parseInt(prefs.getString(getString(R.string.key_max_length), "0"));
 			final String msg;
 			if (ttsMsg != null && maxLength > 0) {
 				msg = ttsMsg.substring(0, Math.min(maxLength, ttsMsg.length()));
@@ -274,30 +288,30 @@ public class Service extends NotificationListenerService {
 	private boolean ignore(boolean isNew) {
 		Calendar c = Calendar.getInstance();
 		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE),
-			quietStart = Common.getPrefs(this).getInt(getString(R.string.key_quietStart), 0),
-			quietEnd = Common.getPrefs(this).getInt(getString(R.string.key_quietEnd), 0);
+			quietStart = prefs.getInt(getString(R.string.key_quietStart), 0),
+			quietEnd = prefs.getInt(getString(R.string.key_quietEnd), 0);
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
 				|| (quietEnd < quietStart && (quietStart <= calTime || calTime < quietEnd))) {
 			ignoreReasons.add(getString(R.string.reason_quiet));
 		}
 		if ((audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
 				|| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
-				&& !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SILENT_ON, false)) {
+				&& !prefs.getBoolean(Common.KEY_SPEAK_SILENT_ON, false)) {
 			ignoreReasons.add(getString(R.string.reason_silent));
 		}
 		if (telephony.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
 			ignoreReasons.add(getString(R.string.reason_call));
 		}
-		if (!isScreenOn() && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true)) {
+		if (!isScreenOn() && !prefs.getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true)) {
 			ignoreReasons.add(getString(R.string.reason_screen_off));
 		}
-		if (isScreenOn() && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_SCREEN_ON, true)) {
+		if (isScreenOn() && !prefs.getBoolean(Common.KEY_SPEAK_SCREEN_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_screen_on));
 		}
-		if (!isHeadsetOn() && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
+		if (!isHeadsetOn() && !prefs.getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_off));
 		}
-		if (isHeadsetOn() && !Common.getPrefs(this).getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
+		if (isHeadsetOn() && !prefs.getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
 			ignoreReasons.add(getString(R.string.reason_headset_on));
 		}
 		if (!ignoreReasons.isEmpty()) {

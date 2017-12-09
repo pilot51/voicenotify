@@ -33,6 +33,11 @@
 			android:summary="@string/tts_message_summary"
 			android:dialogMessage="@string/tts_message_dialog"
 			android:defaultValue="@string/ttsString_default_value" />
+		<com.pilot51.voicenotify.TextReplacePreference
+			android:key="@string/key_ttsTextReplace"
+			android:title="@string/tts_text_replace"
+			android:summary="@string/tts_text_replace_summary"
+			android:dialogMessage="@string/tts_text_replace_dialog" />
 		<ListPreference
 			android:key="@string/key_ttsStream"
 			android:title="@string/tts_stream"
