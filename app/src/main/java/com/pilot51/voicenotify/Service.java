@@ -299,7 +299,7 @@ public class Service extends NotificationListenerService {
 				&& !prefs.getBoolean(Common.KEY_SPEAK_SILENT_ON, false)) {
 			ignoreReasons.add(getString(R.string.reason_silent));
 		}
-		if (telephony.getCallState() != TelephonyManager.CALL_STATE_IDLE) {
+		if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK) {
 			ignoreReasons.add(getString(R.string.reason_call));
 		}
 		if (!isScreenOn() && !prefs.getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true)) {
@@ -361,6 +361,7 @@ public class Service extends NotificationListenerService {
 		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 		filter.addAction(Intent.ACTION_SCREEN_ON);
 		filter.addAction(Intent.ACTION_SCREEN_OFF);
+		filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
 		registerReceiver(stateReceiver, filter);
 		shake = new Shake(this);
 		shake.setOnShakeListener(new Shake.OnShakeListener() {

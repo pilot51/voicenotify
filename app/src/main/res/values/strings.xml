@@ -151,7 +151,7 @@
 	<string name="reason_identical">Identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
 	<string name="reason_quiet">Quiet time</string>
 	<string name="reason_silent">Silent or vibrate mode</string>
-	<string name="reason_call">Active or ringing call</string>
+	<string name="reason_call">Active phone call</string>
 	<string name="reason_screen_off">Screen off</string>
 	<string name="reason_screen_on">Screen on</string>
 	<string name="reason_headset_off">Headset off</string>
