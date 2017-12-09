@@ -192,7 +192,11 @@ public class TextReplacePreference extends DialogPreference {
 	
 	@Override
 	protected Parcelable onSaveInstanceState() {
-		SavedState myState = new SavedState(super.onSaveInstanceState());
+		Parcelable superState = super.onSaveInstanceState();
+		if (getDialog() == null || !getDialog().isShowing()) {
+			return superState;
+		}
+		SavedState myState = new SavedState(superState);
 		adapter.updateFocusedRow();
 		myState.text = convertListToString(adapter.getList());
 		return myState;
