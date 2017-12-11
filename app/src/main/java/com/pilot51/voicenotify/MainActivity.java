@@ -147,35 +147,37 @@ public class MainActivity extends PreferenceActivity {
 				MyDialog.show(getFragmentManager(), MyDialog.ID.QUIET_END);
 				return true;
 			} else if (preference == pTest) {
-				if (!AppList.findOrAddApp(getActivity().getPackageName(), getActivity()).getEnabled()) {
-					Toast.makeText(getActivity(), getString(R.string.test_ignored), Toast.LENGTH_LONG).show();
+				final Context context = getActivity().getApplicationContext();
+				if (!AppList.findOrAddApp(context.getPackageName(), context).getEnabled()) {
+					Toast.makeText(context, getString(R.string.test_ignored), Toast.LENGTH_LONG).show();
 				}
-				final NotificationManager notificationManager = (NotificationManager)getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
+				final NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
 				if (notificationManager != null) {
+					final Intent intent = getActivity().getIntent();
 					new Timer().schedule(new TimerTask() {
 						@Override
 						public void run() {
-							String id = "test";
+							String id = context.getString(R.string.notification_channel_id);
 							if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 								NotificationChannel channel = notificationManager.getNotificationChannel(id);
 								if (channel == null) {
-									channel = new NotificationChannel(id, getString(R.string.test), NotificationManager.IMPORTANCE_LOW);
-									channel.setDescription(getString(R.string.notification_channel_desc));
+									channel = new NotificationChannel(id, context.getString(R.string.test), NotificationManager.IMPORTANCE_LOW);
+									channel.setDescription(context.getString(R.string.notification_channel_desc));
 									notificationManager.createNotificationChannel(channel);
 								}
 							}
-							PendingIntent pi = PendingIntent.getActivity(getActivity(),
-									0, getActivity().getIntent(), PendingIntent.FLAG_UPDATE_CURRENT);
+							PendingIntent pi = PendingIntent.getActivity(context,
+									0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 							NotificationCompat.Builder builder =
-									new NotificationCompat.Builder(getActivity(), id)
+									new NotificationCompat.Builder(context, id)
 											.setAutoCancel(true)
 											.setContentIntent(pi)
 											.setSmallIcon(R.drawable.icon)
-											.setTicker(getString(R.string.test_ticker))
-											.setSubText(getString(R.string.test_subtext))
-											.setContentTitle(getString(R.string.test_content_title))
-											.setContentText(getString(R.string.test_content_text))
-											.setContentInfo(getString(R.string.test_content_info));
+											.setTicker(context.getString(R.string.test_ticker))
+											.setSubText(context.getString(R.string.test_subtext))
+											.setContentTitle(context.getString(R.string.test_content_title))
+											.setContentText(context.getString(R.string.test_content_text))
+											.setContentInfo(context.getString(R.string.test_content_info));
 							notificationManager.notify(0, builder.build());
 						}
 					}, 5000);
