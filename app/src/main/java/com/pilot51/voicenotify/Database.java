@@ -24,6 +24,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 import java.util.ArrayList;
+import java.util.List;
 
 class Database extends SQLiteOpenHelper {
 	private static Database database;
@@ -51,11 +52,11 @@ class Database extends SQLiteOpenHelper {
 		}
 	}
 	
-	/** @return A new ArrayList containing all apps from the database. */
-	static synchronized ArrayList<App> getApps() {
+	/** @return A new List containing all apps from the database. */
+	static synchronized List<App> getApps() {
 		SQLiteDatabase db = database.getReadableDatabase();
 		Cursor cursor = db.query(TABLE_NAME, null, null, null, null, null, COLUMN_LABEL + " COLLATE NOCASE");
-		ArrayList<App> list = new ArrayList<>();
+		List<App> list = new ArrayList<>();
 		while (cursor.moveToNext()) {
 			list.add(new App(
 				cursor.getString(cursor.getColumnIndex(COLUMN_PACKAGE)),
@@ -70,9 +71,10 @@ class Database extends SQLiteOpenHelper {
 	
 	/**
 	 * Clears and sets all apps in database.
-	 * @param list The list of apps to add in the database.
+	 * @param apps The list of apps to add in the database.
 	 */
-	static synchronized void setApps(ArrayList<App> list) {
+	static synchronized void setApps(List<App> apps) {
+		List<App> list = new ArrayList<>(apps);
 		SQLiteDatabase db = database.getWritableDatabase();
 		db.delete(TABLE_NAME, null, null);
 		ContentValues values;

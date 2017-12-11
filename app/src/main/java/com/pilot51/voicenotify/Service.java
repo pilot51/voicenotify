@@ -65,7 +65,7 @@ public class Service extends NotificationListenerService {
 	private RepeatTimer repeater;
 	private Shake shake;
 	private static boolean isInitialized, isSuspended, isScreenOn;
-	private final ArrayList<String> ignoreReasons = new ArrayList<>(),
+	private final List<String> ignoreReasons = new ArrayList<>(),
 	                                repeatList = new ArrayList<>();
     /**
      * this is used to determine if we are the first, middle, or last thing to be spoken at the moment, for enabling/disabling shake and audio focus request
@@ -403,7 +403,7 @@ public class Service extends NotificationListenerService {
 		super.onDestroy();
 	}
 
-	private static final ArrayList<OnStatusChangeListener> statusListeners = new ArrayList<>();
+	private static final List<OnStatusChangeListener> statusListeners = new ArrayList<>();
 	static void registerOnStatusChangeListener(OnStatusChangeListener listener) {
 		statusListeners.add(listener);
 	}

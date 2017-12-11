@@ -42,10 +42,11 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 public class AppList extends ListActivity {
 	private Adapter adapter;
-	private static ArrayList<App> apps;
+	private static List<App> apps;
 	private static boolean defEnable;
 	private static final String KEY_DEFAULT_ENABLE = "defEnable";
 	private static final int IGNORE_TOGGLE = 0, IGNORE_ALL = 1, IGNORE_NONE = 2;
@@ -242,8 +243,8 @@ public class AppList extends ListActivity {
 	}
 	
 	private class Adapter extends BaseAdapter implements Filterable {
-		private final ArrayList<App> baseData = new ArrayList<>();
-		private final ArrayList<App> adapterData = new ArrayList<>();
+		private final List<App> baseData = new ArrayList<>();
+		private final List<App> adapterData = new ArrayList<>();
 		private final LayoutInflater mInflater;
 		private SimpleFilter filter;
 		
@@ -251,7 +252,7 @@ public class AppList extends ListActivity {
 			mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		}
 		
-		private void setData(ArrayList<App> list) {
+		private void setData(List<App> list) {
 			baseData.clear();
 			baseData.addAll(list);
 			refresh();
@@ -304,7 +305,7 @@ public class AppList extends ListActivity {
 					results.count = baseData.size();
 				} else {
 					String prefixString = prefix.toString().toLowerCase();
-					ArrayList<App> newValues = new ArrayList<>();
+					List<App> newValues = new ArrayList<>();
 					for (App app : baseData) {
 						if (app.getLabel().toLowerCase().contains(prefixString)
 								|| app.getPackage().toLowerCase().contains(prefixString)) {
@@ -321,7 +322,7 @@ public class AppList extends ListActivity {
 			@Override
 			protected void publishResults(CharSequence constraint, FilterResults results) {
 				adapterData.clear();
-				adapterData.addAll((ArrayList<App>)results.values);
+				adapterData.addAll((List<App>)results.values);
 				if (results.count > 0) notifyDataSetChanged();
 				else notifyDataSetInvalidated();
 			}

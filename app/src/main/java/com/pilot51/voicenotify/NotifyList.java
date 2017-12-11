@@ -33,10 +33,11 @@ import android.widget.Toast;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 public class NotifyList extends ListView {
 	private final Resources res;
-	private static final ArrayList<NotifyItem> list = new ArrayList<>();
+	private static final List<NotifyItem> list = new ArrayList<>();
 	private static OnListChangeListener listener;
 	private static final int HISTORY_LIMIT = 20;
 	
