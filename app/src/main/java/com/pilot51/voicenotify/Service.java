@@ -195,7 +195,12 @@ public class Service extends NotificationListenerService {
 				&& prefs.getBoolean(getString(R.string.key_ignore_empty), false)) {
 			ignoreReasons.add(getString(R.string.reason_empty_msg));
 		}
-		int ignoreRepeat = Integer.parseInt(prefs.getString(getString(R.string.key_ignore_repeat), "-1"));
+		int ignoreRepeat;
+		try {
+			ignoreRepeat = Integer.parseInt(prefs.getString(getString(R.string.key_ignore_repeat), null));
+		} catch (NumberFormatException e) {
+			ignoreRepeat = -1;
+		}
 		if (lastMsg.containsKey(app)) {
 			if (lastMsg.get(app).equals(ttsMsg) && (ignoreRepeat == -1 || msgTime - lastMsgTime.get(app) < ignoreRepeat * 1000)) {
 				ignoreReasons.add(MessageFormat.format(getString(R.string.reason_identical), ignoreRepeat));
