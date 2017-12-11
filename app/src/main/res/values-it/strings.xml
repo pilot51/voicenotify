@@ -25,8 +25,8 @@
 	<!-- xml/preferences.xml -->
 	<string name="app_list">Elenco App</string>
 	<string name="app_list_summary">Elenco delle app installate per poterle ignorare a piacere.</string>
-	
-	
+	<string name="tts">Sintesi Vocale</string>
+	<string name="tts_summary">Configurazione sintesi vocale</string>
 	<string name="tts_settings">Impostazioni Sintesi Vocale</string>
 	<string name="tts_settings_summary">Apre le impostazioni di Sintesi Vocale di Android.</string>
 	<string name="tts_settings_summary_fail">Impostazioni di sintesi vocale non trovate! Se figurano correttamente nel dispositivo, informa lo sviluppatore.</string>
@@ -34,7 +34,7 @@
 	<string name="tts_message_summary">Personalizza la sintesi vocale delle notifiche.</string>
 	
 	
-	
+	<string name="tts_text_replace_summary">Personalizza la sintesi vocale</string>
 	
 	<string name="tts_stream">Flusso Audio Sintesi Vocale</string>
 	<string name="tts_stream_summary">Scegli attraverso quale flusso audio riprodurre la sintesi vocale.</string>
@@ -65,9 +65,9 @@
 	<string name="ignore_repeat">Ignora Ripetizioni</string>
 	<string name="ignore_repeat_summary">Ignora le notifiche identiche e consecutive per un certo tempo.</string>
 	<string name="ignore_repeat_dialog_msg">Imposta quanti secondi passeranno dall\'ultima notifica prima di annunciare una ripetizione.\nOgni ripetizione ignorata resetterà il conto alla rovescia mentre notifiche differenti lo annulleranno.\n\nVuoto = infinito</string>
-	
-	
-	
+	<string name="max_length">Limite Messaggio</string>
+	<string name="max_length_summary">Lunghezza massima del messaggio da sintetizzare. Messaggi più lunghi verranno troncati.</string>
+	<string name="max_length_dialog_msg">Lunghezza massima del messaggio da sintetizzare.\nMessaggi più lunghi verranno troncati.</string>
 	<string name="device_state">Stati Dispositivo</string>
 	<string name="device_state_summary">Scegli se annunciare durante determinati stati.</string>
 	<string name="device_state_dialog_title">Annuncia con questi stati del dispositivo</string>
@@ -88,11 +88,11 @@
 	<string name="support_summary">Effettua una donazione, valuta o commenta, traduzioni, codice sorgente o contatta lo sviluppatore.</string>
 	
 	<!-- TextReplacePreference.java -->
-	
+	<string name="text_replace_error_duplicate">Duplicato! Non salvato.</string>
 	
 	<!-- text_replace_row.xml -->
-	
-	
+	<string name="text_to_replace">Testo da sostituire</string>
+	<string name="replacement_text">Testo sostitutivo</string>
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Test</string>
@@ -101,11 +101,11 @@
 	
 	<!-- MainActivity.java -->
 	<string name="service_disabled">Il Servizio VN Non E\' Abilitato</string>
-	
-	
+	<string name="status_summary_notification_access_enabled">Apre le impostazioni delle notifiche di Android per disabilitare VN</string>
+	<string name="status_summary_notification_access_disabled">Apre le impostazioni delle notifiche di Android per abilitare VN</string>
 	<string name="status_summary_suspended">Seleziona per attivare VN.</string>
-	
-	
+	<string name="notification_channel_desc">Da usare per test notifiche</string>
+	<string name="test_ticker">Questo è il messaggio del ticker</string>
 	
 	
 	
