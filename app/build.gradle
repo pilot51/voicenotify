@@ -16,26 +16,51 @@
 
 apply plugin: 'com.android.application'
 
+def keystorePropertiesFile = rootProject.file("keystore.properties")
+def keystoreProperties = new Properties()
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+}
+
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.2'
 
     defaultConfig {
         applicationId "com.pilot51.voicenotify"
         minSdkVersion 18
-        targetSdkVersion 26
-        versionName "1.1.0-dev"
-        versionCode 19
+        targetSdkVersion 27
+        versionName "1.1.0"
+        versionCode 20
+    }
+
+    signingConfigs {
+        release {
+            if (!keystoreProperties.isEmpty()) {
+                keyAlias keystoreProperties['keyAlias']
+                keyPassword keystoreProperties['keyPassword']
+                storeFile rootProject.file(keystoreProperties['storeFile'])
+                storePassword keystoreProperties['storePassword']
+            }
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            versionNameSuffix '-debug'
         }
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     dependencies {
-        compile 'com.android.support:support-compat:26.1.0'
+        compile 'com.android.support:support-compat:27.0.2'
     }
 }
