@@ -22,16 +22,20 @@
 	<string name="service_running">Il Servizio VN E\' Avviato</string>
 	<string name="service_suspended">Il Servizio VN E\' Sospeso</string>
 	
-	<!-- xml/service_config.xml -->
-	<string name="service_desc">Leggi le notifiche della status bar con la sintesi vocale.</string>
-	
 	<!-- xml/preferences.xml -->
+	<string name="app_list">Elenco App</string>
+	<string name="app_list_summary">Elenco delle app installate per poterle ignorare a piacere.</string>
+	
+	
 	<string name="tts_settings">Impostazioni Sintesi Vocale</string>
 	<string name="tts_settings_summary">Apre le impostazioni di Sintesi Vocale di Android.</string>
 	<string name="tts_settings_summary_fail">Impostazioni di sintesi vocale non trovate! Se figurano correttamente nel dispositivo, informa lo sviluppatore.</string>
 	<string name="tts_message">Messaggio Sintesi Vocale</string>
 	<string name="tts_message_summary">Personalizza la sintesi vocale delle notifiche.</string>
-	<string name="tts_message_dialog">%t = Titolo/nome app\n%m = Messaggio/contenuto della notifica</string>
+	
+	
+	
+	
 	<string name="tts_stream">Flusso Audio Sintesi Vocale</string>
 	<string name="tts_stream_summary">Scegli attraverso quale flusso audio riprodurre la sintesi vocale.</string>
 	<string name="tts_delay">Ritardo Sintesi Vocale</string>
@@ -40,6 +44,8 @@
 	<string name="tts_repeat">Ripeti Sintesi Vocale</string>
 	<string name="tts_repeat_summary">Continua a ripetere la notifica con la sintesi vocale fino all\'accensione dello schermo.</string>
 	<string name="tts_repeat_dialog_msg">Le notifiche vengono ripetute a intervalli impostati fino all\'accensione dello schermo. Le notifiche ricevute con lo schermo acceso non verranno ripetute.\nValore in minuti, lasciare vuoto o 0 per disattivare.</string>
+	<string name="audio_focus">Metti in pausa/abbassa volume</string>
+	<string name="audio_focus_summary">Abbassa o toglie il volume della traccia in esecuzione durante la notifica</string>
 	<string name="shake_to_silence">Scuoti-Per-Zittire</string>
 	<string name="shake_to_silence_summary">Regola la soglia di sensibilità dello Scuoti-Per-Zittire.</string>
 	<string name="shake_to_silence_dialog_msg">La sensibilità aumenta alzando i valori.\n\nDefault: 100\nLascia vuoto per disabilitare.</string>
@@ -52,10 +58,16 @@
 	</string-array>
 	<string name="ignore_strings">Messaggi Da Ignorare</string>
 	<string name="ignore_strings_summary">Ignora le notifiche che contengono determinate parole nel messaggio</string>
+	<string name="ignore_strings_dialog_msg">Separa le varie immissioni iniziando una nuova riga.</string>
 	<string name="ignore_empty">Ignora Notifiche Nulle</string>
 	<string name="ignore_empty_summary_on">Le notifiche senza un messaggio non veranno annunciate.</string>
 	<string name="ignore_empty_summary_off">Le notifiche senza messaggio verranno annuncite come \"Notifica da [app name].\"</string>
-	<string name="ignore_strings_dialog_msg">Separa le varie immissioni iniziando una nuova riga.</string>
+	<string name="ignore_repeat">Ignora Ripetizioni</string>
+	<string name="ignore_repeat_summary">Ignora le notifiche identiche e consecutive per un certo tempo.</string>
+	<string name="ignore_repeat_dialog_msg">Imposta quanti secondi passeranno dall\'ultima notifica prima di annunciare una ripetizione.\nOgni ripetizione ignorata resetterà il conto alla rovescia mentre notifiche differenti lo annulleranno.\n\nVuoto = infinito</string>
+	
+	
+	
 	<string name="device_state">Stati Dispositivo</string>
 	<string name="device_state_summary">Scegli se annunciare durante determinati stati.</string>
 	<string name="device_state_dialog_title">Annuncia con questi stati del dispositivo</string>
@@ -66,33 +78,41 @@
 		<item>Cuffie Collegate</item>
 		<item>Silenzioso/Vibrazione</item>
 	</string-array>
-	<string name="ignore_repeat">Ignora Ripetizioni</string>
-	<string name="ignore_repeat_summary">Ignora le notifiche identiche e consecutive per un certo tempo.</string>
-	<string name="ignore_repeat_dialog_msg">Imposta quanti secondi passeranno dall\'ultima notifica prima di annunciare una ripetizione.\nOgni ripetizione ignorata resetterà il conto alla rovescia mentre notifiche differenti lo annulleranno.\n\nVuoto = infinito</string>
-	<string name="app_list">Elenco App</string>
-	<string name="app_list_summary">Elenco delle app installate per poterle ignorare a piacere.</string>
 	<string name="quiet_start">Inizio Ora del Silenzio</string>
 	<string name="quiet_start_summary">Non annunciare dopo l\'ora indicata.\nImposta inizio e fine alla stessa ora per disabilitarlo.</string>
 	<string name="quiet_end">Fine Ora del Silenzio</string>
 	<string name="quiet_end_summary">Non annunciare prima dell\'ora indicata.\nImposta inizio e fine alla stessa ora per disabilitarlo.</string>
 	<string name="test_summary">Invia una notifica (con 5 secondi di ritardo) per provare le impostazioni.</string>
 	<string name="test_ignored">Voice Notify è stato ignorato nell\' Elenco App.\nIl test verrà eseguito ma non si sentirà alcun annuncio.</string>
+	<string name="notify_log_summary">Elenco delle ultime 20 notifiche.\nCompleto di ora, nome della app, messaggio e motivi dell\'eventuale ignoro.</string>
 	<string name="support_summary">Effettua una donazione, valuta o commenta, traduzioni, codice sorgente o contatta lo sviluppatore.</string>
-	<string name="audio_focus">Metti in pausa/abbassa volume</string>
-	<string name="audio_focus_summary">Abbassa o toglie il volume della traccia in esecuzione durante la notifica</string>
+	
+	<!-- TextReplacePreference.java -->
+	
+	
+	<!-- text_replace_row.xml -->
+	
+	
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Registro Notifiche</string>
-	<string name="notify_log_summary">Elenco delle ultime 20 notifiche. Completo di ora, nome della app, messaggio e motivi dell\'eventuale ignoro.</string>
 	<string name="support">Sostieni Voice Notify</string>
 	
 	<!-- MainActivity.java -->
 	<string name="service_disabled">Il Servizio VN Non E\' Abilitato</string>
+	
+	
 	<string name="status_summary_suspended">Seleziona per attivare VN.</string>
+	
+	
+	
+	
+	
+	
 	<string name="donate">Fai una donazione</string>
 	<string-array name="support_items">
-		<item>Donazione</item>
+		<item>@string/donate</item>
 		<item>Vota/Commenta</item>
 		<item>Contatta Sviluppatore</item>
 		<item>Traduzioni</item>
@@ -108,6 +128,7 @@
 	<string name="donate_wallet_launch_web">Apri Sito Wallet</string>
 	<string name="error_market">Errore: Impossibile rilevare Google Play Store.</string>
 	<string name="error_email">Errore: non ho trovato un\'app per l\'email installata.</string>
+	
 	
 	<!-- Service.java -->
 	<string name="notification_from">Notifica da %s.</string>
@@ -130,7 +151,7 @@
 	<string name="reason_identical">Messaggio identico entro {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
 	<string name="reason_quiet">Ora del Silenzio</string>
 	<string name="reason_silent">Modalità silenziosa o vibrazione</string>
-	<string name="reason_call">Chiamata attiva o in arrivo</string>
+	
 	<string name="reason_screen_off">Schermo spento</string>
 	<string name="reason_screen_on">Schermo acceso</string>
 	<string name="reason_headset_off">Cuffie non collegate</string>

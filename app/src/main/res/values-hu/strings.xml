@@ -22,16 +22,20 @@
 	
 	
 	
-	<!-- xml/service_config.xml -->
-	<string name="service_desc">A státusz üzenetek felolvasása.</string>
-	
 	<!-- xml/preferences.xml -->
+	<string name="app_list">Program Lista</string>
+	<string name="app_list_summary">Jelöld be melyik program üzeneteit kezeljem.</string>
+	
+	
 	<string name="tts_settings">Szövegfelolvasó Beállítás</string>
 	
 	<string name="tts_settings_summary_fail">Szövefelolvasó nincs telepítve Ha biztos vagy benne, hogy létezik, kérlek vedd fel a kapcsolatot a fejlesztővel.</string>
 	<string name="tts_message">Mit Mondjak?</string>
 	<string name="tts_message_summary">Mit mondjak?</string>
-	<string name="tts_message_dialog">%t = programnév\n%m = üzenet</string>
+	
+	
+	
+	
 	<string name="tts_stream">Szövegfelolvasó Hangkimenet</string>
 	<string name="tts_stream_summary">Melyik hangkimenetet használjam?</string>
 	<string name="tts_delay">Beszéd Késleltetés</string>
@@ -45,34 +49,23 @@
 	
 	
 	
-	<string-array name="stream_name">
-		<item>Média</item>
-		<item>Üzenet</item>
-		<item>Voice</item>
-		<item>Ring</item>
-		<item>Alarm</item>
-	</string-array>
+	
 	<string name="ignore_strings">Szövegek, Amit Nem Mondok.</string>
 	
-	
-	
-	
 	<string name="ignore_strings_dialog_msg">Írj új sorba minden szövegrészt.</string>
-	<string name="device_state">Beszélő Állapotok</string>
-	<string name="device_state_summary">Válaszd ki, hogy mikor kell beszélnem?</string>
-	<string name="device_state_dialog_title">Jelöld be, hogy mikor kell beszélnem.</string>
-	<string-array name="device_states">
-		<item>Screen Off</item>
-		<item>Screen On</item>
-		<item>Headset Off</item>
-		<item>Headset On</item>
-		<item>Néma és rezgő módban</item>
-	</string-array>
+	
+	
+	
 	<string name="ignore_repeat">Ismétlések</string>
 	<string name="ignore_repeat_summary">Add meg, hogy hány másodpercen belül ne ismételjem ugyanazt az eseményt.</string>
 	<string name="ignore_repeat_dialog_msg">Add meg másodpercben, hogy ha ugyanattól a programtól több üzenet érkezik, hány másodpercen túl beszéljek újra.</string>
-	<string name="app_list">Program Lista</string>
-	<string name="app_list_summary">Jelöld be melyik program üzeneteit kezeljem.</string>
+	
+	
+	
+	<string name="device_state">Beszélő Állapotok</string>
+	<string name="device_state_summary">Válaszd ki, hogy mikor kell beszélnem?</string>
+	<string name="device_state_dialog_title">Jelöld be, hogy mikor kell beszélnem.</string>
+	
 	<string name="quiet_start">Néma Időszak Kezdete</string>
 	<string name="quiet_start_summary">Ha egyforma időket adsz meg, akkor a csendes üzemmód kikapcsolódik.</string>
 	<string name="quiet_end">Csendes Időszak Vége</string>
@@ -82,33 +75,39 @@
 	
 	
 	
+	<!-- TextReplacePreference.java -->
+	
+	
+	<!-- text_replace_row.xml -->
+	
+	
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Teszt</string>
 	<string name="notify_log">Üzenet Események</string>
-	
 	<string name="support">Támogatás</string>
 	
 	<!-- MainActivity.java -->
 	
 	
-	<string-array name="support_items">
-		<item>@string/donate</item>
-		<item>Értékelés és megjegyzések</item>
-		<item>Kapcsolat a fejlesztővel</item>
-		<item>Translations</item>
-		<item>Source Code</item>
-	</string-array>
-	<string-array name="donate_services">
-		<item>Google Wallet</item>
-		<item>PayPal</item>
-	</string-array>
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
 	
 	
 	<string name="error_email">Error: Nem találok levelezőprogramot.</string>
+	
 	
 	<!-- Service.java -->
 	

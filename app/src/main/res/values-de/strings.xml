@@ -22,16 +22,20 @@
 	<string name="service_running">VN Service läuft</string>
 	<string name="service_suspended">VN Service wurde angehalten</string>
 	
-	<!-- xml/service_config.xml -->
-	<string name="service_desc">Liest Statuszeilen-Benachrichtigungen mittels Text-zu-Sprache (TTS) vor.</string>
-	
 	<!-- xml/preferences.xml -->
+	<string name="app_list">Liste der Anwendungen</string>
+	<string name="app_list_summary">Wähle Apps, die ignoriert werden sollen.</string>
+	
+	
 	<string name="tts_settings">Sprachausgabe Einstellungen</string>
 	<string name="tts_settings_summary">Android Text-in-Sprache Einstellungen öffnen.</string>
 	<string name="tts_settings_summary_fail">Kann Text-zu-Sprache Einstellungen nicht finden! Wenn es auf Deinem Gerät existiert (das sollte es), kontaktiere bitte den Entwickler.</string>
 	<string name="tts_message">gesprochene Benachrichtigung</string>
 	<string name="tts_message_summary">Passe die Art und Weise an, wie Benachrichtigungen ausgesprochen werden sollen.</string>
-	<string name="tts_message_dialog">%t = Titel der Anwendung\n%m = Inhalt der Benachrichtigung</string>
+	
+	
+	
+	
 	<string name="tts_stream">Sprachausgabekanal (Stream)</string>
 	<string name="tts_stream_summary">Wähle den Kanal über den die gesprochene Benachrichtigung ausgegeben werden soll.</string>
 	<string name="tts_delay">Verzögerung der Sprachausgabe</string>
@@ -40,6 +44,8 @@
 	<string name="tts_repeat">Sprachausgabe wiederholen</string>
 	<string name="tts_repeat_summary">Wiederhole die Sprachausgabe so lange, bis der Bildschirm eingeschaltet wird.</string>
 	<string name="tts_repeat_dialog_msg">Benachrichtigungen werden im definierten Zeitraum wiederholt (Wert in Minuten), bis der Bildschirm eingeschaltet wird. Benachrichtigungen die erscheinen während der Bildschirm eingeschaltet ist, werden nicht wiederholt.\n Leer lassen oder 0 eingeben um Wiederholung zu deaktivieren.</string>
+	<string name="audio_focus">Apps pausieren/stumm schalten</string>
+	<string name="audio_focus_summary">Andere Apps anfragen, den Ton stumm zu schalten oder die Musik zu pausieren.</string>
 	<string name="shake_to_silence">Schütteln für stumm schalten</string>
 	<string name="shake_to_silence_summary">Empfindlichkeit der Shake-To-Silence Funktion einstellen.</string>
 	<string name="shake_to_silence_dialog_msg">Je kleiner der Wert, desto höher ist die Empfindlichkeit.\n\nStandard: 100\nEin leeres Feld deaktiviert diese Funktion.</string>
@@ -52,10 +58,16 @@
 	</string-array>
 	<string name="ignore_strings">Ignorierter Text</string>
 	<string name="ignore_strings_summary">Benachrichtigungen mit bestimmtem Inhalt ignorieren.</string>
+	<string name="ignore_strings_dialog_msg">Trenne einzelne Einträge durch eine neue Zeile.</string>
 	<string name="ignore_empty">Ignoriere leere Nachrichten</string>
 	<string name="ignore_empty_summary_on">Benachrichtigungen ohne Nachricht werden nicht gesprochen.</string>
 	<string name="ignore_empty_summary_off">Benachrichtigungen ohne Inhalt werden als \"Benachrichtigung von [App Name].\" gesprochen</string>
-	<string name="ignore_strings_dialog_msg">Trenne einzelne Einträge durch eine neue Zeile.</string>
+	<string name="ignore_repeat">Ignoriere sich wiederholende Benachrichtigungen</string>
+	<string name="ignore_repeat_summary">Ignoriere aufeinanderfolgende, identische Benachrichtigungen in einem bestimmten Zeitraum.</string>
+	<string name="ignore_repeat_dialog_msg">Stelle den Zeitraum ein (in Sekunden), in dem wiederholte Benachrichtigungen ignoriert werden sollen.\nJede ignorierte Benachrichtigung in diesem Zeitraum lässt die Wartezeit von vorn beginnen. Bei neuen Benachrichtigungen entfällt die Wartezeit.\nleer = Wartezeit wird auf \'unendlich\' gesetzt.</string>
+	
+	
+	
 	<string name="device_state">Gerätezustände</string>
 	<string name="device_state_summary">In welchem Gerätezustand sollen Benachrichtigungen ausgesprochen werden?</string>
 	<string name="device_state_dialog_title">Sprich, wenn folgende Bedingungen erfüllt sind:</string>
@@ -66,30 +78,38 @@
 		<item>Headset eingeschaltet</item>
 		<item>Stumm/Vibration</item>
 	</string-array>
-	<string name="ignore_repeat">Ignoriere sich wiederholende Benachrichtigungen</string>
-	<string name="ignore_repeat_summary">Ignoriere aufeinanderfolgende, identische Benachrichtigungen in einem bestimmten Zeitraum.</string>
-	<string name="ignore_repeat_dialog_msg">Stelle den Zeitraum ein (in Sekunden), in dem wiederholte Benachrichtigungen ignoriert werden sollen.\nJede ignorierte Benachrichtigung in diesem Zeitraum lässt die Wartezeit von vorn beginnen. Bei neuen Benachrichtigungen entfällt die Wartezeit.\nleer = Wartezeit wird auf \'unendlich\' gesetzt.</string>
-	<string name="app_list">Liste der Anwendungen</string>
-	<string name="app_list_summary">Wähle Apps, die ignoriert werden sollen.</string>
 	<string name="quiet_start">Beginn der Ruhezeit</string>
 	<string name="quiet_start_summary">Keine Sprachausgabe nach dieser Uhrzeit.\nStell den gleichen Wert wie bei \'Ende der Ruhezeit\' ein um keine Ruhezeit festzulegen.</string>
 	<string name="quiet_end">Ende der Ruhezeit</string>
 	<string name="quiet_end_summary">Keine Sprachausgabe vor dieser Uhrzeit.\nStell den gleichen Wert wie bei \'Beginn der Ruhezeit\' ein um keine Ruhezeit festzulegen.</string>
 	<string name="test_summary">Erzeuge eine Benachrichtigung (5 Sekunden verzögert) um die aktuellen Einstellungen zu testen.</string>
 	<string name="test_ignored">Voice Notify wurde in der Liste der Anwendungen abgewählt und wird daher ignoriert.\nDie Testbenachrichtigung wird ausgelöst, aber nicht gesprochen.</string>
+	<string name="notify_log_summary">Die letzten 20 Benachrichtigungen auflisten.\nZeigt Zeit, App Name, Nachricht und Ignorier-Ursache.</string>
 	<string name="support_summary">Spenden, bewerten oder den Entwickler kontaktieren; Übersetzungen, Quellcode</string>
-	<string name="audio_focus">Apps pausieren/stumm schalten</string>
-	<string name="audio_focus_summary">Andere Apps anfragen, den Ton stumm zu schalten oder die Musik zu pausieren.</string>
+	
+	<!-- TextReplacePreference.java -->
+	
+	
+	<!-- text_replace_row.xml -->
+	
+	
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Testen</string>
 	<string name="notify_log">Benachrichtigungsprotokoll</string>
-	<string name="notify_log_summary">Die letzten 20 Benachrichtigungen auflisten. Zeigt Zeit, App Name, Nachricht und Ignorier-Ursache.</string>
 	<string name="support">Unterstütze Voice Notify</string>
 	
 	<!-- MainActivity.java -->
 	<string name="service_disabled">VN Service ist deaktiviert</string>
+	
+	
 	<string name="status_summary_suspended">Tippe zum aktivieren von VN</string>
+	
+	
+	
+	
+	
+	
 	<string name="donate">Spenden</string>
 	<string-array name="support_items">
 		<item>@string/donate</item>
@@ -108,6 +128,7 @@
 	<string name="donate_wallet_launch_web">Wallet Website öffnen</string>
 	<string name="error_market">Fehler: Google Play Store ist nicht installiert.</string>
 	<string name="error_email">Fehler: Konnte keine E-Mail Anwendung finden.</string>
+	
 	
 	<!-- Service.java -->
 	<string name="notification_from">Benachrichtigung von %s.</string>
@@ -130,7 +151,7 @@
 	<string name="reason_identical">Identische Nachricht innerhalb {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
 	<string name="reason_quiet">Ruhezeit</string>
 	<string name="reason_silent">Stumm- oder Vibrationsmodus</string>
-	<string name="reason_call">Aktiver oder eingehender Anruf</string>
+	
 	<string name="reason_screen_off">Bildschirm ausschalten</string>
 	<string name="reason_screen_on">Bildschirm einschalten</string>
 	<string name="reason_headset_off">Headset ausschalten</string>

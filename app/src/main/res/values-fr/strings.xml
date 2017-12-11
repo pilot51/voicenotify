@@ -22,16 +22,20 @@
 	<string name="service_running">Services VN en cours d\'exécution</string>
 	<string name="service_suspended">Le service VN est suspendu</string>
 	
-	<!-- xml/service_config.xml -->
-	<string name="service_desc">Lit les notifications de la bar de statut avec la synthèse vocale.</string>
-	
 	<!-- xml/preferences.xml -->
+	<string name="app_list">Liste des applications</string>
+	<string name="app_list_summary">Liste d\'applications installées qui peuvent être ignorées.</string>
+	
+	
 	<string name="tts_settings">Paramètres de synthèse vocale.</string>
 	<string name="tts_settings_summary">Ouvrir les paramètres de synthèse vocale d\'Android.</string>
 	<string name="tts_settings_summary_fail">Paramètres de synthèse vocale introuvables ! S\'ils existent sur voter appareil (ce qui devrait être le cas), veuillez s\'il vous plaît contacter le développeur.</string>
 	<string name="tts_message">Message de la synthèse vocale.</string>
 	<string name="tts_message_summary">Personnaliser la façon dont la synthèse vocale énonce les notifications.</string>
-	<string name="tts_message_dialog">%t = Titre de l\'application\n%m = Message de notification</string>
+	
+	
+	
+	
 	<string name="tts_stream">Flux audio de la synthèse vocale</string>
 	<string name="tts_stream_summary">Choisir le flux audio que la synthèse vocale doit utiliser.</string>
 	<string name="tts_delay">Délai avant que l\'annonce vocale ne démarre</string>
@@ -40,56 +44,60 @@
 	<string name="tts_repeat">Répétition de la synthèse vocale.</string>
 	<string name="tts_repeat_summary">Répéter continuellement les notifications par la synthèse vocale jusqu\'à ce que l\'écran s\'allume.</string>
 	<string name="tts_repeat_dialog_msg">Les notifications seront répétées après l\'intervalle de temps défini jusqu\'à ce que l\'écran s\'allume. Les notifications créés pendant que l\'écran est allumé ne seront pas répétées.\nLes valeurs sont en minutes. Vide ou 0 le désactive.</string>
+	
+	
 	<string name="shake_to_silence">Sécouer-Pour-Silence</string>
 	<string name="shake_to_silence_summary">Ajuster le seuil de sensibilité du Sécouer-Pour-Silence</string>
 	<string name="shake_to_silence_dialog_msg">Les valeurs les plus faibles sont plus sensibles.\n\nPar défaut: 100\nVide pour désactiver.</string>
-	<string-array name="stream_name">
-		<item>Média</item>
-		<item>Notification</item>
-		<item>Voice</item>
-		<item>Ring</item>
-		<item>Alarm</item>
-	</string-array>
+	
 	<string name="ignore_strings">Texte à ignorer</string>
 	<string name="ignore_strings_summary">Ignorer les notifications qui contiennent certains textes dans le message</string>
-	
-	
-	
 	<string name="ignore_strings_dialog_msg">Séparer les entrées individuelles par une nouvelle ligne.</string>
-	<string name="device_state">Etat de l\'appareil</string>
-	<string name="device_state_summary">Choisir à quel moment utiliser l\'annonce vocale selon le statut de l\'appareil.</string>
-	<string name="device_state_dialog_title">Utiliser l\'annonce vocale si :</string>
-	<string-array name="device_states">
-		<item>Ecran éteint</item>
-		<item>Ecran allumé</item>
-		<item>Headset Off</item>
-		<item>Headset On</item>
-		<item>Silencieux/Vibreur</item>
-	</string-array>
+	
+	
+	
 	<string name="ignore_repeat">Ignorer la répétition</string>
 	<string name="ignore_repeat_summary">Ignorer les notifications identiques suivantes dans un temps donné.</string>
 	<string name="ignore_repeat_dialog_msg">Définir le nombre de secondes qui doivent s\'écouler depuis la dernière notification avant une répétition.\nLes répétitions ignorées réinitialisent le compteur et les notifications différentes l’arrêtent.\nVide = infini.</string>
-	<string name="app_list">Liste des applications</string>
-	<string name="app_list_summary">Liste des applications installées qui peuvent être ignorées.</string>
+	
+	
+	
+	<string name="device_state">Etat de l\'appareil</string>
+	<string name="device_state_summary">Choisir à quel moment utiliser l\'annonce vocale selon le statut de l\'appareil.</string>
+	<string name="device_state_dialog_title">Utiliser l\'annonce vocale si :</string>
+	
 	<string name="quiet_start">Début du mode silencieux</string>
 	<string name="quiet_start_summary">Ne pas utiliser les annonces vocales après cette heure.\nMettre la même heure que celle de fin pour désactiver.</string>
 	<string name="quiet_end">Fin du mode silencieux</string>
 	<string name="quiet_end_summary">Ne pas utiliser les annonces vocales avant cette heure.\nMettre la même heure que celle de début pour désactiver.</string>
 	<string name="test_summary">Envoyer une notification (débute après 5 secondes) pour tester les paramètres actuels.</string>
 	<string name="test_ignored">Voice Notify est ignoré dans la liste des applications.\nLe test va s’effectuer mais la notification ne sera pas lue.</string>
+	<string name="notify_log_summary">Liste des 20 dernières notifications.\nHeure d\'affichage, nom de l\'application, message, et les raisons d\'ignorer</string>
 	
+	
+	<!-- TextReplacePreference.java -->
+	
+	
+	<!-- text_replace_row.xml -->
 	
 	
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Journaux des notifications</string>
-	<string name="notify_log_summary">Liste des 20 dernières notifications. Heure d\'affichage, nom de l\'application, message, et les raisons d\'ignorer</string>
 	<string name="support">Soutenir Voice Notify</string>
 	
 	<!-- MainActivity.java -->
 	<string name="service_disabled">Service VN désactivé</string>
+	
+	
 	<string name="status_summary_suspended">Selectionner pour activer le VN</string>
+	
+	
+	
+	
+	
+	
 	
 	<string-array name="support_items">
 		<item>@string/donate</item>
@@ -98,16 +106,14 @@
 		<item>Traductions</item>
 		<item>Code source</item>
 	</string-array>
-	<string-array name="donate_services">
-		<item>Google Wallet</item>
-		<item>PayPal</item>
-	</string-array>
+	
 	
 	
 	
 	
 	
 	<string name="error_email">Erreur : impossible de trouver un client d\'email installé.</string>
+	
 	
 	<!-- Service.java -->
 	
