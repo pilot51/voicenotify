@@ -29,11 +29,11 @@ class Common {
 	private static SharedPreferences prefs;
 	/** Preference key name. */
 	static final String
-		KEY_SPEAK_SCREEN_OFF = "speakScreenOff",
-		KEY_SPEAK_SCREEN_ON = "speakScreenOn",
-		KEY_SPEAK_HEADSET_OFF = "speakHeadsetOff",
-		KEY_SPEAK_HEADSET_ON = "speakHeadsetOn",
-		KEY_SPEAK_SILENT_ON = "speakSilentOn";
+			KEY_SPEAK_SCREEN_OFF = "speakScreenOff",
+			KEY_SPEAK_SCREEN_ON = "speakScreenOn",
+			KEY_SPEAK_HEADSET_OFF = "speakHeadsetOff",
+			KEY_SPEAK_HEADSET_ON = "speakHeadsetOn",
+			KEY_SPEAK_SILENT_ON = "speakSilentOn";
 	
 	private Common() {}
 	
@@ -70,7 +70,7 @@ class Common {
 			if (currentStream != null && currentStream.equals("notification")) {
 				newStream = AudioManager.STREAM_NOTIFICATION;
 			}
-			prefs.edit().putString(c.getString(R.string.key_ttsStream), Integer.toString(newStream)).commit();
+			prefs.edit().putString(c.getString(R.string.key_ttsStream), Integer.toString(newStream)).apply();
 		}
 	}
 	
@@ -87,7 +87,7 @@ class Common {
 	 */
 	static int getSelectedAudioStream(Context c) {
 		return Integer.parseInt(prefs.getString(c.getString(R.string.key_ttsStream),
-		                                        Integer.toString(AudioManager.STREAM_MUSIC)));
+				Integer.toString(AudioManager.STREAM_MUSIC)));
 	}
 	
 	/**

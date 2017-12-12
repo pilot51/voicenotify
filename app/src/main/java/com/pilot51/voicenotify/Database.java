@@ -30,14 +30,14 @@ class Database extends SQLiteOpenHelper {
 	private static Database database;
 	private static final int DB_VERSION = 1;
 	private static final String
-		DB_NAME = "apps.db",
-		TABLE_NAME = "apps",
-		COLUMN_PACKAGE = "package",
-		COLUMN_LABEL = "name",
-		COLUMN_ENABLED = "is_enabled",
-		CREATE_TBL_APPS = "create table if not exists " + TABLE_NAME + "(" + BaseColumns._ID
-			+ " integer primary key autoincrement, " + COLUMN_PACKAGE + " text not null, "
-			+ COLUMN_LABEL + " text not null, " + COLUMN_ENABLED + " integer);";
+			DB_NAME = "apps.db",
+			TABLE_NAME = "apps",
+			COLUMN_PACKAGE = "package",
+			COLUMN_LABEL = "name",
+			COLUMN_ENABLED = "is_enabled",
+			CREATE_TBL_APPS = "create table if not exists " + TABLE_NAME + "(" + BaseColumns._ID
+					+ " integer primary key autoincrement, " + COLUMN_PACKAGE + " text not null, "
+					+ COLUMN_LABEL + " text not null, " + COLUMN_ENABLED + " integer);";
 	
 	private Database(Context context) {
 		super(context, DB_NAME, null, DB_VERSION);
@@ -59,9 +59,9 @@ class Database extends SQLiteOpenHelper {
 		List<App> list = new ArrayList<>();
 		while (cursor.moveToNext()) {
 			list.add(new App(
-				cursor.getString(cursor.getColumnIndex(COLUMN_PACKAGE)),
-				cursor.getString(cursor.getColumnIndex(COLUMN_LABEL)),
-				cursor.getInt(cursor.getColumnIndex(COLUMN_ENABLED)) == 1
+					cursor.getString(cursor.getColumnIndex(COLUMN_PACKAGE)),
+					cursor.getString(cursor.getColumnIndex(COLUMN_LABEL)),
+					cursor.getInt(cursor.getColumnIndex(COLUMN_ENABLED)) == 1
 			));
 		}
 		cursor.close();
@@ -80,9 +80,9 @@ class Database extends SQLiteOpenHelper {
 		ContentValues values;
 		for (App app : list) {
 			values = new ContentValues();
-			values.put(COLUMN_PACKAGE,  app.getPackage());
-			values.put(COLUMN_LABEL,  app.getLabel());
-			values.put(COLUMN_ENABLED,  app.getEnabled() ? 1 : 0);
+			values.put(COLUMN_PACKAGE, app.getPackage());
+			values.put(COLUMN_LABEL, app.getLabel());
+			values.put(COLUMN_ENABLED, app.getEnabled() ? 1 : 0);
 			db.insert(TABLE_NAME, null, values);
 		}
 		db.close();
@@ -94,9 +94,9 @@ class Database extends SQLiteOpenHelper {
 	 */
 	static synchronized void addOrUpdateApp(App app) {
 		ContentValues values = new ContentValues();
-		values.put(COLUMN_PACKAGE,  app.getPackage());
-		values.put(COLUMN_LABEL,  app.getLabel());
-		values.put(COLUMN_ENABLED,  app.getEnabled() ? 1 : 0);
+		values.put(COLUMN_PACKAGE, app.getPackage());
+		values.put(COLUMN_LABEL, app.getLabel());
+		values.put(COLUMN_ENABLED, app.getEnabled() ? 1 : 0);
 		SQLiteDatabase db = database.getWritableDatabase();
 		if (db.update(TABLE_NAME, values, COLUMN_PACKAGE + " = ?", new String[] {app.getPackage()}) == 0) {
 			db.insert(TABLE_NAME, null, values);
@@ -110,7 +110,7 @@ class Database extends SQLiteOpenHelper {
 	 */
 	static synchronized void updateAppEnable(App app) {
 		ContentValues values = new ContentValues();
-		values.put(COLUMN_ENABLED,  app.getEnabled() ? 1 : 0);
+		values.put(COLUMN_ENABLED, app.getEnabled() ? 1 : 0);
 		SQLiteDatabase db = database.getWritableDatabase();
 		db.update(TABLE_NAME, values, COLUMN_PACKAGE + " = ?", new String[] {app.getPackage()});
 		db.close();

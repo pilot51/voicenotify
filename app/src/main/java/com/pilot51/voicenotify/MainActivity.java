@@ -148,7 +148,9 @@ public class MainActivity extends PreferenceActivity {
 				return true;
 			} else if (preference == pTest) {
 				final Context context = getActivity().getApplicationContext();
-				if (!AppList.findOrAddApp(context.getPackageName(), context).getEnabled()) {
+				App vnApp = AppList.findOrAddApp(context.getPackageName(), context);
+				assert vnApp != null; // Prevent Lint warning. Should never be null, I want a crash report if it is.
+				if (!vnApp.getEnabled()) {
 					Toast.makeText(context, getString(R.string.test_ignored), Toast.LENGTH_LONG).show();
 				}
 				final NotificationManager notificationManager = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -282,6 +284,7 @@ public class MainActivity extends PreferenceActivity {
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			ID id = (ID)getArguments().getSerializable(KEY_ID);
+			assert id != null; // Prevent Lint warning. Should never be null, I want a crash report if it is.
 			switch (id) {
 				case DEVICE_STATE:
 					final CharSequence[] items = getResources().getStringArray(R.array.device_states);

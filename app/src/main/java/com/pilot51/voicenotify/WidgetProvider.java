@@ -40,17 +40,25 @@ public class WidgetProvider extends AppWidgetProvider {
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		if (intent.getAction().equals(ACTION_TOGGLE)) {
-			if (Service.isRunning()) {
-				Toast.makeText(context,
-				               Service.toggleSuspend() ? R.string.service_suspended : R.string.service_running,
-				               Toast.LENGTH_SHORT).show();
-			}
-		} else if (intent.getAction().equals(ACTION_UPDATE)) {
-			RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget);
-			updateViews(context, views);
-			AppWidgetManager.getInstance(context).updateAppWidget(new ComponentName(context, WidgetProvider.class), views);
-		} else super.onReceive(context, intent);
+		String action = intent.getAction();
+		assert action != null; // Prevent Lint warning. Should never be null, I want a crash report if it is.
+		switch (action) {
+			case ACTION_TOGGLE:
+				if (Service.isRunning()) {
+					Toast.makeText(context,
+							Service.toggleSuspend() ? R.string.service_suspended : R.string.service_running,
+							Toast.LENGTH_SHORT).show();
+				}
+				break;
+			case ACTION_UPDATE:
+				RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.appwidget);
+				updateViews(context, views);
+				AppWidgetManager.getInstance(context).updateAppWidget(new ComponentName(context, WidgetProvider.class), views);
+				break;
+			default:
+				super.onReceive(context, intent);
+				break;
+		}
 	}
 	
 	private static void updateViews(Context context, RemoteViews views) {

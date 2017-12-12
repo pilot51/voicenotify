@@ -33,6 +33,7 @@ class Shake implements SensorEventListener {
 	Shake(Context c) {
 		context = c;
 		manager = (SensorManager)c.getSystemService(Context.SENSOR_SERVICE);
+		assert manager != null; // Prevent Lint warning. Should never be null, I want a crash report if it is.
 		sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 	}
 	

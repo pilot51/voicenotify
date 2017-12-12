@@ -46,11 +46,12 @@ import java.util.List;
  * Preference that provides a dynamic list with two EditTexts in each row for defining text replacement.
  */
 public class TextReplacePreference extends DialogPreference {
-	private ListView listView;
+	private final ListView listView;
 	private TextReplaceAdapter adapter;
 	private boolean isPersistedReplaceListSet;
 	private final List<Pair<String, String>> persistedReplaceList = new ArrayList<>();
 	
+	@SuppressWarnings("WeakerAccess") // Lint incorrectly thinks this can be private. App crashes at launch if it is.
 	public TextReplacePreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		setDialogLayoutResource(R.layout.preference_dialog_text_replace);
@@ -159,7 +160,7 @@ public class TextReplacePreference extends DialogPreference {
 		ViewParent oldParent = listView.getParent();
 		if (oldParent != view) {
 			if (oldParent != null) {
-				((ViewGroup) oldParent).removeView(listView);
+				((ViewGroup)oldParent).removeView(listView);
 			}
 			ViewGroup container = view.findViewById(R.id.container);
 			if (container != null) {
@@ -418,6 +419,7 @@ public class TextReplacePreference extends DialogPreference {
 		 */
 		private class DataChangedObserver extends DataSetObserver {
 			private boolean dataChanged;
+			
 			@Override
 			public void onChanged() {
 				dataChanged = true;

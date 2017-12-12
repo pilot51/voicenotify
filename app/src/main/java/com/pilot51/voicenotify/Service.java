@@ -65,25 +65,26 @@ public class Service extends NotificationListenerService {
 	private RepeatTimer repeater;
 	private Shake shake;
 	private static boolean isInitialized, isSuspended, isScreenOn;
-	private final List<String> ignoreReasons = new ArrayList<>(),
-	                                repeatList = new ArrayList<>();
-    /**
-     * this is used to determine if we are the first, middle, or last thing to be spoken at the moment, for enabling/disabling shake and audio focus request
-     * entries are added right before the call to speak and removed by onDone in the utteranceProgressListener
-     * if the list is empty when we enqueue a message, we trigger shaking and audio focus requesting
-     * if the list is empty when we finish speaking a message, we untrigger them.
-     */
-    private final LinkedBlockingQueue<Boolean> messageStatuses = new LinkedBlockingQueue<>();
+	private final List<String> ignoreReasons = new ArrayList<>();
+	private final List<String> repeatList = new ArrayList<>();
+	
+	/**
+	 * this is used to determine if we are the first, middle, or last thing to be spoken at the moment, for enabling/disabling shake and audio focus request
+	 * entries are added right before the call to speak and removed by onDone in the utteranceProgressListener
+	 * if the list is empty when we enqueue a message, we trigger shaking and audio focus requesting
+	 * if the list is empty when we finish speaking a message, we untrigger them.
+	 */
+	private final LinkedBlockingQueue<Boolean> messageStatuses = new LinkedBlockingQueue<>();
 	private final Handler handler = new Handler();
 	private final OnStatusChangeListener statusListener = new OnStatusChangeListener() {
 		@Override
 		public void onStatusChanged() {
 			if (isSuspended && mTts != null) mTts.stop();
 			sendBroadcast(new Intent(getApplicationContext(), WidgetProvider.class)
-			              .setAction(WidgetProvider.ACTION_UPDATE));
+					.setAction(WidgetProvider.ACTION_UPDATE));
 		}
 	};
-
+	
 	@Override
 	public void onCreate() {
 		prefs = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
@@ -99,18 +100,18 @@ public class Service extends NotificationListenerService {
 					@Override
 					public void onStart(String utteranceId) {
 					}
-
+					
 					@Override
 					public void onDone(String utteranceId) {
 						messageStatuses.poll();
-						if(messageStatuses.isEmpty()){
+						if (messageStatuses.isEmpty()) {
 							if (shouldRequestFocus) {
 								audioMan.abandonAudioFocus(null);
 							}
 							shake.disable();
 						}
 					}
-
+					
 					@Override
 					public void onError(String utteranceId) {
 						Log.w(TAG, getString(R.string.error_tts_init));
@@ -121,7 +122,7 @@ public class Service extends NotificationListenerService {
 		});
 		super.onCreate();
 	}
-
+	
 	@Override
 	public void onNotificationPosted(StatusBarNotification sbn) {
 		Notification notification = sbn.getNotification();
@@ -152,7 +153,7 @@ public class Service extends NotificationListenerService {
 					contentTitle == null ? "" : contentTitle,
 					contentText == null ? "" : contentText,
 					contentInfoText == null ? "" : contentInfoText);
-		} catch(IllegalFormatException e) {
+		} catch (IllegalFormatException e) {
 			Log.w(TAG, "Error formatting custom TTS string!");
 			e.printStackTrace();
 		}
@@ -247,54 +248,55 @@ public class Service extends NotificationListenerService {
 			ignoreReasons.clear();
 		}
 	}
-
+	
 	@Override
 	public void onNotificationRemoved(StatusBarNotification sbn) {
 	}
-
-    /**
-     * Sends msg to TTS if ignore condition is not met.
-     * ALWAYS CALLED INSIDE A SPAWNED THREAD
-     * @param msg The string to be spoken.
-     * @param isNew True if the notification was just received, otherwise false if it is being repeated.
-     */
-    private void speak(final String msg, boolean isNew) {
-        if (ignore(isNew)) return;
-        if (messageStatuses.isEmpty()) { //if there are no messages in the queue, start up shake detection and audio focus requesting
-            shake.enable();
-            shouldRequestFocus = Common.getPrefs(getApplicationContext())
-                    .getBoolean(getString(R.string.key_audio_focus), false);
+	
+	/**
+	 * Sends msg to TTS if ignore condition is not met.
+	 * ALWAYS CALLED INSIDE A SPAWNED THREAD
+	 * @param msg The string to be spoken.
+	 * @param isNew True if the notification was just received, otherwise false if it is being repeated.
+	 */
+	private void speak(final String msg, boolean isNew) {
+		if (ignore(isNew)) return;
+		if (messageStatuses.isEmpty()) { //if there are no messages in the queue, start up shake detection and audio focus requesting
+			shake.enable();
+			shouldRequestFocus = Common.getPrefs(getApplicationContext())
+					.getBoolean(getString(R.string.key_audio_focus), false);
 			if (shouldRequestFocus) {
-				AudioFocus.requestFocus(audioMan);
+				audioMan.requestAudioFocus(null, AudioManager.STREAM_MUSIC,
+						AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
 			}
-        }
-        //regardless, add the message to the queue, parallelling the TextToSpeech queue since we can't access it.
-        try {
-            messageStatuses.put(false);
-        } catch (InterruptedException e) {
-            //we had an error with too many threads trying to speak at once, cancel the whole thing before adding to the mess
-            return;
-        }
-        //once the message is in our queue, send it to the real one with the necessary parameters
-        final HashMap<String, String> ttsParams = new HashMap<>();
-        //needed because we want to apply stream changes immediately
-        ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
-                      Integer.toString(Common.getSelectedAudioStream(getApplicationContext())));
-        //not used anywhere, but has to be set to get the UtteranceProgressListener to trigger its submethods
-        ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, Long.toString(System.currentTimeMillis()));
-        mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
-    }
-
-    /**
+		}
+		//regardless, add the message to the queue, parallelling the TextToSpeech queue since we can't access it.
+		try {
+			messageStatuses.put(false);
+		} catch (InterruptedException e) {
+			//we had an error with too many threads trying to speak at once, cancel the whole thing before adding to the mess
+			return;
+		}
+		//once the message is in our queue, send it to the real one with the necessary parameters
+		final HashMap<String, String> ttsParams = new HashMap<>();
+		//needed because we want to apply stream changes immediately
+		ttsParams.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
+				Integer.toString(Common.getSelectedAudioStream(getApplicationContext())));
+		//not used anywhere, but has to be set to get the UtteranceProgressListener to trigger its submethods
+		ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, Long.toString(System.currentTimeMillis()));
+		mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
+	}
+	
+	/**
 	 * Checks for any notification-independent ignore states.
 	 * @param isNew True for a notification that was just received, otherwise false.
 	 * @return True if an ignore condition is met, false otherwise.
 	 */
 	private boolean ignore(boolean isNew) {
 		Calendar c = Calendar.getInstance();
-		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE),
-			quietStart = prefs.getInt(getString(R.string.key_quietStart), 0),
-			quietEnd = prefs.getInt(getString(R.string.key_quietEnd), 0);
+		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
+		int quietStart = prefs.getInt(getString(R.string.key_quietStart), 0);
+		int quietEnd = prefs.getInt(getString(R.string.key_quietEnd), 0);
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
 				|| (quietEnd < quietStart && (quietStart <= calTime || calTime < quietEnd))) {
 			ignoreReasons.add(getString(R.string.reason_quiet));
@@ -328,14 +330,14 @@ public class Service extends NotificationListenerService {
 		}
 		return false;
 	}
-
+	
 	private class RepeatTimer extends TimerTask {
 		private RepeatTimer(int minuteInterval) {
 			if (minuteInterval <= 0) return;
 			long interval = minuteInterval * 60000L;
 			new Timer().schedule(this, interval, interval);
 		}
-
+		
 		@Override
 		public void run() {
 			handler.post(new Runnable() {
@@ -347,7 +349,7 @@ public class Service extends NotificationListenerService {
 				}
 			});
 		}
-
+		
 		@Override
 		public boolean cancel() {
 			repeater = null;
@@ -361,7 +363,7 @@ public class Service extends NotificationListenerService {
 		Common.init(this);
 		audioMan = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
 		telephony = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
-		IntentFilter filter =  new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+		IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
 		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED);
 		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED);
 		filter.addAction(Intent.ACTION_SCREEN_ON);
@@ -392,24 +394,26 @@ public class Service extends NotificationListenerService {
 		}
 		return false;
 	}
-
+	
 	@Override
 	public void onDestroy() {
 		if (mTts != null) {
-            mTts.shutdown();
-            mTts = null;
-        }
-
+			mTts.shutdown();
+			mTts = null;
+		}
 		super.onDestroy();
 	}
-
+	
 	private static final List<OnStatusChangeListener> statusListeners = new ArrayList<>();
+	
 	static void registerOnStatusChangeListener(OnStatusChangeListener listener) {
 		statusListeners.add(listener);
 	}
+	
 	static void unregisterOnStatusChangeListener(OnStatusChangeListener listener) {
 		statusListeners.remove(listener);
 	}
+	
 	interface OnStatusChangeListener {
 		/**
 		 * Called when the service status has changed.
@@ -418,66 +422,59 @@ public class Service extends NotificationListenerService {
 		 */
 		void onStatusChanged();
 	}
+	
 	private static void onStatusChanged() {
 		for (OnStatusChangeListener l : statusListeners) {
 			l.onStatusChanged();
 		}
 	}
-
+	
 	static boolean isRunning() {
 		return isInitialized;
 	}
-
+	
 	private void setInitialized(boolean initialized) {
 		isInitialized = initialized;
 		onStatusChanged();
 	}
-
+	
 	static boolean isSuspended() {
 		return isSuspended;
 	}
-
+	
 	static boolean toggleSuspend() {
 		isSuspended ^= true;
 		onStatusChanged();
 		return isSuspended;
 	}
-
+	
 	private boolean isScreenOn() {
 		isScreenOn = CheckScreen.isScreenOn(this);
 		return isScreenOn;
 	}
-
+	
 	private boolean isHeadsetOn() {
 		return (audioMan.isBluetoothA2dpOn() || audioMan.isWiredHeadsetOn());
 	}
-
+	
 	private static class CheckScreen {
 		private static PowerManager powerMan;
+		
 		private static boolean isScreenOn(Context c) {
 			if (powerMan == null) {
 				powerMan = (PowerManager)c.getSystemService(Context.POWER_SERVICE);
 			}
+			assert powerMan != null; // Prevent Lint warning. Should never be null, I want a crash report if it is.
 			return powerMan.isScreenOn();
 		}
 	}
-
-	private static class AudioFocus {
-		private static void abandonFocus(AudioManager audioMan) {
-			audioMan.abandonAudioFocus(null);
-		}
-
-		private static void requestFocus(AudioManager audioMan) {
-			audioMan.requestAudioFocus(null, AudioManager.STREAM_MUSIC,
-					AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
-		}
-	}
-
+	
 	private class DeviceStateReceiver extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			boolean interruptIfIgnored = true;
+			assert action != null; // Prevent Lint warning. Should never be null, I want a crash report if it is.
 			switch (action) {
 				case Intent.ACTION_SCREEN_ON:
 					isScreenOn = true;

@@ -72,6 +72,7 @@ public class AppList extends ListActivity {
 					}
 				});
 			}
+			
 			@Override
 			public void onUpdateCompleted() {
 				runOnUiThread(new Runnable() {
@@ -98,6 +99,7 @@ public class AppList extends ListActivity {
 		void onListUpdated();
 		void onUpdateCompleted();
 	}
+	
 	private static void onListUpdated() {
 		if (listener != null) listener.onListUpdated();
 	}
@@ -167,17 +169,19 @@ public class AppList extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.ignore_all:
-			setDefaultEnable(false);
-			massIgnore(IGNORE_ALL);
-			return true;
-		case R.id.ignore_none:
-			setDefaultEnable(true);
-			massIgnore(IGNORE_NONE);
-			return true;
-		case R.id.filter:
-			((InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0, 0);
-			return true;
+			case R.id.ignore_all:
+				setDefaultEnable(false);
+				massIgnore(IGNORE_ALL);
+				return true;
+			case R.id.ignore_none:
+				setDefaultEnable(true);
+				massIgnore(IGNORE_NONE);
+				return true;
+			case R.id.filter:
+				InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+				assert imm != null; // Prevent Lint warning. Should never be null, I want a crash report if it is.
+				imm.toggleSoftInput(0, 0);
+				return true;
 		}
 		return false;
 	}
@@ -239,7 +243,7 @@ public class AppList extends ListActivity {
 	/** Set the default enabled value for new apps. */
 	private void setDefaultEnable(boolean enable) {
 		defEnable = enable;
-		Common.getPrefs(this).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).commit();
+		Common.getPrefs(this).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).apply();
 	}
 	
 	private class Adapter extends BaseAdapter implements Filterable {
