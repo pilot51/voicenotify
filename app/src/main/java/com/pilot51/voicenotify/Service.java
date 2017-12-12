@@ -208,9 +208,19 @@ public class Service extends NotificationListenerService {
 			}
 		}
 		if (ignoreReasons.isEmpty()) {
-			int delay = Integer.parseInt(prefs.getString(getString(R.string.key_ttsDelay), "0"));
+			int delay;
+			try {
+				delay = Integer.parseInt(prefs.getString(getString(R.string.key_ttsDelay), null));
+			} catch (NumberFormatException e) {
+				delay = 0;
+			}
 			if (!isScreenOn()) {
-				int interval = Integer.parseInt(prefs.getString(getString(R.string.key_tts_repeat), "0"));
+				int interval;
+				try {
+					interval = Integer.parseInt(prefs.getString(getString(R.string.key_tts_repeat), null));
+				} catch (NumberFormatException e) {
+					interval = 0;
+				}
 				if (interval > 0) {
 					repeatList.add(ttsMsg);
 					if (repeater == null) {
@@ -221,7 +231,12 @@ public class Service extends NotificationListenerService {
 			if (delay < 0) { // Just in case we get a weird value, don't want to try to make the Timer wait for negative time
 				delay = 0;
 			}
-			int maxLength = Integer.parseInt(prefs.getString(getString(R.string.key_max_length), "0"));
+			int maxLength;
+			try {
+				maxLength = Integer.parseInt(prefs.getString(getString(R.string.key_max_length), null));
+			} catch (NumberFormatException e) {
+				maxLength = 0;
+			}
 			final String msg;
 			if (ttsMsg != null && maxLength > 0) {
 				msg = ttsMsg.substring(0, Math.min(maxLength, ttsMsg.length()));

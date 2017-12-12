@@ -30,8 +30,8 @@ android {
         applicationId "com.pilot51.voicenotify"
         minSdkVersion 18
         targetSdkVersion 27
-        versionName "1.1.1"
-        versionCode 21
+        versionName "1.1.2"
+        versionCode 22
     }
 
     signingConfigs {
