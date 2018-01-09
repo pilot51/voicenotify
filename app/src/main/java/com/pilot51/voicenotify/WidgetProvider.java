@@ -28,7 +28,10 @@ import android.widget.Toast;
 public class WidgetProvider extends AppWidgetProvider {
 	private static final String ACTION_TOGGLE = "voicenotify.widget.TOGGLE";
 	static final String ACTION_UPDATE = "voicenotify.widget.UPDATE";
-	
+
+	private static final String ACTION_ON = "voicenotify.widget.ON";
+	private static final String ACTION_OFF = "voicenotify.widget.OFF";
+
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
 		for (int appWidgetId : appWidgetIds) {
@@ -55,6 +58,19 @@ public class WidgetProvider extends AppWidgetProvider {
 				updateViews(context, views);
 				AppWidgetManager.getInstance(context).updateAppWidget(new ComponentName(context, WidgetProvider.class), views);
 				break;
+            case ACTION_ON:
+                if (Service.isRunning()) {
+                    Toast.makeText(context,
+                            Service.toggleSuspend(false) ? R.string.service_suspended : R.string.service_running,
+                            Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case ACTION_OFF:
+                if (Service.isRunning()) {
+                    Toast.makeText(context,
+                            Service.toggleSuspend(true) ? R.string.service_suspended : R.string.service_running,
+                            Toast.LENGTH_SHORT).show();
+                }
 			default:
 				super.onReceive(context, intent);
 				break;
