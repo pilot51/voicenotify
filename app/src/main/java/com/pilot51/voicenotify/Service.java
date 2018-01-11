@@ -462,7 +462,13 @@ public class Service extends NotificationListenerService {
 		onStatusChanged();
 		return isSuspended;
 	}
-	
+
+	static boolean toggleSuspend(boolean status) {
+		isSuspended = status;
+		onStatusChanged();
+		return isSuspended;
+	}
+
 	private boolean isScreenOn() {
 		isScreenOn = CheckScreen.isScreenOn(this);
 		return isScreenOn;
