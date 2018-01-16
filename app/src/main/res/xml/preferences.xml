@@ -38,6 +38,14 @@
 			android:title="@string/tts_text_replace"
 			android:summary="@string/tts_text_replace_summary"
 			android:dialogMessage="@string/tts_text_replace_dialog" />
+		<EditTextPreference
+			android:key="@string/key_max_length"
+			android:title="@string/max_length"
+			android:summary="@string/max_length_summary"
+			android:dialogMessage="@string/max_length_dialog_msg"
+			android:digits="0123456789"
+			android:inputType="number"
+			android:defaultValue="100" />
 		<ListPreference
 			android:key="@string/key_ttsStream"
 			android:title="@string/tts_stream"
@@ -92,14 +100,6 @@
 		android:digits="0123456789"
 		android:inputType="number"
 		android:defaultValue="10" />
-	<EditTextPreference
-		android:key="@string/key_max_length"
-		android:title="@string/max_length"
-		android:summary="@string/max_length_summary"
-		android:dialogMessage="@string/max_length_dialog_msg"
-		android:digits="0123456789"
-		android:inputType="number"
-		android:defaultValue="100" />
 	<Preference
 		android:key="@string/key_device_state"
 		android:title="@string/device_state"
