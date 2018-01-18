@@ -126,6 +126,9 @@ public class Service extends NotificationListenerService {
 	@Override
 	public void onNotificationPosted(StatusBarNotification sbn) {
 		Notification notification = sbn.getNotification();
+		if ((notification.flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
+			return; // Completely ignore group summary notifications.
+		}
 		long msgTime = System.currentTimeMillis();
 		String ticker = notification.tickerText != null ? notification.tickerText.toString() : null;
 		// Suppressing lint because documentation says extras added in API 19 when actually added in API 18.
