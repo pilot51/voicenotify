@@ -16,7 +16,6 @@
 
 package com.pilot51.voicenotify;
 
-import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -25,7 +24,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
-import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.PowerManager;
@@ -37,20 +35,17 @@ import android.speech.tts.UtteranceProgressListener;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
-import android.util.Pair;
 import android.widget.Toast;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.regex.Pattern;
 
 public class Service extends NotificationListenerService {
 	private static final String TAG = Service.class.getSimpleName();
@@ -65,7 +60,6 @@ public class Service extends NotificationListenerService {
 	private RepeatTimer repeater;
 	private Shake shake;
 	private static boolean isInitialized, isSuspended, isScreenOn;
-	private final List<String> ignoreReasons = new ArrayList<>();
 	private final List<String> repeatList = new ArrayList<>();
 	
 	/**
@@ -130,54 +124,9 @@ public class Service extends NotificationListenerService {
 			return; // Completely ignore group summary notifications.
 		}
 		long msgTime = System.currentTimeMillis();
-		String ticker = notification.tickerText != null ? notification.tickerText.toString() : null;
-		// Suppressing lint because documentation says extras added in API 19 when actually added in API 18.
-		// See reported issue: https://issuetracker.google.com/issues/69396548
-		@SuppressLint("InlinedApi") Bundle extras = notification.extras;
-		@SuppressLint("InlinedApi") String subtext = extras.getString(Notification.EXTRA_SUB_TEXT);
-		@SuppressLint("InlinedApi") String contentTitle = extras.getString(Notification.EXTRA_TITLE);
-		@SuppressLint("InlinedApi") String contentText = extras.getString(Notification.EXTRA_TEXT);
-		@SuppressLint("InlinedApi") String contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT);
-		final String ttsStringPref = prefs.getString(getString(R.string.key_ttsString), "");
 		App app = AppList.findOrAddApp(sbn.getPackageName(), this);
-		String ttsUnformattedMsg = ttsStringPref
-				.replace("#a", "%1$s") // App Label
-				.replace("#t", "%2$s") // Ticker
-				.replace("#s", "%3$s") // Subtext
-				.replace("#c", "%4$s") // Content Title
-				.replace("#m", "%5$s") // Content Text
-				.replace("#i", "%6$s"); // Content Info Text
-		String ttsMsg = null;
-		try {
-			ttsMsg = String.format(ttsUnformattedMsg,
-					app == null ? "" : app.getLabel(),
-					ticker == null ? "" : ticker.replaceAll("[|\\[\\]{}*<>]+", " "),
-					subtext == null ? "" : subtext,
-					contentTitle == null ? "" : contentTitle,
-					contentText == null ? "" : contentText,
-					contentInfoText == null ? "" : contentInfoText);
-		} catch (IllegalFormatException e) {
-			Log.w(TAG, "Error formatting custom TTS string!");
-			e.printStackTrace();
-		}
-		if (app != null && (ttsMsg == null || ttsMsg.equals(app.getLabel()))) {
-			ttsMsg = getString(R.string.notification_from, app.getLabel());
-		}
-		if (!TextUtils.isEmpty(ttsMsg)) {
-			String ttsTextReplace = prefs.getString(getString(R.string.key_ttsTextReplace), null);
-			List<Pair<String, String>> textReplaceList = TextReplacePreference.convertStringToList(ttsTextReplace);
-			for (Pair<String, String> pair : textReplaceList) {
-				ttsMsg = ttsMsg.replaceAll("(?i)" + Pattern.quote(pair.first), pair.second);
-			}
-		}
-		StringBuilder logBuilder = new StringBuilder();
-		for (String s : new String[] {ticker, subtext, contentTitle, contentText, contentInfoText}) {
-			if (!TextUtils.isEmpty(s)) {
-				if (logBuilder.length() > 0) logBuilder.append("\n");
-				logBuilder.append(s);
-			}
-		}
-		NotifyList.addNotification(app, logBuilder.toString());
+		NotificationInfo info = new NotificationInfo(app, notification);
+		final String ttsMsg = info.buildTtsMessage(getApplicationContext());
 		final String[] ignoreStrings = prefs.getString(getString(R.string.key_ignore_strings), "").toLowerCase().split("\n");
 		boolean stringIgnored = false;
 		for (String s : ignoreStrings) {
@@ -187,17 +136,17 @@ public class Service extends NotificationListenerService {
 			}
 		}
 		if (isSuspended) {
-			ignoreReasons.add(getString(R.string.reason_suspended));
+			info.addIgnoreReason(getString(R.string.reason_suspended));
 		}
 		if (app != null && !app.getEnabled()) {
-			ignoreReasons.add(getString(R.string.reason_app));
+			info.addIgnoreReason(getString(R.string.reason_app));
 		}
 		if (stringIgnored) {
-			ignoreReasons.add(getString(R.string.reason_string));
+			info.addIgnoreReason(getString(R.string.reason_string));
 		}
 		if (TextUtils.isEmpty(ttsMsg)
 				&& prefs.getBoolean(getString(R.string.key_ignore_empty), false)) {
-			ignoreReasons.add(getString(R.string.reason_empty_msg));
+			info.addIgnoreReason(getString(R.string.reason_empty_msg));
 		}
 		int ignoreRepeat;
 		try {
@@ -207,10 +156,11 @@ public class Service extends NotificationListenerService {
 		}
 		if (lastMsg.containsKey(app)) {
 			if (lastMsg.get(app).equals(ttsMsg) && (ignoreRepeat == -1 || msgTime - lastMsgTime.get(app) < ignoreRepeat * 1000)) {
-				ignoreReasons.add(MessageFormat.format(getString(R.string.reason_identical), ignoreRepeat));
+				info.addIgnoreReason(MessageFormat.format(getString(R.string.reason_identical), ignoreRepeat));
 			}
 		}
-		if (ignoreReasons.isEmpty()) {
+		NotifyList.addNotification(info);
+		if (info.getIgnoreReasons().isEmpty()) {
 			int delay;
 			try {
 				delay = Integer.parseInt(prefs.getString(getString(R.string.key_ttsDelay), null));
@@ -234,25 +184,14 @@ public class Service extends NotificationListenerService {
 			if (delay < 0) { // Just in case we get a weird value, don't want to try to make the Timer wait for negative time
 				delay = 0;
 			}
-			int maxLength;
-			try {
-				maxLength = Integer.parseInt(prefs.getString(getString(R.string.key_max_length), null));
-			} catch (NumberFormatException e) {
-				maxLength = 0;
-			}
-			final String msg;
-			if (ttsMsg != null && maxLength > 0) {
-				msg = ttsMsg.substring(0, Math.min(maxLength, ttsMsg.length()));
-			} else {
-				msg = ttsMsg;
-			}
 			new Timer().schedule(new TimerTask() {
 				@Override
 				public void run() {
+					if (ignore(true)) return;
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
-							speak(msg, true);
+							speak(ttsMsg);
 						}
 					});
 				}
@@ -260,10 +199,8 @@ public class Service extends NotificationListenerService {
 			lastMsg.put(app, ttsMsg);
 			lastMsgTime.put(app, msgTime);
 		} else {
-			String reasons = ignoreReasons.toString().replaceAll("[\\[\\]]", "");
-			Log.i(TAG, "Notification from " + (app != null ? app.getLabel() : null) + " ignored for reason(s): " + reasons);
-			NotifyList.setLastIgnore(reasons, true);
-			ignoreReasons.clear();
+			Log.i(TAG, "Notification from " + (app != null ? app.getLabel() : null)
+					+ " ignored for reason(s): " + info.getIgnoreReasonsAsText());
 		}
 	}
 	
@@ -272,13 +209,10 @@ public class Service extends NotificationListenerService {
 	}
 	
 	/**
-	 * Sends msg to TTS if ignore condition is not met.
-	 * ALWAYS CALLED INSIDE A SPAWNED THREAD
+	 * Send a string to be spoken by TTS.
 	 * @param msg The string to be spoken.
-	 * @param isNew True if the notification was just received, otherwise false if it is being repeated.
 	 */
-	private void speak(final String msg, boolean isNew) {
-		if (ignore(isNew)) return;
+	private void speak(final String msg) {
 		if (messageStatuses.isEmpty()) { //if there are no messages in the queue, start up shake detection and audio focus requesting
 			shake.enable();
 			shouldRequestFocus = Common.getPrefs(getApplicationContext())
@@ -315,35 +249,35 @@ public class Service extends NotificationListenerService {
 		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
 		int quietStart = prefs.getInt(getString(R.string.key_quietStart), 0);
 		int quietEnd = prefs.getInt(getString(R.string.key_quietEnd), 0);
+		NotificationInfo info = NotifyList.getLastNotification();
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
 				|| (quietEnd < quietStart && (quietStart <= calTime || calTime < quietEnd))) {
-			ignoreReasons.add(getString(R.string.reason_quiet));
+			info.addIgnoreReason(getString(R.string.reason_quiet));
 		}
 		if ((audioMan.getRingerMode() == AudioManager.RINGER_MODE_SILENT
 				|| audioMan.getRingerMode() == AudioManager.RINGER_MODE_VIBRATE)
 				&& !prefs.getBoolean(Common.KEY_SPEAK_SILENT_ON, false)) {
-			ignoreReasons.add(getString(R.string.reason_silent));
+			info.addIgnoreReason(getString(R.string.reason_silent));
 		}
 		if (telephony.getCallState() == TelephonyManager.CALL_STATE_OFFHOOK) {
-			ignoreReasons.add(getString(R.string.reason_call));
+			info.addIgnoreReason(getString(R.string.reason_call));
 		}
 		if (!isScreenOn() && !prefs.getBoolean(Common.KEY_SPEAK_SCREEN_OFF, true)) {
-			ignoreReasons.add(getString(R.string.reason_screen_off));
+			info.addIgnoreReason(getString(R.string.reason_screen_off));
 		}
 		if (isScreenOn() && !prefs.getBoolean(Common.KEY_SPEAK_SCREEN_ON, true)) {
-			ignoreReasons.add(getString(R.string.reason_screen_on));
+			info.addIgnoreReason(getString(R.string.reason_screen_on));
 		}
 		if (!isHeadsetOn() && !prefs.getBoolean(Common.KEY_SPEAK_HEADSET_OFF, true)) {
-			ignoreReasons.add(getString(R.string.reason_headset_off));
+			info.addIgnoreReason(getString(R.string.reason_headset_off));
 		}
 		if (isHeadsetOn() && !prefs.getBoolean(Common.KEY_SPEAK_HEADSET_ON, true)) {
-			ignoreReasons.add(getString(R.string.reason_headset_on));
+			info.addIgnoreReason(getString(R.string.reason_headset_on));
 		}
-		if (!ignoreReasons.isEmpty()) {
-			String reasons = ignoreReasons.toString().replaceAll("[\\[\\]]", "");
-			Log.i(TAG, "Notification ignored for reason(s): " + reasons);
-			NotifyList.setLastIgnore(reasons, isNew);
-			ignoreReasons.clear();
+		if (!info.getIgnoreReasons().isEmpty()) {
+			Log.i(TAG, "Notification ignored for reason(s): " + info.getIgnoreReasonsAsText());
+			info.setSilenced(!isNew);
+			NotifyList.refresh();
 			return true;
 		}
 		return false;
@@ -358,11 +292,12 @@ public class Service extends NotificationListenerService {
 		
 		@Override
 		public void run() {
+			if (ignore(false)) return;
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
 					for (String s : repeatList) {
-						speak(s, false);
+						speak(s);
 					}
 				}
 			});
@@ -392,9 +327,12 @@ public class Service extends NotificationListenerService {
 		shake.setOnShakeListener(new Shake.OnShakeListener() {
 			@Override
 			public void onShake() {
-				Log.i(TAG, "TTS silenced by shake");
-				NotifyList.setLastIgnore(getString(R.string.reason_shake), false);
 				if (mTts != null) mTts.stop();
+				Log.i(TAG, "TTS silenced by shake");
+				NotificationInfo info = NotifyList.getLastNotification();
+				info.addIgnoreReason(getString(R.string.reason_shake));
+				info.setSilenced(true);
+				NotifyList.refresh();
 			}
 		});
 		registerOnStatusChangeListener(statusListener);
