@@ -124,7 +124,7 @@ public class Service extends NotificationListenerService {
 			return; // Completely ignore group summary notifications.
 		}
 		long msgTime = System.currentTimeMillis();
-		App app = AppList.findOrAddApp(sbn.getPackageName(), this);
+		App app = AppListActivity.findOrAddApp(sbn.getPackageName(), this);
 		NotificationInfo info = new NotificationInfo(app, notification);
 		final String ttsMsg = info.buildTtsMessage(getApplicationContext());
 		final String[] ignoreStrings = prefs.getString(getString(R.string.key_ignore_strings), "").toLowerCase().split("\n");

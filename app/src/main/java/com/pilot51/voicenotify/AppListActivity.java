@@ -44,7 +44,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-public class AppList extends ListActivity {
+public class AppListActivity extends ListActivity {
 	private Adapter adapter;
 	private static List<App> apps;
 	private static boolean defEnable;

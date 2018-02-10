@@ -37,7 +37,7 @@
 			</intent-filter>
 		</activity>
 		<activity
-			android:name=".AppList"
+			android:name=".AppListActivity"
 			android:configChanges="keyboardHidden|orientation">
 		</activity>
 		<service

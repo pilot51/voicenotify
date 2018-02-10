@@ -89,7 +89,7 @@ public class MainActivity extends PreferenceActivity {
 			pNotifyLog.setOnPreferenceClickListener(this);
 			pSupport = findPreference(getString(R.string.key_support));
 			pSupport.setOnPreferenceClickListener(this);
-			findPreference(getString(R.string.key_appList)).setIntent(new Intent(getActivity(), AppList.class));
+			findPreference(getString(R.string.key_appList)).setIntent(new Intent(getActivity(), AppListActivity.class));
 			Preference pTTS = findPreference(getString(R.string.key_ttsSettings));
 			Intent ttsIntent = getTtsIntent();
 			if (ttsIntent != null) {
@@ -148,7 +148,7 @@ public class MainActivity extends PreferenceActivity {
 				return true;
 			} else if (preference == pTest) {
 				final Context context = getActivity().getApplicationContext();
-				App vnApp = AppList.findOrAddApp(context.getPackageName(), context);
+				App vnApp = AppListActivity.findOrAddApp(context.getPackageName(), context);
 				assert vnApp != null; // Prevent Lint warning. Should never be null, I want a crash report if it is.
 				if (!vnApp.getEnabled()) {
 					Toast.makeText(context, getString(R.string.test_ignored), Toast.LENGTH_LONG).show();
