@@ -100,28 +100,41 @@ public class NotifyList extends ListView {
 			return position;
 		}
 		
+		private class ViewHolder {
+			private TextView time;
+			private TextView title;
+			private TextView message;
+			private TextView ignoreReasons;
+		}
+		
 		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			View view = convertView;
+		public View getView(int position, View view, ViewGroup parent) {
+			final ViewHolder holder;
 			if (view == null) {
 				view = mInflater.inflate(R.layout.notify_log_item, parent, false);
+				holder = new ViewHolder();
+				holder.time = view.findViewById(R.id.time);
+				holder.title = view.findViewById(R.id.title);
+				holder.message = view.findViewById(R.id.message);
+				holder.ignoreReasons = view.findViewById(R.id.ignore_reasons);
+				view.setTag(holder);
+			} else {
+				holder = (ViewHolder)view.getTag();
 			}
 			final NotificationInfo item = list.get(position);
-			((TextView)view.findViewById(R.id.time)).setText(item.getTime());
-			((TextView)view.findViewById(R.id.title)).setText(item.getApp().getLabel());
-			TextView textView = view.findViewById(R.id.message);
+			holder.time.setText(item.getTime());
+			holder.title.setText(item.getApp().getLabel());
 			String logMessage = item.getLogMessage();
 			if (logMessage.length() != 0) {
-				textView.setText(logMessage);
-				textView.setVisibility(TextView.VISIBLE);
-			} else textView.setVisibility(TextView.GONE);
-			textView = view.findViewById(R.id.ignore_reasons);
+				holder.message.setText(logMessage);
+				holder.message.setVisibility(TextView.VISIBLE);
+			} else holder.message.setVisibility(TextView.GONE);
 			if (item.getIgnoreReasonsAsText() != null && item.getIgnoreReasonsAsText().length() != 0) {
-				textView.setText(item.getIgnoreReasonsAsText());
-				if (item.isSilenced()) textView.setTextColor(Color.YELLOW);
-				else textView.setTextColor(Color.RED);
-				textView.setVisibility(TextView.VISIBLE);
-			} else textView.setVisibility(TextView.GONE);
+				holder.ignoreReasons.setText(item.getIgnoreReasonsAsText());
+				if (item.isSilenced()) holder.ignoreReasons.setTextColor(Color.YELLOW);
+				else holder.ignoreReasons.setTextColor(Color.RED);
+				holder.ignoreReasons.setVisibility(TextView.VISIBLE);
+			} else holder.ignoreReasons.setVisibility(TextView.GONE);
 			view.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View v) {

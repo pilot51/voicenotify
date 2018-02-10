@@ -23,12 +23,12 @@
 		android:layout_weight="1"
 		android:orientation="vertical">
 		<TextView
-			android:id="@+id/text1"
+			android:id="@+id/app_label"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:textSize="24sp" />
 		<TextView
-			android:id="@+id/text2"
+			android:id="@+id/app_package"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content" />
 	</LinearLayout>

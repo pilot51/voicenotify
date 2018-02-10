@@ -283,14 +283,28 @@ public class AppListActivity extends ListActivity {
 			return position;
 		}
 		
+		private class ViewHolder {
+			private TextView appLabel;
+			private TextView appPackage;
+			private CheckBox checkbox;
+		}
+		
 		@Override
 		public View getView(int position, View view, ViewGroup parent) {
+			final ViewHolder holder;
 			if (view == null) {
 				view = mInflater.inflate(R.layout.app_list_item, parent, false);
+				holder = new ViewHolder();
+				holder.appLabel = view.findViewById(R.id.app_label);
+				holder.appPackage = view.findViewById(R.id.app_package);
+				holder.checkbox = view.findViewById(R.id.checkbox);
+				view.setTag(holder);
+			} else {
+				holder = (ViewHolder)view.getTag();
 			}
-			((TextView)view.findViewById(R.id.text1)).setText(adapterData.get(position).getLabel());
-			((TextView)view.findViewById(R.id.text2)).setText(adapterData.get(position).getPackage());
-			((CheckBox)view.findViewById(R.id.checkbox)).setChecked(adapterData.get(position).getEnabled());
+			holder.appLabel.setText(adapterData.get(position).getLabel());
+			holder.appPackage.setText(adapterData.get(position).getPackage());
+			holder.checkbox.setChecked(adapterData.get(position).getEnabled());
 			return view;
 		}
 		
