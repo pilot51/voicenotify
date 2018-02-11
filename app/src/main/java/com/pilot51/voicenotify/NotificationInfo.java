@@ -56,11 +56,18 @@ public class NotificationInfo {
 	private boolean silenced;
 	/** List of reasons this notification was ignored. */
 	private final List<String> ignoreReasons = new ArrayList<>();
+	/** The message that was or shall be spoken. */
+	private String ttsMessage;
 	
+	/**
+	 * @param app The app that posted the notification.
+	 * @param notification The notification from which to get most of the info.
+	 * @param context Required to get preferences and string resources when building the TTS message.
+	 */
 	// Suppressing lint because documentation says extras added in API 19 when actually added in API 18.
 	// See reported issue: https://issuetracker.google.com/issues/69396548
 	@SuppressLint("InlinedApi")
-	NotificationInfo(App app, Notification notification) {
+	NotificationInfo(App app, Notification notification, Context context) {
 		this.app = app;
 		ticker = notification.tickerText != null ? notification.tickerText.toString() : null;
 		Bundle extras = notification.extras;
@@ -69,6 +76,7 @@ public class NotificationInfo {
 		contentText = extras.getString(Notification.EXTRA_TEXT);
 		contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT);
 		time = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+		buildTtsMessage(context);
 	}
 	
 	/**
@@ -79,11 +87,17 @@ public class NotificationInfo {
 	}
 	
 	/**
+	 * @return The message that was or shall be spoken.
+	 */
+	String getTtsMessage() {
+		return ttsMessage;
+	}
+	
+	/**
 	 * Generates the string to be used for TTS.
 	 * @param context Required to get preferences and string resources.
-	 * @return The generated TTS message.
 	 */
-	String buildTtsMessage(Context context) {
+	private void buildTtsMessage(Context context) {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		final String ttsStringPref = prefs.getString(context.getString(R.string.key_ttsString), "");
 		String ttsUnformattedMsg = ttsStringPref
@@ -93,9 +107,8 @@ public class NotificationInfo {
 				.replace("#c", "%4$s") // Content Title
 				.replace("#m", "%5$s") // Content Text
 				.replace("#i", "%6$s"); // Content Info Text
-		String ttsMsg = null;
 		try {
-			ttsMsg = String.format(ttsUnformattedMsg,
+			ttsMessage = String.format(ttsUnformattedMsg,
 					app == null ? "" : app.getLabel(),
 					ticker == null ? "" : ticker.replaceAll("[|\\[\\]{}*<>]+", " "),
 					subtext == null ? "" : subtext,
@@ -106,25 +119,24 @@ public class NotificationInfo {
 			Log.w(Service.class.getSimpleName(), "Error formatting custom TTS string!");
 			e.printStackTrace();
 		}
-		if (app != null && (ttsMsg == null || ttsMsg.equals(app.getLabel()))) {
-			ttsMsg = context.getString(R.string.notification_from, app.getLabel());
+		if (app != null && (ttsMessage == null || ttsMessage.equals(app.getLabel()))) {
+			ttsMessage = context.getString(R.string.notification_from, app.getLabel());
 		}
-		if (!TextUtils.isEmpty(ttsMsg)) {
+		if (!TextUtils.isEmpty(ttsMessage)) {
 			String ttsTextReplace = prefs.getString(context.getString(R.string.key_ttsTextReplace), null);
 			List<Pair<String, String>> textReplaceList = TextReplacePreference.convertStringToList(ttsTextReplace);
 			for (Pair<String, String> pair : textReplaceList) {
-				ttsMsg = ttsMsg.replaceAll("(?i)" + Pattern.quote(pair.first), pair.second);
+				ttsMessage = ttsMessage.replaceAll("(?i)" + Pattern.quote(pair.first), pair.second);
 			}
 		}
-		if (ttsMsg != null) {
+		if (ttsMessage != null) {
 			try {
 				int maxLength = Integer.parseInt(prefs.getString(context.getString(R.string.key_max_length), null));
 				if (maxLength > 0) {
-					ttsMsg = ttsMsg.substring(0, Math.min(maxLength, ttsMsg.length()));
+					ttsMessage = ttsMessage.substring(0, Math.min(maxLength, ttsMessage.length()));
 				}
 			} catch (NumberFormatException e) {}
 		}
-		return ttsMsg;
 	}
 	
 	/**

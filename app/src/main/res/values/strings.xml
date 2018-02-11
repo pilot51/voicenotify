@@ -158,4 +158,5 @@
 	<string name="reason_headset_on">Headset on</string>
 	<string name="reason_shake">Silenced by shake</string>
 	<string name="reason_suspended">VN suspended by widget</string>
+	<string name="reason_service_stopped">Service stopped</string>
 </resources>

@@ -60,7 +60,7 @@ public class Service extends NotificationListenerService {
 	private RepeatTimer repeater;
 	private Shake shake;
 	private static boolean isInitialized, isSuspended, isScreenOn;
-	private final List<String> repeatList = new ArrayList<>();
+	private final List<NotificationInfo> repeatList = new ArrayList<>();
 	
 	/**
 	 * this is used to determine if we are the first, middle, or last thing to be spoken at the moment, for enabling/disabling shake and audio focus request
@@ -125,8 +125,8 @@ public class Service extends NotificationListenerService {
 		}
 		long msgTime = System.currentTimeMillis();
 		App app = AppListActivity.findOrAddApp(sbn.getPackageName(), this);
-		NotificationInfo info = new NotificationInfo(app, notification);
-		final String ttsMsg = info.buildTtsMessage(getApplicationContext());
+		final NotificationInfo info = new NotificationInfo(app, notification, getApplicationContext());
+		final String ttsMsg = info.getTtsMessage();
 		final String[] ignoreStrings = prefs.getString(getString(R.string.key_ignore_strings), "").toLowerCase().split("\n");
 		boolean stringIgnored = false;
 		for (String s : ignoreStrings) {
@@ -175,7 +175,7 @@ public class Service extends NotificationListenerService {
 					interval = 0;
 				}
 				if (interval > 0) {
-					repeatList.add(ttsMsg);
+					repeatList.add(info);
 					if (repeater == null) {
 						repeater = new RepeatTimer(interval);
 					}
@@ -191,7 +191,7 @@ public class Service extends NotificationListenerService {
 					handler.post(new Runnable() {
 						@Override
 						public void run() {
-							speak(ttsMsg);
+							speak(info);
 						}
 					});
 				}
@@ -209,10 +209,16 @@ public class Service extends NotificationListenerService {
 	}
 	
 	/**
-	 * Send a string to be spoken by TTS.
-	 * @param msg The string to be spoken.
+	 * Send a notification to be spoken by TTS.
+	 * @param info The info for the notification to be spoken.
 	 */
-	private void speak(final String msg) {
+	private void speak(final NotificationInfo info) {
+		if (mTts == null) {
+			Log.w(TAG, "Speak failed due to service destroyed");
+			info.addIgnoreReason(getString(R.string.reason_service_stopped));
+			NotifyList.refresh();
+			return;
+		}
 		if (messageStatuses.isEmpty()) { //if there are no messages in the queue, start up shake detection and audio focus requesting
 			shake.enable();
 			shouldRequestFocus = Common.getPrefs(getApplicationContext())
@@ -236,7 +242,7 @@ public class Service extends NotificationListenerService {
 				Integer.toString(Common.getSelectedAudioStream(getApplicationContext())));
 		//not used anywhere, but has to be set to get the UtteranceProgressListener to trigger its submethods
 		ttsParams.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, Long.toString(System.currentTimeMillis()));
-		mTts.speak(msg, TextToSpeech.QUEUE_ADD, ttsParams);
+		mTts.speak(info.getTtsMessage(), TextToSpeech.QUEUE_ADD, ttsParams);
 	}
 	
 	/**
@@ -296,8 +302,8 @@ public class Service extends NotificationListenerService {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					for (String s : repeatList) {
-						speak(s);
+					for (NotificationInfo info : repeatList) {
+						speak(info);
 					}
 				}
 			});
