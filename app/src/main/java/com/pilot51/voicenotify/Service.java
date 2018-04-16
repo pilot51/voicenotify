@@ -251,11 +251,14 @@ public class Service extends NotificationListenerService {
 	 * @return True if an ignore condition is met, false otherwise.
 	 */
 	private boolean ignore(boolean isNew) {
+		NotificationInfo info = NotifyList.getLastNotification();
+		if (info == null) {
+			return false;
+		}
 		Calendar c = Calendar.getInstance();
 		int calTime = c.get(Calendar.HOUR_OF_DAY) * 60 + c.get(Calendar.MINUTE);
 		int quietStart = prefs.getInt(getString(R.string.key_quietStart), 0);
 		int quietEnd = prefs.getInt(getString(R.string.key_quietEnd), 0);
-		NotificationInfo info = NotifyList.getLastNotification();
 		if ((quietStart < quietEnd & quietStart <= calTime & calTime < quietEnd)
 				|| (quietEnd < quietStart && (quietStart <= calTime || calTime < quietEnd))) {
 			info.addIgnoreReason(getString(R.string.reason_quiet));

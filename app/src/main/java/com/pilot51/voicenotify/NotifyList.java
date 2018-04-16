@@ -61,7 +61,8 @@ public class NotifyList extends ListView {
 	}
 	
 	static NotificationInfo getLastNotification() {
-		return list.get(0);
+		if (list.isEmpty()) return null;
+		else return list.get(0);
 	}
 	
 	private interface OnListChangeListener {
