@@ -73,7 +73,8 @@ public class NotificationInfo {
 		Bundle extras = notification.extras;
 		subtext = extras.getString(Notification.EXTRA_SUB_TEXT);
 		contentTitle = extras.getString(Notification.EXTRA_TITLE);
-		contentText = extras.getString(Notification.EXTRA_TEXT);
+		CharSequence text = extras.getCharSequence(Notification.EXTRA_TEXT);
+		contentText = text != null ? text.toString() : null;
 		contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT);
 		time = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(Calendar.getInstance().getTime());
 		buildTtsMessage(context);
