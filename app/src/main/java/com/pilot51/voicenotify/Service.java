@@ -192,7 +192,9 @@ public class Service extends NotificationListenerService {
 					interval = Integer.parseInt(intervalStr);
 				}
 				if (interval > 0) {
-					repeatList.add(info);
+					synchronized (repeatList) {
+						repeatList.add(info);
+					}
 					if (repeater == null) {
 						repeater = new RepeatTimer(interval);
 					}
@@ -324,8 +326,10 @@ public class Service extends NotificationListenerService {
 			handler.post(new Runnable() {
 				@Override
 				public void run() {
-					for (NotificationInfo info : repeatList) {
-						speak(info);
+					synchronized (repeatList) {
+						for (NotificationInfo info : repeatList) {
+							speak(info);
+						}
 					}
 				}
 			});
@@ -472,7 +476,9 @@ public class Service extends NotificationListenerService {
 					isScreenOn = true;
 					if (repeater != null) {
 						repeater.cancel();
-						repeatList.clear();
+						synchronized (repeatList) {
+							repeatList.clear();
+						}
 					}
 					interruptIfIgnored = false;
 					break;
