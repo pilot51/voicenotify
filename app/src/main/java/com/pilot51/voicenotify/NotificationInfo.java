@@ -26,12 +26,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.util.Pair;
 
+import java.text.MessageFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.IllegalFormatException;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -50,12 +52,14 @@ public class NotificationInfo {
 	private final String contentText;
 	/** The notification's content info. */
 	private final String contentInfoText;
-	/** The formatted time that this instance of NotificationInfo was created. */
-	private final String time;
+	/** Calendar representing the time that this instance of NotificationInfo was created. */
+	private final Calendar calendar;
+	/** Set of reasons this notification was ignored. */
+	private final Set<IgnoreReason> ignoreReasons = new HashSet<>();
 	/** Indicates if the notification was silenced (interrupted). */
 	private boolean silenced;
-	/** List of reasons this notification was ignored. */
-	private final List<String> ignoreReasons = new ArrayList<>();
+	/** The Ignore Repeats setting in seconds, set by {@link #addIgnoreReasonIdentical(int)}. */
+	private int ignoreRepeatSeconds = -1;
 	/** The message that was or shall be spoken. */
 	private String ttsMessage;
 	
@@ -76,7 +80,7 @@ public class NotificationInfo {
 		CharSequence text = extras.getCharSequence(Notification.EXTRA_TEXT);
 		contentText = text != null ? text.toString() : null;
 		contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT);
-		time = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(Calendar.getInstance().getTime());
+		calendar = Calendar.getInstance();
 		buildTtsMessage(context);
 	}
 	
@@ -157,10 +161,22 @@ public class NotificationInfo {
 	
 	/**
 	 * Gets the reasons this notification was ignored as a single string.
+	 * @param c Context required to get string resources.
 	 * @return Comma-separated list of ignore reasons.
 	 */
-	String getIgnoreReasonsAsText() {
-		return getIgnoreReasons().toString().replaceAll("[\\[\\]]", "");
+	String getIgnoreReasonsAsText(Context c) {
+		String text = IgnoreReason.convertSetToString(ignoreReasons, c);
+		if (ignoreReasons.contains(IgnoreReason.IDENTICAL)) {
+			text = MessageFormat.format(text, ignoreRepeatSeconds);
+		}
+		return text;
+	}
+	
+	/**
+	 * @return The calendar representing the time that this NotificationInfo was created.
+	 */
+	Calendar getCalendar() {
+		return calendar;
 	}
 	
 	/**
@@ -168,7 +184,7 @@ public class NotificationInfo {
 	 * Formatted as HH:mm:ss.
 	 */
 	String getTime() {
-		return time;
+		return new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(calendar.getTime());
 	}
 	
 	/**
@@ -188,17 +204,34 @@ public class NotificationInfo {
 	}
 	
 	/**
+	 * Set this notification as ignored for being identical to a previous notification within the configured time
+	 * @param ignoreRepeatTime The time in seconds that identical notifications are not to be spoken.
+	 */
+	void addIgnoreReasonIdentical(int ignoreRepeatTime) {
+		ignoreRepeatSeconds = ignoreRepeatTime;
+		ignoreReasons.add(IgnoreReason.IDENTICAL);
+	}
+	
+	/**
 	 * Add a reason this notification was ignored.
 	 * @param reason The ignore reason to add.
 	 */
-	void addIgnoreReason(String reason) {
+	void addIgnoreReason(IgnoreReason reason) {
 		ignoreReasons.add(reason);
 	}
 	
 	/**
-	 * @return List of reasons this notification was ignored, or an empty list if not ignored.
+	 * Add a set of reasons this notification was ignored.
+	 * @param reasons The ignore reasons to add.
 	 */
-	List<String> getIgnoreReasons() {
+	void addIgnoreReasons(Set<IgnoreReason> reasons) {
+		ignoreReasons.addAll(reasons);
+	}
+	
+	/**
+	 * @return Set of reasons this notification was ignored, or an empty set if not ignored.
+	 */
+	Set<IgnoreReason> getIgnoreReasons() {
 		return ignoreReasons;
 	}
 }

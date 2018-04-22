@@ -60,11 +60,6 @@ public class NotifyList extends ListView {
 		refresh();
 	}
 	
-	static NotificationInfo getLastNotification() {
-		if (list.isEmpty()) return null;
-		else return list.get(0);
-	}
-	
 	private interface OnListChangeListener {
 		void onListChange();
 	}
@@ -130,8 +125,8 @@ public class NotifyList extends ListView {
 				holder.message.setText(logMessage);
 				holder.message.setVisibility(TextView.VISIBLE);
 			} else holder.message.setVisibility(TextView.GONE);
-			if (item.getIgnoreReasonsAsText() != null && item.getIgnoreReasonsAsText().length() != 0) {
-				holder.ignoreReasons.setText(item.getIgnoreReasonsAsText());
+			if (!item.getIgnoreReasons().isEmpty()) {
+				holder.ignoreReasons.setText(item.getIgnoreReasonsAsText(view.getContext()));
 				if (item.isSilenced()) holder.ignoreReasons.setTextColor(Color.YELLOW);
 				else holder.ignoreReasons.setTextColor(Color.RED);
 				holder.ignoreReasons.setVisibility(TextView.VISIBLE);
