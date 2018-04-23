@@ -301,16 +301,22 @@ public class MainActivity extends PreferenceActivity {
 									new DialogInterface.OnMultiChoiceClickListener() {
 										@Override
 										public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-											if (which == 0) { // Screen off
-												Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_SCREEN_OFF, isChecked).apply();
-											} else if (which == 1) { // Screen on
-												Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_SCREEN_ON, isChecked).apply();
-											} else if (which == 2) { // Headset off
-												Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_HEADSET_OFF, isChecked).apply();
-											} else if (which == 3) { // Headset on
-												Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_HEADSET_ON, isChecked).apply();
-											} else if (which == 4) { // Silent/vibrate
-												Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_SILENT_ON, isChecked).apply();
+											switch (which) {
+												case 0:  // Screen off
+													Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_SCREEN_OFF, isChecked).apply();
+													break;
+												case 1:  // Screen on
+													Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_SCREEN_ON, isChecked).apply();
+													break;
+												case 2:  // Headset off
+													Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_HEADSET_OFF, isChecked).apply();
+													break;
+												case 3:  // Headset on
+													Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_HEADSET_ON, isChecked).apply();
+													break;
+												case 4:  // Silent/vibrate
+													Common.getPrefs(getActivity()).edit().putBoolean(Common.KEY_SPEAK_SILENT_ON, isChecked).apply();
+													break;
 											}
 										}
 									}

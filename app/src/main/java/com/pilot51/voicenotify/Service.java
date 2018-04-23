@@ -109,7 +109,7 @@ public class Service extends NotificationListenerService {
 						if (interrupted) {
 							NotificationInfo info = ttsQueue.get(Long.parseLong(utteranceId));
 							if (info != null) {
-								info.setSilenced(true);
+								info.setSilenced();
 								NotifyList.refresh();
 							}
 							ttsQueue.clear();

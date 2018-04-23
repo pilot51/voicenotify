@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2012 Mark Injerd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+	<string name="app_name">Notifikasi Suara</string>
+	
+	<!-- Used by multiple files -->
+	<string name="app_is_ignored">%s diabaikan</string>
+	<string name="app_is_not_ignored">%s tidak diabaikan</string>
+	<string name="service_running">Servis VN sedang digunakan</string>
+	<string name="service_suspended">Servis VN sedang ditangguhkan</string>
+	
+	<!-- xml/preferences.xml -->
+	<string name="app_list">Senarai Apl</string>
+	<string name="app_list_summary">Senarai aplikasi terpasang yang boleh diabaikan</string>
+	<string name="tts">Teks-Ke-Ucapan</string>
+	<string name="tts_summary">Konfigur aktiviti Teks-Ke-Ucapan</string>
+	<string name="tts_settings">Seting TTS</string>
+	<string name="tts_settings_summary">Buka seting Android Teks-Ke-Ucapan</string>
+	<string name="tts_settings_summary_fail">Gagal cari seting TTS! Jika ada diperanti anda (mesti), sila rujuk pengeluar.</string>
+	<string name="tts_message">Mesej TTS</string>
+	<string name="tts_message_summary">Pilih bahagian mana notifikasi digunakan</string>
+	<string name="tts_message_dialog">#a = Apl tajuk\n#t = Ticker\n#s = Subtekst\n#c = Kandungan tajuk\n#m = Kandungan mesej\n#i = Kandungan info\n\nAsal:\n#a. #c. #m.\n\nOld default (v1.0.x):\n#a: #t</string>
+	<string name="tts_text_replace">Penukaran Ayat TTS</string>
+	<string name="tts_text_replace_summary">Gantikan teks untuk bercakap, apa-apa untuk membetulkan sebutan</string>
+	<string name="tts_text_replace_dialog">Gantikan teks untuk bercakap, membolehkan anda untuk menyesuaikan bagaimana teks ke diucap ke  perkataan atau teks ganti bagi apa-apa alasan. Teks lain bagi menggantikan adalah kes tidak sensitif.</string>
+	<string name="tts_stream">Strim Audio TTS</string>
+	<string name="tts_stream_summary">Pilih strim audio yang teks ke ucapan dimainkan melalui</string>
+	<string name="tts_delay">Tangguh TTS</string>
+	<string name="tts_delay_summary">Tangguh TTS setkan beberapa saat selepas pemberitahuan</string>
+	<string name="tts_delay_dialog_msg">Bilangan saat untuk menunggu selepas notifikasi sebelum ucapan.</string>
+	<string name="tts_repeat">Ulang TTS</string>
+	<string name="tts_repeat_summary">Ulang berterusan notifikasi atas TTS sehingga skrin dibuka</string>
+	<string name="tts_repeat_dialog_msg">Notifikasi diulang pada tempoh yang ditetapkan sehingga skrin dihidupkan. Notifikasi yang dicipta semasa skrin dihidupkan adalah tidak diulang. Nilai didalam minit. Kosong atau 0 untuk mematikan.</string>
+	<string name="audio_focus">Pegun/media malap</string>
+	<string name="audio_focus_summary">Mohon media lain untuk pegun/malap ketika ucapan</string>
+	<string name="shake_to_silence">Goyang-Ke-Senyap</string>
+	<string name="shake_to_silence_summary">Ubah sensitiviti tetapan Goyang-Ke-Senyap</string>
+	<string name="shake_to_silence_dialog_msg">Nilai rendah adalah lebih sensitif.\n\nAsal: 100\nKosongkan untuk nyahaktif.</string>
+	<string-array name="stream_name">
+		<item>Media</item>
+		<item>Notifikasi</item>
+		<item>Suara</item>
+		<item>Dering</item>
+		<item>Penggera</item>
+	</string-array>
+	<string name="ignore_strings">Abaikan Teks</string>
+	<string name="ignore_strings_summary">Abaikan notifikasi yang mengandungi teks didalam mesej</string>
+	<string name="ignore_strings_dialog_msg">Asingkan entri individu dengan perenggan baru.</string>
+	<string name="ignore_empty">Abaikan Kosong</string>
+	<string name="ignore_empty_summary_on">Notifikasi tanpa mesej tidak diucapkan</string>
+	<string name="ignore_empty_summary_off">Notifikasi tanpa mesej akan diucapkan sebagai \"Notifikasi dari [nama apl].\"</string>
+	<string name="ignore_repeat">Abaikan Ulangan</string>
+	<string name="ignore_repeat_summary">Abaikan pemberitahuan seterusnya yang serupa dalam masa yang ditetapkan</string>
+	<string name="ignore_repeat_dialog_msg">Tetapkan saat yang melepasi sejak notifikasi terakhir sebelum ulangan diucapkan.\abaikan ulangan semula kiraan dan pemberitahuan yang berbeza. \nKosong = tak terhingga.</string>
+	<string name="max_length">Mesej Maksima</string>
+	<string name="max_length_summary">Panjang mesej maksima diucapkan. Mesej yang besar akan dipendekkan.</string>
+	<string name="max_length_dialog_msg">Panjang mesej maksima diucapkan\nMesej yang besar akan dipendekkan.</string>
+	<string name="device_state">Status Peranti</string>
+	<string name="device_state_summary">Pilih jika ingin diucapkan didalam status peranti tertentu</string>
+	<string name="device_state_dialog_title">Ucapan semasa peranti distatus ini</string>
+	<string-array name="device_states">
+		<item>Tutup skrin</item>
+		<item>Skrin buka</item>
+		<item>Fon kepala tutup</item>
+		<item>Fon kepala buka</item>
+		<item>Senyap/Getar</item>
+	</string-array>
+	<string name="quiet_start">Masa Senyap Mula</string>
+	<string name="quiet_start_summary">Tiada\ ucapan selepas masa ini.\nBiarkan sama untuk nyahaktif.</string>
+	<string name="quiet_end">Masa Senyap Henti</string>
+	<string name="quiet_end_summary">Tiada ucapan sebelum masa ini.\nBiarkan sama untuk nyahaktif.</string>
+	<string name="test_summary">Papar notifikasi (ditangguh 5 saat) untuk cubaan tetapan seting</string>
+	<string name="test_ignored">Voice Notify diabaikan dalam Senarai Aplikasi.\nCubaan mula tetapi notifikasi tidak diucapkan.</string>
+	<string name="notify_log_summary">Senarai terakhir notifikasi.\nPaparkan masa, nama apl, mesej dan sebab diabaikan.</string>
+	<string name="support_summary">Donasi, nilai/komen, alihbahasa, punca kod atau rujuk pengeluar</string>
+	
+	<!-- TextReplacePreference.java -->
+	<string name="text_replace_error_duplicate">Pendua! Tidak akan disimpan</string>
+	
+	<!-- text_replace_row.xml -->
+	<string name="text_to_replace">Teks untuk ditukar</string>
+	<string name="replacement_text">Pertukaran teks</string>
+	
+	<!-- MainActivity.java and xml/preferences.xml -->
+	<string name="test">Cuba</string>
+	<string name="notify_log">Log Notifikasi</string>
+	<string name="support">Sokong Voice Notify</string>
+	
+	<!-- MainActivity.java -->
+	<string name="service_disabled">Servis VN dinyahaktif</string>
+	<string name="status_summary_notification_access_enabled">Buka seting akses notifikasi android untuk nyahaktif VN</string>
+	<string name="status_summary_notification_access_disabled">Buka seting akses notifikasi android untuk aktifkan VN</string>
+	<string name="status_summary_suspended">Pilih untuk aktifkan VN</string>
+	<string name="notification_channel_desc">Gunakan untuk cubaan notifikasi</string>
+	<string name="test_ticker">Ini adalah mesej ticker</string>
+	<string name="test_subtext">Ini Subteks</string>
+	<string name="test_content_title">Kandungan Tajuk</string>
+	<string name="test_content_text">Ini adalah kandungan mesej.</string>
+	<string name="test_content_info">Kandungan Info</string>
+	<string name="donate">Donasi</string>
+	<string-array name="support_items">
+		<item>@string/donate</item>
+		<item>Nilai/Komen</item>
+		<item>Hubungi Pembina Apl</item>
+		<item>Alihbahasa</item>
+		<item>Kod Punca</item>
+	</string-array>
+	<string-array name="donate_services">
+		<item>Google Wallet</item>
+		<item>PayPal</item>
+	</string-array>
+	<string name="donate_wallet_title">Donasi - Google Wallet</string>
+	<string name="donate_wallet_message">Jika anda berada di United State dan ingin membuat donasi melalui Google Wallet, sila gunakan Send Money dan hantar kepada pilota51@gmail.com.\nMalangnya, Send Money tidak tersedia di luar US.\n\nTerima kasih kerana menggunakan dan menyokong Voice Notify!</string>
+	<string name="donate_wallet_launch_app">Mulakan Apl Wallet</string>
+	<string name="donate_wallet_launch_web">Buka Website Wallet</string>
+	<string name="error_market">Ralat: Gagal Google Play Store tiada</string>
+	<string name="error_email">Ralat: Gagal cari aplikasi emel.</string>
+	<string name="tts_message_reset_default">Tetapan baru seting Mesej TTS dikemaskini</string>
+	
+	<!-- Service.java -->
+	<string name="notification_from">Notifikasi dari %s.</string>
+	<string name="error_tts_init">Ralat: TTS gagal!</string>
+	
+	<!-- NotifyList.java -->
+	<string name="yes">Ya</string>
+	<string name="ignore_app">Abai %s?</string>
+	<string name="unignore_app">Jgn Abaikan %s?</string>
+	
+	<!-- menu/app_list.xml-->
+	<string name="ignore_all">Abai Semua</string>
+	<string name="ignore_none">Tiada Abai</string>
+	<string name="filter">Tapis</string>
+	
+	<!-- Ignore/Silence reasons -->
+	<string name="reason_app">Abai apl</string>
+	<string name="reason_string">Abai teks</string>
+	<string name="reason_empty_msg">Mesej kosong</string>
+	<string name="reason_identical">Identiti mesej dalam {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+	<string name="reason_quiet">Masa senyap</string>
+	<string name="reason_silent">Mod senyap atau getar</string>
+	<string name="reason_call">Panggilan aktif</string>
+	<string name="reason_screen_off">Tutup skrin</string>
+	<string name="reason_screen_on">Skrin buka</string>
+	<string name="reason_headset_off">Fon kepala tutup</string>
+	<string name="reason_headset_on">Fon kepala buka</string>
+	<string name="reason_shake">Senyap dengan goyang</string>
+	<string name="reason_suspended">VN ditangguhkan oleh wiget</string>
+	<string name="reason_service_stopped">Servis berhenti</string>
+</resources>

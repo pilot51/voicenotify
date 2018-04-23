@@ -39,7 +39,7 @@ import java.util.regex.Pattern;
 /**
  * Class for all the information about a notification that we use.
  */
-public class NotificationInfo {
+class NotificationInfo {
 	/** The app that posted the notification. */
 	private final App app;
 	/** The notification's ticker message. */
@@ -135,12 +135,13 @@ public class NotificationInfo {
 			}
 		}
 		if (ttsMessage != null) {
-			try {
-				int maxLength = Integer.parseInt(prefs.getString(context.getString(R.string.key_max_length), null));
+			String maxLengthStr = prefs.getString(context.getString(R.string.key_max_length), null);
+			if (!TextUtils.isEmpty(maxLengthStr)) {
+				int maxLength = Integer.parseInt(maxLengthStr);
 				if (maxLength > 0) {
 					ttsMessage = ttsMessage.substring(0, Math.min(maxLength, ttsMessage.length()));
 				}
-			} catch (NumberFormatException e) {}
+			}
 		}
 	}
 	
@@ -196,11 +197,10 @@ public class NotificationInfo {
 	
 	/**
 	 * Used to indicate the color of the ignore reasons in {@link NotifyList}.
-	 * Yellow if silenced (interrupted), red if never spoken.
-	 * @param silenced True if this notification was silenced (interrupted), otherwise false.
+	 * Call this to set it yellow for silenced (interrupted). Default is red for never spoken.
 	 */
-	void setSilenced(boolean silenced) {
-		this.silenced = silenced;
+	void setSilenced() {
+		silenced = true;
 	}
 	
 	/**

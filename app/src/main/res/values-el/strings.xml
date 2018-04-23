@@ -25,17 +25,17 @@
 	<!-- xml/preferences.xml -->
 	<string name="app_list">Λίστα Εφαρμογών</string>
 	<string name="app_list_summary">Εμφάνιση λίστας εφαρμογών που μπορούν να αγνοηθούν.</string>
-	
-	
+	<string name="tts">Κείμενο-σε-Ομιλία</string>
+	<string name="tts_summary">Ρυθμίσεις Κειμένου-σε-Ομιλία</string>
 	<string name="tts_settings">Ρυθμίσεις TTS</string>
 	<string name="tts_settings_summary">Δείτε τις ρυθμίσεις σχετικά με το Text-To-Speech.</string>
 	<string name="tts_settings_summary_fail">Αδυναμία εύρεσης ρυθμίσεων TTS ! Εάν υπάρχουν στην συσκευή σας (θα έπρεπε...), παρακαλώ επικοινωνήστε με τον προγραμματιστή.</string>
 	<string name="tts_message">μήνυμα TTS</string>
-	<string name="tts_message_summary">Διαμορφώστε τις εκφωνήσεις των ανακοινώσεων του Text-To-Speech.</string>
-	
-	
-	
-	
+	<string name="tts_message_summary">Προσαρμόστε ποιά μέρη των ειδοποιήσεων θα ακούγονται</string>
+	<string name="tts_message_dialog">#a = Τίτλος Εφαρμογής\n#t = Κυλιόμενο\n#s = Υπο-κέιμενο\n#c = Τίτλος περιεχομένου\n#m = Μήνυμα περιεχομένου\n#i = Πληροφοριές περιεχομένου\n\nDefault:\n#a. #c. #m.\n\nΠαλιό κείμενο (v1.0.x):\n#a: #t</string>
+	<string name="tts_text_replace">Κείμενο αντικατάστασης TTS</string>
+	<string name="tts_text_replace_summary">Αναπληρώστε το κείμενο που θα εκφωνηθεί, όπως για παράδειγμα να διορθώσετε την προφορά</string>
+	<string name="tts_text_replace_dialog">Αντικαταστήστε το κείμενο που θέλετε να εκφωνηθεί, επιτρέποντάς σας να προσαρμόσετε τον τρόπο με τον οποίο το Κείμενο-σε-Ομιλία να προφέρει τις λέξεις ή να αντικαταστήσει κείμενο για οποιονδήποτε άλλο λόγο.\n\nΤο κείμενο που αντικαθιστάται είναι ευαίσθητο στα πεζά γράμματα.</string>
 	<string name="tts_stream">TTS Εξοδος Ηχου</string>
 	<string name="tts_stream_summary">Επιλέξτε την έξοδο ήχου οπου το Text-To-Speech θα κάνει αναπαραγωγή.</string>
 	<string name="tts_delay">TTS χρονοκαθυστέρηση</string>
@@ -65,9 +65,9 @@
 	<string name="ignore_repeat">Αγνόηση Επαναλήψεων</string>
 	<string name="ignore_repeat_summary">Αγνοήστε τις επόμενες όμοιες ανακοινώσεις μέσα σε ένα καθορισμένο χρονικό διάστημα.</string>
 	<string name="ignore_repeat_dialog_msg">Καθορίστε τα δευτερόλεπτα που πρέπει να περάσουν απο την τελευταία ανακοίνωση πρίν γίνει επανάληψη εκφώνησης.\nΑγνοημένες επαναλήψεις μηδενίζουν τον μετρητή.\nΚενό = χωρίς όριο</string>
-	
-	
-	
+	<string name="max_length">Μέγιστο Μήνυμα</string>
+	<string name="max_length_summary">Μέγιστο μέγεθος κειμένου για εκφώνηση. Μεγαλύτερα κείμενα θα περικοπούν.</string>
+	<string name="max_length_dialog_msg">Μέγιστο μέγεθος κειμένου για εκφώνηση\nΜεγαλύτερα κείμενα θα περικοπούν.</string>
 	<string name="device_state">Κατάσταση Συσκευής</string>
 	<string name="device_state_summary">Επιλέξτε αν θέλετε να εκφωνούνται κατά τη διάρκεια ορισμένων καταστάσεων της συσκευής.</string>
 	<string name="device_state_dialog_title">Εκφώνηση κατα τη διάρκεια αυτών των καταστάσεων συσκευής</string>
@@ -88,11 +88,11 @@
 	<string name="support_summary">Συνισφορά, αξιολόγηση/σχολιασμός, μετάφραση, πηγαίος κώδικας ή επικοινωνήστε με τον προγραμματισμό.</string>
 	
 	<!-- TextReplacePreference.java -->
-	
+	<string name="text_replace_error_duplicate">Υπάρχει ήδη! Δεν θα αποθηκευτεί.</string>
 	
 	<!-- text_replace_row.xml -->
-	
-	
+	<string name="text_to_replace">Κείμενο για αντικατάσταση</string>
+	<string name="replacement_text">Κείμενο αντικατάστασης</string>
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Δοκιμή</string>
@@ -101,15 +101,15 @@
 	
 	<!-- MainActivity.java -->
 	<string name="service_disabled">VN υπηρεσία είναι ανενεργή</string>
-	
-	
+	<string name="status_summary_notification_access_enabled">Ανοίξτε τις Ρυθμίσεις Ειδοποιήσεων για να απενεργοποιήσετε την υπηρεσία του VN</string>
+	<string name="status_summary_notification_access_disabled">Ανοίξτε τις Ρυθμίσεις Ειδοποιήσεων για να ενεργοποιήσετε την υπηρεσία του VN</string>
 	<string name="status_summary_suspended">Επιλέξτε για την ενεργοποίηση του VN.</string>
-	
-	
-	
-	
-	
-	
+	<string name="notification_channel_desc">Χρησιμοποιείται για δοκιμαστική ανακοίνωση</string>
+	<string name="test_ticker">Κυλιόμενο μήνυμα</string>
+	<string name="test_subtext">Το υπο-κέιμενο</string>
+	<string name="test_content_title">Τίτλος περιεχομένου</string>
+	<string name="test_content_text">Αυτό είναι το μήνυμα περιεχομένου.</string>
+	<string name="test_content_info">Πληροφορίες Περιεχομένου</string>
 	<string name="donate">Συνισφορά</string>
 	<string-array name="support_items">
 		<item>@string/donate</item>
@@ -128,7 +128,7 @@
 	<string name="donate_wallet_launch_web">Ανοιγμα ιστοσελίδας Wallet</string>
 	<string name="error_market">Σφάλμα: αδυναμία εύρεσης της εφαρμογής Google Play Store.</string>
 	<string name="error_email">Σφάλμα: αδυναμία εύρεσης εφαρμογής για αποστολή email.</string>
-	
+	<string name="tts_message_reset_default">Κείμενο TTS ρύθμιση μηνυμάτων ενημερώθηκε στη νέα προεπιλεγμένη τιμή</string>
 	
 	<!-- Service.java -->
 	<string name="notification_from">Ανακοίνωση απο %s.</string>
@@ -151,11 +151,12 @@
 	<string name="reason_identical">Πανομοιότυπο μήνυμα σε {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
 	<string name="reason_quiet">Ωρες σίγασης</string>
 	<string name="reason_silent">Σίγαση ή δόνηση</string>
-	
+	<string name="reason_call">Ενεργή τηλεφωνική κλήση</string>
 	<string name="reason_screen_off">Οθόνη κλειστή</string>
 	<string name="reason_screen_on">Οθόνη ενεργή</string>
 	<string name="reason_headset_off">Χωρίς ακουστικά</string>
 	<string name="reason_headset_on">Ακουστικά ενεργά</string>
 	<string name="reason_shake">Σίγαση απο ανακίνηση</string>
 	<string name="reason_suspended">VN προσωρινά μή ενεργό απο μικροεφαρμογή</string>
+	<string name="reason_service_stopped">Η Υπηρεσία σταμάτησε</string>
 </resources>

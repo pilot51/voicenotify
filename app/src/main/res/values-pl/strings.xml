@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2012 Mark Injerd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources>
+	
+	
+	<!-- Used by multiple files -->
+	<string name="app_is_ignored">%s jest ignorowane</string>
+	<string name="app_is_not_ignored">%s nie jest ignorowane</string>
+	<string name="service_running">Serwis VN jest uruchomiony</string>
+	<string name="service_suspended">Serwis VN jest wstrzymany</string>
+	
+	<!-- xml/preferences.xml -->
+	<string name="app_list">Lista aplikacji</string>
+	<string name="app_list_summary">Lista zainstalowanych aplikacji które mogą być ignorowane</string>
+	<string name="tts">Synteza mowy TTS</string>
+	<string name="tts_summary">Skonfiguruj zachowanie syntezatora mowy TTS</string>
+	<string name="tts_settings">Ustawienia TTS</string>
+	<string name="tts_settings_summary">Otwórz ustawienia syntezatora mowy TTS androida</string>
+	<string name="tts_settings_summary_fail">Nie można odnaleźć ustawień syntezatora mowy TTS na urządzeniu! jeżeli istniej (a powinien) skontaktuj się z developerem</string>
+	<string name="tts_message">Wiadomość TTS</string>
+	<string name="tts_message_summary">Dopasuj które części powiadomienia mają być wypowiedziane</string>
+	
+	<string name="tts_text_replace">Wymiana tekstu TTS</string>
+	<string name="tts_text_replace_summary">Zamiana tekstu do poprawnej wymowy</string>
+	<string name="tts_text_replace_dialog">Zamiana tekstu do wypowiedzenia, pozwalający dostosować w jaki syntezator mowy TTS wymawia słowa lub zamienia tekst z dowolnego innego powodu. \n\nTekst do wymowy jest niewrażliwy na wielkość liter.</string>
+	<string name="tts_stream">Strumień dźwięku syntezatora TTS</string>
+	<string name="tts_stream_summary">Wybierz strumień dźwięku z którego syntezator mowy TTS ma mówić</string>
+	<string name="tts_delay">Opóźnienie TTS</string>
+	<string name="tts_delay_summary">Opóźnia syntezator mowy TTS o wybraną liczbę sekund po pojawienia się powiadomienia</string>
+	<string name="tts_delay_dialog_msg">Liczba sekund do odczekania po otrzymaniu powiadomienia</string>
+	<string name="tts_repeat">Powtórzenia TTS</string>
+	<string name="tts_repeat_summary">Ciągle powtarzaj wymowę powiadomienia do czasu włączenia ekranu</string>
+	<string name="tts_repeat_dialog_msg">Powiadomienia są powtarzane przez zdefiniowany interwał do czasu włączenia ekranu. Powiadomienia otrzymane w czasie włączonego ekranu nie są powtarzane. \n\nWartość w minutach. Pusto albo 0 to wyłączone.</string>
+	<string name="audio_focus">Zapałzuj/przycisz media</string>
+	<string name="audio_focus_summary">Zażądaj inne media do zapałzowania/przyciszenia w czasie mówienia</string>
+	<string name="shake_to_silence">Potrząśnij aby wyciszyć</string>
+	<string name="shake_to_silence_summary">Dostosuj wrażliwość progu wstrząśnięcia do wyciszenia</string>
+	<string name="shake_to_silence_dialog_msg">Niższe wartości oznaczają większą wrażliwość. \n\nDomyślnie: 100\nPuste aby wyłączyć </string>
+	<string-array name="stream_name">
+		<item>Media</item>
+		<item>Powiadomienia</item>
+		<item>Głos</item>
+		<item>Dzwonek</item>
+		<item>Alarm</item>
+	</string-array>
+	<string name="ignore_strings">Ignoruj tekst</string>
+	<string name="ignore_strings_summary">Ignoruj powiadomienie które posiadają konkretną litere</string>
+	<string name="ignore_strings_dialog_msg">Oddziel indywidualne wpisy nową linią</string>
+	<string name="ignore_empty">Ignoruj puste</string>
+	<string name="ignore_empty_summary_on">Powiadomienia bez wiadomości nie będę wymawiane</string>
+	<string name="ignore_empty_summary_off">Powiadomienia będą wymawiane jako  \"powiadomienie od  [app name].\"</string>
+	<string name="ignore_repeat">Ignoruj powtórzenia</string>
+	<string name="ignore_repeat_summary">Ignoruj następne identyczne powiadomienia w określonym czasie</string>
+	<string name="ignore_repeat_dialog_msg">Ustaw liczbę sekund które muszą przeminąć aby poprzednie powtórzone powiadomienie było wymówione. \nIgorowanie powtórzeń resetuje licznik oraz inne powiadomienie je czyści. \nPuste = nieskończoność.</string>
+	<string name="max_length">Maksymalna wiadomość</string>
+	<string name="max_length_summary">Maksymalna długość wiadomości do wypowiedzenia. Dłuższe wiadomości zostaną przycięte.</string>
+	<string name="max_length_dialog_msg">Maksymalna długość wiadomości do wypowiedzenia \nDłuższe wiadomości zostaną przycięte.	</string>
+	<string name="device_state">Stany urządzenia</string>
+	<string name="device_state_summary">Wybierz w jakich statusach telefonu ma być mówione powiadomienie</string>
+	<string name="device_state_dialog_title">Wypowiadaj w tych stanach urządzenia</string>
+	<string-array name="device_states">
+		<item>Ekran wyłączony</item>
+		<item>Ekran włączony</item>
+		<item>Bez zestawem słuchawkowego</item>
+		<item>Z zestawem słuchawkowym</item>
+		<item>Wyciszony/tryb wibracji</item>
+	</string-array>
+	<string name="quiet_start">Rozpocznij cichy czas</string>
+	<string name="quiet_start_summary">Nie mów po tym czasie. \nPozostaw te same aby wyłączyć.</string>
+	<string name="quiet_end">Zakończ cichy czas</string>
+	<string name="quiet_end_summary">Nie mów przed tym czasem. \nPozostaw te same aby wyłączyć.</string>
+	<string name="test_summary">Wyzwól powiadomienie (opóźnione 5 sekund) aby wypróbować aktualne ustawienia</string>
+	<string name="test_ignored">Voice Notify jest ignorowane w liście aplikacji. \n Test się obędzie, ale powiadomienie nie będzie wypowiedziane.</string>
+	<string name="notify_log_summary">Lista ostatnich 20 powiadomień. \nWyświetl czas, nazwę aplikacji, wiadomość oraz powód zignorowania</string>
+	<string name="support_summary">Darowizna, ocena/komentarz, tłumaczenie, kod źródłowy oraz kontakt z deweloperem</string>
+	
+	<!-- TextReplacePreference.java -->
+	<string name="text_replace_error_duplicate">Duplikat! Nie zostanie zapisane</string>
+	
+	<!-- text_replace_row.xml -->
+	<string name="text_to_replace">Tekst to zamienienia</string>
+	<string name="replacement_text">Zastąpiony tekst</string>
+	
+	<!-- MainActivity.java and xml/preferences.xml -->
+	<string name="test">Test</string>
+	<string name="notify_log">Dziennik powiadomień</string>
+	<string name="support">Wesprzyj Voice Notify</string>
+	
+	<!-- MainActivity.java -->
+	<string name="service_disabled">Serwis VN jest wyłączony</string>
+	<string name="status_summary_notification_access_enabled">Otwórz ostawienia dostępu do powiadomień aby wyłaczyć VN</string>
+	<string name="status_summary_notification_access_disabled">Otwórz ostawienia dostępu do powiadomień aby włączyć VN</string>
+	<string name="status_summary_suspended">Wybierz aby aktywować VN.</string>
+	<string name="notification_channel_desc">Używane do testowania powiadomień</string>
+	
+	<string name="test_subtext">Podtekst</string>
+	<string name="test_content_title">Tytuł</string>
+	<string name="test_content_text">To jest kontent wiadomości</string>
+	<string name="test_content_info">Informacja kontentu </string>
+	<string name="donate">Darowizna</string>
+	<string-array name="support_items">
+		<item>@string/donate</item>
+		<item>Oceń/skomentuj </item>
+		<item>Kontakt z deweloperem</item>
+		<item>Tłumaczenie</item>
+		<item>Kod źródłowy</item>
+	</string-array>
+	<string-array name="donate_services">
+		<item>Google Wallet</item>
+		<item>PayPal</item>
+	</string-array>
+	<string name="donate_wallet_title">Darowizna - Google Wallet</string>
+	<string name="donate_wallet_message">Jeżeli jesteś w USA możesz dać darowiznę ozywając funkcji "Send Money" na adres pilota51@gmail.com.\nNiestety wysyłanie pieniędzy nie jest dostępne poza USA. \n\nDziękuję za używanie i wspieranie Voice Notify!</string>
+	<string name="donate_wallet_launch_app">Otwórz aplikacje Wallet</string>
+	<string name="donate_wallet_launch_web">Otwórz stronę Wallet</string>
+	<string name="error_market">Error: nie można odnaleźć Sklepu Google Play </string>
+	<string name="error_email">Error: Nie można znaleźć zainstalowanej aplikacji Email.</string>
+	<string name="tts_message_reset_default">Ustawianie wiadomości TTS zaktualizowane do nowej domyślnej wartości</string>
+	
+	<!-- Service.java -->
+	<string name="notification_from">Powiadomienie od %s.</string>
+	<string name="error_tts_init">Error: Nie można było zainicjalizować TTS.</string>
+	
+	<!-- NotifyList.java -->
+	<string name="yes">Tak</string>
+	<string name="ignore_app">Ignorować %s?</string>
+	<string name="unignore_app">Od ignorować %s?</string>
+	
+	<!-- menu/app_list.xml-->
+	<string name="ignore_all">Ignoruj wszystko</string>
+	<string name="ignore_none">Nic nie ignoruj</string>
+	<string name="filter">Filter</string>
+	
+	<!-- Ignore/Silence reasons -->
+	<string name="reason_app">Ignorowane aplikacje</string>
+	<string name="reason_string">Ignorowany tekst</string>
+	<string name="reason_empty_msg">Pusta wiadomość</string>
+	<string name="reason_identical">Identyczna wiadomość w ostatnich {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+	<string name="reason_quiet">Czas ciszy</string>
+	<string name="reason_silent">Wyciszony lub tryb wibracji</string>
+	<string name="reason_call">Aktywna rozmowa telefoniczna</string>
+	<string name="reason_screen_off">Ekran wyłaczony</string>
+	<string name="reason_screen_on">Ekran właczony</string>
+	<string name="reason_headset_off">Bez zestawy słuchawkowego</string>
+	<string name="reason_headset_on">Z zestawem słuchawkowym</string>
+	<string name="reason_shake">Wyciszony poprzez potrząśnięcie</string>
+	<string name="reason_suspended">VN wstrzymany przez widget</string>
+	<string name="reason_service_stopped">Serwis zastopowany</string>
+</resources>

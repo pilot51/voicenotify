@@ -46,7 +46,7 @@
 	<string name="tts_repeat_dialog_msg">Benachrichtigungen werden im definierten Zeitraum wiederholt (Wert in Minuten), bis der Bildschirm eingeschaltet wird. Benachrichtigungen die erscheinen während der Bildschirm eingeschaltet ist, werden nicht wiederholt.\n Leer lassen oder 0 eingeben um Wiederholung zu deaktivieren.</string>
 	<string name="audio_focus">Apps pausieren/stumm schalten</string>
 	<string name="audio_focus_summary">Andere Apps anfragen, den Ton stumm zu schalten oder die Musik zu pausieren.</string>
-	<string name="shake_to_silence">Schütteln für stumm schalten</string>
+	<string name="shake_to_silence">Schütteln zum Stummschalten</string>
 	<string name="shake_to_silence_summary">Empfindlichkeit der Shake-To-Silence Funktion einstellen.</string>
 	<string name="shake_to_silence_dialog_msg">Je kleiner der Wert, desto höher ist die Empfindlichkeit.\n\nStandard: 100\nEin leeres Feld deaktiviert diese Funktion.</string>
 	<string-array name="stream_name">
@@ -65,8 +65,8 @@
 	<string name="ignore_repeat">Ignoriere sich wiederholende Benachrichtigungen</string>
 	<string name="ignore_repeat_summary">Ignoriere aufeinanderfolgende, identische Benachrichtigungen in einem bestimmten Zeitraum.</string>
 	<string name="ignore_repeat_dialog_msg">Stelle den Zeitraum ein (in Sekunden), in dem wiederholte Benachrichtigungen ignoriert werden sollen.\nJede ignorierte Benachrichtigung in diesem Zeitraum lässt die Wartezeit von vorn beginnen. Bei neuen Benachrichtigungen entfällt die Wartezeit.\nleer = Wartezeit wird auf \'unendlich\' gesetzt.</string>
-	
-	
+	<string name="max_length">Maximale Textlänge</string>
+	<string name="max_length_summary">Anzahl der Zeichen die vorgelesen werden. </string>
 	
 	<string name="device_state">Gerätezustände</string>
 	<string name="device_state_summary">In welchem Gerätezustand sollen Benachrichtigungen ausgesprochen werden?</string>
@@ -91,8 +91,8 @@
 	
 	
 	<!-- text_replace_row.xml -->
-	
-	
+	<string name="text_to_replace">Zu ersetzender Text</string>
+	<string name="replacement_text">Ersetzender Text</string>
 	
 	<!-- MainActivity.java and xml/preferences.xml -->
 	<string name="test">Testen</string>
@@ -158,4 +158,5 @@
 	<string name="reason_headset_on">Headset einschalten</string>
 	<string name="reason_shake">Durch Schütteln stumm geschaltet</string>
 	<string name="reason_suspended">VN durch Widget angehalten</string>
+	
 </resources>

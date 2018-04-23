@@ -37,7 +37,7 @@ enum IgnoreReason {
 	EMPTY_MSG(R.string.reason_empty_msg),
 	IDENTICAL(R.string.reason_identical);
 	
-	private int stringId;
+	private final int stringId;
 	
 	IgnoreReason(int resId) {
 		this.stringId = resId;

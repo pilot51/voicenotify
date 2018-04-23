@@ -19,8 +19,8 @@
 	<!-- Used by multiple files -->
 	<string name="app_is_ignored">%s diabaikan</string>
 	<string name="app_is_not_ignored">%s tidak diabaikan</string>
-	<string name="service_running">Layanan VN sedang berjalan</string>
-	<string name="service_suspended">Layanan VN ditangguhkan</string>
+	<string name="service_running">Layanan PS sedang berjalan</string>
+	<string name="service_suspended">Layanan PS ditangguhkan</string>
 	
 	<!-- xml/preferences.xml -->
 	<string name="app_list">Daftar Aplikasi</string>
@@ -31,10 +31,10 @@
 	<string name="tts_settings_summary">Buka pengaturan Teks-Ke-Ucap Android.</string>
 	<string name="tts_settings_summary_fail">Tidak dapat menemukan pengaturan TKU! Bila ini tersedia di perangkat Anda (dan seharusnya), harap menghubungi pengembang.</string>
 	<string name="tts_message">Pesan TKU</string>
-	<string name="tts_message_summary">Sesuaikan bagaimana Teks-Ke-Ucap ucapkan pemberitahuan</string>
-	<string name="tts_message_dialog">#a = Judul Aplikasi\n#t = Detak\n#s = Subteks\n#c = Judul isi\n#m = Pesan isi\n#i = Info isi\n\nAsali:\n#a. #c. #m.</string>
+	<string name="tts_message_summary">Sesuaikan bagian-bagian pemberitahuan yang diucapkan</string>
+	<string name="tts_message_dialog">#a = Judul Aplikasi\n#t = Detak\n#s = Sub-teks\n#c = Judul isi\n#m = Pesan isi\n#i = Info isi\n\nAsali:\n#a. #c. #m.\n\nAsali lama (v1.0.x):\n#a: #t</string>
 	<string name="tts_text_replace">Teks Pengganti TKU</string>
-	<string name="tts_text_replace_summary">Sesuaikan bagaimana Teks-Ke-Ucap berucap</string>
+	<string name="tts_text_replace_summary">Teks pengganti yang diucapkan, semisal memperbaiki pengucapan</string>
 	<string name="tts_text_replace_dialog">Pecah teks yang diucapkan, memungkinkan Anda untuk menyesuaikan bagaimana Teks-Ke-Ucap mengeja kata atau mengubah teks untuk alasan apapun.\n\nTeks pengganti tidak peka kapitalisasi.</string>
 	<string name="tts_stream">Aliran Audio TKU</string>
 	<string name="tts_stream_summary">Pilih aliran audio yang memainkan Teks-Ke-Ucap</string>
@@ -158,4 +158,5 @@
 	<string name="reason_headset_on">Pelantang telinga nyala</string>
 	<string name="reason_shake">Membungkam dengan membuncang</string>
 	<string name="reason_suspended">PS ditangguhkan oleh gawit</string>
+	<string name="reason_service_stopped">Layanan berhenti</string>
 </resources>
