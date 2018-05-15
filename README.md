@@ -3,6 +3,8 @@
 
 Voice Notify is an Android app that uses Text-to-Speech (TTS) to announce status bar notification messages so you don't need to look at the screen to know what a notification says.
 
+<a href="https://f-droid.org/packages/com.pilot51.voicenotify/" target="_blank">
+<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80"></a>
 <a href="https://play.google.com/store/apps/details?id=com.pilot51.voicenotify" target="_blank">
 <img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" alt="Get it on Google Play" height="80"/></a>
 
