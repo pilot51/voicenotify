@@ -14,8 +14,8 @@
      limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.pilot51.voicenotify"
-          android:installLocation="internalOnly">
+	package="com.pilot51.voicenotify"
+	android:installLocation="internalOnly">
 	<uses-permission android:name="android.permission.BLUETOOTH" />
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
@@ -27,7 +27,8 @@
 		android:name="android.hardware.bluetooth"
 		android:required="false" />
 	<application
-		android:icon="@drawable/icon"
+		android:icon="@mipmap/ic_launcher"
+		android:roundIcon="@mipmap/ic_launcher_round"
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme">
 		<activity android:name=".MainActivity">

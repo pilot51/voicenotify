@@ -174,7 +174,7 @@ public class MainActivity extends PreferenceActivity {
 									new NotificationCompat.Builder(context, id)
 											.setAutoCancel(true)
 											.setContentIntent(pi)
-											.setSmallIcon(R.drawable.icon)
+											.setSmallIcon(R.drawable.ic_notification)
 											.setTicker(context.getString(R.string.test_ticker))
 											.setSubText(context.getString(R.string.test_subtext))
 											.setContentTitle(context.getString(R.string.test_content_title))
