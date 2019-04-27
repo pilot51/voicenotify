@@ -92,6 +92,12 @@
 		android:summaryOn="@string/ignore_empty_summary_on"
 		android:summaryOff="@string/ignore_empty_summary_off"
 		android:defaultValue="true" />
+	<CheckBoxPreference
+		android:key="@string/key_ignore_groups"
+		android:title="@string/ignore_groups"
+		android:summaryOn="@string/ignore_groups_summary_on"
+		android:summaryOff="@string/ignore_groups_summary_off"
+		android:defaultValue="true" />
 	<EditTextPreference
 		android:key="@string/key_ignore_repeat"
 		android:title="@string/ignore_repeat"
