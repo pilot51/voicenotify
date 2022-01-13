@@ -143,7 +143,8 @@ public class Service extends NotificationListenerService {
 	@Override
 	public void onNotificationPosted(StatusBarNotification sbn) {
 		Notification notification = sbn.getNotification();
-		if ((notification.flags & Notification.FLAG_GROUP_SUMMARY) != 0) {
+		if (prefs.getBoolean(getString(R.string.key_ignore_groups), true)
+				&& ((notification.flags & Notification.FLAG_GROUP_SUMMARY) != 0)) {
 			return; // Completely ignore group summary notifications.
 		}
 		App app = AppListActivity.findOrAddApp(sbn.getPackageName(), this);

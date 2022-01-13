@@ -62,6 +62,9 @@
 	<string name="ignore_empty">Ignore Empty</string>
 	<string name="ignore_empty_summary_on">Notifications without a message will not be spoken</string>
 	<string name="ignore_empty_summary_off">Notifications without a message will be spoken as \"Notification from [app name].\"</string>
+	<string name="ignore_groups">Ignore Group Messages</string>
+	<string name="ignore_groups_summary_on">Notifications containing multiple messages will not be spoken</string>
+	<string name="ignore_groups_summary_off">Notifications containing multiple messages will be spoken</string>
 	<string name="ignore_repeat">Ignore Repeats</string>
 	<string name="ignore_repeat_summary">Ignore subsequent identical notifications within a set time</string>
 	<string name="ignore_repeat_dialog_msg">Set number of seconds that must pass since last notification before a repeat can be spoken.\nIgnored repeats reset the count and different notifications clear it.\nBlank = infinite.</string>
