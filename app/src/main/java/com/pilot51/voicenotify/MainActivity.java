@@ -41,8 +41,6 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -50,6 +48,9 @@ import com.pilot51.voicenotify.Service.OnStatusChangeListener;
 
 import java.util.Timer;
 import java.util.TimerTask;
+
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 public class MainActivity extends PreferenceActivity {
 	@Override
