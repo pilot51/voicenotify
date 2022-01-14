@@ -87,19 +87,19 @@
 	<string name="notify_log_summary">Die letzten 20 Benachrichtigungen auflisten.\nZeigt Zeit, App Name, Nachricht und Ignorier-Ursache.</string>
 	<string name="support_summary">Spenden, bewerten oder den Entwickler kontaktieren; Übersetzungen, Quellcode</string>
 	
-	<!-- TextReplacePreference.java -->
+	<!-- TextReplacePreference -->
 	
 	
 	<!-- text_replace_row.xml -->
 	<string name="text_to_replace">Zu ersetzender Text</string>
 	<string name="replacement_text">Ersetzender Text</string>
 	
-	<!-- MainActivity.java and xml/preferences.xml -->
+	<!-- MainActivity and xml/preferences.xml -->
 	<string name="test">Testen</string>
 	<string name="notify_log">Benachrichtigungsprotokoll</string>
 	<string name="support">Unterstütze Voice Notify</string>
 	
-	<!-- MainActivity.java -->
+	<!-- MainActivity -->
 	<string name="service_disabled">VN Service ist deaktiviert</string>
 	
 	
@@ -130,11 +130,11 @@
 	<string name="error_email">Fehler: Konnte keine E-Mail Anwendung finden.</string>
 	
 	
-	<!-- Service.java -->
+	<!-- Service -->
 	<string name="notification_from">Benachrichtigung von %s.</string>
 	<string name="error_tts_init">Fehler: Text-zu-Sprache konnte nicht inizialisiert werden!</string>
 	
-	<!-- NotifyList.java -->
+	<!-- NotifyList -->
 	<string name="yes">Ja</string>
 	<string name="ignore_app">%s ignorieren?</string>
 	<string name="unignore_app">%s nicht ignorieren?</string>

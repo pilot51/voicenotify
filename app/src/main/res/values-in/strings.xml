@@ -87,19 +87,19 @@
 	<string name="notify_log_summary">Daftar 20 pemberitahuan terakhir.\nMenampilkan waktu, nama aplikasi, pesan, dan pesan diabaikan.</string>
 	<string name="support_summary">Menyumbang, nilai/berkomentar, alih bahasa, kode sumber, atau hubungi pengembang</string>
 	
-	<!-- TextReplacePreference.java -->
+	<!-- TextReplacePreference -->
 	<string name="text_replace_error_duplicate">Ganda! Tidak akan disimpan.</string>
 	
 	<!-- text_replace_row.xml -->
 	<string name="text_to_replace">Teks yang diganti</string>
 	<string name="replacement_text">Teks pengganti</string>
 	
-	<!-- MainActivity.java and xml/preferences.xml -->
+	<!-- MainActivity and xml/preferences.xml -->
 	<string name="test">Uji</string>
 	<string name="notify_log">Catatan Pemberitahuan</string>
 	<string name="support">Dukung Pemberitahuan Suara</string>
 	
-	<!-- MainActivity.java -->
+	<!-- MainActivity -->
 	<string name="service_disabled">Layanan PS dimatikan</string>
 	<string name="status_summary_notification_access_enabled">Buka pengaturan pemberitahuan Android untuk mematikan PS</string>
 	<string name="status_summary_notification_access_disabled">Buka pengaturan pemberitahuan Android untuk menyalakan PS</string>
@@ -130,11 +130,11 @@
 	<string name="error_email">Galat: Gagal menemukan aplikasi surel terpasang.</string>
 	<string name="tts_message_reset_default">Pengaturan Teks-Ke-Ucapan diperbarui ke nilai asali baru </string>
 	
-	<!-- Service.java -->
+	<!-- Service -->
 	<string name="notification_from">Pemberitahuan dari %s.</string>
 	<string name="error_tts_init">Galat: Gagal memulai Teks-Ke-Ucapan!</string>
 	
-	<!-- NotifyList.java -->
+	<!-- NotifyList -->
 	<string name="yes">Ya</string>
 	<string name="ignore_app">Abaikan %s?</string>
 	<string name="unignore_app">Tak abaikan %s?</string>

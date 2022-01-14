@@ -75,19 +75,19 @@
 	
 	
 	
-	<!-- TextReplacePreference.java -->
+	<!-- TextReplacePreference -->
 	
 	
 	<!-- text_replace_row.xml -->
 	
 	
 	
-	<!-- MainActivity.java and xml/preferences.xml -->
+	<!-- MainActivity and xml/preferences.xml -->
 	<string name="test">Teszt</string>
 	<string name="notify_log">Üzenet Események</string>
 	<string name="support">Támogatás</string>
 	
-	<!-- MainActivity.java -->
+	<!-- MainActivity -->
 	
 	
 	
@@ -109,11 +109,11 @@
 	<string name="error_email">Error: Nem találok levelezőprogramot.</string>
 	
 	
-	<!-- Service.java -->
+	<!-- Service -->
 	
 	
 	
-	<!-- NotifyList.java -->
+	<!-- NotifyList -->
 	
 	
 	

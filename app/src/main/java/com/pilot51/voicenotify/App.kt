@@ -13,47 +13,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.pilot51.voicenotify
 
-package com.pilot51.voicenotify;
-
-class App {
-	private final String packageName, label;
-	private boolean enabled;
-	
-	App(String pkg, String name, boolean enable) {
-		packageName = pkg;
-		label = name;
-		enabled = enable;
-	}
-	
+class App(val `package`: String, val label: String, var enabled: Boolean) {
 	/**
 	 * Updates self in database.
 	 * @return This instance.
 	 */
-	App updateDb() {
-		Database.addOrUpdateApp(this);
-		return this;
+	fun updateDb(): App {
+		Database.addOrUpdateApp(this)
+		return this
 	}
-	
-	void setEnabled(boolean enable, boolean updateDb) {
-		enabled = enable;
-		if (updateDb) Database.updateAppEnable(this);
+
+	fun setEnabled(enable: Boolean, updateDb: Boolean) {
+		enabled = enable
+		if (updateDb) Database.updateAppEnable(this)
 	}
-	
+
 	/** Removes self from database. */
-	void remove() {
-		Database.removeApp(this);
-	}
-	
-	String getLabel() {
-		return label;
-	}
-	
-	String getPackage() {
-		return packageName;
-	}
-	
-	boolean getEnabled() {
-		return enabled;
+	fun remove() {
+		Database.removeApp(this)
 	}
 }

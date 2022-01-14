@@ -87,19 +87,19 @@
 	<string name="notify_log_summary">Lista las últimas 20 notificaciones.\nMuestra tiempo, nombre de la aplicación, mensaje y razones de ignorar.</string>
 	<string name="support_summary">Donaciones, valoraciones/comentarios, traducciones, código fuente, contacto con desarrollador.</string>
 	
-	<!-- TextReplacePreference.java -->
+	<!-- TextReplacePreference -->
 	
 	
 	<!-- text_replace_row.xml -->
 	
 	
 	
-	<!-- MainActivity.java and xml/preferences.xml -->
+	<!-- MainActivity and xml/preferences.xml -->
 	<string name="test">Prueba</string>
 	<string name="notify_log">Registro de notificaciones</string>
 	<string name="support">Dar soporte a Notificación por voz</string>
 	
-	<!-- MainActivity.java -->
+	<!-- MainActivity -->
 	<string name="service_disabled">Servicio de Notificación por Voz está desactivado.</string>
 	
 	
@@ -130,11 +130,11 @@
 	<string name="error_email">Error: No se pudo encontrar una aplicación de email instalada</string>
 	
 	
-	<!-- Service.java -->
+	<!-- Service -->
 	<string name="notification_from">Notificación de %s.</string>
 	<string name="error_tts_init">Error: No se puede inicializar TTS!</string>
 	
-	<!-- NotifyList.java -->
+	<!-- NotifyList -->
 	<string name="yes">Sí</string>
 	<string name="ignore_app">Ignorar %s?</string>
 	<string name="unignore_app">Dejar de ignorar %s?</string>

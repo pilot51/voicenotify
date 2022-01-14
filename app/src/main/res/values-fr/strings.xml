@@ -75,19 +75,19 @@
 	<string name="notify_log_summary">Liste des 20 dernières notifications.\nHeure d\'affichage, nom de l\'application, message, et les raisons d\'ignorer</string>
 	
 	
-	<!-- TextReplacePreference.java -->
+	<!-- TextReplacePreference -->
 	
 	
 	<!-- text_replace_row.xml -->
 	
 	
 	
-	<!-- MainActivity.java and xml/preferences.xml -->
+	<!-- MainActivity and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Journaux des notifications</string>
 	<string name="support">Soutenir Voice Notify</string>
 	
-	<!-- MainActivity.java -->
+	<!-- MainActivity -->
 	<string name="service_disabled">Service VN désactivé</string>
 	
 	
@@ -115,11 +115,11 @@
 	<string name="error_email">Erreur : impossible de trouver un client d\'email installé.</string>
 	
 	
-	<!-- Service.java -->
+	<!-- Service -->
 	
 	
 	
-	<!-- NotifyList.java -->
+	<!-- NotifyList -->
 	<string name="yes">Oui</string>
 	<string name="ignore_app">Ignorer %s?</string>
 	<string name="unignore_app">Ne pas ignorer %s?</string>

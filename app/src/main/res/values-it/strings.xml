@@ -87,19 +87,19 @@
 	<string name="notify_log_summary">Elenco delle ultime 20 notifiche.\nCompleto di ora, nome della app, messaggio e motivi dell\'eventuale ignoro.</string>
 	<string name="support_summary">Effettua una donazione, valuta o commenta, traduzioni, codice sorgente o contatta lo sviluppatore.</string>
 	
-	<!-- TextReplacePreference.java -->
+	<!-- TextReplacePreference -->
 	<string name="text_replace_error_duplicate">Duplicato! Non salvato.</string>
 	
 	<!-- text_replace_row.xml -->
 	<string name="text_to_replace">Testo da sostituire</string>
 	<string name="replacement_text">Testo sostitutivo</string>
 	
-	<!-- MainActivity.java and xml/preferences.xml -->
+	<!-- MainActivity and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Registro Notifiche</string>
 	<string name="support">Sostieni Voice Notify</string>
 	
-	<!-- MainActivity.java -->
+	<!-- MainActivity -->
 	<string name="service_disabled">Il Servizio VN Non E\' Abilitato</string>
 	<string name="status_summary_notification_access_enabled">Apre le impostazioni delle notifiche di Android per disabilitare VN</string>
 	<string name="status_summary_notification_access_disabled">Apre le impostazioni delle notifiche di Android per abilitare VN</string>
@@ -130,11 +130,11 @@
 	<string name="error_email">Errore: non ho trovato un\'app per l\'email installata.</string>
 	
 	
-	<!-- Service.java -->
+	<!-- Service -->
 	<string name="notification_from">Notifica da %s.</string>
 	<string name="error_tts_init">Errore: impossibile inizializzare TTS!</string>
 	
-	<!-- NotifyList.java -->
+	<!-- NotifyList -->
 	<string name="yes">Sì</string>
 	<string name="ignore_app">Vuoi ignorare %s?</string>
 	<string name="unignore_app">Vuoi considerare %s?</string>

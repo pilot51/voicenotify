@@ -88,19 +88,19 @@ Oznámení vytvořené při zapnuté obrazovce se neopakují.\n\nHodnota je v mi
 	<string name="notify_log_summary">Seznam posledních 20 oznámení.\nZobrazí čas, název aplikace a důvody pro ignorování.</string>
 	<string name="support_summary">Darovat, hodnocení/komentář, překlady, zdrojový kód, nebo kontaktujte vývojáře.</string>
 	
-	<!-- TextReplacePreference.java -->
+	<!-- TextReplacePreference -->
 	
 	
 	<!-- text_replace_row.xml -->
 	
 	
 	
-	<!-- MainActivity.java and xml/preferences.xml -->
+	<!-- MainActivity and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Registr oznámení</string>
 	<string name="support">Podpora Voice Notify</string>
 	
-	<!-- MainActivity.java -->
+	<!-- MainActivity -->
 	<string name="service_disabled">VN služba je zakázána</string>
 	
 	
@@ -131,11 +131,11 @@ Oznámení vytvořené při zapnuté obrazovce se neopakují.\n\nHodnota je v mi
 	<string name="error_email">Chyba: Nelze najít nainstalovanou e-mailovou aplikaci.</string>
 	
 	
-	<!-- Service.java -->
+	<!-- Service -->
 	<string name="notification_from">Oznámení z %s.</string>
 	<string name="error_tts_init">Chyba: Nepodařilo se spustit TTS!</string>
 	
-	<!-- NotifyList.java -->
+	<!-- NotifyList -->
 	<string name="yes">Ano</string>
 	<string name="ignore_app">Ignorovat %s?</string>
 	<string name="unignore_app">Neignorovat %s?</string>

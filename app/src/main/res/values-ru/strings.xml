@@ -87,19 +87,19 @@
 	<string name="notify_log_summary">Показать 20 последних уведомлений.\nОтображает время, имя приложения и причины игнорирования.</string>
 	<string name="support_summary">Пожертвования, рейтинг/комментарии, перевод, исходный код, связь с разработчиком.</string>
 	
-	<!-- TextReplacePreference.java -->
+	<!-- TextReplacePreference -->
 	
 	
 	<!-- text_replace_row.xml -->
 	
 	
 	
-	<!-- MainActivity.java and xml/preferences.xml -->
+	<!-- MainActivity and xml/preferences.xml -->
 	<string name="test">Тест</string>
 	<string name="notify_log">Лог уведомлений</string>
 	<string name="support">Поддержать приложение</string>
 	
-	<!-- MainActivity.java -->
+	<!-- MainActivity -->
 	<string name="service_disabled">Сервис Уведомлений Голосом остановлен</string>
 	
 	
@@ -130,11 +130,11 @@
 	<string name="error_email">Ошибка: Не удалось найти установленный почтовый клиент.</string>
 	
 	
-	<!-- Service.java -->
+	<!-- Service -->
 	<string name="notification_from">Уведомление от %s.</string>
 	<string name="error_tts_init">Ошибка: Не удалось запустить TTS!</string>
 	
-	<!-- NotifyList.java -->
+	<!-- NotifyList -->
 	<string name="yes">Да</string>
 	<string name="ignore_app">Игнорировать %s?</string>
 	<string name="unignore_app">Не игнорировать %s?</string>

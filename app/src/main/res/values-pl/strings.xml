@@ -87,19 +87,19 @@
 	<string name="notify_log_summary">Lista ostatnich 20 powiadomień. \nWyświetl czas, nazwę aplikacji, wiadomość oraz powód zignorowania</string>
 	<string name="support_summary">Darowizna, ocena/komentarz, tłumaczenie, kod źródłowy oraz kontakt z deweloperem</string>
 	
-	<!-- TextReplacePreference.java -->
+	<!-- TextReplacePreference -->
 	<string name="text_replace_error_duplicate">Duplikat! Nie zostanie zapisane</string>
 	
 	<!-- text_replace_row.xml -->
 	<string name="text_to_replace">Tekst to zamienienia</string>
 	<string name="replacement_text">Zastąpiony tekst</string>
 	
-	<!-- MainActivity.java and xml/preferences.xml -->
+	<!-- MainActivity and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Dziennik powiadomień</string>
 	<string name="support">Wesprzyj Voice Notify</string>
 	
-	<!-- MainActivity.java -->
+	<!-- MainActivity -->
 	<string name="service_disabled">Serwis VN jest wyłączony</string>
 	<string name="status_summary_notification_access_enabled">Otwórz ostawienia dostępu do powiadomień aby wyłaczyć VN</string>
 	<string name="status_summary_notification_access_disabled">Otwórz ostawienia dostępu do powiadomień aby włączyć VN</string>
@@ -130,11 +130,11 @@
 	<string name="error_email">Error: Nie można znaleźć zainstalowanej aplikacji Email.</string>
 	<string name="tts_message_reset_default">Ustawianie wiadomości TTS zaktualizowane do nowej domyślnej wartości</string>
 	
-	<!-- Service.java -->
+	<!-- Service -->
 	<string name="notification_from">Powiadomienie od %s.</string>
 	<string name="error_tts_init">Error: Nie można było zainicjalizować TTS.</string>
 	
-	<!-- NotifyList.java -->
+	<!-- NotifyList -->
 	<string name="yes">Tak</string>
 	<string name="ignore_app">Ignorować %s?</string>
 	<string name="unignore_app">Od ignorować %s?</string>
