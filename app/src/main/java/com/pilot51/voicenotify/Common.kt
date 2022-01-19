@@ -21,10 +21,10 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.media.AudioManager
 import android.os.Build
-import android.preference.PreferenceManager
 import android.provider.Settings
+import androidx.preference.PreferenceManager
 
-internal object Common {
+object Common {
 	private lateinit var prefs: SharedPreferences
 
 	/** Preference key name. */
@@ -45,7 +45,6 @@ internal object Common {
 	/**
 	 * Initializes default [SharedPreferences] and [Database] if needed.
 	 */
-	@JvmStatic
 	fun init(context: Context) {
 		if (!::prefs.isInitialized) {
 			PreferenceManager.setDefaultValues(context, R.xml.preferences, true)
@@ -83,7 +82,6 @@ internal object Common {
 	 * @param c Context used to get the preference key name from resources.
 	 * @return The selected audio stream matching the STREAM_ constant from [AudioManager].
 	 */
-	@JvmStatic
 	fun getSelectedAudioStream(c: Context): Int {
 		return prefs.getString(c.getString(R.string.key_ttsStream),
 			AudioManager.STREAM_MUSIC.toString())!!.toInt()
@@ -93,7 +91,6 @@ internal object Common {
 	 * @param context Context used to get a default [SharedPreferences] instance if we don't already have one.
 	 * @return A default [SharedPreferences] instance.
 	 */
-	@JvmStatic
 	fun getPrefs(context: Context): SharedPreferences {
 		if (!::prefs.isInitialized) {
 			prefs = PreferenceManager.getDefaultSharedPreferences(context)
@@ -101,7 +98,6 @@ internal object Common {
 		return prefs
 	}
 
-	@JvmStatic
 	val notificationListenerSettingsIntent: Intent
 		get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
 			Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS)

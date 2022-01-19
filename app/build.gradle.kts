@@ -72,4 +72,5 @@ android {
 
 dependencies {
 	implementation("androidx.core:core-ktx:1.7.0")
+	implementation("androidx.preference:preference-ktx:1.1.1")
 }

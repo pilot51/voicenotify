@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright 2012 Mark Injerd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<Preference
+		android:key="@string/key_ttsSettings"
+		android:title="@string/tts_settings"
+		android:summary="@string/tts_settings_summary" />
+	<EditTextPreference
+		android:key="@string/key_ttsString"
+		android:title="@string/tts_message"
+		android:summary="@string/tts_message_summary"
+		android:dialogMessage="@string/tts_message_dialog"
+		android:defaultValue="@string/ttsString_default_value" />
+	<com.pilot51.voicenotify.TextReplacePreference
+		android:key="@string/key_ttsTextReplace"
+		android:title="@string/tts_text_replace"
+		android:summary="@string/tts_text_replace_summary"
+		android:dialogMessage="@string/tts_text_replace_dialog" />
+	<EditTextPreference
+		android:key="@string/key_max_length"
+		android:title="@string/max_length"
+		android:summary="@string/max_length_summary"
+		android:dialogMessage="@string/max_length_dialog_msg"
+		android:digits="0123456789"
+		android:inputType="number"
+		android:defaultValue="100" />
+	<ListPreference
+		android:key="@string/key_ttsStream"
+		android:title="@string/tts_stream"
+		android:summary="@string/tts_stream_summary"
+		android:entries="@array/stream_name"
+		android:entryValues="@array/stream_value"
+		android:defaultValue="3" />
+	<EditTextPreference
+		android:key="@string/key_ttsDelay"
+		android:title="@string/tts_delay"
+		android:summary="@string/tts_delay_summary"
+		android:dialogMessage="@string/tts_delay_dialog_msg"
+		android:digits="0123456789"
+		android:inputType="number" />
+	<EditTextPreference
+		android:key="@string/key_tts_repeat"
+		android:title="@string/tts_repeat"
+		android:summary="@string/tts_repeat_summary"
+		android:dialogMessage="@string/tts_repeat_dialog_msg"
+		android:digits="0123456789"
+		android:inputType="number" />
+</PreferenceScreen>

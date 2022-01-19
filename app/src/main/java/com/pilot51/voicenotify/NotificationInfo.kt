@@ -18,9 +18,9 @@ package com.pilot51.voicenotify
 import android.annotation.SuppressLint
 import android.app.Notification
 import android.content.Context
-import android.preference.PreferenceManager
 import android.text.TextUtils
 import android.util.Log
+import androidx.preference.PreferenceManager
 import com.pilot51.voicenotify.IgnoreReason.Companion.convertSetToString
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
@@ -42,7 +42,7 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 	context: Context
 ) {
 	/** The notification's ticker message. */
-	private val ticker: String? = if (notification.tickerText != null) notification.tickerText.toString() else null
+	private val ticker = notification.tickerText?.toString()
 	/** The notification's subtext. */
 	private val subtext: String?
 	/** The notification's content title. */
@@ -108,7 +108,7 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 			val ttsTextReplace = prefs.getString(context.getString(R.string.key_ttsTextReplace), null)
 			val textReplaceList = TextReplacePreference.convertStringToList(ttsTextReplace)
 			for (pair in textReplaceList) {
-				ttsMessage = ttsMessage!!.replace("(?i)" + Pattern.quote(pair.first).toRegex(), pair.second)
+				ttsMessage = ttsMessage!!.replace("(?i)${Pattern.quote(pair.first)}".toRegex(), pair.second)
 			}
 		}
 		if (ttsMessage != null) {

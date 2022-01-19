@@ -24,14 +24,17 @@ import com.pilot51.voicenotify.Common.getPrefs
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-internal class Shake(private val context: Context) : SensorEventListener {
-	private val manager: SensorManager?
-	private val sensor: Sensor
+class Shake(
+	private val context: Context
+) : SensorEventListener {
+	private val manager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+	private val sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 	private var listener: OnShakeListener? = null
 	private var threshold = 0
 	private var overThresholdCount = 0
 	private var accelCurrent = 0f
 	private var accelLast = 0f
+
 	fun enable() {
 		if (listener == null) return
 		threshold = try {
@@ -40,11 +43,11 @@ internal class Shake(private val context: Context) : SensorEventListener {
 			// Don't enable if threshold setting is blank
 			return
 		}
-		manager!!.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+		manager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
 	}
 
 	fun disable() {
-		manager!!.unregisterListener(this)
+		manager.unregisterListener(this)
 		accelCurrent = 0f
 		accelLast = 0f
 		overThresholdCount = 0
@@ -55,6 +58,7 @@ internal class Shake(private val context: Context) : SensorEventListener {
 	}
 
 	override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
+
 	override fun onSensorChanged(event: SensorEvent) {
 		val x = event.values[0]
 		val y = event.values[1]
@@ -72,12 +76,7 @@ internal class Shake(private val context: Context) : SensorEventListener {
 		accelLast = accelCurrent
 	}
 
-	internal interface OnShakeListener {
+	interface OnShakeListener {
 		fun onShake()
-	}
-
-	init {
-		manager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-		sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 	}
 }

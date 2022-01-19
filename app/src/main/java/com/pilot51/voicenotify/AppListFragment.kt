@@ -15,65 +15,58 @@
  */
 package com.pilot51.voicenotify
 
-import android.app.ListActivity
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
+import androidx.fragment.app.ListFragment
 import com.pilot51.voicenotify.Common.getPrefs
-import com.pilot51.voicenotify.Common.init
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
-class AppListActivity : ListActivity() {
-	private var adapter: Adapter? = null
-	public override fun onCreate(savedInstanceState: Bundle?) {
+class AppListFragment : ListFragment() {
+	private val adapter by lazy { Adapter() }
+
+	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		init(this)
-		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS)
+		setHasOptionsMenu(true)
+		Common.init(requireActivity())
+		defEnable = getPrefs(requireContext()).getBoolean(KEY_DEFAULT_ENABLE, true)
+	}
+
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+		super.onViewCreated(view, savedInstanceState)
 		val lv = listView
 		lv.isTextFilterEnabled = true
 		lv.isFastScrollEnabled = true
-		adapter = Adapter()
-		listener = object : OnListUpdateListener {
-			override fun onListUpdated() {
-				runOnUiThread { adapter!!.setData(apps) }
-			}
-
-			override fun onUpdateCompleted() {
-				runOnUiThread { setProgressBarIndeterminateVisibility(false) }
-				listener = null
-			}
-		}
-		lv.adapter = adapter
+		listAdapter = adapter
 		lv.onItemClickListener = OnItemClickListener { _, _, position, _ ->
-			setIgnore(adapter!!.getItem(position) as App, IGNORE_TOGGLE)
-			adapter!!.notifyDataSetChanged()
+			setIgnore(adapter.getItem(position) as App, IGNORE_TOGGLE)
+			adapter.notifyDataSetChanged()
 		}
-		defEnable = getPrefs(this).getBoolean(KEY_DEFAULT_ENABLE, true)
 		updateAppsList()
 	}
 
-	private interface OnListUpdateListener {
-		fun onListUpdated()
-		fun onUpdateCompleted()
-	}
-
 	private fun updateAppsList() {
-		setProgressBarIndeterminateVisibility(true)
 		if (isUpdating) {
-			adapter!!.setData(apps)
+			adapter.setData(apps)
 			return
 		}
+		setListShown(false)
 		isUpdating = true
-		Thread {
+		CoroutineScope(Dispatchers.IO).launch {
 			synchronized(SYNC_APPS) {
 				apps = Database.apps.toMutableList()
 				onListUpdated()
 				val isFirstLoad = apps.isEmpty()
-				val packMan = packageManager
+				val packMan = requireContext().packageManager
 
 				// Remove uninstalled
 				for (a in apps.indices.reversed()) {
@@ -104,14 +97,21 @@ class AppListActivity : ListActivity() {
 				if (isFirstLoad) Database.apps = apps
 			}
 			isUpdating = false
-			if (listener != null) listener!!.onUpdateCompleted()
-		}.start()
+			CoroutineScope(Dispatchers.Main).launch {
+				setListShown(true)
+			}
+		}
 	}
 
-	override fun onCreateOptionsMenu(menu: Menu): Boolean {
-		super.onCreateOptionsMenu(menu)
-		menuInflater.inflate(R.menu.app_list, menu)
-		return true
+	private fun onListUpdated() {
+		CoroutineScope(Dispatchers.Main).launch {
+			adapter.setData(apps)
+		}
+	}
+
+	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+		super.onCreateOptionsMenu(menu, inflater)
+		inflater.inflate(R.menu.app_list, menu)
 	}
 
 	override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -127,9 +127,8 @@ class AppListActivity : ListActivity() {
 				return true
 			}
 			R.id.filter -> {
-				// Prevent Lint warning. Should never be null, I want a crash report if it is.
-				val imm = (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager)
-				imm.toggleSoftInput(0, 0)
+				val imm = requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+				imm.showSoftInput(item.actionView, 0)
 				return true
 			}
 		}
@@ -140,20 +139,22 @@ class AppListActivity : ListActivity() {
 		for (app in apps) {
 			setIgnore(app, ignoreType)
 		}
-		adapter!!.notifyDataSetChanged()
-		Thread { Database.apps = apps }.start()
+		adapter.notifyDataSetChanged()
+		CoroutineScope(Dispatchers.IO).launch {
+			Database.apps = apps
+		}
 	}
 
 	private fun setIgnore(app: App, ignoreType: Int) {
 		if (!app.enabled && (ignoreType == IGNORE_TOGGLE || ignoreType == IGNORE_NONE)) {
 			app.setEnabled(true, ignoreType == IGNORE_TOGGLE)
 			if (ignoreType == IGNORE_TOGGLE) {
-				Toast.makeText(this, getString(R.string.app_is_not_ignored, app.label), Toast.LENGTH_SHORT).show()
+				Toast.makeText(requireContext(), getString(R.string.app_is_not_ignored, app.label), Toast.LENGTH_SHORT).show()
 			}
 		} else if (app.enabled && (ignoreType == IGNORE_TOGGLE || ignoreType == IGNORE_ALL)) {
 			app.setEnabled(false, ignoreType == IGNORE_TOGGLE)
 			if (ignoreType == IGNORE_TOGGLE) {
-				Toast.makeText(this, getString(R.string.app_is_ignored, app.label), Toast.LENGTH_SHORT).show()
+				Toast.makeText(requireContext(), getString(R.string.app_is_ignored, app.label), Toast.LENGTH_SHORT).show()
 			}
 		}
 	}
@@ -161,14 +162,15 @@ class AppListActivity : ListActivity() {
 	/** Set the default enabled value for new apps. */
 	private fun setDefaultEnable(enable: Boolean) {
 		defEnable = enable
-		getPrefs(this).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).apply()
+		getPrefs(requireContext()).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).apply()
 	}
 
 	private inner class Adapter : BaseAdapter(), Filterable {
 		private val baseData: MutableList<App> = ArrayList()
 		private val adapterData: MutableList<App> = ArrayList()
-		private val mInflater: LayoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
+		private val inflater = requireContext().getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
 		private var filter: SimpleFilter? = null
+
 		fun setData(list: List<App>?) {
 			baseData.clear()
 			baseData.addAll(list!!)
@@ -200,7 +202,7 @@ class AppListActivity : ListActivity() {
 		}
 
 		override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-			val view = convertView ?: mInflater.inflate(R.layout.app_list_item, parent, false)
+			val view = convertView ?: inflater.inflate(R.layout.app_list_item, parent, false)
 			val holder: ViewHolder
 			if (convertView == null) {
 				holder = ViewHolder()
@@ -259,18 +261,13 @@ class AppListActivity : ListActivity() {
 		private const val IGNORE_ALL = 1
 		private const val IGNORE_NONE = 2
 		private val SYNC_APPS = Any()
-		private var listener: OnListUpdateListener? = null
 		private var isUpdating = false
-		private fun onListUpdated() {
-			if (listener != null) listener!!.onListUpdated()
-		}
 
 		/**
 		 * @param pkg Package name used to find [App] in current list or create a new one from system.
 		 * @param ctx Context required to get default enabled preference and to get package manager for searching system.
 		 * @return Found or created [App], otherwise null if app not found on system.
 		 */
-		@JvmStatic
 		fun findOrAddApp(pkg: String, ctx: Context): App? {
 			synchronized(SYNC_APPS) {
 				if (!::apps.isInitialized) {

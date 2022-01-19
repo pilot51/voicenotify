@@ -17,10 +17,7 @@ package com.pilot51.voicenotify
 
 import android.content.Context
 import android.database.DataSetObserver
-import android.os.Parcel
-import android.os.Parcelable
-import android.os.Parcelable.Creator
-import android.preference.DialogPreference
+import android.os.Bundle
 import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
@@ -31,18 +28,32 @@ import android.view.View.OnFocusChangeListener
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import android.widget.TextView.OnEditorActionListener
+import androidx.preference.DialogPreference
+import androidx.preference.PreferenceDialogFragmentCompat
 import java.util.*
 
 /**
  * Preference that provides a dynamic list with two EditTexts in each row for defining text replacement.
  */
 class TextReplacePreference(context: Context?, attrs: AttributeSet?) : DialogPreference(context, attrs) {
-	private val listView: ListView
-	private lateinit var adapter: TextReplaceAdapter
 	private var isPersistedReplaceListSet = false
-	private val persistedReplaceList: MutableList<Pair<String, String>?> = ArrayList()
+	val persistedReplaceList: MutableList<Pair<String, String>?> = ArrayList()
 
-	private fun setPersistedReplaceList(list: List<Pair<String, String>?>) {
+	init {
+		dialogLayoutResource = R.layout.preference_dialog_text_replace
+		setPositiveButtonText(android.R.string.ok)
+		setNegativeButtonText(android.R.string.cancel)
+	}
+
+	override fun onSetInitialValue(restorePersistedValue: Boolean, defaultValue: Any?) {
+		setPersistedReplaceList(
+			if (restorePersistedValue) {
+				getPersistedString(convertListToString(persistedReplaceList))
+			} else defaultValue as String
+		)
+	}
+
+	fun setPersistedReplaceList(list: List<Pair<String, String>?>) {
 		val trimmedList: MutableList<Pair<String, String>> = ArrayList(list.size)
 		copyLoop@ for (pair in list) {
 			if (pair != null && pair.first.isNotEmpty()) {
@@ -82,245 +93,232 @@ class TextReplacePreference(context: Context?, attrs: AttributeSet?) : DialogPre
 		persistedReplaceList.addAll(convertStringToList(text))
 	}
 
-	override fun onBindDialogView(view: View) {
-		super.onBindDialogView(view)
-		adapter = TextReplaceAdapter()
-		listView.adapter = adapter
-		val oldParent = listView.parent
-		if (oldParent !== view) {
-			if (oldParent != null) {
-				(oldParent as ViewGroup).removeView(listView)
-			}
-			val container = view.findViewById<ViewGroup>(R.id.container)
-			container?.addView(listView, ViewGroup.LayoutParams.MATCH_PARENT,
-				ViewGroup.LayoutParams.MATCH_PARENT)
-		}
-	}
+	class TextReplaceFragment : PreferenceDialogFragmentCompat() {
+		private lateinit var textReplacePreference: TextReplacePreference
+		private lateinit var listView: ListView
+		private lateinit var adapter: TextReplaceAdapter
 
-	override fun onDialogClosed(positiveResult: Boolean) {
-		if (positiveResult) {
+		override fun onCreate(savedInstanceState: Bundle?) {
+			super.onCreate(savedInstanceState)
+			textReplacePreference = preference as TextReplacePreference
+			listView = ListView(context)
+			adapter = TextReplaceAdapter()
+			listView.addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
+				override fun onViewAttachedToWindow(v: View) {
+					val window = dialog!!.window
+					// Required for soft keyboard to appear.
+					window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+						or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM
+					) ?: Log.e(TextReplaceFragment::class.simpleName,
+						"Null window, unable to clear window flags, soft keyboard may not appear.")
+				}
+
+				override fun onViewDetachedFromWindow(v: View) {}
+			})
+		}
+
+		override fun onSaveInstanceState(outState: Bundle) {
+			if (dialog?.isShowing != true) return super.onSaveInstanceState(outState)
 			adapter.updateFocusedRow()
-			if (callChangeListener(convertListToString(adapter.list))) {
-				setPersistedReplaceList(adapter.list)
+			outState.putString(KEY_LIST_STATE, convertListToString(adapter.list))
+		}
+
+		override fun onViewStateRestored(savedInstanceState: Bundle?) {
+			super.onViewStateRestored(savedInstanceState)
+			savedInstanceState?.getString(KEY_LIST_STATE)?.let {
+				adapter.list = convertStringToList(it)
 			}
 		}
-	}
 
-	override fun onSetInitialValue(restorePersistedValue: Boolean, defaultValue: Any) {
-		setPersistedReplaceList((if (restorePersistedValue) getPersistedString(convertListToString(persistedReplaceList)) else defaultValue as String)!!)
-	}
-
-	override fun shouldDisableDependents(): Boolean {
-		return persistedReplaceList.isEmpty() || super.shouldDisableDependents()
-	}
-
-	override fun onSaveInstanceState(): Parcelable {
-		val superState = super.onSaveInstanceState()
-		if (dialog == null || !dialog.isShowing) {
-			return superState
-		}
-		val myState = SavedState(superState)
-		adapter.updateFocusedRow()
-		myState.text = convertListToString(adapter.list)
-		return myState
-	}
-
-	override fun onRestoreInstanceState(state: Parcelable) {
-		if (state.javaClass != SavedState::class.java) {
-			super.onRestoreInstanceState(state)
-			return
-		}
-		val myState = state as SavedState
-		super.onRestoreInstanceState(myState.superState)
-		adapter.list = convertStringToList(myState.text)
-	}
-
-	private class SavedState : BaseSavedState {
-		var text: String? = null
-
-		constructor(superState: Parcelable) : super(superState)
-		private constructor(source: Parcel) : super(source) {
-			text = source.readString()
+		override fun onBindDialogView(view: View) {
+			super.onBindDialogView(view)
+			listView.adapter = adapter
+			val oldParent = listView.parent
+			if (oldParent !== view) {
+				if (oldParent != null) {
+					(oldParent as ViewGroup).removeView(listView)
+				}
+				val container = view.findViewById<ViewGroup>(R.id.container)
+				container?.addView(listView, ViewGroup.LayoutParams.MATCH_PARENT,
+					ViewGroup.LayoutParams.MATCH_PARENT)
+			}
 		}
 
-		override fun writeToParcel(dest: Parcel, flags: Int) {
-			super.writeToParcel(dest, flags)
-			dest.writeString(text)
+		/**
+		 * Adapter for the list of text replacements.
+		 */
+		// FIXME: Adapter update forces focus to editFrom of the row with focus prior to update.
+		private inner class TextReplaceAdapter : BaseAdapter() {
+			private val inflater = requireContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+			private val replaceList: MutableList<Pair<String, String>?> = ArrayList()
+
+			/**
+			 * Sets the adapter data and adds null for an empty last row
+			 * if the list doesn't already contain null (it shouldn't).
+			 */
+			var list: List<Pair<String, String>?>
+				get() = replaceList
+				set(list) {
+					replaceList.clear()
+					replaceList.addAll(list)
+					if (!replaceList.contains(null)) {
+						replaceList.add(null)
+					}
+					notifyDataSetChanged()
+				}
+
+			init {
+				list = textReplacePreference.persistedReplaceList
+			}
+
+			/**
+			 * Finds the focused row and forces the entered text to be updated in the adapter's data.
+			 * This is used when the dialog's positive button is pressed or when saving instance state.
+			 */
+			fun updateFocusedRow() {
+				listView.focusedChild?.run {
+					updateListItem(tag as ViewHolder)
+				}
+			}
+
+			/**
+			 * Updates a row in the adapter's data.
+			 * @param holder The ViewHolder for the row. The EditTexts and position in data are used.
+			 */
+			private fun updateListItem(holder: ViewHolder) {
+				var listPair: Pair<String, String>? = null
+				if (holder.position < replaceList.size) {
+					listPair = replaceList[holder.position]
+				}
+				val editStringPair = Pair.create(holder.editFrom.text.toString(),
+					holder.editTo.text.toString())
+				if (editStringPair.first.isNotEmpty()) {
+					if (listPair == null) {
+						replaceList.add(holder.position, editStringPair)
+						notifyDataSetChanged()
+					} else if (editStringPair.first != listPair.first
+						|| editStringPair.second != listPair.second) {
+						replaceList[holder.position] = editStringPair
+					}
+				} else if (listPair != null) {
+					replaceList.removeAt(holder.position)
+					notifyDataSetChanged()
+				}
+			}
+
+			/**
+			 * Sets EditText error message if entered text is a duplicate of another entry in [.replaceList],
+			 * otherwise clears error if not a duplicate.
+			 * @param editFrom The EditText to check and set error message if text is duplicate, otherwise clear error.
+			 * @param position The position of this entry in [.replaceList] to prevent detecting self as duplicate.
+			 */
+			private fun setErrorIfDuplicate(editFrom: EditText, position: Int) {
+				val editFromString = editFrom.text.toString()
+				for (p in replaceList) {
+					if (p != null && replaceList.indexOf(p) < position && editFromString.equals(p.first, ignoreCase = true)) {
+						editFrom.error = requireContext().getString(R.string.text_replace_error_duplicate)
+						return
+					}
+				}
+				editFrom.error = null
+			}
+
+			override fun getCount() = replaceList.size
+
+			override fun getItem(position: Int) = replaceList[position]
+
+			override fun getItemId(position: Int) = position.toLong()
+
+			override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+				val view = convertView ?: inflater.inflate(R.layout.text_replace_row, parent, false)
+				val holder: ViewHolder
+				if (convertView == null) {
+					holder = ViewHolder()
+					holder.editFrom = view.findViewById(R.id.text_to_replace)
+					holder.editTo = view.findViewById(R.id.replacement_text)
+					holder.remove = view.findViewById(R.id.remove)
+					view.tag = holder
+				} else {
+					holder = view.tag as ViewHolder
+				}
+				holder.position = position
+				val pair = replaceList[position]
+				val editFrom = holder.editFrom
+				val editTo = holder.editTo
+				holder.remove.setOnClickListener {
+					editFrom.text = null
+					editTo.text = null
+					updateListItem(holder)
+				}
+				editFrom.setText(pair?.first)
+				editTo.setText(pair?.second)
+				setErrorIfDuplicate(editFrom, position)
+				val observer = DataChangedObserver()
+				registerDataSetObserver(observer)
+				val listener = OnFocusChangeListener { _, hasFocus ->
+					if (hasFocus || observer.dataChanged) return@OnFocusChangeListener
+					setErrorIfDuplicate(editFrom, position)
+					updateListItem(holder)
+				}
+				editFrom.onFocusChangeListener = listener
+				editTo.onFocusChangeListener = listener
+				editTo.setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
+					if (actionId == EditorInfo.IME_ACTION_DONE) {
+						if (position != replaceList.size - 1) {
+							val nextField = editFrom.focusSearch(View.FOCUS_DOWN) as TextView
+							nextField.requestFocus()
+						}
+						return@OnEditorActionListener true
+					}
+					false
+				})
+				return view
+			}
+
+			private inner class ViewHolder {
+				var position = 0
+				lateinit var editFrom: EditText
+				lateinit var editTo: EditText
+				lateinit var remove: ImageButton
+			}
+
+			/**
+			 * A DataSetObserver used to prevent onFocusChange of the EditTexts from erroneously updating
+			 * data with old row information after data has changed from onClick of the remove button.
+			 */
+			private inner class DataChangedObserver : DataSetObserver() {
+				var dataChanged = false
+				override fun onChanged() {
+					dataChanged = true
+					unregisterDataSetObserver(this)
+				}
+			}
+		}
+
+		override fun onDialogClosed(positiveResult: Boolean) {
+			if (positiveResult) {
+				adapter.updateFocusedRow()
+				if (preference.callChangeListener(convertListToString(adapter.list))) {
+					textReplacePreference.setPersistedReplaceList(adapter.list)
+				}
+			}
 		}
 
 		companion object {
-			@JvmField
-			val CREATOR: Creator<SavedState> = object : Creator<SavedState> {
-				override fun createFromParcel(`in`: Parcel): SavedState {
-					return SavedState(`in`)
-				}
+			private const val KEY_LIST_STATE = "key_list_state"
 
-				override fun newArray(size: Int): Array<SavedState?> {
-					return arrayOfNulls(size)
-				}
-			}
-		}
-	}
-
-	/**
-	 * Adapter for the list of text replacements.
-	 */
-	// FIXME: Adapter update forces focus to editFrom of the row with focus prior to update.
-	private inner class TextReplaceAdapter : BaseAdapter() {
-		private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-		private val replaceList: MutableList<Pair<String, String>?> = ArrayList()
-
-		/**
-		 * Sets the adapter data and adds null for an empty last row
-		 * if the list doesn't already contain null (it shouldn't).
-		 */
-		var list: List<Pair<String, String>?>
-			get() = replaceList
-			set(list) {
-				replaceList.clear()
-				replaceList.addAll(list)
-				if (!replaceList.contains(null)) {
-					replaceList.add(null)
-				}
-				notifyDataSetChanged()
-			}
-
-		init {
-			list = persistedReplaceList
-		}
-
-		/**
-		 * Finds the focused row and forces the entered text to be updated in the adapter's data.
-		 * This is used when the dialog's positive button is pressed or when saving instance state.
-		 */
-		fun updateFocusedRow() {
-			val focusedRow = listView.focusedChild
-			if (focusedRow != null) {
-				updateListItem(focusedRow.tag as ViewHolder)
-			}
-		}
-
-		/**
-		 * Updates a row in the adapter's data.
-		 * @param holder The ViewHolder for the row. The EditTexts and position in data are used.
-		 */
-		private fun updateListItem(holder: ViewHolder) {
-			var listPair: Pair<String, String>? = null
-			if (holder.position < replaceList.size) {
-				listPair = replaceList[holder.position]
-			}
-			val editStringPair = Pair.create(holder.editFrom.text.toString(),
-				holder.editTo.text.toString())
-			if (editStringPair.first.isNotEmpty()) {
-				if (listPair == null) {
-					replaceList.add(holder.position, editStringPair)
-					notifyDataSetChanged()
-				} else if (editStringPair.first != listPair.first
-					|| editStringPair.second != listPair.second) {
-					replaceList[holder.position] = editStringPair
-				}
-			} else if (listPair != null) {
-				replaceList.removeAt(holder.position)
-				notifyDataSetChanged()
-			}
-		}
-
-		/**
-		 * Sets EditText error message if entered text is a duplicate of another entry in [.replaceList],
-		 * otherwise clears error if not a duplicate.
-		 * @param editFrom The EditText to check and set error message if text is duplicate, otherwise clear error.
-		 * @param position The position of this entry in [.replaceList] to prevent detecting self as duplicate.
-		 */
-		private fun setErrorIfDuplicate(editFrom: EditText?, position: Int) {
-			val editFromString = editFrom!!.text.toString()
-			for (p in replaceList) {
-				if (p != null && replaceList.indexOf(p) < position && editFromString.equals(p.first, ignoreCase = true)) {
-					editFrom.error = context.getString(R.string.text_replace_error_duplicate)
-					return
-				}
-			}
-			editFrom.error = null
-		}
-
-		override fun getCount() = replaceList.size
-
-		override fun getItem(position: Int) = replaceList[position]
-
-		override fun getItemId(position: Int) = position.toLong()
-
-		private inner class ViewHolder {
-			var position = 0
-			lateinit var editFrom: EditText
-			lateinit var editTo: EditText
-			lateinit var remove: ImageButton
-		}
-
-		override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-			val view = convertView ?: inflater.inflate(R.layout.text_replace_row, parent, false)
-			val holder: ViewHolder
-			if (convertView == null) {
-				holder = ViewHolder()
-				holder.editFrom = view.findViewById(R.id.text_to_replace)
-				holder.editTo = view.findViewById(R.id.replacement_text)
-				holder.remove = view.findViewById(R.id.remove)
-				view.tag = holder
-			} else {
-				holder = view.tag as ViewHolder
-			}
-			holder.position = position
-			val pair = replaceList[position]
-			val editFrom = holder.editFrom
-			val editTo = holder.editTo
-			holder.remove.setOnClickListener {
-				editFrom.text = null
-				editTo.text = null
-				updateListItem(holder)
-			}
-			if (pair != null) {
-				editFrom.setText(pair.first)
-				editTo.setText(pair.second)
-			} else {
-				editFrom.text = null
-				editTo.text = null
-			}
-			setErrorIfDuplicate(editFrom, position)
-			val observer = DataChangedObserver()
-			registerDataSetObserver(observer)
-			val listener = OnFocusChangeListener { _, hasFocus ->
-				if (hasFocus || observer.dataChanged) return@OnFocusChangeListener
-				setErrorIfDuplicate(editFrom, position)
-				updateListItem(holder)
-			}
-			editFrom.onFocusChangeListener = listener
-			editTo.onFocusChangeListener = listener
-			editTo.setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
-				if (actionId == EditorInfo.IME_ACTION_DONE) {
-					if (position != replaceList.size - 1) {
-						val nextField = editFrom.focusSearch(View.FOCUS_DOWN) as TextView
-						nextField.requestFocus()
+			fun newInstance(key: String): TextReplaceFragment {
+				return TextReplaceFragment().apply {
+					arguments = Bundle(1).apply {
+						putString(ARG_KEY, key)
 					}
-					return@OnEditorActionListener true
 				}
-				false
-			})
-			return view
-		}
-
-		/**
-		 * A DataSetObserver used to prevent onFocusChange of the EditTexts from erroneously updating
-		 * data with old row information after data has changed from onClick of the remove button.
-		 */
-		private inner class DataChangedObserver : DataSetObserver() {
-			var dataChanged = false
-			override fun onChanged() {
-				dataChanged = true
-				unregisterDataSetObserver(this)
 			}
 		}
 	}
 
 	companion object {
-		private fun convertListToString(list: List<Pair<String, String>?>): String {
+		fun convertListToString(list: List<Pair<String, String>?>): String {
 			val saveString = StringBuilder()
 			for (pair in list) {
 				if (pair == null) {
@@ -356,24 +354,5 @@ class TextReplacePreference(context: Context?, attrs: AttributeSet?) : DialogPre
 			}
 			return list
 		}
-	}
-
-	init {
-		dialogLayoutResource = R.layout.preference_dialog_text_replace
-		setPositiveButtonText(android.R.string.ok)
-		setNegativeButtonText(android.R.string.cancel)
-		listView = ListView(context, attrs)
-		listView.addOnAttachStateChangeListener(object : OnAttachStateChangeListener {
-			override fun onViewAttachedToWindow(v: View) {
-				val window = dialog.window
-				// Required for soft keyboard to appear.
-				window?.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-					or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-					?: Log.e(TextReplacePreference::class.simpleName,
-						"Null window, unable to clear window flags, soft keyboard may not appear.")
-			}
-
-			override fun onViewDetachedFromWindow(v: View) {}
-		})
 	}
 }

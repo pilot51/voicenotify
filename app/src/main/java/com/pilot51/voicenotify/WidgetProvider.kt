@@ -38,7 +38,6 @@ class WidgetProvider : AppWidgetProvider() {
 	}
 
 	override fun onReceive(context: Context, intent: Intent) {
-		// Prevent Lint warning. Should never be null, I want a crash report if it is.
 		when (intent.action!!) {
 			ACTION_TOGGLE -> if (isRunning) {
 				Toast.makeText(context,

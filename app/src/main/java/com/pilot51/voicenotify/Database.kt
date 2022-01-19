@@ -22,7 +22,9 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 import java.util.*
 
-internal class Database private constructor(context: Context) : SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION) {
+class Database private constructor(context: Context) :
+	SQLiteOpenHelper(context, DB_NAME, null, DB_VERSION)
+{
 	override fun onCreate(db: SQLiteDatabase) {
 		db.execSQL(CREATE_TBL_APPS)
 	}
@@ -30,7 +32,7 @@ internal class Database private constructor(context: Context) : SQLiteOpenHelper
 	override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
 	companion object {
-		private var database: Database? = null
+		private lateinit var database: Database
 		private const val DB_VERSION = 1
 		private const val DB_NAME = "apps.db"
 		private const val TABLE_NAME = "apps"
@@ -45,7 +47,7 @@ internal class Database private constructor(context: Context) : SQLiteOpenHelper
 		 * Initializes database object if not already initialized.
 		 */
 		fun init(context: Context) {
-			if (database == null) {
+			if (!::database.isInitialized) {
 				database = Database(context)
 			}
 		}
@@ -57,7 +59,7 @@ internal class Database private constructor(context: Context) : SQLiteOpenHelper
 		@set:Synchronized
 		var apps: List<App>
 			get() {
-				val db = database!!.readableDatabase
+				val db = database.readableDatabase
 				val cursor = db.query(TABLE_NAME, null, null, null, null, null, "$COLUMN_LABEL COLLATE NOCASE")
 				val list: MutableList<App> = ArrayList()
 				while (cursor.moveToNext()) {
@@ -73,7 +75,7 @@ internal class Database private constructor(context: Context) : SQLiteOpenHelper
 			}
 			set(apps) {
 				val list: List<App> = ArrayList(apps)
-				val db = database!!.writableDatabase
+				val db = database.writableDatabase
 				db.delete(TABLE_NAME, null, null)
 				var values: ContentValues
 				for (app in list) {
@@ -96,7 +98,7 @@ internal class Database private constructor(context: Context) : SQLiteOpenHelper
 			values.put(COLUMN_PACKAGE, app.`package`)
 			values.put(COLUMN_LABEL, app.label)
 			values.put(COLUMN_ENABLED, if (app.enabled) 1 else 0)
-			val db = database!!.writableDatabase
+			val db = database.writableDatabase
 			if (db.update(TABLE_NAME, values, "$COLUMN_PACKAGE = ?", arrayOf(app.`package`)) == 0) {
 				db.insert(TABLE_NAME, null, values)
 			}
@@ -111,7 +113,7 @@ internal class Database private constructor(context: Context) : SQLiteOpenHelper
 		fun updateAppEnable(app: App) {
 			val values = ContentValues()
 			values.put(COLUMN_ENABLED, if (app.enabled) 1 else 0)
-			val db = database!!.writableDatabase
+			val db = database.writableDatabase
 			db.update(TABLE_NAME, values, "$COLUMN_PACKAGE = ?", arrayOf(app.`package`))
 			db.close()
 		}
@@ -122,7 +124,7 @@ internal class Database private constructor(context: Context) : SQLiteOpenHelper
 		 */
 		@Synchronized
 		fun removeApp(app: App) {
-			val db = database!!.writableDatabase
+			val db = database.writableDatabase
 			db.delete(TABLE_NAME, "$COLUMN_PACKAGE = ?", arrayOf(app.`package`))
 			db.close()
 		}

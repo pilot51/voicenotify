@@ -17,8 +17,23 @@ package com.pilot51.voicenotify
 
 import android.content.Context
 
-enum class IgnoreReason(private val stringId: Int) {
-	SERVICE_STOPPED(R.string.reason_service_stopped), SUSPENDED(R.string.reason_suspended), QUIET(R.string.reason_quiet), SHAKE(R.string.reason_shake), SILENT(R.string.reason_silent), CALL(R.string.reason_call), SCREEN_OFF(R.string.reason_screen_off), SCREEN_ON(R.string.reason_screen_on), HEADSET_OFF(R.string.reason_headset_off), HEADSET_ON(R.string.reason_headset_on), APP(R.string.reason_app), STRING(R.string.reason_string), EMPTY_MSG(R.string.reason_empty_msg), IDENTICAL(R.string.reason_identical);
+enum class IgnoreReason(
+	private val stringId: Int
+) {
+	SERVICE_STOPPED(R.string.reason_service_stopped),
+	SUSPENDED(R.string.reason_suspended),
+	QUIET(R.string.reason_quiet),
+	SHAKE(R.string.reason_shake),
+	SILENT(R.string.reason_silent),
+	CALL(R.string.reason_call),
+	SCREEN_OFF(R.string.reason_screen_off),
+	SCREEN_ON(R.string.reason_screen_on),
+	HEADSET_OFF(R.string.reason_headset_off),
+	HEADSET_ON(R.string.reason_headset_on),
+	APP(R.string.reason_app),
+	STRING(R.string.reason_string),
+	EMPTY_MSG(R.string.reason_empty_msg),
+	IDENTICAL(R.string.reason_identical);
 
 	/**
 	 * @param c Context required to get the string resource.
@@ -33,7 +48,6 @@ enum class IgnoreReason(private val stringId: Int) {
 		 * @param c Context required to get string resources.
 		 * @return The resulting string.
 		 */
-		@JvmStatic
 		fun convertSetToString(reasons: Set<IgnoreReason>, c: Context): String {
 			val builder = StringBuilder()
 			val iterator = reasons.iterator()

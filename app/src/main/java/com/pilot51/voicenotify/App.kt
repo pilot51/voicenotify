@@ -15,7 +15,11 @@
  */
 package com.pilot51.voicenotify
 
-class App(val `package`: String, val label: String, var enabled: Boolean) {
+class App(
+	val `package`: String,
+	val label: String,
+	var enabled: Boolean
+) {
 	/**
 	 * Updates self in database.
 	 * @return This instance.

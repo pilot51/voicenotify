@@ -15,10 +15,8 @@
  */
 package com.pilot51.voicenotify
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
@@ -27,27 +25,29 @@ import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 
-class NotifyList internal constructor(context: Context?) : ListView(context) {
-	private val res: Resources = resources
-
+class NotifyList(context: Context?) : ListView(context) {
 	private interface OnListChangeListener {
 		fun onListChange()
 	}
 
 	init {
-		divider = res.getDrawable(R.drawable.divider)
 		adapter = Adapter()
 	}
 
 	private inner class Adapter : BaseAdapter() {
-		private val inflater: LayoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+		private val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
 		init {
 			listener = object : OnListChangeListener {
 				override fun onListChange() {
-					(context as Activity).runOnUiThread { notifyDataSetChanged() }
+					CoroutineScope(Dispatchers.Main).launch {
+						notifyDataSetChanged()
+					}
 				}
 			}
 		}
@@ -99,11 +99,11 @@ class NotifyList internal constructor(context: Context?) : ListView(context) {
 			} else holder.ignoreReasons.visibility = GONE
 			view.setOnLongClickListener {
 				AlertDialog.Builder(context)
-					.setTitle(res.getString(if (item.app.enabled) R.string.ignore_app else R.string.unignore_app,
+					.setTitle(resources.getString(if (item.app.enabled) R.string.ignore_app else R.string.unignore_app,
 						item.app.label))
 					.setPositiveButton(R.string.yes) { _, _ ->
 						item.app.setEnabled(!item.app.enabled, true)
-						Toast.makeText(context, res.getString(if (item.app.enabled) R.string.app_is_not_ignored else R.string.app_is_ignored,
+						Toast.makeText(context, resources.getString(if (item.app.enabled) R.string.app_is_not_ignored else R.string.app_is_ignored,
 							item.app.label),
 							Toast.LENGTH_SHORT).show()
 					}
@@ -119,14 +119,11 @@ class NotifyList internal constructor(context: Context?) : ListView(context) {
 		private const val HISTORY_LIMIT = 20
 		private val list: MutableList<NotificationInfo> = ArrayList(HISTORY_LIMIT)
 		private var listener: OnListChangeListener? = null
-		@JvmStatic
+
 		fun refresh() {
-			if (listener != null) {
-				listener!!.onListChange()
-			}
+			listener?.onListChange()
 		}
 
-		@JvmStatic
 		fun addNotification(info: NotificationInfo) {
 			if (list.size == HISTORY_LIMIT) {
 				list.removeAt(list.size - 1)

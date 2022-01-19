@@ -15,38 +15,39 @@
  */
 package com.pilot51.voicenotify
 
+import android.Manifest
 import android.app.*
 import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.ActivityNotFoundException
 import android.content.Intent
-import android.content.SharedPreferences
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.preference.EditTextPreference
-import android.preference.Preference
-import android.preference.Preference.OnPreferenceClickListener
-import android.preference.PreferenceActivity
-import android.preference.PreferenceFragment
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
+import androidx.preference.Preference
+import androidx.preference.Preference.OnPreferenceClickListener
+import androidx.preference.PreferenceFragmentCompat
 import com.pilot51.voicenotify.MainActivity.MyDialog.ID
 import com.pilot51.voicenotify.Service.OnStatusChangeListener
 import java.util.*
 
-class MainActivity : PreferenceActivity() {
+class MainActivity : FragmentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		if (savedInstanceState == null) {
 			val fragment = MainFragment()
-			fragmentManager.beginTransaction().replace(android.R.id.content, fragment).commit()
+			supportFragmentManager.beginTransaction().replace(android.R.id.content, fragment).commit()
 		}
 	}
 
-	class MainFragment : PreferenceFragment(), OnPreferenceClickListener, OnSharedPreferenceChangeListener {
+	class MainFragment : PreferenceFragmentCompat(), OnPreferenceClickListener {
 		private lateinit var pStatus: Preference
 		private lateinit var pDeviceState: Preference
 		private lateinit var pQuietStart: Preference
@@ -62,66 +63,43 @@ class MainActivity : PreferenceActivity() {
 
 		override fun onCreate(savedInstanceState: Bundle?) {
 			super.onCreate(savedInstanceState)
+			val activity = requireActivity()
+			val context = requireContext()
 			Common.init(activity)
-			addPreferencesFromResource(R.xml.preferences)
-			pStatus = findPreference(getString(R.string.key_status))
-			pStatus.onPreferenceClickListener = this
-			pDeviceState = findPreference(getString(R.string.key_device_state))
-			pDeviceState.onPreferenceClickListener = this
-			pQuietStart = findPreference(getString(R.string.key_quietStart))
-			pQuietStart.onPreferenceClickListener = this
-			pQuietEnd = findPreference(getString(R.string.key_quietEnd))
-			pQuietEnd.onPreferenceClickListener = this
-			pTest = findPreference(getString(R.string.key_test))
-			pTest.onPreferenceClickListener = this
-			pNotifyLog = findPreference(getString(R.string.key_notify_log))
-			pNotifyLog.onPreferenceClickListener = this
-			pSupport = findPreference(getString(R.string.key_support))
-			pSupport.onPreferenceClickListener = this
-			findPreference(getString(R.string.key_appList)).intent = Intent(activity, AppListActivity::class.java)
-			val pTTS = findPreference(getString(R.string.key_ttsSettings))
-			val ttsIntent = ttsIntent
-			if (ttsIntent != null) {
-				pTTS.intent = ttsIntent
-			} else {
-				pTTS.isEnabled = false
-				pTTS.setSummary(R.string.tts_settings_summary_fail)
-			}
-			val pTtsString = findPreference(getString(R.string.key_ttsString)) as EditTextPreference
-			if (pTtsString.text.contains("%")) {
-				Toast.makeText(activity, R.string.tts_message_reset_default, Toast.LENGTH_LONG).show()
-				pTtsString.text = getString(R.string.ttsString_default_value)
+			if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
+				!= PackageManager.PERMISSION_GRANTED
+			) {
+				if (shouldShowRequestPermissionRationale(Manifest.permission.READ_PHONE_STATE)) {
+					AlertDialog.Builder(context)
+						.setMessage(R.string.permission_rationale_read_phone_state)
+						.setPositiveButton(android.R.string.ok) { _, _ -> requestPhoneStatePerm() }
+						.show()
+				} else {
+					requestPhoneStatePerm()
+				}
 			}
 		}
 
-		private val ttsIntent: Intent?
-			get() {
-				val intent = Intent(Intent.ACTION_MAIN)
-				when {
-					checkActivityExist("com.android.settings.TextToSpeechSettings") ->
-						intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings")
-					checkActivityExist("com.android.settings.Settings\$TextToSpeechSettingsActivity") ->
-						intent.setClassName("com.android.settings", "com.android.settings.Settings\$TextToSpeechSettingsActivity")
-					checkActivityExist("com.google.tv.settings.TextToSpeechSettingsTop") ->
-						intent.setClassName("com.google.tv.settings", "com.google.tv.settings.TextToSpeechSettingsTop")
-					else -> return null
-				}
-				return intent
-			}
+		private fun requestPhoneStatePerm() {
+			ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.READ_PHONE_STATE), 1)
+		}
 
-		private fun checkActivityExist(name: String): Boolean {
-			try {
-				val pkgInfo = activity.packageManager.getPackageInfo(
-					name.substring(0, name.lastIndexOf(".")), PackageManager.GET_ACTIVITIES)
-				if (pkgInfo.activities != null) {
-					for (n in pkgInfo.activities.indices) {
-						if (pkgInfo.activities[n].name == name) return true
-					}
-				}
-			} catch (e: PackageManager.NameNotFoundException) {
-				e.printStackTrace()
-			}
-			return false
+		override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+			addPreferencesFromResource(R.xml.preferences)
+			pStatus = findPreference(getString(R.string.key_status))!!
+			pStatus.onPreferenceClickListener = this
+			pDeviceState = findPreference(getString(R.string.key_device_state))!!
+			pDeviceState.onPreferenceClickListener = this
+			pQuietStart = findPreference(getString(R.string.key_quietStart))!!
+			pQuietStart.onPreferenceClickListener = this
+			pQuietEnd = findPreference(getString(R.string.key_quietEnd))!!
+			pQuietEnd.onPreferenceClickListener = this
+			pTest = findPreference(getString(R.string.key_test))!!
+			pTest.onPreferenceClickListener = this
+			pNotifyLog = findPreference(getString(R.string.key_notify_log))!!
+			pNotifyLog.onPreferenceClickListener = this
+			pSupport = findPreference(getString(R.string.key_support))!!
+			pSupport.onPreferenceClickListener = this
 		}
 
 		override fun onPreferenceClick(preference: Preference): Boolean {
@@ -129,23 +107,22 @@ class MainActivity : PreferenceActivity() {
 				Service.toggleSuspend()
 				return true
 			} else if (preference === pDeviceState) {
-				MyDialog.show(fragmentManager, ID.DEVICE_STATE)
+				MyDialog.show(parentFragmentManager, ID.DEVICE_STATE)
 				return true
 			} else if (preference === pQuietStart) {
-				MyDialog.show(fragmentManager, ID.QUIET_START)
+				MyDialog.show(parentFragmentManager, ID.QUIET_START)
 				return true
 			} else if (preference === pQuietEnd) {
-				MyDialog.show(fragmentManager, ID.QUIET_END)
+				MyDialog.show(parentFragmentManager, ID.QUIET_END)
 				return true
 			} else if (preference === pTest) {
-				val context = activity.applicationContext
-				// Prevent Lint warning. Should never be null, I want a crash report if it is.
-				val vnApp = AppListActivity.findOrAddApp(context.packageName, context)!!
+				val context = requireContext().applicationContext
+				val vnApp = AppListFragment.findOrAddApp(context.packageName, context)!!
 				if (!vnApp.enabled) {
 					Toast.makeText(context, getString(R.string.test_ignored), Toast.LENGTH_LONG).show()
 				}
 				val notificationManager = context.getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-				val intent = activity.intent
+				val intent = requireActivity().intent
 				Timer().schedule(object : TimerTask() {
 					override fun run() {
 						val id = context.getString(R.string.notification_channel_id)
@@ -175,10 +152,10 @@ class MainActivity : PreferenceActivity() {
 				}, 5000)
 				return true
 			} else if (preference === pNotifyLog) {
-				MyDialog.show(fragmentManager, ID.LOG)
+				MyDialog.show(parentFragmentManager, ID.LOG)
 				return true
 			} else if (preference === pSupport) {
-				MyDialog.show(fragmentManager, ID.SUPPORT)
+				MyDialog.show(parentFragmentManager, ID.SUPPORT)
 				return true
 			}
 			return false
@@ -191,7 +168,8 @@ class MainActivity : PreferenceActivity() {
 				pStatus.intent = null
 			} else {
 				pStatus.setTitle(if (Service.isRunning) R.string.service_running else R.string.service_disabled)
-				if (NotificationManagerCompat.getEnabledListenerPackages(activity).contains(activity.packageName)) {
+				val context = requireContext()
+				if (NotificationManagerCompat.getEnabledListenerPackages(context).contains(context.packageName)) {
 					pStatus.setSummary(R.string.status_summary_notification_access_enabled)
 				} else {
 					pStatus.setSummary(R.string.status_summary_notification_access_disabled)
@@ -202,34 +180,42 @@ class MainActivity : PreferenceActivity() {
 
 		override fun onResume() {
 			super.onResume()
-			Common.getPrefs(activity).registerOnSharedPreferenceChangeListener(this)
 			Service.registerOnStatusChangeListener(statusListener)
 			updateStatus()
 		}
 
 		override fun onPause() {
 			Service.unregisterOnStatusChangeListener(statusListener)
-			Common.getPrefs(activity).unregisterOnSharedPreferenceChangeListener(this)
 			super.onPause()
-		}
-
-		override fun onSharedPreferenceChanged(sp: SharedPreferences, key: String) {
-			if (key == getString(R.string.key_ttsStream)) {
-				Common.setVolumeStream(activity)
-			}
 		}
 	}
 
 	class MyDialog : DialogFragment() {
+		private lateinit var activity: Activity
+
 		enum class ID {
-			DEVICE_STATE, QUIET_START, QUIET_END, LOG, SUPPORT, DONATE, WALLET
+			DEVICE_STATE,
+			QUIET_START,
+			QUIET_END,
+			LOG,
+			SUPPORT,
+			DONATE,
+			WALLET
 		}
 
-		private val sTimeSetListener = OnTimeSetListener { _, hourOfDay, minute -> Common.getPrefs(activity).edit().putInt(getString(R.string.key_quietStart), hourOfDay * 60 + minute).apply() }
-		private val eTimeSetListener = OnTimeSetListener { _, hourOfDay, minute -> Common.getPrefs(activity).edit().putInt(getString(R.string.key_quietEnd), hourOfDay * 60 + minute).apply() }
+		private val sTimeSetListener = OnTimeSetListener { _, hourOfDay, minute ->
+			Common.getPrefs(activity).edit()
+				.putInt(getString(R.string.key_quietStart), hourOfDay * 60 + minute)
+				.apply()
+		}
+		private val eTimeSetListener = OnTimeSetListener { _, hourOfDay, minute ->
+			Common.getPrefs(activity).edit()
+				.putInt(getString(R.string.key_quietEnd), hourOfDay * 60 + minute)
+				.apply()
+		}
 
 		/**
-		 * @return The intent for Google Wallet, otherwise null if installation is not found.
+		 * The intent for Google Wallet, otherwise null if installation is not found.
 		 */
 		private val walletIntent: Intent?
 			get() {
@@ -244,7 +230,8 @@ class MainActivity : PreferenceActivity() {
 			}
 
 		override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-			return when (arguments.getSerializable(KEY_ID) as ID) {
+			activity = requireActivity()
+			return when (requireArguments().getSerializable(KEY_ID) as ID) {
 				ID.DEVICE_STATE -> {
 					val items = resources.getStringArray(R.array.device_states)
 					AlertDialog.Builder(activity)
@@ -285,7 +272,7 @@ class MainActivity : PreferenceActivity() {
 					.setTitle(R.string.support)
 					.setItems(R.array.support_items) { _, item ->
 						when (item) {
-							0 -> show(fragmentManager, ID.DONATE)
+							0 -> show(parentFragmentManager, ID.DONATE)
 							1 -> {
 								val iMarket = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.pilot51.voicenotify"))
 								iMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -328,7 +315,7 @@ class MainActivity : PreferenceActivity() {
 					.setTitle(R.string.donate)
 					.setItems(R.array.donate_services) { _, item ->
 						when (item) {
-							0 -> show(fragmentManager, ID.WALLET)
+							0 -> show(parentFragmentManager, ID.WALLET)
 							1 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://paypal.com/cgi-bin/webscr?"
 								+ "cmd=_donations&business=pilota51%40gmail%2ecom&lc=US&item_name=Voice%20Notify&"
 								+ "no_note=0&no_shipping=1&currency_code=USD")))
@@ -356,6 +343,7 @@ class MainActivity : PreferenceActivity() {
 
 		companion object {
 			private const val KEY_ID = "id"
+
 			fun show(fm: FragmentManager, id: ID) {
 				val bundle = Bundle()
 				bundle.putSerializable(KEY_ID, id)
