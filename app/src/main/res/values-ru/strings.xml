@@ -110,22 +110,12 @@
 	
 	
 	
-	<string name="donate">Пожертвовать</string>
 	<string-array name="support_items">
-		<item>@string/donate</item>
 		<item>Оставить отзыв</item>
 		<item>Связаться с разработчиком</item>
 		<item>Переводы</item>
 		<item>Исходный Код</item>
 	</string-array>
-	<string-array name="donate_services">
-		<item>Кошелек Google</item>
-		<item>PayPal</item>
-	</string-array>
-	<string name="donate_wallet_title">Пожертвовать - кошелек Google</string>
-	
-	<string name="donate_wallet_launch_app">Открыть кошелек</string>
-	<string name="donate_wallet_launch_web">Открыть кошелек в браузере</string>
 	
 	<string name="error_email">Ошибка: Не удалось найти установленный почтовый клиент.</string>
 	

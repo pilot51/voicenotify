@@ -12,11 +12,9 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
-import androidx.navigation.fragment.findNavController
 import com.pilot51.voicenotify.PrefDialogID.*
 
 class PrefDialog : DialogFragment() {
-	private val navController by lazy { findNavController() }
 	private val prefs by lazy { Common.getPrefs(requireContext()) }
 
 	private val sTimeSetListener = OnTimeSetListener { _, hourOfDay, minute ->
@@ -29,21 +27,6 @@ class PrefDialog : DialogFragment() {
 			.putInt(getString(R.string.key_quietEnd), hourOfDay * 60 + minute)
 			.apply()
 	}
-
-	/**
-	 * The intent for Google Wallet, otherwise null if installation is not found.
-	 */
-	private val walletIntent: Intent?
-		get() {
-			val walletPackage = "com.google.android.apps.gmoney"
-			val pm = requireActivity().packageManager
-			return try {
-				pm.getPackageInfo(walletPackage, PackageManager.GET_ACTIVITIES)
-				pm.getLaunchIntentForPackage(walletPackage)
-			} catch (e: PackageManager.NameNotFoundException) {
-				null
-			}
-		}
 
 	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 		return when (PrefDialogArgs.fromBundle(requireArguments()).id) {
@@ -87,8 +70,7 @@ class PrefDialog : DialogFragment() {
 				.setTitle(R.string.support)
 				.setItems(R.array.support_items) { _, item ->
 					when (item) {
-						0 -> navController.navigate(MainFragmentDirections.actionPrefDialog(DONATE))
-						1 -> {
+						0 -> {
 							val iMarket = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.pilot51.voicenotify"))
 							iMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 							try {
@@ -98,7 +80,7 @@ class PrefDialog : DialogFragment() {
 								Toast.makeText(activity, R.string.error_market, Toast.LENGTH_LONG).show()
 							}
 						}
-						2 -> {
+						1 -> {
 							val activity = requireActivity()
 							val iEmail = Intent(Intent.ACTION_SEND)
 							iEmail.type = "plain/text"
@@ -123,37 +105,10 @@ class PrefDialog : DialogFragment() {
 								Toast.makeText(activity, R.string.error_email, Toast.LENGTH_LONG).show()
 							}
 						}
-						3 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://getlocalization.com/voicenotify")))
-						4 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/pilot51/voicenotify")))
+						2 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://getlocalization.com/voicenotify")))
+						3 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/pilot51/voicenotify")))
 					}
 				}.create()
-			DONATE -> AlertDialog.Builder(activity)
-				.setTitle(R.string.donate)
-				.setItems(R.array.donate_services) { _, item ->
-					when (item) {
-						0 -> navController.navigate(MainFragmentDirections.actionPrefDialog(WALLET))
-						1 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://paypal.com/cgi-bin/webscr?"
-							+ "cmd=_donations&business=pilota51%40gmail%2ecom&lc=US&item_name=Voice%20Notify&"
-							+ "no_note=0&no_shipping=1&currency_code=USD")))
-					}
-				}.create()
-			WALLET -> {
-				val walletIntent = walletIntent
-				val dlg = AlertDialog.Builder(activity)
-					.setTitle(R.string.donate_wallet_title)
-					.setMessage(R.string.donate_wallet_message)
-					.setNegativeButton(android.R.string.cancel, null)
-				if (walletIntent != null) {
-					dlg.setPositiveButton(R.string.donate_wallet_launch_app) { _, _ ->
-						startActivity(walletIntent)
-					}
-				} else {
-					dlg.setPositiveButton(R.string.donate_wallet_launch_web) { _, _ ->
-						startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://wallet.google.com")))
-					}
-				}
-				dlg.create()
-			}
 		}
 	}
 }
@@ -163,7 +118,5 @@ enum class PrefDialogID {
 	QUIET_START,
 	QUIET_END,
 	LOG,
-	SUPPORT,
-	DONATE,
-	WALLET
+	SUPPORT
 }

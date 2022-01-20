@@ -100,7 +100,6 @@
 	
 	
 	<string-array name="support_items">
-		<item>@string/donate</item>
 		<item>Noter/Commenter</item>
 		<item>Contacter le développeur</item>
 		<item>Traductions</item>

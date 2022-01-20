@@ -110,22 +110,12 @@
 	
 	
 	
-	<string name="donate">Donar</string>
 	<string-array name="support_items">
-		<item>@string/donate</item>
 		<item>Calificar/Comentar</item>
 		<item>Contactar al Desarrollador</item>
 		<item>Traducciones</item>
 		<item>Código fuente</item>
 	</string-array>
-	<string-array name="donate_services">
-		<item>Google Wallet</item>
-		<item>PayPal</item>
-	</string-array>
-	<string name="donate_wallet_title">Donar - Google Wallet</string>
-	<string name="donate_wallet_message">Si eres de los EEUU y te gustaría donar vía Google Wallet, simplemente usa la función de Enviar Dinero y envíalo a pilota51@gmail.com.\nDesafortunadamente, Enviar Dinero no está disponible fuera de los EEUU.\n\nGracias por usar y dar soporte a Voice Notify!</string>
-	<string name="donate_wallet_launch_app">Ejecutar aplicación Wallet.</string>
-	<string name="donate_wallet_launch_web">Abrir sitio web de Wallet</string>
 	<string name="error_market">Error: Incapaz de encontrar Google Play Store instalado.</string>
 	<string name="error_email">Error: No se pudo encontrar una aplicación de email instalada</string>
 	

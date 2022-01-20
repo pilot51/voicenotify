@@ -111,22 +111,12 @@ Oznámení vytvořené při zapnuté obrazovce se neopakují.\n\nHodnota je v mi
 	
 	
 	
-	<string name="donate">Darovat</string>
 	<string-array name="support_items">
-		<item>@string/donate</item>
 		<item>Hodnotit/Komentovat</item>
 		<item>Kontaktovat Vývojáře</item>
 		<item>Překlady</item>
 		<item>Zdrojový Kód</item>
 	</string-array>
-	<string-array name="donate_services">
-		<item>Google Peněženka</item>
-		<item>PayPal</item>
-	</string-array>
-	<string name="donate_wallet_title">Darovat - Google Peněženka</string>
-	<string name="donate_wallet_message">Pokud jste ve Spojených státech a chcete darovat prostřednictvím Peněženky Google, jednoduše použijte funkci Odeslat peníze a adresujte ji pilota51@gmail.com.\nBohužel zaslat peníze není k dispozici mimo USA.\n\nDěkujeme za používání a podporu Voice Notify!</string>
-	<string name="donate_wallet_launch_app">Spuštění aplikace Peněženka</string>
-	<string name="donate_wallet_launch_web">Otevřít Webovou Peněženku</string>
 	<string name="error_market">Chyba: Nelze najít nainstalovaný Google Play Obchod.</string>
 	<string name="error_email">Chyba: Nelze najít nainstalovanou e-mailovou aplikaci.</string>
 	

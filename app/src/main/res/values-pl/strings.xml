@@ -110,22 +110,12 @@
 	<string name="test_content_title">Tytuł</string>
 	<string name="test_content_text">To jest kontent wiadomości</string>
 	<string name="test_content_info">Informacja kontentu </string>
-	<string name="donate">Darowizna</string>
 	<string-array name="support_items">
-		<item>@string/donate</item>
 		<item>Oceń/skomentuj </item>
 		<item>Kontakt z deweloperem</item>
 		<item>Tłumaczenie</item>
 		<item>Kod źródłowy</item>
 	</string-array>
-	<string-array name="donate_services">
-		<item>Google Wallet</item>
-		<item>PayPal</item>
-	</string-array>
-	<string name="donate_wallet_title">Darowizna - Google Wallet</string>
-	<string name="donate_wallet_message">Jeżeli jesteś w USA możesz dać darowiznę ozywając funkcji "Send Money" na adres pilota51@gmail.com.\nNiestety wysyłanie pieniędzy nie jest dostępne poza USA. \n\nDziękuję za używanie i wspieranie Voice Notify!</string>
-	<string name="donate_wallet_launch_app">Otwórz aplikacje Wallet</string>
-	<string name="donate_wallet_launch_web">Otwórz stronę Wallet</string>
 	<string name="error_market">Error: nie można odnaleźć Sklepu Google Play </string>
 	<string name="error_email">Error: Nie można znaleźć zainstalowanej aplikacji Email.</string>
 	<string name="tts_message_reset_default">Ustawianie wiadomości TTS zaktualizowane do nowej domyślnej wartości</string>

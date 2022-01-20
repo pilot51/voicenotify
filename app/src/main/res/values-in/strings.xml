@@ -110,22 +110,12 @@
 	<string name="test_content_title">Judul Isi</string>
 	<string name="test_content_text">Ini adalah pesan isi</string>
 	<string name="test_content_info">Info Isi</string>
-	<string name="donate">Menyumbang</string>
 	<string-array name="support_items">
-		<item>@string/donate</item>
 		<item>Nilai/Komentar</item>
 		<item>Hubungi Pengembang</item>
 		<item>Alih Bahasa</item>
 		<item>Kode Sumber</item>
 	</string-array>
-	<string-array name="donate_services">
-		<item>Google Wallet</item>
-		<item>PayPal</item>
-	</string-array>
-	<string name="donate_wallet_title">Menyumbang - Google Wallet</string>
-	<string name="donate_wallet_message">Bila Anda berada di Amerika Serikat dan berkeinginan untuk menyumbang melalui Google Wallet, cukup gunakan fitur Kirim Uang dan alamatkan ke pilota51@gmail.com.\nSayangnya, Kirim Uang tidak tersedia di luar Amerika Serikat.\n\nTerima kasih telah menggunakan dan mendukung Pemberitahuan Suara!</string>
-	<string name="donate_wallet_launch_app">Luncurkan Google Wallet</string>
-	<string name="donate_wallet_launch_web">Buka situs Google Wallet</string>
 	<string name="error_market">Galat: Gagal menemukan Google Play Store terpasang.</string>
 	<string name="error_email">Galat: Gagal menemukan aplikasi surel terpasang.</string>
 	<string name="tts_message_reset_default">Pengaturan Teks-Ke-Ucapan diperbarui ke nilai asali baru </string>

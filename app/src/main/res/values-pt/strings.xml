@@ -110,22 +110,12 @@
 	
 	
 	
-	<string name="donate">Doe.</string>
 	<string-array name="support_items">
-		<item>@string/donate</item>
 		<item>Avaliar/Comentar</item>
 		<item>Contactar desenvolvedor</item>
 		<item>Traduzir</item>
 		<item>Código fonte</item>
 	</string-array>
-	<string-array name="donate_services">
-		<item>Google Wallet</item>
-		<item>PayPal</item>
-	</string-array>
-	<string name="donate_wallet_title">Doe via Google Wallet</string>
-	<string name="donate_wallet_message">Se você está nos Estados Unidos e quiser doar via Google Wallet basta usar o recurso de enviar dinheiro para pilota51@gmail.com.\nInfelizmente o recurso enviar dinheiro não está disponível fora dos EUA.\n\nObrigado por utilizar e apoiar Notificações por voz!</string>
-	<string name="donate_wallet_launch_app">Chamar o aplicativo de carteira.</string>
-	<string name="donate_wallet_launch_web">Abrir o site do Wallet.</string>
 	<string name="error_market">Erro: Não foi possível localizar o Google Play Store instalado.</string>
 	<string name="error_email">Erro: Não é possível encontrar um aplicativo de e-mail instalado.</string>
 	

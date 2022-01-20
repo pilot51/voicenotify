@@ -88,7 +88,7 @@
 	<string name="test_summary">Post a notification (delayed 5 seconds) to test current settings</string>
 	<string name="test_ignored">Voice Notify is ignored in App List.\nTest will run, but notification will not be spoken.</string>
 	<string name="notify_log_summary">List last 20 notifications.\nDisplays time, app name, message, and ignore reasons.</string>
-	<string name="support_summary">Donate, rate/comment, translations, source code, or contact the developer</string>
+	<string name="support_summary">Rate/comment, translations, source code, or contact the developer</string>
 	
 	<!-- TextReplacePreference -->
 	<string name="text_replace_error_duplicate">Duplicate! Will not be saved.</string>
@@ -113,22 +113,12 @@
 	<string name="test_content_title">Content Title</string>
 	<string name="test_content_text">This is the content message.</string>
 	<string name="test_content_info">Content Info</string>
-	<string name="donate">Donate</string>
 	<string-array name="support_items">
-		<item>@string/donate</item>
 		<item>Rate/Comment</item>
 		<item>Contact Developer</item>
 		<item>Translations</item>
 		<item>Source Code</item>
 	</string-array>
-	<string-array name="donate_services">
-		<item>Google Wallet</item>
-		<item>PayPal</item>
-	</string-array>
-	<string name="donate_wallet_title">Donate - Google Wallet</string>
-	<string name="donate_wallet_message">If you are in the United States and would like to donate via Google Wallet, simply use the Send Money feature and address it to pilota51@gmail.com.\nUnfortunately, Send Money is not available outside the US.\n\nThank you for using and supporting Voice Notify!</string>
-	<string name="donate_wallet_launch_app">Launch Wallet App</string>
-	<string name="donate_wallet_launch_web">Open Wallet Website</string>
 	<string name="error_market">Error: Unable to find Google Play Store installed.</string>
 	<string name="error_email">Error: Unable to find an installed email app.</string>
 	<string name="tts_message_reset_default">TTS Message setting updated to new default value</string>
