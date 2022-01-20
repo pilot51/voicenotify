@@ -19,12 +19,11 @@
 	<Preference
 		android:key="@string/key_appList"
 		android:title="@string/app_list"
-		android:summary="@string/app_list_summary"
-		android:fragment="com.pilot51.voicenotify.AppListFragment" />
+		android:summary="@string/app_list_summary" />
 	<Preference
+		android:key="@string/key_ttsConfig"
 		android:title="@string/tts"
-		android:summary="@string/tts_summary"
-		android:fragment="com.pilot51.voicenotify.TtsConfigFragment" />
+		android:summary="@string/tts_summary" />
 	<CheckBoxPreference
 		android:key="@string/key_audio_focus"
 		android:title="@string/audio_focus"

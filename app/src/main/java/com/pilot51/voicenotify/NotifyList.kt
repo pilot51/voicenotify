@@ -25,6 +25,7 @@ import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.Toast
+import com.pilot51.voicenotify.databinding.NotifyLogItemBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -72,17 +73,18 @@ class NotifyList(context: Context?) : ListView(context) {
 		}
 
 		override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-			val view = convertView ?: inflater.inflate(R.layout.notify_log_item, parent, false)
-			val holder: ViewHolder
-			if (convertView == null) {
+			lateinit var holder: ViewHolder
+			val binding = convertView?.let {
+				NotifyLogItemBinding.bind(it).apply {
+					holder = root.tag as ViewHolder
+				}
+			} ?: NotifyLogItemBinding.inflate(inflater, parent, false).apply {
 				holder = ViewHolder()
-				holder.time = view.findViewById(R.id.time)
-				holder.title = view.findViewById(R.id.title)
-				holder.message = view.findViewById(R.id.message)
-				holder.ignoreReasons = view.findViewById(R.id.ignore_reasons)
-				view.tag = holder
-			} else {
-				holder = view.tag as ViewHolder
+				holder.time = time
+				holder.title = title
+				holder.message = message
+				holder.ignoreReasons = ignoreReasons
+				root.tag = holder
 			}
 			val item = list[position]
 			holder.time.text = item.time
@@ -93,25 +95,33 @@ class NotifyList(context: Context?) : ListView(context) {
 				holder.message.visibility = VISIBLE
 			} else holder.message.visibility = GONE
 			if (item.getIgnoreReasons().isNotEmpty()) {
-				holder.ignoreReasons.text = item.getIgnoreReasonsAsText(view.context)
-				if (item.isSilenced) holder.ignoreReasons.setTextColor(Color.YELLOW) else holder.ignoreReasons.setTextColor(Color.RED)
+				holder.ignoreReasons.text = item.getIgnoreReasonsAsText(context)
+				if (item.isSilenced) {
+					holder.ignoreReasons.setTextColor(Color.YELLOW)
+				} else holder.ignoreReasons.setTextColor(Color.RED)
 				holder.ignoreReasons.visibility = VISIBLE
 			} else holder.ignoreReasons.visibility = GONE
-			view.setOnLongClickListener {
+			binding.root.setOnLongClickListener {
 				AlertDialog.Builder(context)
-					.setTitle(resources.getString(if (item.app.enabled) R.string.ignore_app else R.string.unignore_app,
-						item.app.label))
+					.setTitle(resources.getString(
+						if (item.app.enabled) R.string.ignore_app else R.string.unignore_app,
+						item.app.label
+					))
 					.setPositiveButton(R.string.yes) { _, _ ->
 						item.app.setEnabled(!item.app.enabled, true)
-						Toast.makeText(context, resources.getString(if (item.app.enabled) R.string.app_is_not_ignored else R.string.app_is_ignored,
-							item.app.label),
-							Toast.LENGTH_SHORT).show()
+						Toast.makeText(context,
+							resources.getString(
+								if (item.app.enabled) R.string.app_is_not_ignored else R.string.app_is_ignored,
+								item.app.label
+							),
+							Toast.LENGTH_SHORT
+						).show()
 					}
 					.setNegativeButton(android.R.string.cancel, null)
 					.show()
 				false
 			}
-			return view
+			return binding.root
 		}
 	}
 

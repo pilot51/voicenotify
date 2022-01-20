@@ -21,6 +21,7 @@ plugins {
 	id("com.android.application")
 	kotlin("android")
 	kotlin("kapt")
+	id("androidx.navigation.safeargs.kotlin")
 }
 
 val keystorePropertiesFile = rootProject.file("keystore.properties")
@@ -37,6 +38,7 @@ android {
 		targetSdk = 31
 		versionName = "1.1.3"
 		versionCode = 23
+		viewBinding { isEnabled = true }
 	}
 
 	compileOptions {
@@ -73,4 +75,6 @@ android {
 dependencies {
 	implementation("androidx.core:core-ktx:1.7.0")
 	implementation("androidx.preference:preference-ktx:1.1.1")
+	implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
+	implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
 }

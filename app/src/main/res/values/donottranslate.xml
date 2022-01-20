@@ -18,6 +18,7 @@
 	<!-- Preference keys -->
 	<string name="key_status">status</string>
 	<string name="key_appList">appList</string>
+	<string name="key_ttsConfig">ttsConfig</string>
 	<string name="key_ttsSettings">ttsSettings</string>
 	<string name="key_ttsString">ttsString</string>
 	<string name="key_ttsTextReplace">ttsTextReplace</string>

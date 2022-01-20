@@ -30,6 +30,8 @@ import android.widget.*
 import android.widget.TextView.OnEditorActionListener
 import androidx.preference.DialogPreference
 import androidx.preference.PreferenceDialogFragmentCompat
+import com.pilot51.voicenotify.databinding.PreferenceDialogTextReplaceBinding
+import com.pilot51.voicenotify.databinding.TextReplaceRowBinding
 import java.util.*
 
 /**
@@ -132,14 +134,12 @@ class TextReplacePreference(context: Context?, attrs: AttributeSet?) : DialogPre
 
 		override fun onBindDialogView(view: View) {
 			super.onBindDialogView(view)
+			val binding = PreferenceDialogTextReplaceBinding.bind(view)
 			listView.adapter = adapter
 			val oldParent = listView.parent
 			if (oldParent !== view) {
-				if (oldParent != null) {
-					(oldParent as ViewGroup).removeView(listView)
-				}
-				val container = view.findViewById<ViewGroup>(R.id.container)
-				container?.addView(listView, ViewGroup.LayoutParams.MATCH_PARENT,
+				(oldParent as? ViewGroup)?.removeView(listView)
+				binding.container.addView(listView, ViewGroup.LayoutParams.MATCH_PARENT,
 					ViewGroup.LayoutParams.MATCH_PARENT)
 			}
 		}
@@ -230,16 +230,17 @@ class TextReplacePreference(context: Context?, attrs: AttributeSet?) : DialogPre
 			override fun getItemId(position: Int) = position.toLong()
 
 			override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-				val view = convertView ?: inflater.inflate(R.layout.text_replace_row, parent, false)
-				val holder: ViewHolder
-				if (convertView == null) {
+				lateinit var holder: ViewHolder
+				val binding = convertView?.let {
+					TextReplaceRowBinding.bind(it).apply {
+						holder = root.tag as ViewHolder
+					}
+				} ?: TextReplaceRowBinding.inflate(inflater, parent, false).apply {
 					holder = ViewHolder()
-					holder.editFrom = view.findViewById(R.id.text_to_replace)
-					holder.editTo = view.findViewById(R.id.replacement_text)
-					holder.remove = view.findViewById(R.id.remove)
-					view.tag = holder
-				} else {
-					holder = view.tag as ViewHolder
+					holder.editFrom = textToReplace
+					holder.editTo = replacementText
+					holder.remove = remove
+					root.tag = holder
 				}
 				holder.position = position
 				val pair = replaceList[position]
@@ -272,7 +273,7 @@ class TextReplacePreference(context: Context?, attrs: AttributeSet?) : DialogPre
 					}
 					false
 				})
-				return view
+				return binding.root
 			}
 
 			private inner class ViewHolder {

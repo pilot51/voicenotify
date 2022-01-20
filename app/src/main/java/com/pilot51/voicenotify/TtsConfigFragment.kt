@@ -29,6 +29,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.pilot51.voicenotify.TextReplacePreference.TextReplaceFragment
 
 class TtsConfigFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
+	private val prefs by lazy { Common.getPrefs(requireContext()) }
 	private val ttsIntent: Intent?
 		get() {
 			val intent = Intent(Intent.ACTION_MAIN)
@@ -62,11 +63,11 @@ class TtsConfigFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeLi
 
 	override fun onResume() {
 		super.onResume()
-		Common.getPrefs(requireActivity()).registerOnSharedPreferenceChangeListener(this)
+		prefs.registerOnSharedPreferenceChangeListener(this)
 	}
 
 	override fun onPause() {
-		Common.getPrefs(requireActivity()).unregisterOnSharedPreferenceChangeListener(this)
+		prefs.unregisterOnSharedPreferenceChangeListener(this)
 		super.onPause()
 	}
 

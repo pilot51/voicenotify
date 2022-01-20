@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/nav_graph"
+	app:startDestination="@id/mainFragment">
+	<fragment
+		android:id="@+id/mainFragment"
+		android:name="com.pilot51.voicenotify.MainFragment"
+		android:label="@string/app_name">
+		<action
+			android:id="@+id/action_appListFragment"
+			app:destination="@id/appListFragment" />
+		<action
+			android:id="@+id/action_ttsConfigFragment"
+			app:destination="@id/ttsConfigFragment" />
+		<action
+			android:id="@+id/action_prefDialog"
+			app:destination="@id/prefDialog" />
+	</fragment>
+	<fragment
+		android:id="@+id/appListFragment"
+		android:name="com.pilot51.voicenotify.AppListFragment"
+		android:label="@string/app_list" />
+	<fragment
+		android:id="@+id/ttsConfigFragment"
+		android:name="com.pilot51.voicenotify.TtsConfigFragment"
+		android:label="@string/tts" />
+	<dialog
+		android:id="@+id/prefDialog"
+		android:name="com.pilot51.voicenotify.PrefDialog" >
+		<argument
+			android:name="id"
+			app:argType="com.pilot51.voicenotify.PrefDialogID" />
+	</dialog>
+</navigation>

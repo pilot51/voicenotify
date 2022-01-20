@@ -26,19 +26,21 @@ import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.fragment.app.ListFragment
 import com.pilot51.voicenotify.Common.getPrefs
+import com.pilot51.voicenotify.databinding.AppListItemBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 
 class AppListFragment : ListFragment() {
+	private val prefs by lazy { getPrefs(requireContext()) }
 	private val adapter by lazy { Adapter() }
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setHasOptionsMenu(true)
 		Common.init(requireActivity())
-		defEnable = getPrefs(requireContext()).getBoolean(KEY_DEFAULT_ENABLE, true)
+		defEnable = prefs.getBoolean(KEY_DEFAULT_ENABLE, true)
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -162,7 +164,7 @@ class AppListFragment : ListFragment() {
 	/** Set the default enabled value for new apps. */
 	private fun setDefaultEnable(enable: Boolean) {
 		defEnable = enable
-		getPrefs(requireContext()).edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).apply()
+		prefs.edit().putBoolean(KEY_DEFAULT_ENABLE, defEnable).apply()
 	}
 
 	private inner class Adapter : BaseAdapter(), Filterable {
@@ -202,21 +204,22 @@ class AppListFragment : ListFragment() {
 		}
 
 		override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-			val view = convertView ?: inflater.inflate(R.layout.app_list_item, parent, false)
-			val holder: ViewHolder
-			if (convertView == null) {
+			lateinit var holder: ViewHolder
+			val binding = convertView?.let {
+				AppListItemBinding.bind(it).apply {
+					holder = root.tag as ViewHolder
+				}
+			} ?: AppListItemBinding.inflate(inflater, parent, false).apply {
 				holder = ViewHolder()
-				holder.appLabel = view.findViewById(R.id.app_label)
-				holder.appPackage = view.findViewById(R.id.app_package)
-				holder.checkbox = view.findViewById(R.id.checkbox)
-				view.tag = holder
-			} else {
-				holder = view.tag as ViewHolder
+				holder.appLabel = appLabel
+				holder.appPackage = appPackage
+				holder.checkbox = checkbox
+				root.tag = holder
 			}
 			holder.appLabel.text = adapterData[position].label
 			holder.appPackage.text = adapterData[position].`package`
 			holder.checkbox.isChecked = adapterData[position].enabled
-			return view
+			return binding.root
 		}
 
 		override fun getFilter(): Filter {
