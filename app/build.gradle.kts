@@ -39,6 +39,15 @@ android {
 		versionName = "1.1.3"
 		versionCode = 23
 		viewBinding { isEnabled = true }
+		javaCompileOptions {
+			annotationProcessorOptions {
+				arguments += mapOf(
+					"room.schemaLocation" to "$projectDir/schemas",
+					"room.incremental" to "true",
+					"room.expandProjection" to "true"
+				)
+			}
+		}
 	}
 
 	compileOptions {
@@ -77,4 +86,6 @@ dependencies {
 	implementation("androidx.preference:preference-ktx:1.1.1")
 	implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
 	implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+	implementation("androidx.room:room-ktx:2.4.1")
+	kapt("androidx.room:room-compiler:2.4.1")
 }

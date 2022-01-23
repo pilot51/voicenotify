@@ -27,6 +27,7 @@
 		android:name="android.hardware.bluetooth"
 		android:required="false" />
 	<application
+		android:name=".VNApplication"
 		android:icon="@mipmap/ic_launcher"
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:label="@string/app_name"

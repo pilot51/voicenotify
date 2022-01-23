@@ -25,11 +25,15 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
 import androidx.fragment.app.ListFragment
+import com.pilot51.voicenotify.AppDatabase.Companion.db
 import com.pilot51.voicenotify.Common.getPrefs
 import com.pilot51.voicenotify.databinding.AppListItemBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.*
 
 class AppListFragment : ListFragment() {
@@ -64,8 +68,8 @@ class AppListFragment : ListFragment() {
 		setListShown(false)
 		isUpdating = true
 		CoroutineScope(Dispatchers.IO).launch {
-			synchronized(SYNC_APPS) {
-				apps = Database.apps.toMutableList()
+			SYNC_APPS.withLock {
+				apps = db.appDao.getAll().toMutableList()
 				onListUpdated()
 				val isFirstLoad = apps.isEmpty()
 				val packMan = requireContext().packageManager
@@ -74,7 +78,7 @@ class AppListFragment : ListFragment() {
 				for (a in apps.indices.reversed()) {
 					val app = apps[a]
 					try {
-						packMan.getApplicationInfo(app.`package`, 0)
+						packMan.getApplicationInfo(app.packageName, 0)
 					} catch (e: PackageManager.NameNotFoundException) {
 						if (!isFirstLoad) app.remove()
 						apps.removeAt(a)
@@ -85,18 +89,22 @@ class AppListFragment : ListFragment() {
 				// Add new
 				inst@ for (appInfo in packMan.getInstalledApplications(0)) {
 					for (app in apps) {
-						if (app.`package` == appInfo.packageName) {
+						if (app.packageName == appInfo.packageName) {
 							continue@inst
 						}
 					}
-					val app = App(appInfo.packageName, appInfo.loadLabel(packMan).toString(), defEnable)
+					val app = App(
+						packageName = appInfo.packageName,
+						label = appInfo.loadLabel(packMan).toString(),
+						isEnabled = defEnable
+					)
 					apps.add(app)
 					onListUpdated()
 					if (!isFirstLoad) app.updateDb()
 				}
 				apps.sortWith { app1, app2 -> app1.label.compareTo(app2.label, ignoreCase = true) }
 				onListUpdated()
-				if (isFirstLoad) Database.apps = apps
+				if (isFirstLoad) db.appDao.upsert(apps)
 			}
 			isUpdating = false
 			CoroutineScope(Dispatchers.Main).launch {
@@ -143,7 +151,7 @@ class AppListFragment : ListFragment() {
 		}
 		adapter.notifyDataSetChanged()
 		CoroutineScope(Dispatchers.IO).launch {
-			Database.apps = apps
+			db.appDao.upsert(apps)
 		}
 	}
 
@@ -217,7 +225,7 @@ class AppListFragment : ListFragment() {
 				root.tag = holder
 			}
 			holder.appLabel.text = adapterData[position].label
-			holder.appPackage.text = adapterData[position].`package`
+			holder.appPackage.text = adapterData[position].packageName
 			holder.checkbox.isChecked = adapterData[position].enabled
 			return binding.root
 		}
@@ -238,7 +246,7 @@ class AppListFragment : ListFragment() {
 					val newValues: MutableList<App> = ArrayList()
 					for (app in baseData) {
 						if (app.label.lowercase().contains(prefixString)
-							|| app.`package`.lowercase().contains(prefixString)) {
+							|| app.packageName.lowercase().contains(prefixString)) {
 							newValues.add(app)
 						}
 					}
@@ -263,7 +271,7 @@ class AppListFragment : ListFragment() {
 		private const val IGNORE_TOGGLE = 0
 		private const val IGNORE_ALL = 1
 		private const val IGNORE_NONE = 2
-		private val SYNC_APPS = Any()
+		private val SYNC_APPS = Mutex()
 		private var isUpdating = false
 
 		/**
@@ -272,24 +280,30 @@ class AppListFragment : ListFragment() {
 		 * @return Found or created [App], otherwise null if app not found on system.
 		 */
 		fun findOrAddApp(pkg: String, ctx: Context): App? {
-			synchronized(SYNC_APPS) {
-				if (!::apps.isInitialized) {
-					defEnable = getPrefs(ctx).getBoolean(KEY_DEFAULT_ENABLE, true)
-					apps = Database.apps.toMutableList()
-				}
-				for (app in apps) {
-					if (app.`package` == pkg) {
-						return app
+			return runBlocking(Dispatchers.IO) {
+				SYNC_APPS.withLock {
+					if (!::apps.isInitialized) {
+						defEnable = getPrefs(ctx).getBoolean(KEY_DEFAULT_ENABLE, true)
+						apps = db.appDao.getAll().toMutableList()
 					}
-				}
-				return try {
-					val packMan = ctx.packageManager
-					val app = App(pkg, packMan.getApplicationInfo(pkg, 0).loadLabel(packMan).toString(), defEnable)
-					apps.add(app.updateDb())
-					app
-				} catch (e: PackageManager.NameNotFoundException) {
-					e.printStackTrace()
-					null
+					for (app in apps) {
+						if (app.packageName == pkg) {
+							return@runBlocking app
+						}
+					}
+					return@runBlocking try {
+						val packMan = ctx.packageManager
+						val app = App(
+							packageName = pkg,
+							label = packMan.getApplicationInfo(pkg, 0).loadLabel(packMan).toString(),
+							isEnabled = defEnable
+						)
+						apps.add(app.updateDb())
+						app
+					} catch (e: PackageManager.NameNotFoundException) {
+						e.printStackTrace()
+						null
+					}
 				}
 			}
 		}

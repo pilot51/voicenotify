@@ -15,27 +15,54 @@
  */
 package com.pilot51.voicenotify
 
-class App(
-	val `package`: String,
+import android.provider.BaseColumns
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.Ignore
+import androidx.room.PrimaryKey
+import com.pilot51.voicenotify.AppDatabase.Companion.db
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
+@Entity(tableName = "apps")
+data class App(
+	@PrimaryKey(autoGenerate = true)
+	@ColumnInfo(name = BaseColumns._ID)
+	val id: Int? = null,
+	@ColumnInfo(name = "package")
+	val packageName: String,
+	@ColumnInfo(name = "name", collate = ColumnInfo.NOCASE)
 	val label: String,
-	var enabled: Boolean
+	@ColumnInfo(name = "is_enabled")
+	var isEnabled: Boolean?
 ) {
+	@get:Ignore
+	@set:Ignore
+	var enabled: Boolean
+		get() = isEnabled!!
+		set(value) { isEnabled = value }
+
 	/**
 	 * Updates self in database.
 	 * @return This instance.
 	 */
-	fun updateDb(): App {
-		Database.addOrUpdateApp(this)
+	suspend fun updateDb(): App {
+		db.appDao.addOrUpdateApp(this)
 		return this
 	}
 
 	fun setEnabled(enable: Boolean, updateDb: Boolean) {
 		enabled = enable
-		if (updateDb) Database.updateAppEnable(this)
+		CoroutineScope(Dispatchers.IO).launch {
+			if (updateDb) db.appDao.updateAppEnable(this@App)
+		}
 	}
 
 	/** Removes self from database. */
 	fun remove() {
-		Database.removeApp(this)
+		CoroutineScope(Dispatchers.IO).launch {
+			db.appDao.removeApp(this@App)
+		}
 	}
 }

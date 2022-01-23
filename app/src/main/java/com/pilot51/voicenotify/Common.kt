@@ -35,7 +35,7 @@ object Common {
 	const val KEY_SPEAK_SILENT_ON = "speakSilentOn"
 
 	/**
-	 * Initializes default [SharedPreferences] and [Database] if needed and sets volume control stream.
+	 * Initializes default [SharedPreferences] if needed and sets volume control stream.
 	 */
 	fun init(activity: Activity) {
 		init(activity.applicationContext)
@@ -43,7 +43,7 @@ object Common {
 	}
 
 	/**
-	 * Initializes default [SharedPreferences] and [Database] if needed.
+	 * Initializes default [SharedPreferences] if needed.
 	 */
 	fun init(context: Context) {
 		if (!::prefs.isInitialized) {
@@ -51,7 +51,6 @@ object Common {
 			prefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
 			convertOldStreamPref(context)
 		}
-		Database.init(context)
 	}
 
 	/**
