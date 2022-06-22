@@ -37,7 +37,7 @@ import java.util.*
 /**
  * Preference that provides a dynamic list with two EditTexts in each row for defining text replacement.
  */
-class TextReplacePreference(context: Context?, attrs: AttributeSet?) : DialogPreference(context, attrs) {
+class TextReplacePreference(context: Context, attrs: AttributeSet?) : DialogPreference(context, attrs) {
 	private var isPersistedReplaceListSet = false
 	val persistedReplaceList: MutableList<Pair<String, String>?> = ArrayList()
 
@@ -47,6 +47,7 @@ class TextReplacePreference(context: Context?, attrs: AttributeSet?) : DialogPre
 		setNegativeButtonText(android.R.string.cancel)
 	}
 
+	@Deprecated("Deprecated in Java")
 	override fun onSetInitialValue(restorePersistedValue: Boolean, defaultValue: Any?) {
 		setPersistedReplaceList(
 			if (restorePersistedValue) {

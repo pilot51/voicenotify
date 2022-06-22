@@ -133,6 +133,7 @@ class Service : NotificationListenerService() {
 					}
 				}
 
+				@Deprecated("Deprecated in Java")
 				override fun onError(utteranceId: String) {
 					Log.e(TAG, "Utterance error")
 				}

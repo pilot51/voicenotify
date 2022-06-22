@@ -55,7 +55,7 @@ class TtsConfigFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeLi
 			pTTS.setSummary(R.string.tts_settings_summary_fail)
 		}
 		val pTtsString: EditTextPreference = findPreference(getString(R.string.key_ttsString))!!
-		if (pTtsString.text.contains("%")) {
+		if (pTtsString.text!!.contains("%")) {
 			Toast.makeText(context, R.string.tts_message_reset_default, Toast.LENGTH_LONG).show()
 			pTtsString.text = getString(R.string.ttsString_default_value)
 		}
@@ -71,7 +71,7 @@ class TtsConfigFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeLi
 		super.onPause()
 	}
 
-	override fun onDisplayPreferenceDialog(preference: Preference?) {
+	override fun onDisplayPreferenceDialog(preference: Preference) {
 		val textReplaceFragmentTag = TextReplaceFragment::class.simpleName
 		if (parentFragmentManager.findFragmentByTag(textReplaceFragmentTag) != null) {
 			return

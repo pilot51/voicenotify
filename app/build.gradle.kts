@@ -31,11 +31,11 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-	compileSdk = 31
+	compileSdk = 32
 	defaultConfig {
 		applicationId = "com.pilot51.voicenotify"
 		minSdk = 18
-		targetSdk = 31
+		targetSdk = 32
 		versionName = "1.1.3"
 		versionCode = 23
 		viewBinding { isEnabled = true }
@@ -75,17 +75,13 @@ android {
 			versionNameSuffix = "-debug"
 		}
 	}
-
-	lint {
-		isAbortOnError = false
-	}
 }
 
 dependencies {
-	implementation("androidx.core:core-ktx:1.7.0")
-	implementation("androidx.preference:preference-ktx:1.1.1")
-	implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
-	implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
-	implementation("androidx.room:room-ktx:2.4.1")
-	kapt("androidx.room:room-compiler:2.4.1")
+	implementation("androidx.core:core-ktx:1.8.0")
+	implementation("androidx.preference:preference-ktx:1.2.0")
+	implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
+	implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
+	implementation("androidx.room:room-ktx:2.5.0-alpha02")
+	kapt("androidx.room:room-compiler:2.5.0-alpha02")
 }

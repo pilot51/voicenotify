@@ -38,7 +38,6 @@ data class App(
 	var isEnabled: Boolean?
 ) {
 	@get:Ignore
-	@set:Ignore
 	var enabled: Boolean
 		get() = isEnabled!!
 		set(value) { isEnabled = value }
