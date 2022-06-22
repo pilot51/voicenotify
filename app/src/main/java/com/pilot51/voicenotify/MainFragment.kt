@@ -21,9 +21,11 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context.NOTIFICATION_SERVICE
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -109,9 +111,9 @@ class MainFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickLis
 	override fun onPreferenceClick(preference: Preference): Boolean {
 		return when (preference) {
 			pStatus -> {
-				if (Service.isRunning && Service.isSuspended) {
-					Service.toggleSuspend()
-				}
+				if (!Service.isRunning) {
+					startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+				} else Service.toggleSuspend()
 				true
 			}
 			pAppList -> {
