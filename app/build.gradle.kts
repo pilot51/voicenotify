@@ -36,8 +36,8 @@ android {
 		applicationId = "com.pilot51.voicenotify"
 		minSdk = 18
 		targetSdk = 32
-		versionName = "1.1.3"
-		versionCode = 23
+		versionName = "1.2.0"
+		versionCode = 24
 		viewBinding { isEnabled = true }
 		javaCompileOptions {
 			annotationProcessorOptions {
@@ -80,8 +80,8 @@ android {
 dependencies {
 	implementation("androidx.core:core-ktx:1.8.0")
 	implementation("androidx.preference:preference-ktx:1.2.0")
-	implementation("androidx.navigation:navigation-fragment-ktx:2.4.2")
-	implementation("androidx.navigation:navigation-ui-ktx:2.4.2")
+	implementation("androidx.navigation:navigation-fragment-ktx:2.5.1")
+	implementation("androidx.navigation:navigation-ui-ktx:2.5.1")
 	implementation("androidx.room:room-ktx:2.5.0-alpha02")
 	kapt("androidx.room:room-compiler:2.5.0-alpha02")
 }
