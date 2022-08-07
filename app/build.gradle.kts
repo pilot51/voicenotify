@@ -36,8 +36,8 @@ android {
 		applicationId = "com.pilot51.voicenotify"
 		minSdk = 18
 		targetSdk = 32
-		versionName = "1.2.0"
-		versionCode = 24
+		versionName = "1.2.1"
+		versionCode = 25
 		viewBinding { isEnabled = true }
 		javaCompileOptions {
 			annotationProcessorOptions {
