@@ -110,12 +110,10 @@
 	
 	
 	
-	<string-array name="support_items">
-		<item>Calificar/Comentar</item>
-		<item>Contactar al Desarrollador</item>
-		<item>Traducciones</item>
-		<item>Código fuente</item>
-	</string-array>
+	<string name="support_rate">Calificar/Comentar</string>
+	<string name="support_contact">Contactar al Desarrollador</string>
+	<string name="support_translations">Traducciones</string>
+	<string name="support_source">Código fuente</string>
 	<string name="error_market">Error: Incapaz de encontrar Google Play Store instalado.</string>
 	<string name="error_email">Error: No se pudo encontrar una aplicación de email instalada</string>
 	

@@ -84,9 +84,12 @@ class PrefDialog : DialogFragment() {
 			SUPPORT -> AlertDialog.Builder(activity)
 				.setTitle(R.string.support)
 				.setItems(R.array.support_items) { _, item ->
-					when (item) {
-						0 -> {
-							val iMarket = Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.pilot51.voicenotify"))
+					when (resources.getStringArray(R.array.support_items)[item]) {
+						getString(R.string.support_rate) -> {
+							val iMarket = Intent(
+								Intent.ACTION_VIEW,
+								Uri.parse("market://details?id=com.pilot51.voicenotify")
+							)
 							iMarket.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 							try {
 								startActivity(iMarket)
@@ -95,7 +98,7 @@ class PrefDialog : DialogFragment() {
 								Toast.makeText(activity, R.string.error_market, Toast.LENGTH_LONG).show()
 							}
 						}
-						1 -> {
+						getString(R.string.support_contact) -> {
 							val activity = requireActivity()
 							val iEmail = Intent(Intent.ACTION_SEND)
 							iEmail.type = "plain/text"
@@ -117,11 +120,28 @@ class PrefDialog : DialogFragment() {
 								startActivity(iEmail)
 							} catch (e: ActivityNotFoundException) {
 								e.printStackTrace()
-								Toast.makeText(activity, R.string.error_email, Toast.LENGTH_LONG).show()
+								Toast.makeText(
+									activity, R.string.error_email, Toast.LENGTH_LONG
+								).show()
 							}
 						}
-						2 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("http://getlocalization.com/voicenotify")))
-						3 -> startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/pilot51/voicenotify")))
+						getString(R.string.support_translations) -> startActivity(
+							Intent(
+								Intent.ACTION_VIEW,
+								Uri.parse("https://hosted.weblate.org/projects/voice-notify")
+							)
+						)
+						getString(R.string.support_source) -> startActivity(
+							Intent(
+								Intent.ACTION_VIEW,
+								Uri.parse("https://github.com/pilot51/voicenotify")
+							)
+						)
+						getString(R.string.support_privacy) -> AlertDialog.Builder(activity)
+							.setTitle(R.string.support_privacy)
+							.setMessage(R.string.support_privacy_message)
+							.setPositiveButton(android.R.string.ok, null)
+							.show()
 					}
 				}.create()
 		}

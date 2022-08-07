@@ -110,12 +110,10 @@
 	
 	
 	
-	<string-array name="support_items">
-		<item>Avaliar/Comentar</item>
-		<item>Contactar desenvolvedor</item>
-		<item>Traduzir</item>
-		<item>Código fonte</item>
-	</string-array>
+	<string name="support_rate">Avaliar/Comentar</string>
+	<string name="support_contact">Contactar desenvolvedor</string>
+	<string name="support_translations">Traduzir</string>
+	<string name="support_source">Código fonte</string>
 	<string name="error_market">Erro: Não foi possível localizar o Google Play Store instalado.</string>
 	<string name="error_email">Erro: Não é possível encontrar um aplicativo de e-mail instalado.</string>
 	

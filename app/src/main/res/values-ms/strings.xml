@@ -110,12 +110,10 @@
 	<string name="test_content_title">Kandungan Tajuk</string>
 	<string name="test_content_text">Ini adalah kandungan mesej.</string>
 	<string name="test_content_info">Kandungan Info</string>
-	<string-array name="support_items">
-		<item>Nilai/Komen</item>
-		<item>Hubungi Pembina Apl</item>
-		<item>Alihbahasa</item>
-		<item>Kod Punca</item>
-	</string-array>
+	<string name="support_rate">Nilai/Komen</string>
+	<string name="support_contact">Hubungi Pembina Apl</string>
+	<string name="support_translations">Alihbahasa</string>
+	<string name="support_source">Kod Punca</string>
 	<string name="error_market">Ralat: Gagal Google Play Store tiada</string>
 	<string name="error_email">Ralat: Gagal cari aplikasi emel.</string>
 	<string name="tts_message_reset_default">Tetapan baru seting Mesej TTS dikemaskini</string>

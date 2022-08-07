@@ -110,12 +110,10 @@
 	
 	
 	
-	<string-array name="support_items">
-		<item>Vota/Commenta</item>
-		<item>Contatta Sviluppatore</item>
-		<item>Traduzioni</item>
-		<item>Codice sorgente</item>
-	</string-array>
+	<string name="support_rate">Vota/Commenta</string>
+	<string name="support_contact">Contatta Sviluppatore</string>
+	<string name="support_translations">Traduzioni</string>
+	<string name="support_source">Codice sorgente</string>
 	<string name="error_market">Errore: Impossibile rilevare Google Play Store.</string>
 	<string name="error_email">Errore: non ho trovato un\'app per l\'email installata.</string>
 	

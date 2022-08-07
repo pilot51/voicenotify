@@ -110,12 +110,10 @@
 	<string name="test_content_title">Judul Isi</string>
 	<string name="test_content_text">Ini adalah pesan isi</string>
 	<string name="test_content_info">Info Isi</string>
-	<string-array name="support_items">
-		<item>Nilai/Komentar</item>
-		<item>Hubungi Pengembang</item>
-		<item>Alih Bahasa</item>
-		<item>Kode Sumber</item>
-	</string-array>
+	<string name="support_rate">Nilai/Komentar</string>
+	<string name="support_contact">Hubungi Pengembang</string>
+	<string name="support_translations">Alih Bahasa</string>
+	<string name="support_source">Kode Sumber</string>
 	<string name="error_market">Galat: Gagal menemukan Google Play Store terpasang.</string>
 	<string name="error_email">Galat: Gagal menemukan aplikasi surel terpasang.</string>
 	<string name="tts_message_reset_default">Pengaturan Teks-Ke-Ucapan diperbarui ke nilai asali baru </string>

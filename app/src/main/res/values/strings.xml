@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2012 Mark Injerd
+<!-- Copyright 2012-2022 Mark Injerd
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -19,10 +19,10 @@
 	<!-- Used by multiple files -->
 	<string name="app_is_ignored">%s is ignored</string>
 	<string name="app_is_not_ignored">%s is not ignored</string>
-	<string name="service_running">VN service is running</string>
-	<string name="service_suspended">VN service is suspended</string>
+	<string name="service_running">Voice Notify service is running</string>
+	<string name="service_suspended">Voice Notify service is suspended</string>
 	
-	<!-- xml/preferences.xml -->
+	<!-- xml/preferences.xml and xml/preferences_tts.xml -->
 	<string name="app_list">App List</string>
 	<string name="app_list_summary">List installed apps which can be ignored</string>
 	<string name="tts">Text-To-Speech</string>
@@ -88,7 +88,7 @@
 	<string name="test_summary">Post a notification (delayed 5 seconds) to test current settings</string>
 	<string name="test_ignored">Voice Notify is ignored in App List.\nTest will run, but notification will not be spoken.</string>
 	<string name="notify_log_summary">List last 20 notifications.\nDisplays time, app name, message, and ignore reasons.</string>
-	<string name="support_summary">Rate/comment, translations, source code, or contact the developer</string>
+	<string name="support_summary">Rate/comment, contact the developer, translations, source code, privacy policy</string>
 	
 	<!-- TextReplacePreference -->
 	<string name="text_replace_error_duplicate">Duplicate! Will not be saved.</string>
@@ -97,28 +97,42 @@
 	<string name="text_to_replace">Text to replace</string>
 	<string name="replacement_text">Replacement text</string>
 	
-	<!-- MainActivity and xml/preferences.xml -->
+	<!-- MainFragment and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Notification Log</string>
-	<string name="support">Support Voice Notify</string>
+	<string name="support">Help &amp; Support</string>
 	
-	<!-- MainActivity -->
-	<string name="service_disabled">VN service is disabled</string>
-	<string name="status_summary_notification_access_enabled">Open the Android notification access settings to disable VN</string>
-	<string name="status_summary_notification_access_disabled">Open the Android notification access settings to enable VN</string>
-	<string name="status_summary_suspended">Select to activate VN.</string>
+	<!-- MainFragment -->
+	<string name="service_disabled">Voice Notify service is disabled</string>
+	<string name="status_summary_notification_access_enabled">Open the Android notification access settings to disable Voice Notify</string>
+	<string name="status_summary_notification_access_disabled">Open the Android notification access settings to enable Voice Notify</string>
+	<string name="status_summary_suspended">Select to activate Voice Notify.</string>
 	<string name="notification_channel_desc">Used for test notification</string>
 	<string name="test_ticker">This is the ticker message</string>
 	<string name="test_subtext">The Subtext</string>
 	<string name="test_content_title">Content Title</string>
 	<string name="test_content_text">This is the content message.</string>
 	<string name="test_content_info">Content Info</string>
-	<string-array name="support_items">
-		<item>Rate/Comment</item>
-		<item>Contact Developer</item>
-		<item>Translations</item>
-		<item>Source Code</item>
-	</string-array>
+	<string name="support_rate">Rate/Comment</string>
+	<string name="support_contact">Contact Developer</string>
+	<string name="support_translations">Translations</string>
+	<string name="support_source">Source Code</string>
+	<string name="support_privacy">Privacy Policy</string>
+	<string name="support_privacy_message">Voice Notify does not collect or transmit data off of the device. However, it does use third party apps or services that may transmit data, as outlined below under \"Third party apps and services\".
+\n\nIn the unlikely event that sensitive or personal information is received by the developer, it will not be sold, shared, copied, or used without the express consent of who the information belongs to. In the absence of consent, the information will be deleted if possible.
+\n\nThe purpose of Voice Notify is to speak notifications, and as such it is likely that spoken notifications may be heard by people or microphones in the vicinity. It is recommended to configure Voice Notify and the device to prevent undesired spoken notifications. Use at your own risk.
+\n\nThe notifications received by Voice Notify are only held in memory to be displayed in the Notification Log (up to the most recent 20) and are not written to storage. This prevents other apps from accessing the data, especially if the device is rooted. As a result, if the Voice Notify process is terminated, the notification log is cleared.
+\n\nInstalled apps are read and listed to allow users to choose which apps have their notifications spoken. The app titles and package names are stored in a database in Voice Notify\'s internal private data storage on the device to save selections and act as a cache to improve performance of loading the app list.
+\n\nThird party apps and services:
+\n• Text-To-Speech engine - Voice Notify passes notification text to be spoken to the default Text-To-Speech engine, which is outside the direct control of Voice Notify. Please read the privacy policy of the TTS engine for how it uses data.
+\n• Google Play Services may send anonymized crash and basic analytical data back to the developer to assist in improving the app.
+\n• Messaging app - The \"Contact Developer\" option opens the user\'s chosen or default messaging app, such as an email app, and pre-populates the message with the Voice Notify version, Android version, Android build number, and device name. For an email app, the \"To\" field is set to the developer\'s address (pilota51@gmail.com). By sending the message, the user understands and consents to their name and contact information being shared with the recipient(s), as determined by the messaging app.
+\n• Other options under \"Help &amp; Support\" open the relevant external apps or websites (Play Store, Weblate.org, GitHub.com), only sending a hard coded URL to the Voice Notify page.
+\n\nBelow are the permissions used by Voice Notify and why they\'re needed:
+\n• Bluetooth - Required to detect whether Bluetooth headset is connected.
+\n• Vibrate - Required for Test feature while phone is in vibrate mode.
+\n• Modify Audio Settings - Required for improved wired headset detection.
+\n• Read Phone State - Required to interrupt TTS if a phone call becomes active.</string>
 	<string name="error_market">Error: Unable to find Google Play Store installed.</string>
 	<string name="error_email">Error: Unable to find an installed email app.</string>
 	<string name="tts_message_reset_default">TTS Message setting updated to new default value</string>
@@ -151,6 +165,6 @@
 	<string name="reason_headset_off">Headset off</string>
 	<string name="reason_headset_on">Headset on</string>
 	<string name="reason_shake">Silenced by shake</string>
-	<string name="reason_suspended">VN suspended by widget</string>
+	<string name="reason_suspended">Voice Notify suspended by widget</string>
 	<string name="reason_service_stopped">Service stopped</string>
 </resources>

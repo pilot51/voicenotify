@@ -110,12 +110,10 @@
 	<string name="test_content_title">Τίτλος περιεχομένου</string>
 	<string name="test_content_text">Αυτό είναι το μήνυμα περιεχομένου.</string>
 	<string name="test_content_info">Πληροφορίες Περιεχομένου</string>
-	<string-array name="support_items">
-		<item>Αξιολόγηση/Σχόλια</item>
-		<item>Επικοινωνία με προγραμματιστή</item>
-		<item>Μεταφράσεις</item>
-		<item>Πηγαίος Κώδικας</item>
-	</string-array>
+	<string name="support_rate">Αξιολόγηση/Σχόλια</string>
+	<string name="support_contact">Επικοινωνία με προγραμματιστή</string>
+	<string name="support_translations">Μεταφράσεις</string>
+	<string name="support_source">Πηγαίος Κώδικας</string>
 	<string name="error_market">Σφάλμα: αδυναμία εύρεσης της εφαρμογής Google Play Store.</string>
 	<string name="error_email">Σφάλμα: αδυναμία εύρεσης εφαρμογής για αποστολή email.</string>
 	<string name="tts_message_reset_default">Κείμενο TTS ρύθμιση μηνυμάτων ενημερώθηκε στη νέα προεπιλεγμένη τιμή</string>

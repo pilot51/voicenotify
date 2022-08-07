@@ -111,12 +111,10 @@ Oznámení vytvořené při zapnuté obrazovce se neopakují.\n\nHodnota je v mi
 	
 	
 	
-	<string-array name="support_items">
-		<item>Hodnotit/Komentovat</item>
-		<item>Kontaktovat Vývojáře</item>
-		<item>Překlady</item>
-		<item>Zdrojový Kód</item>
-	</string-array>
+	<string name="support_rate">Hodnotit/Komentovat</string>
+	<string name="support_contact">Kontaktovat Vývojáře</string>
+	<string name="support_translations">Překlady</string>
+	<string name="support_source">Zdrojový Kód</string>
 	<string name="error_market">Chyba: Nelze najít nainstalovaný Google Play Obchod.</string>
 	<string name="error_email">Chyba: Nelze najít nainstalovanou e-mailovou aplikaci.</string>
 	

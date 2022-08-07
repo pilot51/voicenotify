@@ -111,12 +111,10 @@ Notificaties die binnen komen met het scherm aan worden niet herhaald. \n\nWaard
 	
 	
 	
-	<string-array name="support_items">
-		<item>Waarderen/Comentaar</item>
-		<item>Contact met de maker</item>
-		<item>Vertalingen</item>
-		<item>Broncode</item>
-	</string-array>
+	<string name="support_rate">Waarderen/Comentaar</string>
+	<string name="support_contact">Contact met de maker</string>
+	<string name="support_translations">Vertalingen</string>
+	<string name="support_source">Broncode</string>
 	<string name="error_market">Fout: Google Play Store is niet geïnstalleerd.</string>
 	<string name="error_email">Fout: Er is geen e-mail app geinstalleerd.</string>
 	

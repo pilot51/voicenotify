@@ -10,10 +10,17 @@
 	</string-array>
 	<string name="ttsString_default_value">#a. #c. #m.</string>
 	<string name="notification_channel_id">test</string>
+	<string-array name="support_items">
+		<item>@string/support_rate</item>
+		<item>@string/support_contact</item>
+		<item>@string/support_translations</item>
+		<item>@string/support_source</item>
+		<item>@string/support_privacy</item>
+	</string-array>
 	
 	<!-- Forcing English for user visible support email strings -->
 	<string name="email_subject">Contacting about Voice Notify</string>
-	<string name="email_body">\n\nVN version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
+	<string name="email_body">\n\nVoice Notify version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
 	
 	<!-- Preference keys -->
 	<string name="key_status">status</string>

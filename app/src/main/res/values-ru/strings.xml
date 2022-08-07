@@ -110,12 +110,10 @@
 	
 	
 	
-	<string-array name="support_items">
-		<item>Оставить отзыв</item>
-		<item>Связаться с разработчиком</item>
-		<item>Переводы</item>
-		<item>Исходный Код</item>
-	</string-array>
+	<string name="support_rate">Оставить отзыв</string>
+	<string name="support_contact">Связаться с разработчиком</string>
+	<string name="support_translations">Переводы</string>
+	<string name="support_source">Исходный Код</string>
 	
 	<string name="error_email">Ошибка: Не удалось найти установленный почтовый клиент.</string>
 	

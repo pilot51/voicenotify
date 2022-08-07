@@ -110,12 +110,10 @@
 	
 	
 	
-	<string-array name="support_items">
-		<item>Bewerte/Kommentiere</item>
-		<item>Entwickler kontaktieren</item>
-		<item>Übersetzungen</item>
-		<item>Quellcode</item>
-	</string-array>
+	<string name="support_rate">Bewerte/Kommentiere</string>
+	<string name="support_contact">Entwickler kontaktieren</string>
+	<string name="support_translations">Übersetzungen</string>
+	<string name="support_source">Quellcode</string>
 	<string name="error_market">Fehler: Google Play Store ist nicht installiert.</string>
 	<string name="error_email">Fehler: Konnte keine E-Mail Anwendung finden.</string>
 	

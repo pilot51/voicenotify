@@ -99,12 +99,10 @@
 	
 	
 	
-	<string-array name="support_items">
-		<item>Noter/Commenter</item>
-		<item>Contacter le développeur</item>
-		<item>Traductions</item>
-		<item>Code source</item>
-	</string-array>
+	<string name="support_rate">Noter/Commenter</string>
+	<string name="support_contact">Contacter le développeur</string>
+	<string name="support_translations">Traductions</string>
+	<string name="support_source">Code source</string>
 	
 	
 	
