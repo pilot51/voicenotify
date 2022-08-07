@@ -48,6 +48,7 @@ object Common {
 	fun init(context: Context) {
 		if (!::prefs.isInitialized) {
 			PreferenceManager.setDefaultValues(context, R.xml.preferences, true)
+			PreferenceManager.setDefaultValues(context, R.xml.preferences_tts, true)
 			prefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
 			convertOldStreamPref(context)
 		}
@@ -59,13 +60,10 @@ object Common {
 	 */
 	private fun convertOldStreamPref(c: Context) {
 		val currentStream = prefs.getString(c.getString(R.string.key_ttsStream), null)
-		try {
-			currentStream!!.toInt()
-		} catch (e: NumberFormatException) {
-			var newStream = AudioManager.STREAM_MUSIC
-			if (currentStream != null && currentStream == "notification") {
-				newStream = AudioManager.STREAM_NOTIFICATION
-			}
+		currentStream?.toIntOrNull() ?: run {
+			val newStream = if (currentStream == "notification") {
+				AudioManager.STREAM_NOTIFICATION
+			} else AudioManager.STREAM_MUSIC
 			prefs.edit().putString(c.getString(R.string.key_ttsStream), newStream.toString()).apply()
 		}
 	}
