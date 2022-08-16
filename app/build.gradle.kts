@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Mark Injerd
+ * Copyright 2017-2022 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ android {
 		versionName = "1.2.1"
 		versionCode = 25
 		viewBinding { isEnabled = true }
+		vectorDrawables.useSupportLibrary = true
 		javaCompileOptions {
 			annotationProcessorOptions {
 				arguments += mapOf(

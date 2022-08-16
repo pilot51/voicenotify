@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Mark Injerd
+ * Copyright 2012-2022 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.pilot51.voicenotify
 
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -24,7 +23,11 @@ import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import android.widget.AdapterView.OnItemClickListener
+import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.fragment.app.ListFragment
+import androidx.lifecycle.Lifecycle
 import com.pilot51.voicenotify.AppDatabase.Companion.db
 import com.pilot51.voicenotify.Common.getPrefs
 import com.pilot51.voicenotify.databinding.AppListItemBinding
@@ -34,21 +37,21 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
-import java.util.*
 
-class AppListFragment : ListFragment() {
+
+class AppListFragment : ListFragment(), MenuProvider {
 	private val prefs by lazy { getPrefs(requireContext()) }
 	private val adapter by lazy { Adapter() }
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setHasOptionsMenu(true)
 		Common.init(requireActivity())
 		defEnable = prefs.getBoolean(KEY_DEFAULT_ENABLE, true)
 	}
 
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 		super.onViewCreated(view, savedInstanceState)
+		requireActivity().addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
 		val lv = listView
 		lv.isTextFilterEnabled = true
 		lv.isFastScrollEnabled = true
@@ -119,13 +122,42 @@ class AppListFragment : ListFragment() {
 		}
 	}
 
-	override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-		super.onCreateOptionsMenu(menu, inflater)
-		inflater.inflate(R.menu.app_list, menu)
+	override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+		menuInflater.inflate(R.menu.app_list, menu)
+		val menuFilter = menu.findItem(R.id.filter)!!
+		val searchView = (menuFilter.actionView as SearchView).apply {
+			setIconifiedByDefault(false)
+			setOnQueryTextFocusChangeListener { view, hasFocus ->
+				if (hasFocus) view.post {
+					ContextCompat.getSystemService(
+						view.context, InputMethodManager::class.java
+					)!!.showSoftInput(view.findFocus(), 0)
+				}
+			}
+		}
+		menuFilter.setOnActionExpandListener(object : MenuItem.OnActionExpandListener {
+			override fun onMenuItemActionExpand(p0: MenuItem): Boolean {
+				searchView.run {
+					requestFocus()
+					setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+						override fun onQueryTextSubmit(query: String) = false
+						override fun onQueryTextChange(newText: String): Boolean {
+							adapter.filter.filter(newText)
+							return true
+						}
+					})
+				}
+				return true
+			}
+			override fun onMenuItemActionCollapse(p0: MenuItem): Boolean {
+				searchView.setQuery(null, true)
+				return true
+			}
+		})
 	}
 
-	override fun onOptionsItemSelected(item: MenuItem): Boolean {
-		when (item.itemId) {
+	override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+		when (menuItem.itemId) {
 			R.id.ignore_all -> {
 				setDefaultEnable(false)
 				massIgnore(IGNORE_ALL)
@@ -134,11 +166,6 @@ class AppListFragment : ListFragment() {
 			R.id.ignore_none -> {
 				setDefaultEnable(true)
 				massIgnore(IGNORE_NONE)
-				return true
-			}
-			R.id.filter -> {
-				val imm = requireContext().getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-				imm.showSoftInput(item.actionView, 0)
 				return true
 			}
 		}
@@ -179,7 +206,7 @@ class AppListFragment : ListFragment() {
 		private val baseData: MutableList<App> = ArrayList()
 		private val adapterData: MutableList<App> = ArrayList()
 		private val inflater = requireContext().getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-		private var filter: SimpleFilter? = null
+		private val appFilter by lazy { SimpleFilter() }
 
 		fun setData(list: List<App>?) {
 			baseData.clear()
@@ -230,12 +257,9 @@ class AppListFragment : ListFragment() {
 			return binding.root
 		}
 
-		override fun getFilter(): Filter {
-			if (filter == null) filter = SimpleFilter()
-			return filter!!
-		}
+		override fun getFilter() = appFilter
 
-		private inner class SimpleFilter : Filter() {
+		inner class SimpleFilter : Filter() {
 			override fun performFiltering(prefix: CharSequence?): FilterResults {
 				val results = FilterResults()
 				if (prefix.isNullOrEmpty()) {
@@ -256,7 +280,7 @@ class AppListFragment : ListFragment() {
 				return results
 			}
 
-			override fun publishResults(constraint: CharSequence, results: FilterResults) {
+			override fun publishResults(constraint: CharSequence?, results: FilterResults) {
 				adapterData.clear()
 				adapterData.addAll(results.values as List<App>)
 				if (results.count > 0) notifyDataSetChanged() else notifyDataSetInvalidated()

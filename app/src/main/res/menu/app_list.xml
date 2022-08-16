@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools">
 	<item
 		android:id="@+id/ignore_all"
 		android:title="@string/ignore_all">
@@ -10,6 +11,10 @@
 	</item>
 	<item
 		android:id="@+id/filter"
-		android:title="@string/filter">
+		android:title="@string/filter"
+		android:icon="@drawable/ic_search"
+		android:actionViewClass="androidx.appcompat.widget.SearchView"
+		android:showAsAction="ifRoom|collapseActionView"
+		tools:ignore="AppCompatResource">
 	</item>
 </menu>
