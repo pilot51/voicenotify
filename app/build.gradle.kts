@@ -36,8 +36,8 @@ android {
 		applicationId = "com.pilot51.voicenotify"
 		minSdk = 18
 		targetSdk = 32
-		versionName = "1.2.1"
-		versionCode = 25
+		versionName = "1.2.2"
+		versionCode = 26
 		viewBinding { isEnabled = true }
 		vectorDrawables.useSupportLibrary = true
 		javaCompileOptions {
