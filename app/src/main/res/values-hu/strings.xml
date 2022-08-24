@@ -61,8 +61,6 @@
     <string name="ignore_all">Az összes ki</string>
     <string name="ignore_none">Az összes be</string>
     <!-- Ignore/Silence reasons -->
-    <string name="status_summary_notification_access_disabled"/>
     <string name="reason_silent"/>
-    <string name="audio_focus"/>
     <string name="reason_headset_off"/>
 </resources>

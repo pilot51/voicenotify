@@ -126,5 +126,4 @@
     <string name="reason_headset_on">Auriculares encendidos</string>
     <string name="reason_shake">Silenciado por sacudida</string>
     <string name="reason_suspended">Notificación por Voz suspendido por widget</string>
-    <string name="max_length_summary"/>
 </resources>

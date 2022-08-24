@@ -129,5 +129,4 @@
     <string name="reason_headset_on">Headset einschalten</string>
     <string name="reason_shake">Durch Schütteln stumm geschaltet</string>
     <string name="reason_suspended">VN durch Widget angehalten</string>
-    <string name="status_summary_notification_access_enabled"/>
 </resources>
