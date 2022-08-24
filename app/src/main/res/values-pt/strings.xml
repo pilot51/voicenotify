@@ -12,140 +12,145 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<resources>
-	<string name="app_name">Notificações por voz</string>
-	
-	<!-- Used by multiple files -->
-	<string name="app_is_ignored">%s ignorado</string>
-	<string name="app_is_not_ignored">%s não ignorado</string>
-	<string name="service_running">Serviço NV em execução</string>
-	<string name="service_suspended">Serviço NV suspenso</string>
-	
-	<!-- xml/preferences.xml -->
-	<string name="app_list">Lista de aplicativos</string>
-	<string name="app_list_summary">Lista de aplicativos ignoráveis.</string>
-	
-	
-	<string name="tts_settings">Conversão de texto em voz</string>
-	<string name="tts_settings_summary">Abre as configurações de conversão de texto em voz do Android</string>
-	<string name="tts_settings_summary_fail">Incapaz de encontrar as configurações de conversão de texto em voz! Se ele existe no seu dispositivo (como deveria), por favor, entre em contato com o desenvolvedor.</string>
-	<string name="tts_message">Mensagem</string>
-	<string name="tts_message_summary">Personalize como falar as notificações.</string>
-	
-	
-	
-	
-	<string name="tts_stream">Saída de áudio</string>
-	<string name="tts_stream_summary">Escolha a saída de áudio usada para reprodução da fala.</string>
-	<string name="tts_delay">Atraso na fala</string>
-	<string name="tts_delay_summary">Atrase a fala um determinado número de segundos após a notificação.</string>
-	<string name="tts_delay_dialog_msg">Intervalo em segundos entre a notificação e a fala.</string>
-	<string name="tts_repeat">Repetição da fala.</string>
-	<string name="tts_repeat_summary">Continue repetindo as notificações até a tela ligar.</string>
-	<string name="tts_repeat_dialog_msg">Notificações são repetidas por um intervalo definido até ligar a tela. Notificações criadas enquanto a tela está ligada não são repetidas.\n\nValor em minutos. Deixe vazio ou como zero para desativar.</string>
-	<string name="audio_focus">Pausar ou reduzir som de mídia.</string>
-	<string name="audio_focus_summary">Solicitar pausa ou redução do volume de outras médias ao falar.</string>
-	<string name="shake_to_silence">Agitar-para-sossegar</string>
-	<string name="shake_to_silence_summary">Ajustar o limite de sensibilidade para o Agitar-Para-Sossegar.</string>
-	<string name="shake_to_silence_dialog_msg">Menores valores indicam maior sensibilidade.\n\nPadrão: 100\nValor vazio para desabilitar.</string>
-	<string-array name="stream_name">
-		<item>Mídia</item>
-		<item>Notificação</item>
-		<item>Voz</item>
-		<item>Toque</item>
-		<item>Alarme</item>
-	</string-array>
-	<string name="ignore_strings">Ignorar texto</string>
-	<string name="ignore_strings_summary">Ignorar as notificações que contêm determinado texto na mensagem.</string>
-	<string name="ignore_strings_dialog_msg">Separar entradas individuais com uma nova linha.</string>
-	<string name="ignore_empty">Ignorar vazias</string>
-	<string name="ignore_empty_summary_on">Notificações sem uma mensagem não serão faladas.</string>
-	<string name="ignore_empty_summary_off">Notificações sem mensagem serão faladas como \"Notificação de [aplicativo].\"</string>
-	<string name="ignore_repeat">Ignorar repetições</string>
-	<string name="ignore_repeat_summary">Ignorar notificações idênticas subseqüentes dentro de um tempo definido.</string>
-	<string name="ignore_repeat_dialog_msg">Defina o número de segundos que deve transcorrer desde a última notificação para que uma repetição possa ser falada.\nRepetições ignoradas reiniciam a contagem e notificações diferentes limpam.\nVazio = infinito.</string>
-	
-	
-	
-	<string name="device_state">Estados do aparelho</string>
-	<string name="device_state_summary">Selecionar quanto falar durante determinados estados do aparelho.</string>
-	<string name="device_state_dialog_title">Falar durante esses estados do aparelho</string>
-	<string-array name="device_states">
-		<item>Tela apagada</item>
-		<item>Tela ligada</item>
-		<item>Fone de ouvido desconectado</item>
-		<item>Fone de ouvido conectado</item>
-		<item>Silencioso/Vibração</item>
-	</string-array>
-	<string name="quiet_start">Início do horário de silêncio</string>
-	<string name="quiet_start_summary">Não falar após este horário.\nIgual ao final para desabilitar.</string>
-	<string name="quiet_end">Final do horário de silêncio</string>
-	<string name="quiet_end_summary">Não fale antes deste horário.\nIgual ao início para desabilitar.</string>
-	<string name="test_summary">Criar uma notificação com atraso de 5 segundos para testar as configurações atuais.</string>
-	<string name="test_ignored">Voice Notify está como ignorado na lista de aplicativos.\nO teste correrá mas nenhuma notificação será falada.</string>
-	<string name="notify_log_summary">Lista as últimas as 20 notificações.\nExibe horário, nome do aplicativo, mensagem e motivos considerados para ignorar.</string>
-	<string name="support_summary">Doação, avaliação/comentário, traduções, código fonte ou contato com o desenvolvedor.</string>
-	
-	<!-- TextReplacePreference -->
-	
-	
-	<!-- text_replace_row.xml -->
-	
-	
-	
-	<!-- MainActivity and xml/preferences.xml -->
-	<string name="test">Teste</string>
-	<string name="notify_log">Histórico de Notificações</string>
-	<string name="support">Ajude o Voice Notify</string>
-	
-	<!-- MainActivity -->
-	<string name="service_disabled">Serviço VN está desligado.</string>
-	
-	
-	<string name="status_summary_suspended">Selecione para ativar o VN.</string>
-	
-	
-	
-	
-	
-	
-	<string-array name="support_items">
-		<item>Avaliar/Comentar</item>
-		<item>Contactar desenvolvedor</item>
-		<item>Traduzir</item>
-		<item>Código fonte</item>
-	</string-array>
-	<string name="error_market">Erro: Não foi possível localizar o Google Play Store instalado.</string>
-	<string name="error_email">Erro: Não é possível encontrar um aplicativo de e-mail instalado.</string>
-	
-	
-	<!-- Service -->
-	<string name="notification_from">Notificação de %s.</string>
-	<string name="error_tts_init">Erro: Não foi possível inicializar a conversão do texto em voz!</string>
-	
-	<!-- NotifyList -->
-	<string name="yes">Sim</string>
-	<string name="ignore_app">Ignorar %s?</string>
-	<string name="unignore_app">Parar de ignorar %s?</string>
-	
-	<!-- menu/app_list.xml-->
-	<string name="ignore_all">Ignorar tudo</string>
-	<string name="ignore_none">Ignorar nada</string>
-	<string name="filter">Filtrar</string>
-	
-	<!-- Ignore/Silence reasons -->
-	<string name="reason_app">Aplicativos ignorados</string>
-	<string name="reason_string">Texto ignorado</string>
-	<string name="reason_empty_msg">Mensagem vazia</string>
-	<string name="reason_identical">Mensagens idênticas dentro de {0,choice,-1#infinitos segundos|1#{0} segundo|1&lt;{0} segundos}</string>
-	<string name="reason_quiet">Horário de silêncio</string>
-	<string name="reason_silent">Modo silencioso ou vibração</string>
-	
-	<string name="reason_screen_off">Tela apagada</string>
-	<string name="reason_screen_on">Tela ligada</string>
-	<string name="reason_headset_off">Fone de ouvido desconectado</string>
-	<string name="reason_headset_on">Fone de ouvido conectado</string>
-	<string name="reason_shake">Silenciado (Agitar para calar)</string>
-	<string name="reason_suspended">VN suspenso pelo widget</string>
+--><resources>
+    <string name="app_name">Notificações por voz</string>
+    <!-- Used by multiple files -->
+    <string name="app_is_ignored">%s ignorado</string>
+    <string name="app_is_not_ignored">%s não ignorado</string>
+    <string name="service_running">Serviço NV em execução</string>
+    <string name="service_suspended">Serviço NV suspenso</string>
+    <!-- xml/preferences.xml -->
+    <string name="app_list">Lista de aplicativos</string>
+    <string name="app_list_summary">Lista de aplicativos ignoráveis.</string>
+    <string name="tts_settings">Conversão de texto em voz</string>
+    <string name="tts_settings_summary">Abre as configurações de conversão de texto em voz do Android</string>
+    <string name="tts_settings_summary_fail">Incapaz de encontrar as configurações de conversão de texto em voz! Se ele existe no seu dispositivo (como deveria), por favor, entre em contato com o desenvolvedor.</string>
+    <string name="tts_message">Mensagem</string>
+    <string name="tts_message_summary">Personalize como falar as notificações.</string>
+    <string name="tts_stream">Saída de áudio</string>
+    <string name="tts_stream_summary">Escolha a saída de áudio usada para reprodução da fala.</string>
+    <string name="tts_delay">Atraso na fala</string>
+    <string name="tts_delay_summary">Atrase a fala um determinado número de segundos após a notificação.</string>
+    <string name="tts_delay_dialog_msg">Intervalo em segundos entre a notificação e a fala.</string>
+    <string name="tts_repeat">Repetição da fala.</string>
+    <string name="tts_repeat_summary">Continue repetindo as notificações até a tela ligar.</string>
+    <string name="tts_repeat_dialog_msg">Notificações são repetidas por um intervalo definido até ligar a tela. Notificações criadas enquanto a tela está ligada não são repetidas.
+\n
+\nValor em minutos. Deixe vazio ou como zero para desativar.</string>
+    <string name="audio_focus">Pausar ou reduzir som de mídia.</string>
+    <string name="audio_focus_summary">Solicitar pausa ou redução do volume de outras médias ao falar.</string>
+    <string name="shake_to_silence">Agitar-para-sossegar</string>
+    <string name="shake_to_silence_summary">Ajustar o limite de sensibilidade para o Agitar-Para-Sossegar.</string>
+    <string name="shake_to_silence_dialog_msg">Menores valores indicam maior sensibilidade.
+\n
+\nPadrão: 100
+\nValor vazio para desabilitar.</string>
+    <string-array name="stream_name">
+        <item>Mídia</item>
+        <item>Notificação</item>
+        <item>Voz</item>
+        <item>Toque</item>
+        <item>Alarme</item>
+    </string-array>
+    <string name="ignore_strings">Ignorar texto</string>
+    <string name="ignore_strings_summary">Ignorar as notificações que contêm determinado texto na mensagem.</string>
+    <string name="ignore_strings_dialog_msg">Separar entradas individuais com uma nova linha.</string>
+    <string name="ignore_empty">Ignorar vazias</string>
+    <string name="ignore_empty_summary_on">Notificações sem uma mensagem não serão faladas.</string>
+    <string name="ignore_empty_summary_off">Notificações sem mensagem serão faladas como \"Notificação de [aplicativo].\"</string>
+    <string name="ignore_repeat">Ignorar repetições</string>
+    <string name="ignore_repeat_summary">Ignorar notificações idênticas subseqüentes dentro de um tempo definido.</string>
+    <string name="ignore_repeat_dialog_msg">Defina o número de segundos que deve transcorrer desde a última notificação para que uma repetição possa ser falada.
+\nRepetições ignoradas reiniciam a contagem e notificações diferentes limpam.
+\nVazio = infinito.</string>
+    <string name="device_state">Estados do aparelho</string>
+    <string name="device_state_summary">Selecionar quanto falar durante determinados estados do aparelho.</string>
+    <string name="device_state_dialog_title">Falar durante esses estados do aparelho</string>
+    <string-array name="device_states">
+        <item>Tela apagada</item>
+        <item>Tela ligada</item>
+        <item>Fone de ouvido desconectado</item>
+        <item>Fone de ouvido conectado</item>
+        <item>Silencioso/Vibração</item>
+    </string-array>
+    <string name="quiet_start">Início do horário de silêncio</string>
+    <string name="quiet_start_summary">Não falar após este horário.
+\nIgual ao final para desabilitar.</string>
+    <string name="quiet_end">Final do horário de silêncio</string>
+    <string name="quiet_end_summary">Não fale antes deste horário.
+\nIgual ao início para desabilitar.</string>
+    <string name="test_summary">Criar uma notificação com atraso de 5 segundos para testar as configurações atuais.</string>
+    <string name="test_ignored">Voice Notify está como ignorado na lista de aplicativos.
+\nO teste correrá mas nenhuma notificação será falada.</string>
+    <string name="notify_log_summary">Lista as últimas as 20 notificações.
+\nExibe horário, nome do aplicativo, mensagem e motivos considerados para ignorar.</string>
+    <string name="support_summary">Doação, avaliação/comentário, traduções, código fonte ou contato com o desenvolvedor.</string>
+    <!-- TextReplacePreference -->
+    <!-- text_replace_row.xml -->
+    <!-- MainActivity and xml/preferences.xml -->
+    <string name="test">Teste</string>
+    <string name="notify_log">Histórico de Notificações</string>
+    <string name="support">Ajude o Voice Notify</string>
+    <!-- MainActivity -->
+    <string name="service_disabled">Serviço VN está desligado.</string>
+    <string name="status_summary_suspended">Selecione para ativar o VN.</string>
+    <string-array name="support_items">
+        <item>Avaliar/Comentar</item>
+        <item>Contactar desenvolvedor</item>
+        <item>Traduzir</item>
+        <item>Código fonte</item>
+    </string-array>
+    <string name="error_market">Erro: Não foi possível localizar o Google Play Store instalado.</string>
+    <string name="error_email">Erro: Não é possível encontrar um aplicativo de e-mail instalado.</string>
+    <!-- Service -->
+    <string name="notification_from">Notificação de %s.</string>
+    <string name="error_tts_init">Erro: Não foi possível inicializar a conversão do texto em voz!</string>
+    <!-- NotifyList -->
+    <string name="yes">Sim</string>
+    <string name="ignore_app">Ignorar %s\?</string>
+    <string name="unignore_app">Parar de ignorar %s\?</string>
+    <!-- menu/app_list.xml-->
+    <string name="ignore_all">Ignorar tudo</string>
+    <string name="ignore_none">Ignorar nada</string>
+    <string name="filter">Filtrar</string>
+    <!-- Ignore/Silence reasons -->
+    <string name="reason_app">Aplicativos ignorados</string>
+    <string name="reason_string">Texto ignorado</string>
+    <string name="reason_empty_msg">Mensagem vazia</string>
+    <string name="reason_identical">Mensagens idênticas dentro de {0,choice,-1#infinitos segundos|1#{0} segundo|1&lt;{0} segundos}</string>
+    <string name="reason_quiet">Horário de silêncio</string>
+    <string name="reason_silent">Modo silencioso ou vibração</string>
+    <string name="reason_screen_off">Tela apagada</string>
+    <string name="reason_screen_on">Tela ligada</string>
+    <string name="reason_headset_off">Fone de ouvido desconectado</string>
+    <string name="reason_headset_on">Fone de ouvido conectado</string>
+    <string name="reason_shake">Silenciado (Agitar para calar)</string>
+    <string name="reason_suspended">VN suspenso pelo widget</string>
+    <string name="tts_text_replace_summary"></string>
+    <string name="text_to_replace"></string>
+    <string name="status_summary_notification_access_enabled"></string>
+    <string name="reason_call"></string>
+    <string name="test_ticker"></string>
+    <string name="tts_text_replace_dialog"></string>
+    <string name="replacement_text"></string>
+    <string name="ignore_groups_summary_on"></string>
+    <string name="ignore_groups_summary_off"></string>
+    <string name="tts_message_dialog"></string>
+    <string name="tts_message_reset_default"></string>
+    <string name="test_content_text"></string>
+    <string name="text_replace_error_duplicate"></string>
+    <string name="tts"></string>
+    <string name="reason_service_stopped"></string>
+    <string name="max_length_dialog_msg"></string>
+    <string name="status_summary_notification_access_disabled"></string>
+    <string name="test_content_title"></string>
+    <string name="max_length"></string>
+    <string name="notification_channel_desc"></string>
+    <string name="test_subtext"></string>
+    <string name="tts_summary"></string>
+    <string name="test_content_info"></string>
+    <string name="tts_text_replace"></string>
+    <string name="ignore_groups"></string>
+    <string name="max_length_summary"></string>
+    <string name="permission_rationale_read_phone_state"></string>
 </resources>
