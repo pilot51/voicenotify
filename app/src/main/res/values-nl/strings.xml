@@ -12,141 +12,145 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<resources>
-	<string name="app_name">Voice Notify</string>
-	
-	<!-- Used by multiple files -->
-	<string name="app_is_ignored">%s wordt genegeerd</string>
-	<string name="app_is_not_ignored">%s wordt niet genegeerd</string>
-	<string name="service_running">VN service is gestart</string>
-	<string name="service_suspended">VN service is tijdelijk uitgeschakeld</string>
-	
-	<!-- xml/preferences.xml -->
-	<string name="app_list">App Lijst</string>
-	<string name="app_list_summary">Lijst van geïnstalleerde apps die kunnen worden genegeerd.</string>
-	
-	
-	<string name="tts_settings">TTS Instellingen</string>
-	<string name="tts_settings_summary">Open de Android Text-To-Speech instellingen.</string>
-	<string name="tts_settings_summary_fail">Kan de TTS instellingen niet vinden! Als TTS wel op je apparaat aanwezig is (dat moet), neem dan contact op met de maker.</string>
-	<string name="tts_message">TTS Bericht</string>
-	<string name="tts_message_summary">Instellen hoe Text-To-Speech de notificaties uitspreekt.</string>
-	
-	
-	
-	
-	<string name="tts_stream">TTS Audio Stream</string>
-	<string name="tts_stream_summary">Kies de audiostream die Text-To-Speech moet gebruiken.</string>
-	<string name="tts_delay">TTS Vertraging</string>
-	<string name="tts_delay_summary">Vertraag TTS een bepaald aantal seconden na de notificatie.</string>
-	<string name="tts_delay_dialog_msg">Aantal seconden dat gewacht moet worden na de notificatie alvorens te spreken.</string>
-	<string name="tts_repeat">TTS Herhalen</string>
-	<string name="tts_repeat_summary">Herhaal de TTS notificaties tot het scherm wordt ingeschakeld.</string>
-	<string name="tts_repeat_dialog_msg">Notificaties worden herhaald volgens de ingestelde interval tot het scherm wordt aangezet.
-Notificaties die binnen komen met het scherm aan worden niet herhaald. \n\nWaarde is in minuten. Leeg of 0 om uit te schakelen.</string>
-	<string name="audio_focus">Pauzeer notificaties</string>
-	<string name="audio_focus_summary">Verzoek andere berichten om even te wachten tijdens het spreken.</string>
-	<string name="shake_to_silence">Schudden Zet Geluid Uit.</string>
-	<string name="shake_to_silence_summary">Pas de gevoeligheid aan die gebruikt wordt bij het schudden.</string>
-	<string name="shake_to_silence_dialog_msg">Hoe lager de waarde hoe gevoeliger \n\nStandaard: 100\nLeeg is uitgeschakeld.</string>
-	<string-array name="stream_name">
-		<item>Media</item>
-		<item>Notificatie</item>
-		<item>Spraak</item>
-		<item>Beltoon</item>
-		<item>Alarm</item>
-	</string-array>
-	<string name="ignore_strings">Negeer Tekst</string>
-	<string name="ignore_strings_summary">Negeer notificaties die bepaalde tekst in het bericht bevatten.</string>
-	<string name="ignore_strings_dialog_msg">Gebruik voor elk item een nieuwe regel.</string>
-	<string name="ignore_empty">Negeer Lege Berichten</string>
-	<string name="ignore_empty_summary_on">Notificaties zonder bericht wordt niet uitgesproken.</string>
-	<string name="ignore_empty_summary_off">Notificaties die geen tekst bevatten worden uitgesproken als \"Notificatie met [app naam].\"</string>
-	<string name="ignore_repeat">Negeer Herhalingen</string>
-	<string name="ignore_repeat_summary">Negeer opeenvolgende identieke notificaties binnen een bepaalde tijd.</string>
-	<string name="ignore_repeat_dialog_msg">Stel het aantal seconden in die voorbij moeten gaan na de vorige notificatie voor een herhaling moet worden uitgesproken. \nNegeer herhalingen en reset de teller.\nLeeg = oneindig.</string>
-	
-	
-	
-	<string name="device_state">Apparaat Status</string>
-	<string name="device_state_summary">Selecteer wanneer je het apparaat wilt laten spreken.</string>
-	<string name="device_state_dialog_title">Selecteer wanneer het apparaat moet spreken.</string>
-	<string-array name="device_states">
-		<item>Scherm Uit</item>
-		<item>Scherm Aan</item>
-		<item>Koptelefoon Uit</item>
-		<item>Koptelefoon Aan</item>
-		<item>Stil/Tril</item>
-	</string-array>
-	<string name="quiet_start">Begin Stilte Modus</string>
-	<string name="quiet_start_summary">Spreek niet na deze tijd.\nGelijk aan \"Begin Stilte Modus\" om uit te schakelen.</string>
-	<string name="quiet_end">Einde Stilte Modus</string>
-	<string name="quiet_end_summary">Spreek niet voor deze tijd.\nGelijk aan \"Einde Stilte Modus\" om uit te schakelen.</string>
-	<string name="test_summary">Stuur een test notificatie (met 5 seconden vertraging) om de huidige instellingen te testen.</string>
-	<string name="test_ignored">Voice Notify wordt genegeerd in de App Lijst.\nTest kan worden uitgevoerd, maar wordt niet uitgesproken.</string>
-	<string name="notify_log_summary">Lijst van de laatste 20 meldingen.\nGeeft de tijd, app naam, bericht en de reden waarom er notificaties zijn overgeslagen.</string>
-	<string name="support_summary">Doneren, waarderen/commentaar, vertalingen, broncode, of contact opnemen met de ontwikkelaar.</string>
-	
-	<!-- TextReplacePreference -->
-	
-	
-	<!-- text_replace_row.xml -->
-	
-	
-	
-	<!-- MainActivity and xml/preferences.xml -->
-	<string name="test">Test</string>
-	<string name="notify_log">Notificatie Logboek</string>
-	<string name="support">Ondersteuning Voice Notify</string>
-	
-	<!-- MainActivity -->
-	<string name="service_disabled">VN service is uitgeschakeld</string>
-	
-	
-	<string name="status_summary_suspended">Selecteer om VN te activeren.</string>
-	
-	
-	
-	
-	
-	
-	<string-array name="support_items">
-		<item>Waarderen/Comentaar</item>
-		<item>Contact met de maker</item>
-		<item>Vertalingen</item>
-		<item>Broncode</item>
-	</string-array>
-	<string name="error_market">Fout: Google Play Store is niet geïnstalleerd.</string>
-	<string name="error_email">Fout: Er is geen e-mail app geinstalleerd.</string>
-	
-	
-	<!-- Service -->
-	<string name="notification_from">Notificatie van %s</string>
-	<string name="error_tts_init">Fout: Kan TTS niet initialiseren!</string>
-	
-	<!-- NotifyList -->
-	<string name="yes">Ja</string>
-	<string name="ignore_app">Negeren %s?</string>
-	<string name="unignore_app">Niet meer negeren %s?</string>
-	
-	<!-- menu/app_list.xml-->
-	<string name="ignore_all">Alles Negeren</string>
-	<string name="ignore_none">Niets Negeren</string>
-	<string name="filter">Filter</string>
-	
-	<!-- Ignore/Silence reasons -->
-	<string name="reason_app">Genegeerde app</string>
-	<string name="reason_string">Genegeerde tekst</string>
-	<string name="reason_empty_msg">Leeg bericht</string>
-	<string name="reason_identical">Dezelfde boodschap binnen {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
-	<string name="reason_quiet">Stilte modus</string>
-	<string name="reason_silent">Stil of trilstand</string>
-	
-	<string name="reason_screen_off">Scherm uit</string>
-	<string name="reason_screen_on">Scherm aan</string>
-	<string name="reason_headset_off">Koptelefoon uit</string>
-	<string name="reason_headset_on">Koptelefoon aan</string>
-	<string name="reason_shake">Stil als je schud</string>
-	<string name="reason_suspended">VN gestopt door widget</string>
+--><resources>
+    <string name="app_name">Voice Notify</string>
+    <!-- Used by multiple files -->
+    <string name="app_is_ignored">%s wordt genegeerd</string>
+    <string name="app_is_not_ignored">%s wordt niet genegeerd</string>
+    <string name="service_running">VN service is gestart</string>
+    <string name="service_suspended">VN service is tijdelijk uitgeschakeld</string>
+    <!-- xml/preferences.xml -->
+    <string name="app_list">App Lijst</string>
+    <string name="app_list_summary">Lijst van geïnstalleerde apps die kunnen worden genegeerd.</string>
+    <string name="tts_settings">TTS Instellingen</string>
+    <string name="tts_settings_summary">Open de Android Text-To-Speech instellingen.</string>
+    <string name="tts_settings_summary_fail">Kan de TTS instellingen niet vinden! Als TTS wel op je apparaat aanwezig is (dat moet), neem dan contact op met de maker.</string>
+    <string name="tts_message">TTS Bericht</string>
+    <string name="tts_message_summary">Instellen hoe Text-To-Speech de notificaties uitspreekt.</string>
+    <string name="tts_stream">TTS Audio Stream</string>
+    <string name="tts_stream_summary">Kies de audiostream die Text-To-Speech moet gebruiken.</string>
+    <string name="tts_delay">TTS Vertraging</string>
+    <string name="tts_delay_summary">Vertraag TTS een bepaald aantal seconden na de notificatie.</string>
+    <string name="tts_delay_dialog_msg">Aantal seconden dat gewacht moet worden na de notificatie alvorens te spreken.</string>
+    <string name="tts_repeat">TTS Herhalen</string>
+    <string name="tts_repeat_summary">Herhaal de TTS notificaties tot het scherm wordt ingeschakeld.</string>
+    <string name="tts_repeat_dialog_msg">Notificaties worden herhaald volgens de ingestelde interval tot het scherm wordt aangezet. Notificaties die binnen komen met het scherm aan worden niet herhaald.
+\n
+\nWaarde is in minuten. Leeg of 0 om uit te schakelen.</string>
+    <string name="audio_focus">Pauzeer notificaties</string>
+    <string name="audio_focus_summary">Verzoek andere berichten om even te wachten tijdens het spreken.</string>
+    <string name="shake_to_silence">Schudden Zet Geluid Uit.</string>
+    <string name="shake_to_silence_summary">Pas de gevoeligheid aan die gebruikt wordt bij het schudden.</string>
+    <string name="shake_to_silence_dialog_msg">Hoe lager de waarde hoe gevoeliger
+\n
+\nStandaard: 100
+\nLeeg is uitgeschakeld.</string>
+    <string-array name="stream_name">
+        <item>Media</item>
+        <item>Notificatie</item>
+        <item>Spraak</item>
+        <item>Beltoon</item>
+        <item>Alarm</item>
+    </string-array>
+    <string name="ignore_strings">Negeer Tekst</string>
+    <string name="ignore_strings_summary">Negeer notificaties die bepaalde tekst in het bericht bevatten.</string>
+    <string name="ignore_strings_dialog_msg">Gebruik voor elk item een nieuwe regel.</string>
+    <string name="ignore_empty">Negeer Lege Berichten</string>
+    <string name="ignore_empty_summary_on">Notificaties zonder bericht wordt niet uitgesproken.</string>
+    <string name="ignore_empty_summary_off">Notificaties die geen tekst bevatten worden uitgesproken als \"Notificatie met [app naam].\"</string>
+    <string name="ignore_repeat">Negeer Herhalingen</string>
+    <string name="ignore_repeat_summary">Negeer opeenvolgende identieke notificaties binnen een bepaalde tijd.</string>
+    <string name="ignore_repeat_dialog_msg">Stel het aantal seconden in die voorbij moeten gaan na de vorige notificatie voor een herhaling moet worden uitgesproken.
+\nNegeer herhalingen en reset de teller.
+\nLeeg = oneindig.</string>
+    <string name="device_state">Apparaat Status</string>
+    <string name="device_state_summary">Selecteer wanneer je het apparaat wilt laten spreken.</string>
+    <string name="device_state_dialog_title">Selecteer wanneer het apparaat moet spreken.</string>
+    <string-array name="device_states">
+        <item>Scherm Uit</item>
+        <item>Scherm Aan</item>
+        <item>Koptelefoon Uit</item>
+        <item>Koptelefoon Aan</item>
+        <item>Stil/Tril</item>
+    </string-array>
+    <string name="quiet_start">Begin Stilte Modus</string>
+    <string name="quiet_start_summary">Spreek niet na deze tijd.
+\nGelijk aan \"Begin Stilte Modus\" om uit te schakelen.</string>
+    <string name="quiet_end">Einde Stilte Modus</string>
+    <string name="quiet_end_summary">Spreek niet voor deze tijd.
+\nGelijk aan \"Einde Stilte Modus\" om uit te schakelen.</string>
+    <string name="test_summary">Stuur een test notificatie (met 5 seconden vertraging) om de huidige instellingen te testen.</string>
+    <string name="test_ignored">Voice Notify wordt genegeerd in de App Lijst.
+\nTest kan worden uitgevoerd, maar wordt niet uitgesproken.</string>
+    <string name="notify_log_summary">Lijst van de laatste 20 meldingen.
+\nGeeft de tijd, app naam, bericht en de reden waarom er notificaties zijn overgeslagen.</string>
+    <string name="support_summary">Doneren, waarderen/commentaar, vertalingen, broncode, of contact opnemen met de ontwikkelaar.</string>
+    <!-- TextReplacePreference -->
+    <!-- text_replace_row.xml -->
+    <!-- MainActivity and xml/preferences.xml -->
+    <string name="test">Test</string>
+    <string name="notify_log">Notificatie Logboek</string>
+    <string name="support">Ondersteuning Voice Notify</string>
+    <!-- MainActivity -->
+    <string name="service_disabled">VN service is uitgeschakeld</string>
+    <string name="status_summary_suspended">Selecteer om VN te activeren.</string>
+    <string-array name="support_items">
+        <item>Waarderen/Comentaar</item>
+        <item>Contact met de maker</item>
+        <item>Vertalingen</item>
+        <item>Broncode</item>
+    </string-array>
+    <string name="error_market">Fout: Google Play Store is niet geïnstalleerd.</string>
+    <string name="error_email">Fout: Er is geen e-mail app geinstalleerd.</string>
+    <!-- Service -->
+    <string name="notification_from">Notificatie van %s</string>
+    <string name="error_tts_init">Fout: Kan TTS niet initialiseren!</string>
+    <!-- NotifyList -->
+    <string name="yes">Ja</string>
+    <string name="ignore_app">Negeren %s\?</string>
+    <string name="unignore_app">Niet meer negeren %s\?</string>
+    <!-- menu/app_list.xml-->
+    <string name="ignore_all">Alles Negeren</string>
+    <string name="ignore_none">Niets Negeren</string>
+    <string name="filter">Filter</string>
+    <!-- Ignore/Silence reasons -->
+    <string name="reason_app">Genegeerde app</string>
+    <string name="reason_string">Genegeerde tekst</string>
+    <string name="reason_empty_msg">Leeg bericht</string>
+    <string name="reason_identical">Dezelfde boodschap binnen {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+    <string name="reason_quiet">Stilte modus</string>
+    <string name="reason_silent">Stil of trilstand</string>
+    <string name="reason_screen_off">Scherm uit</string>
+    <string name="reason_screen_on">Scherm aan</string>
+    <string name="reason_headset_off">Koptelefoon uit</string>
+    <string name="reason_headset_on">Koptelefoon aan</string>
+    <string name="reason_shake">Stil als je schud</string>
+    <string name="reason_suspended">VN gestopt door widget</string>
+    <string name="ignore_groups_summary_off"></string>
+    <string name="ignore_groups"></string>
+    <string name="ignore_groups_summary_on"></string>
+    <string name="reason_call"></string>
+    <string name="tts_text_replace_summary"></string>
+    <string name="tts_message_dialog"></string>
+    <string name="tts"></string>
+    <string name="tts_summary"></string>
+    <string name="tts_text_replace"></string>
+    <string name="tts_text_replace_dialog"></string>
+    <string name="max_length"></string>
+    <string name="max_length_summary"></string>
+    <string name="max_length_dialog_msg"></string>
+    <string name="text_replace_error_duplicate"></string>
+    <string name="text_to_replace"></string>
+    <string name="replacement_text"></string>
+    <string name="status_summary_notification_access_enabled"></string>
+    <string name="status_summary_notification_access_disabled"></string>
+    <string name="notification_channel_desc"></string>
+    <string name="test_ticker"></string>
+    <string name="test_subtext"></string>
+    <string name="test_content_title"></string>
+    <string name="test_content_text"></string>
+    <string name="test_content_info"></string>
+    <string name="tts_message_reset_default"></string>
+    <string name="permission_rationale_read_phone_state"></string>
+    <string name="reason_service_stopped"></string>
 </resources>
