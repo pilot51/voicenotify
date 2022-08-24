@@ -12,141 +12,145 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<resources>
-	<string name="app_name">Hlasové oznámení</string>
-	
-	<!-- Used by multiple files -->
-	<string name="app_is_ignored">%s je ignorována</string>
-	<string name="app_is_not_ignored">%s není ignorována</string>
-	<string name="service_running">VN služba je spuštěna</string>
-	<string name="service_suspended">VN služba je pozastavena</string>
-	
-	<!-- xml/preferences.xml -->
-	<string name="app_list">Seznam aplikací</string>
-	<string name="app_list_summary">Seznam instalovaných aplikací, které mohou být ignorovány.</string>
-	
-	
-	<string name="tts_settings">TTS Nastavení</string>
-	<string name="tts_settings_summary">Otevře android nastavení převodu TTS (Text-Na-Řeč).</string>
-	<string name="tts_settings_summary_fail">Nelze najít nastavení TTS! Pokud existuje na vašem zařízení (měl by), obraťte se na vývojáře.</string>
-	<string name="tts_message">TTS Zpráva</string>
-	<string name="tts_message_summary">Přizpůsobit jak TTS (Text-Na-Řeč) čte oznámení.</string>
-	
-	
-	
-	
-	<string name="tts_stream">TTS Zvukový Kanál</string>
-	<string name="tts_stream_summary">Zvolte zvukový kanál, kterým se TTS (Text-Na-Řeč) přehraje.</string>
-	<string name="tts_delay">TTS Prodleva</string>
-	<string name="tts_delay_summary">Prodleva TTS a nastavení počtu sekund po oznámení.</string>
-	<string name="tts_delay_dialog_msg">Počet sekund vyčkání po oznámení před tím, než začne číst.</string>
-	<string name="tts_repeat">TTS Opakování</string>
-	<string name="tts_repeat_summary">Neustále opakuje upozornění přes TTS než se zapne obrazovka.</string>
-	<string name="tts_repeat_dialog_msg">Oznámení se opakuje v zadaném intervalu, dokud není obrazovka zapnuta.
-Oznámení vytvořené při zapnuté obrazovce se neopakují.\n\nHodnota je v minutách. Prázdné nebo 0 je zakázáno.</string>
-	<string name="audio_focus">Pozastavit/Ztlumit zvukový proud</string>
-	<string name="audio_focus_summary">Pozastavit nebo ztlumit zvukový proud při čtení</string>
-	<string name="shake_to_silence">Zatřepáním Umlčet</string>
-	<string name="shake_to_silence_summary">Nastavte práh citlivosti pro Umlčení.</string>
-	<string name="shake_to_silence_dialog_msg">Nižší hodnoty jsou citlivější.\n\nVýchozí: 100\nPrázdné zakázat.</string>
-	<string-array name="stream_name">
-		<item>Média</item>
-		<item>Oznámení</item>
-		<item>Čtení</item>
-		<item>Vyzvánění</item>
-		<item>Budík</item>
-	</string-array>
-	<string name="ignore_strings">Ignorovat Text</string>
-	<string name="ignore_strings_summary">Ignorovat oznámení, které obsahují určitý text ve zprávě.</string>
-	<string name="ignore_strings_dialog_msg">Oddělte jednotlivé položky novým řádkem.</string>
-	<string name="ignore_empty">Ignorovat prázdné</string>
-	<string name="ignore_empty_summary_on">Oznámení bez zprávy nebude přečteno.</string>
-	<string name="ignore_empty_summary_off">Oznámení bez zprávy bude přečteno jako \"Oznámení z [název aplikace].\"</string>
-	<string name="ignore_repeat">Ignorovat Opakování</string>
-	<string name="ignore_repeat_summary">Ignorovat následné stejné oznámení ve stanoveném čase.</string>
-	<string name="ignore_repeat_dialog_msg">Nastavte počet sekund, které musí uplynout od posledního oznámení, než opakování může být přečteno.\nIgnorované opakování vynulujte a různá oznámení zrušte jeho zaškrtnutím.\nPrázdné = nekonečno.</string>
-	
-	
-	
-	<string name="device_state">Stav zařízení</string>
-	<string name="device_state_summary">Vyberte, zda chcete číst v určitých stavech zařízení.</string>
-	<string name="device_state_dialog_title">Číst během těchto stavů zařízení</string>
-	<string-array name="device_states">
-		<item>Obrazovka vypnuta</item>
-		<item>Obrazovka zapnuta</item>
-		<item>Sluchátka vypnuta</item>
-		<item>Sluchátka zapnuta</item>
-		<item>Tichý/Vibrace</item>
-	</string-array>
-	<string name="quiet_start">Začátek Tichý režim</string>
-	<string name="quiet_start_summary">Nečte oznámení po uplynutí předem stanovené doby.\nChcete-li zakázat možnost, zadejte čas ukončení.</string>
-	<string name="quiet_end">Konec Tichý režim</string>
-	<string name="quiet_end_summary">Nečte oznámení před nastaveným časem.\nChcete-li zakázat možnost, zadejte čas začátku.</string>
-	<string name="test_summary">Zkouška oznámení (zpoždění 5 sekund) pro otestování aktuálního nastavení.</string>
-	<string name="test_ignored">Voice Notify je ignorován v seznamu aplikací.\nZkouška bude zahájena, ale oznámení nebude přečteno.</string>
-	<string name="notify_log_summary">Seznam posledních 20 oznámení.\nZobrazí čas, název aplikace a důvody pro ignorování.</string>
-	<string name="support_summary">Darovat, hodnocení/komentář, překlady, zdrojový kód, nebo kontaktujte vývojáře.</string>
-	
-	<!-- TextReplacePreference -->
-	
-	
-	<!-- text_replace_row.xml -->
-	
-	
-	
-	<!-- MainActivity and xml/preferences.xml -->
-	<string name="test">Test</string>
-	<string name="notify_log">Registr oznámení</string>
-	<string name="support">Podpora Voice Notify</string>
-	
-	<!-- MainActivity -->
-	<string name="service_disabled">VN služba je zakázána</string>
-	
-	
-	<string name="status_summary_suspended">Vyberte, chcete-li aktivovat VN.</string>
-	
-	
-	
-	
-	
-	
-	<string-array name="support_items">
-		<item>Hodnotit/Komentovat</item>
-		<item>Kontaktovat Vývojáře</item>
-		<item>Překlady</item>
-		<item>Zdrojový Kód</item>
-	</string-array>
-	<string name="error_market">Chyba: Nelze najít nainstalovaný Google Play Obchod.</string>
-	<string name="error_email">Chyba: Nelze najít nainstalovanou e-mailovou aplikaci.</string>
-	
-	
-	<!-- Service -->
-	<string name="notification_from">Oznámení z %s.</string>
-	<string name="error_tts_init">Chyba: Nepodařilo se spustit TTS!</string>
-	
-	<!-- NotifyList -->
-	<string name="yes">Ano</string>
-	<string name="ignore_app">Ignorovat %s?</string>
-	<string name="unignore_app">Neignorovat %s?</string>
-	
-	<!-- menu/app_list.xml-->
-	<string name="ignore_all">Ignorovat vše</string>
-	<string name="ignore_none">Neignorovat nic</string>
-	<string name="filter">Filtr</string>
-	
-	<!-- Ignore/Silence reasons -->
-	<string name="reason_app">Ignorované aplikace</string>
-	<string name="reason_string">Ignorovaný text</string>
-	<string name="reason_empty_msg">Prázdná zpráva</string>
-	<string name="reason_identical">Identické zprávy v {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
-	<string name="reason_quiet">Tichý režim</string>
-	<string name="reason_silent">Tichý nebo vibrační režim</string>
-	
-	<string name="reason_screen_off">Obrazovka vypnuta</string>
-	<string name="reason_screen_on">Obrazovka zapnuta</string>
-	<string name="reason_headset_off">Sluchátka vypnuta</string>
-	<string name="reason_headset_on">Sluchátka zapnuta</string>
-	<string name="reason_shake">Umlčení zatřepáním</string>
-	<string name="reason_suspended">VN widget pozastaven</string>
+--><resources>
+    <string name="app_name">Hlasové oznámení</string>
+    <!-- Used by multiple files -->
+    <string name="app_is_ignored">%s je ignorována</string>
+    <string name="app_is_not_ignored">%s není ignorována</string>
+    <string name="service_running">VN služba je spuštěna</string>
+    <string name="service_suspended">VN služba je pozastavena</string>
+    <!-- xml/preferences.xml -->
+    <string name="app_list">Seznam aplikací</string>
+    <string name="app_list_summary">Seznam instalovaných aplikací, které mohou být ignorovány.</string>
+    <string name="tts_settings">TTS Nastavení</string>
+    <string name="tts_settings_summary">Otevře android nastavení převodu TTS (Text-Na-Řeč).</string>
+    <string name="tts_settings_summary_fail">Nelze najít nastavení TTS! Pokud existuje na vašem zařízení (měl by), obraťte se na vývojáře.</string>
+    <string name="tts_message">TTS Zpráva</string>
+    <string name="tts_message_summary">Přizpůsobit jak TTS (Text-Na-Řeč) čte oznámení.</string>
+    <string name="tts_stream">TTS Zvukový Kanál</string>
+    <string name="tts_stream_summary">Zvolte zvukový kanál, kterým se TTS (Text-Na-Řeč) přehraje.</string>
+    <string name="tts_delay">TTS Prodleva</string>
+    <string name="tts_delay_summary">Prodleva TTS a nastavení počtu sekund po oznámení.</string>
+    <string name="tts_delay_dialog_msg">Počet sekund vyčkání po oznámení před tím, než začne číst.</string>
+    <string name="tts_repeat">TTS Opakování</string>
+    <string name="tts_repeat_summary">Neustále opakuje upozornění přes TTS než se zapne obrazovka.</string>
+    <string name="tts_repeat_dialog_msg">Oznámení se opakuje v zadaném intervalu, dokud není obrazovka zapnuta. Oznámení vytvořené při zapnuté obrazovce se neopakují.
+\n
+\nHodnota je v minutách. Prázdné nebo 0 je zakázáno.</string>
+    <string name="audio_focus">Pozastavit/Ztlumit zvukový proud</string>
+    <string name="audio_focus_summary">Pozastavit nebo ztlumit zvukový proud při čtení</string>
+    <string name="shake_to_silence">Zatřepáním Umlčet</string>
+    <string name="shake_to_silence_summary">Nastavte práh citlivosti pro Umlčení.</string>
+    <string name="shake_to_silence_dialog_msg">Nižší hodnoty jsou citlivější.
+\n
+\nVýchozí: 100
+\nPrázdné zakázat.</string>
+    <string-array name="stream_name">
+        <item>Média</item>
+        <item>Oznámení</item>
+        <item>Čtení</item>
+        <item>Vyzvánění</item>
+        <item>Budík</item>
+    </string-array>
+    <string name="ignore_strings">Ignorovat Text</string>
+    <string name="ignore_strings_summary">Ignorovat oznámení, které obsahují určitý text ve zprávě.</string>
+    <string name="ignore_strings_dialog_msg">Oddělte jednotlivé položky novým řádkem.</string>
+    <string name="ignore_empty">Ignorovat prázdné</string>
+    <string name="ignore_empty_summary_on">Oznámení bez zprávy nebude přečteno.</string>
+    <string name="ignore_empty_summary_off">Oznámení bez zprávy bude přečteno jako \"Oznámení z [název aplikace].\"</string>
+    <string name="ignore_repeat">Ignorovat Opakování</string>
+    <string name="ignore_repeat_summary">Ignorovat následné stejné oznámení ve stanoveném čase.</string>
+    <string name="ignore_repeat_dialog_msg">Nastavte počet sekund, které musí uplynout od posledního oznámení, než opakování může být přečteno.
+\nIgnorované opakování vynulujte a různá oznámení zrušte jeho zaškrtnutím.
+\nPrázdné = nekonečno.</string>
+    <string name="device_state">Stav zařízení</string>
+    <string name="device_state_summary">Vyberte, zda chcete číst v určitých stavech zařízení.</string>
+    <string name="device_state_dialog_title">Číst během těchto stavů zařízení</string>
+    <string-array name="device_states">
+        <item>Obrazovka vypnuta</item>
+        <item>Obrazovka zapnuta</item>
+        <item>Sluchátka vypnuta</item>
+        <item>Sluchátka zapnuta</item>
+        <item>Tichý/Vibrace</item>
+    </string-array>
+    <string name="quiet_start">Začátek Tichý režim</string>
+    <string name="quiet_start_summary">Nečte oznámení po uplynutí předem stanovené doby.
+\nChcete-li zakázat možnost, zadejte čas ukončení.</string>
+    <string name="quiet_end">Konec Tichý režim</string>
+    <string name="quiet_end_summary">Nečte oznámení před nastaveným časem.
+\nChcete-li zakázat možnost, zadejte čas začátku.</string>
+    <string name="test_summary">Zkouška oznámení (zpoždění 5 sekund) pro otestování aktuálního nastavení.</string>
+    <string name="test_ignored">Voice Notify je ignorován v seznamu aplikací.
+\nZkouška bude zahájena, ale oznámení nebude přečteno.</string>
+    <string name="notify_log_summary">Seznam posledních 20 oznámení.
+\nZobrazí čas, název aplikace a důvody pro ignorování.</string>
+    <string name="support_summary">Darovat, hodnocení/komentář, překlady, zdrojový kód, nebo kontaktujte vývojáře.</string>
+    <!-- TextReplacePreference -->
+    <!-- text_replace_row.xml -->
+    <!-- MainActivity and xml/preferences.xml -->
+    <string name="test">Test</string>
+    <string name="notify_log">Registr oznámení</string>
+    <string name="support">Podpora Voice Notify</string>
+    <!-- MainActivity -->
+    <string name="service_disabled">VN služba je zakázána</string>
+    <string name="status_summary_suspended">Vyberte, chcete-li aktivovat VN.</string>
+    <string-array name="support_items">
+        <item>Hodnotit/Komentovat</item>
+        <item>Kontaktovat Vývojáře</item>
+        <item>Překlady</item>
+        <item>Zdrojový Kód</item>
+    </string-array>
+    <string name="error_market">Chyba: Nelze najít nainstalovaný Google Play Obchod.</string>
+    <string name="error_email">Chyba: Nelze najít nainstalovanou e-mailovou aplikaci.</string>
+    <!-- Service -->
+    <string name="notification_from">Oznámení z %s.</string>
+    <string name="error_tts_init">Chyba: Nepodařilo se spustit TTS!</string>
+    <!-- NotifyList -->
+    <string name="yes">Ano</string>
+    <string name="ignore_app">Ignorovat %s\?</string>
+    <string name="unignore_app">Neignorovat %s\?</string>
+    <!-- menu/app_list.xml-->
+    <string name="ignore_all">Ignorovat vše</string>
+    <string name="ignore_none">Neignorovat nic</string>
+    <string name="filter">Filtr</string>
+    <!-- Ignore/Silence reasons -->
+    <string name="reason_app">Ignorované aplikace</string>
+    <string name="reason_string">Ignorovaný text</string>
+    <string name="reason_empty_msg">Prázdná zpráva</string>
+    <string name="reason_identical">Identické zprávy v {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+    <string name="reason_quiet">Tichý režim</string>
+    <string name="reason_silent">Tichý nebo vibrační režim</string>
+    <string name="reason_screen_off">Obrazovka vypnuta</string>
+    <string name="reason_screen_on">Obrazovka zapnuta</string>
+    <string name="reason_headset_off">Sluchátka vypnuta</string>
+    <string name="reason_headset_on">Sluchátka zapnuta</string>
+    <string name="reason_shake">Umlčení zatřepáním</string>
+    <string name="reason_suspended">VN widget pozastaven</string>
+    <string name="text_to_replace"></string>
+    <string name="status_summary_notification_access_enabled"></string>
+    <string name="test_ticker"></string>
+    <string name="replacement_text"></string>
+    <string name="max_length_summary"></string>
+    <string name="reason_service_stopped"></string>
+    <string name="notification_channel_desc"></string>
+    <string name="tts_text_replace_summary"></string>
+    <string name="text_replace_error_duplicate"></string>
+    <string name="status_summary_notification_access_disabled"></string>
+    <string name="max_length"></string>
+    <string name="tts_text_replace"></string>
+    <string name="reason_call"></string>
+    <string name="test_content_text"></string>
+    <string name="max_length_dialog_msg"></string>
+    <string name="tts"></string>
+    <string name="tts_summary"></string>
+    <string name="tts_message_dialog"></string>
+    <string name="tts_text_replace_dialog"></string>
+    <string name="ignore_groups"></string>
+    <string name="ignore_groups_summary_on"></string>
+    <string name="ignore_groups_summary_off"></string>
+    <string name="test_subtext"></string>
+    <string name="test_content_title"></string>
+    <string name="test_content_info"></string>
+    <string name="tts_message_reset_default"></string>
+    <string name="permission_rationale_read_phone_state"></string>
 </resources>
