@@ -126,17 +126,10 @@
     <string name="reason_headset_on">Koptelefoon aan</string>
     <string name="reason_shake">Stil als je schud</string>
     <string name="reason_suspended">VN gestopt door widget</string>
-    <string name="ignore_groups"/>
     <string name="reason_call"/>
-    <string name="tts_message_dialog"/>
     <string name="tts_summary"/>
-    <string name="tts_text_replace_dialog"/>
     <string name="max_length_summary"/>
-    <string name="text_replace_error_duplicate"/>
     <string name="replacement_text"/>
-    <string name="status_summary_notification_access_disabled"/>
     <string name="test_ticker"/>
-    <string name="test_content_title"/>
     <string name="test_content_info"/>
-    <string name="permission_rationale_read_phone_state"/>
 </resources>

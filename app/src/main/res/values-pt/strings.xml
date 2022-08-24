@@ -126,17 +126,10 @@
     <string name="reason_headset_on">Fone de ouvido conectado</string>
     <string name="reason_shake">Silenciado (Agitar para calar)</string>
     <string name="reason_suspended">VN suspenso pelo widget</string>
-    <string name="text_to_replace"/>
     <string name="reason_call"/>
-    <string name="tts_text_replace_dialog"/>
     <string name="ignore_groups_summary_on"/>
-    <string name="tts_message_dialog"/>
     <string name="test_content_text"/>
-    <string name="tts"/>
     <string name="max_length_dialog_msg"/>
-    <string name="test_content_title"/>
     <string name="notification_channel_desc"/>
-    <string name="tts_summary"/>
     <string name="tts_text_replace"/>
-    <string name="max_length_summary"/>
 </resources>

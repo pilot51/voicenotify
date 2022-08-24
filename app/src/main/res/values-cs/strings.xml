@@ -126,17 +126,10 @@
     <string name="reason_headset_on">Sluchátka zapnuta</string>
     <string name="reason_shake">Umlčení zatřepáním</string>
     <string name="reason_suspended">VN widget pozastaven</string>
-    <string name="status_summary_notification_access_enabled"/>
     <string name="replacement_text"/>
-    <string name="reason_service_stopped"/>
     <string name="tts_text_replace_summary"/>
-    <string name="status_summary_notification_access_disabled"/>
     <string name="tts_text_replace"/>
-    <string name="test_content_text"/>
     <string name="tts"/>
-    <string name="tts_message_dialog"/>
     <string name="ignore_groups"/>
-    <string name="ignore_groups_summary_off"/>
     <string name="test_content_title"/>
-    <string name="tts_message_reset_default"/>
 </resources>

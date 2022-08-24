@@ -61,36 +61,20 @@
     <string name="ignore_all">Az összes ki</string>
     <string name="ignore_none">Az összes be</string>
     <!-- Ignore/Silence reasons -->
-    <string name="service_disabled"/>
     <string name="app_is_not_ignored"/>
-    <string name="max_length_dialog_msg"/>
     <string name="reason_screen_off"/>
-    <string name="reason_headset_on"/>
     <string name="ignore_strings_summary"/>
-    <string name="shake_to_silence_summary"/>
     <string name="status_summary_notification_access_disabled"/>
-    <string name="service_running"/>
     <string name="reason_call"/>
-    <string name="yes"/>
     <string name="shake_to_silence"/>
-    <string name="reason_quiet"/>
     <string name="status_summary_suspended"/>
-    <string name="ignore_empty_summary_off"/>
     <string name="reason_silent"/>
-    <string name="reason_app"/>
     <string name="app_is_ignored"/>
-    <string name="notify_log_summary"/>
     <string name="ignore_groups"/>
-    <string name="reason_empty_msg"/>
     <string name="tts"/>
-    <string name="text_replace_error_duplicate"/>
     <string name="audio_focus"/>
-    <string name="error_tts_init"/>
     <string name="tts_text_replace_summary"/>
-    <string name="ignore_empty_summary_on"/>
     <string name="test_ticker"/>
-    <string name="test_content_title"/>
     <string name="test_content_info"/>
-    <string name="tts_message_reset_default"/>
     <string name="reason_headset_off"/>
 </resources>

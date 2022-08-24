@@ -144,9 +144,6 @@
     <string name="test_content_text">Questo è il messaggio di contenuto.</string>
     <string name="test_content_info">Informazioni sui contenuti</string>
     <string name="test_content_title">Titolo del contenuto</string>
-    <string name="reason_service_stopped"/>
     <string name="ignore_groups_summary_on"/>
-    <string name="tts_message_dialog"/>
     <string name="tts_text_replace_dialog"/>
-    <string name="permission_rationale_read_phone_state"/>
 </resources>
