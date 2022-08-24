@@ -149,5 +149,4 @@
     <string name="reason_shake">Wyciszony poprzez potrząśnięcie</string>
     <string name="reason_suspended">VN wstrzymany przez widget</string>
     <string name="reason_service_stopped">Serwis zastopowany</string>
-    <string name="ignore_groups"/>
 </resources>

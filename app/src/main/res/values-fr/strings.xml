@@ -108,11 +108,7 @@
     <string name="error_market">Erreur : impossible de trouver le Google Play Store installé.</string>
     <string name="notification_from">Notification de %s.</string>
     <string name="error_tts_init">Erreur : impossible d\'initialiser la synthèse vocale !</string>
-    <string name="test_subtext"/>
     <string name="ignore_groups"/>
-    <string name="tts_message_dialog"/>
     <string name="tts_text_replace_summary"/>
-    <string name="reason_identical"/>
     <string name="audio_focus"/>
-    <string name="text_replace_error_duplicate"/>
 </resources>

@@ -163,5 +163,4 @@
     <string name="reason_shake">Membungkam dengan membuncang</string>
     <string name="reason_suspended">PS ditangguhkan oleh gawit</string>
     <string name="reason_service_stopped">Layanan berhenti</string>
-    <string name="permission_rationale_read_phone_state"/>
 </resources>

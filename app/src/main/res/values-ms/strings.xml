@@ -158,5 +158,4 @@
     <string name="reason_shake">Senyap dengan goyang</string>
     <string name="reason_suspended">VN ditangguhkan oleh wiget</string>
     <string name="reason_service_stopped">Servis berhenti</string>
-    <string name="permission_rationale_read_phone_state"/>
 </resources>

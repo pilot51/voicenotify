@@ -126,10 +126,7 @@
     <string name="reason_headset_on">Auriculares encendidos</string>
     <string name="reason_shake">Silenciado por sacudida</string>
     <string name="reason_suspended">Notificación por Voz suspendido por widget</string>
-    <string name="tts_text_replace_dialog"/>
     <string name="tts_text_replace"/>
-    <string name="test_subtext"/>
     <string name="max_length_summary"/>
-    <string name="replacement_text"/>
     <string name="test_content_text"/>
 </resources>
