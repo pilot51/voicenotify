@@ -12,141 +12,159 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
--->
-<resources>
-	<string name="app_name">Pemberitahuan Suara</string>
-	
-	<!-- Used by multiple files -->
-	<string name="app_is_ignored">%s diabaikan</string>
-	<string name="app_is_not_ignored">%s tidak diabaikan</string>
-	<string name="service_running">Layanan PS sedang berjalan</string>
-	<string name="service_suspended">Layanan PS ditangguhkan</string>
-	
-	<!-- xml/preferences.xml -->
-	<string name="app_list">Daftar Aplikasi</string>
-	<string name="app_list_summary">Daftar aplikasi yang dapat diabaikan</string>
-	<string name="tts">Teks-Ke-Ucap</string>
-	<string name="tts_summary">Atur kelakuan Teks-Ke-Ucap</string>
-	<string name="tts_settings">Pengaturan TKU</string>
-	<string name="tts_settings_summary">Buka pengaturan Teks-Ke-Ucap Android.</string>
-	<string name="tts_settings_summary_fail">Tidak dapat menemukan pengaturan TKU! Bila ini tersedia di perangkat Anda (dan seharusnya), harap menghubungi pengembang.</string>
-	<string name="tts_message">Pesan TKU</string>
-	<string name="tts_message_summary">Sesuaikan bagian-bagian pemberitahuan yang diucapkan</string>
-	<string name="tts_message_dialog">#a = Judul Aplikasi\n#t = Detak\n#s = Sub-teks\n#c = Judul isi\n#m = Pesan isi\n#i = Info isi\n\nAsali:\n#a. #c. #m.\n\nAsali lama (v1.0.x):\n#a: #t</string>
-	<string name="tts_text_replace">Teks Pengganti TKU</string>
-	<string name="tts_text_replace_summary">Teks pengganti yang diucapkan, semisal memperbaiki pengucapan</string>
-	<string name="tts_text_replace_dialog">Pecah teks yang diucapkan, memungkinkan Anda untuk menyesuaikan bagaimana Teks-Ke-Ucap mengeja kata atau mengubah teks untuk alasan apapun.\n\nTeks pengganti tidak peka kapitalisasi.</string>
-	<string name="tts_stream">Aliran Audio TKU</string>
-	<string name="tts_stream_summary">Pilih aliran audio yang memainkan Teks-Ke-Ucap</string>
-	<string name="tts_delay">Tunda TKU</string>
-	<string name="tts_delay_summary">Menunda TKU sekian detik setelah pemberitahuan</string>
-	<string name="tts_delay_dialog_msg">Jumlah detik menunggu sebelum berucap setelah pemberitahuan.</string>
-	<string name="tts_repeat">Pengulang TKU</string>
-	<string name="tts_repeat_summary">Pengulangan pemberitahuan TKU hingga layar menyala</string>
-	<string name="tts_repeat_dialog_msg">Pengulangan pemberitahuan ditentukan berdasarkan jeda waktu hingga layar dinyalakan. Pemberitahuan tidak diulang bila dibuat ketika layar menyala.\n\nNilai dalam menit. Kosongkan atau 0 untuk mematikan.</string>
-	<string name="audio_focus">Jeda/redam media</string>
-	<string name="audio_focus_summary">Meminta media lain untuk menjeda/meredam ketika berucap</string>
-	<string name="shake_to_silence">Buncang-Tuk-Bungkam</string>
-	<string name="shake_to_silence_summary">Atur nilai kepekaan Buncang-Tuk-Bungkam</string>
-	<string name="shake_to_silence_dialog_msg">Semakin rendah nilai makan semakin peka.\n\nAsali:100\nKosong untuk mematikan.</string>
-	<string-array name="stream_name">
-		<item>Media</item>
-		<item>Pemberitahuan</item>
-		<item>Suara</item>
-		<item>Dering</item>
-		<item>Alarm</item>
-	</string-array>
-	<string name="ignore_strings">Teks Terabaikan</string>
-	<string name="ignore_strings_summary">Abaikan pemberitahuan yang mengandung teks tertentu dalam pesan</string>
-	<string name="ignore_strings_dialog_msg">Pisahkan tiap masukan dengan baris baru. </string>
-	<string name="ignore_empty">Abaikan Kosong</string>
-	<string name="ignore_empty_summary_on">Pemberitahuan tanpa pesan tidak akan diucapkan</string>
-	<string name="ignore_empty_summary_off">Pemberitahuan tanpa pesan akan diucapkan \"Pemberitahuan dari [nama aplikasi].\"</string>
-	<string name="ignore_repeat">Abaikan Pengulangan</string>
-	<string name="ignore_repeat_summary">Abaikan pemberitahuan sama yang berulang dalam rentang waktu yang ditentukan</string>
-	<string name="ignore_repeat_dialog_msg">Sejumlah detik yang harus ditunggu sejak pemberitahuan terakhir sebelum pengulangan dapat diucapkan.\nMengabaikan pengulangan mengatur ulang penghitungan dan dibersihkan oleh pemberitahuan yang lain.\nKosong= tak terhingga.</string>
-	<string name="max_length">Pesan Maksimum</string>
-	<string name="max_length_summary">Panjang pesan diucapkan maksimum. Pesan panjang akan dipotong.</string>
-	<string name="max_length_dialog_msg">Panjang pesan diucapkan maksimum\nPesan panjang akan dipotong</string>
-	<string name="device_state">Keadaan Perangkat</string>
-	<string name="device_state_summary">Pilih apakan akan berucap dalam keadaan perangkat tertentu</string>
-	<string name="device_state_dialog_title">Berucap selama keadaan berikut</string>
-	<string-array name="device_states">
-		<item>Layar Mati</item>
-		<item>Layar Nyala</item>
-		<item>Pelantang Telinga Mati</item>
-		<item>Pelantang Telinga Nyala</item>
-		<item>Sunyi/Getar</item>
-	</string-array>
-	<string name="quiet_start">Awal Waktu Sunyi</string>
-	<string name="quiet_start_summary">Jangan berucap setelah waktu ini.\nSamakan dengan akhir waktu untuk mematikan.</string>
-	<string name="quiet_end">Akhir Waktu Sunyi</string>
-	<string name="quiet_end_summary">Jangan berucap sebelum waktu ini.\nSamakan dengan awal waktu untuk mematikan.</string>
-	<string name="test_summary">Kirim sebuah pemberitahuan (jeda 5 detik) untuk menguji pengaturan</string>
-	<string name="test_ignored">Pemberitahuan Suara diabaikan dalam Daftar Aplikasi.\nTeks akan dijalankan, tapi pemberitahuan tidak akan diucapkan.</string>
-	<string name="notify_log_summary">Daftar 20 pemberitahuan terakhir.\nMenampilkan waktu, nama aplikasi, pesan, dan pesan diabaikan.</string>
-	<string name="support_summary">Menyumbang, nilai/berkomentar, alih bahasa, kode sumber, atau hubungi pengembang</string>
-	
-	<!-- TextReplacePreference -->
-	<string name="text_replace_error_duplicate">Ganda! Tidak akan disimpan.</string>
-	
-	<!-- text_replace_row.xml -->
-	<string name="text_to_replace">Teks yang diganti</string>
-	<string name="replacement_text">Teks pengganti</string>
-	
-	<!-- MainActivity and xml/preferences.xml -->
-	<string name="test">Uji</string>
-	<string name="notify_log">Catatan Pemberitahuan</string>
-	<string name="support">Dukung Pemberitahuan Suara</string>
-	
-	<!-- MainActivity -->
-	<string name="service_disabled">Layanan PS dimatikan</string>
-	<string name="status_summary_notification_access_enabled">Buka pengaturan pemberitahuan Android untuk mematikan PS</string>
-	<string name="status_summary_notification_access_disabled">Buka pengaturan pemberitahuan Android untuk menyalakan PS</string>
-	<string name="status_summary_suspended">Pilih untuk menyalakan PS</string>
-	<string name="notification_channel_desc">Digunakan untuk pengujian pemberitahuan</string>
-	<string name="test_ticker">Ini adalah pesan detak</string>
-	<string name="test_subtext">Subteks</string>
-	<string name="test_content_title">Judul Isi</string>
-	<string name="test_content_text">Ini adalah pesan isi</string>
-	<string name="test_content_info">Info Isi</string>
-	<string-array name="support_items">
-		<item>Nilai/Komentar</item>
-		<item>Hubungi Pengembang</item>
-		<item>Alih Bahasa</item>
-		<item>Kode Sumber</item>
-	</string-array>
-	<string name="error_market">Galat: Gagal menemukan Google Play Store terpasang.</string>
-	<string name="error_email">Galat: Gagal menemukan aplikasi surel terpasang.</string>
-	<string name="tts_message_reset_default">Pengaturan Teks-Ke-Ucapan diperbarui ke nilai asali baru </string>
-	
-	<!-- Service -->
-	<string name="notification_from">Pemberitahuan dari %s.</string>
-	<string name="error_tts_init">Galat: Gagal memulai Teks-Ke-Ucapan!</string>
-	
-	<!-- NotifyList -->
-	<string name="yes">Ya</string>
-	<string name="ignore_app">Abaikan %s?</string>
-	<string name="unignore_app">Tak abaikan %s?</string>
-	
-	<!-- menu/app_list.xml-->
-	<string name="ignore_all">Abaikan Semua</string>
-	<string name="ignore_none">Tak Abaikan Semua</string>
-	<string name="filter">Tapis</string>
-	
-	<!-- Ignore/Silence reasons -->
-	<string name="reason_app">Aplikasi diabaikan</string>
-	<string name="reason_string">Teks diabaikan</string>
-	<string name="reason_empty_msg">Pesan kosong</string>
-	<string name="reason_identical">Pesan sama dalam {0,choice,-1#detik tak terbatas|1#{0} detik|1&lt;{0} detik}</string>
-	<string name="reason_quiet">Waktu Sunyi</string>
-	<string name="reason_silent">Mode sunyi atau getar</string>
-	<string name="reason_call">Nyalakan panggilan telepon</string>
-	<string name="reason_screen_off">Layar mati</string>
-	<string name="reason_screen_on">Layar Nyala</string>
-	<string name="reason_headset_off">Pelantang telinga mati</string>
-	<string name="reason_headset_on">Pelantang telinga nyala</string>
-	<string name="reason_shake">Membungkam dengan membuncang</string>
-	<string name="reason_suspended">PS ditangguhkan oleh gawit</string>
-	<string name="reason_service_stopped">Layanan berhenti</string>
+--><resources>
+    <string name="app_name">Pemberitahuan Suara</string>
+    <!-- Used by multiple files -->
+    <string name="app_is_ignored">%s diabaikan</string>
+    <string name="app_is_not_ignored">%s tidak diabaikan</string>
+    <string name="service_running">Layanan PS sedang berjalan</string>
+    <string name="service_suspended">Layanan PS ditangguhkan</string>
+    <!-- xml/preferences.xml -->
+    <string name="app_list">Daftar Aplikasi</string>
+    <string name="app_list_summary">Daftar aplikasi yang dapat diabaikan</string>
+    <string name="tts">Teks-Ke-Ucap</string>
+    <string name="tts_summary">Atur kelakuan Teks-Ke-Ucap</string>
+    <string name="tts_settings">Pengaturan TKU</string>
+    <string name="tts_settings_summary">Buka pengaturan Teks-Ke-Ucap Android.</string>
+    <string name="tts_settings_summary_fail">Tidak dapat menemukan pengaturan TKU! Bila ini tersedia di perangkat Anda (dan seharusnya), harap menghubungi pengembang.</string>
+    <string name="tts_message">Pesan TKU</string>
+    <string name="tts_message_summary">Sesuaikan bagian-bagian pemberitahuan yang diucapkan</string>
+    <string name="tts_message_dialog">#a = Judul Aplikasi
+\n#t = Detak
+\n#s = Sub-teks
+\n#c = Judul isi
+\n#m = Pesan isi
+\n#i = Info isi
+\n
+\nAsali:
+\n#a. #c. #m.
+\n
+\nAsali lama (v1.0.x):
+\n#a: #t</string>
+    <string name="tts_text_replace">Teks Pengganti TKU</string>
+    <string name="tts_text_replace_summary">Teks pengganti yang diucapkan, semisal memperbaiki pengucapan</string>
+    <string name="tts_text_replace_dialog">Pecah teks yang diucapkan, memungkinkan Anda untuk menyesuaikan bagaimana Teks-Ke-Ucap mengeja kata atau mengubah teks untuk alasan apapun.
+\n
+\nTeks pengganti tidak peka kapitalisasi.</string>
+    <string name="tts_stream">Aliran Audio TKU</string>
+    <string name="tts_stream_summary">Pilih aliran audio yang memainkan Teks-Ke-Ucap</string>
+    <string name="tts_delay">Tunda TKU</string>
+    <string name="tts_delay_summary">Menunda TKU sekian detik setelah pemberitahuan</string>
+    <string name="tts_delay_dialog_msg">Jumlah detik menunggu sebelum berucap setelah pemberitahuan.</string>
+    <string name="tts_repeat">Pengulang TKU</string>
+    <string name="tts_repeat_summary">Pengulangan pemberitahuan TKU hingga layar menyala</string>
+    <string name="tts_repeat_dialog_msg">Pengulangan pemberitahuan ditentukan berdasarkan jeda waktu hingga layar dinyalakan. Pemberitahuan tidak diulang bila dibuat ketika layar menyala.
+\n
+\nNilai dalam menit. Kosongkan atau 0 untuk mematikan.</string>
+    <string name="audio_focus">Jeda/redam media</string>
+    <string name="audio_focus_summary">Meminta media lain untuk menjeda/meredam ketika berucap</string>
+    <string name="shake_to_silence">Buncang-Tuk-Bungkam</string>
+    <string name="shake_to_silence_summary">Atur nilai kepekaan Buncang-Tuk-Bungkam</string>
+    <string name="shake_to_silence_dialog_msg">Semakin rendah nilai makan semakin peka.
+\n
+\nAsali:100
+\nKosong untuk mematikan.</string>
+    <string-array name="stream_name">
+        <item>Media</item>
+        <item>Pemberitahuan</item>
+        <item>Suara</item>
+        <item>Dering</item>
+        <item>Alarm</item>
+    </string-array>
+    <string name="ignore_strings">Teks Terabaikan</string>
+    <string name="ignore_strings_summary">Abaikan pemberitahuan yang mengandung teks tertentu dalam pesan</string>
+    <string name="ignore_strings_dialog_msg">Pisahkan tiap masukan dengan baris baru.</string>
+    <string name="ignore_empty">Abaikan Kosong</string>
+    <string name="ignore_empty_summary_on">Pemberitahuan tanpa pesan tidak akan diucapkan</string>
+    <string name="ignore_empty_summary_off">Pemberitahuan tanpa pesan akan diucapkan \"Pemberitahuan dari [nama aplikasi].\"</string>
+    <string name="ignore_repeat">Abaikan Pengulangan</string>
+    <string name="ignore_repeat_summary">Abaikan pemberitahuan sama yang berulang dalam rentang waktu yang ditentukan</string>
+    <string name="ignore_repeat_dialog_msg">Sejumlah detik yang harus ditunggu sejak pemberitahuan terakhir sebelum pengulangan dapat diucapkan.
+\nMengabaikan pengulangan mengatur ulang penghitungan dan dibersihkan oleh pemberitahuan yang lain.
+\nKosong= tak terhingga.</string>
+    <string name="max_length">Pesan Maksimum</string>
+    <string name="max_length_summary">Panjang pesan diucapkan maksimum. Pesan panjang akan dipotong.</string>
+    <string name="max_length_dialog_msg">Panjang pesan diucapkan maksimum
+\nPesan panjang akan dipotong</string>
+    <string name="device_state">Keadaan Perangkat</string>
+    <string name="device_state_summary">Pilih apakan akan berucap dalam keadaan perangkat tertentu</string>
+    <string name="device_state_dialog_title">Berucap selama keadaan berikut</string>
+    <string-array name="device_states">
+        <item>Layar Mati</item>
+        <item>Layar Nyala</item>
+        <item>Pelantang Telinga Mati</item>
+        <item>Pelantang Telinga Nyala</item>
+        <item>Sunyi/Getar</item>
+    </string-array>
+    <string name="quiet_start">Awal Waktu Sunyi</string>
+    <string name="quiet_start_summary">Jangan berucap setelah waktu ini.
+\nSamakan dengan akhir waktu untuk mematikan.</string>
+    <string name="quiet_end">Akhir Waktu Sunyi</string>
+    <string name="quiet_end_summary">Jangan berucap sebelum waktu ini.
+\nSamakan dengan awal waktu untuk mematikan.</string>
+    <string name="test_summary">Kirim sebuah pemberitahuan (jeda 5 detik) untuk menguji pengaturan</string>
+    <string name="test_ignored">Pemberitahuan Suara diabaikan dalam Daftar Aplikasi.
+\nTeks akan dijalankan, tapi pemberitahuan tidak akan diucapkan.</string>
+    <string name="notify_log_summary">Daftar 20 pemberitahuan terakhir.
+\nMenampilkan waktu, nama aplikasi, pesan, dan pesan diabaikan.</string>
+    <string name="support_summary">Menyumbang, nilai/berkomentar, alih bahasa, kode sumber, atau hubungi pengembang</string>
+    <!-- TextReplacePreference -->
+    <string name="text_replace_error_duplicate">Ganda! Tidak akan disimpan.</string>
+    <!-- text_replace_row.xml -->
+    <string name="text_to_replace">Teks yang diganti</string>
+    <string name="replacement_text">Teks pengganti</string>
+    <!-- MainActivity and xml/preferences.xml -->
+    <string name="test">Uji</string>
+    <string name="notify_log">Catatan Pemberitahuan</string>
+    <string name="support">Dukung Pemberitahuan Suara</string>
+    <!-- MainActivity -->
+    <string name="service_disabled">Layanan PS dimatikan</string>
+    <string name="status_summary_notification_access_enabled">Buka pengaturan pemberitahuan Android untuk mematikan PS</string>
+    <string name="status_summary_notification_access_disabled">Buka pengaturan pemberitahuan Android untuk menyalakan PS</string>
+    <string name="status_summary_suspended">Pilih untuk menyalakan PS</string>
+    <string name="notification_channel_desc">Digunakan untuk pengujian pemberitahuan</string>
+    <string name="test_ticker">Ini adalah pesan detak</string>
+    <string name="test_subtext">Subteks</string>
+    <string name="test_content_title">Judul Isi</string>
+    <string name="test_content_text">Ini adalah pesan isi</string>
+    <string name="test_content_info">Info Isi</string>
+    <string-array name="support_items">
+        <item>Nilai/Komentar</item>
+        <item>Hubungi Pengembang</item>
+        <item>Alih Bahasa</item>
+        <item>Kode Sumber</item>
+    </string-array>
+    <string name="error_market">Galat: Gagal menemukan Google Play Store terpasang.</string>
+    <string name="error_email">Galat: Gagal menemukan aplikasi surel terpasang.</string>
+    <string name="tts_message_reset_default">Pengaturan Teks-Ke-Ucapan diperbarui ke nilai asali baru</string>
+    <!-- Service -->
+    <string name="notification_from">Pemberitahuan dari %s.</string>
+    <string name="error_tts_init">Galat: Gagal memulai Teks-Ke-Ucapan!</string>
+    <!-- NotifyList -->
+    <string name="yes">Ya</string>
+    <string name="ignore_app">Abaikan %s\?</string>
+    <string name="unignore_app">Tak abaikan %s\?</string>
+    <!-- menu/app_list.xml-->
+    <string name="ignore_all">Abaikan Semua</string>
+    <string name="ignore_none">Tak Abaikan Semua</string>
+    <string name="filter">Tapis</string>
+    <!-- Ignore/Silence reasons -->
+    <string name="reason_app">Aplikasi diabaikan</string>
+    <string name="reason_string">Teks diabaikan</string>
+    <string name="reason_empty_msg">Pesan kosong</string>
+    <string name="reason_identical">Pesan sama dalam {0,choice,-1#detik tak terbatas|1#{0} detik|1&lt;{0} detik}</string>
+    <string name="reason_quiet">Waktu Sunyi</string>
+    <string name="reason_silent">Mode sunyi atau getar</string>
+    <string name="reason_call">Nyalakan panggilan telepon</string>
+    <string name="reason_screen_off">Layar mati</string>
+    <string name="reason_screen_on">Layar Nyala</string>
+    <string name="reason_headset_off">Pelantang telinga mati</string>
+    <string name="reason_headset_on">Pelantang telinga nyala</string>
+    <string name="reason_shake">Membungkam dengan membuncang</string>
+    <string name="reason_suspended">PS ditangguhkan oleh gawit</string>
+    <string name="reason_service_stopped">Layanan berhenti</string>
+    <string name="ignore_groups_summary_on"></string>
+    <string name="ignore_groups"></string>
+    <string name="ignore_groups_summary_off"></string>
+    <string name="permission_rationale_read_phone_state"></string>
 </resources>
