@@ -144,5 +144,4 @@
     <string name="test_content_text">Questo è il messaggio di contenuto.</string>
     <string name="test_content_info">Informazioni sui contenuti</string>
     <string name="test_content_title">Titolo del contenuto</string>
-    <string name="tts_text_replace_dialog"/>
 </resources>

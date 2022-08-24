@@ -125,7 +125,5 @@
     <string name="reason_headset_on">Гарнитура вкл.</string>
     <string name="reason_shake">Чтение приостановлено встряской</string>
     <string name="reason_suspended">Уведомления Голосом приостановлены с помощью виджета.</string>
-    <string name="reason_call"/>
     <string name="tts_text_replace_dialog"/>
-    <string name="tts_summary"/>
 </resources>

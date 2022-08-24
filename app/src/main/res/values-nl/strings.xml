@@ -126,7 +126,5 @@
     <string name="reason_headset_on">Koptelefoon aan</string>
     <string name="reason_shake">Stil als je schud</string>
     <string name="reason_suspended">VN gestopt door widget</string>
-    <string name="tts_summary"/>
     <string name="replacement_text"/>
-    <string name="test_content_info"/>
 </resources>
