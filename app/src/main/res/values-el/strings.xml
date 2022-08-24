@@ -163,8 +163,6 @@
     <string name="reason_shake">Σίγαση απο ανακίνηση</string>
     <string name="reason_suspended">VN προσωρινά μή ενεργό απο μικροεφαρμογή</string>
     <string name="reason_service_stopped">Η Υπηρεσία σταμάτησε</string>
-    <string name="ignore_groups_summary_off"></string>
-    <string name="ignore_groups_summary_on"></string>
-    <string name="ignore_groups"></string>
-    <string name="permission_rationale_read_phone_state"></string>
+    <string name="ignore_groups_summary_on"/>
+    <string name="permission_rationale_read_phone_state"/>
 </resources>
