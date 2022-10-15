@@ -4,8 +4,8 @@
     <!-- Used by multiple files -->
     <string name="app_is_ignored">%s es ignorado</string>
     <string name="app_is_not_ignored">%s no es ignorado</string>
-    <string name="service_running">Servicio Notificación por Voz se está ejecutando</string>
-    <string name="service_suspended">Servicio Notificación por Voz está suspendido</string>
+    <string name="service_running">El servicio Voice Notify se está ejecutando</string>
+    <string name="service_suspended">Voice Notify está suspendido</string>
     <!-- xml/preferences.xml -->
     <string name="app_list">Listado de aplicaciones</string>
     <string name="app_list_summary">Lista las aplicaciones instaladas que pueden ser ignoradas</string>
@@ -111,4 +111,19 @@
     <string name="reason_headset_on">Auriculares encendidos</string>
     <string name="reason_shake">Silenciado por sacudida</string>
     <string name="reason_suspended">Notificación por Voz suspendido por widget</string>
+    <string name="tts_message_dialog">#a = Título de la aplicación
+\n#t = Ticker
+\n#s = Subtexto
+\n#c = Título del contenido
+\n#m = Mensaje del contenido
+\n#i = Información del contenido
+\n
+\nPor defecto:
+\n#a. #c. #m.
+\n
+\nPor defecto antiguo (v1.0.x):
+\n#a: #t</string>
+    <string name="tts">Texto por voz</string>
+    <string name="tts_summary">Configurar el comportamiento del texto por voz</string>
+    <string name="tts_text_replace">Reemplazo de texto TTS</string>
 </resources>
