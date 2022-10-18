@@ -10,15 +10,15 @@
     <string name="app_list">Listado de aplicaciones</string>
     <string name="app_list_summary">Lista las aplicaciones instaladas que pueden ser ignoradas</string>
     <string name="tts_settings">Configuración de TTS (Texto a voz)</string>
-    <string name="tts_settings_summary">Abre la configuración de Android Text-To-Speech.</string>
-    <string name="tts_settings_summary_fail">No se encontró el menú de configuración de TTS! Si está seguro de que se encuentra instalado en el dispositivo, (debería estarlo) por favor contacte al desarrollador de la aplicación</string>
+    <string name="tts_settings_summary">Abrir los ajustes de texto por voz de Android</string>
+    <string name="tts_settings_summary_fail">¡No se puede encontrar la configuración de TTS! Si existe en su dispositivo (debería), comuníquese con el desarrollador.</string>
     <string name="tts_message">Mensaje de Texto-a-Voz</string>
     <string name="tts_message_summary">Personalizar la forma en que Texto-a-Voz pronuncia las notificaciones</string>
     <string name="tts_stream">Emisor de audio de Texto-a-Voz</string>
     <string name="tts_stream_summary">Seleccione el emisor de audio a través del cual Texto-a-Voz trabajará</string>
     <string name="tts_delay">Retraso de Texto-a-Voz</string>
     <string name="tts_delay_summary">Retrasar Texto-a-Voz una serie de segundos luego de la notificación</string>
-    <string name="tts_delay_dialog_msg">Segundos a esperar para hablar luego de la notificación</string>
+    <string name="tts_delay_dialog_msg">Número de segundos que hay que esperar después de la notificación antes de hablar.</string>
     <string name="tts_repeat">Repetición de Texto-a-Voz</string>
     <string name="tts_repeat_summary">Repetir las notificaciones con Texto-a-Voz hasta que la pantalla se encienda</string>
     <string name="tts_repeat_dialog_msg">Las notificaciones se repiten al intervalo de tiempo definido hasta que la pantalla se encienda. Las notificaciones generadas mientras la pantalla se encuentra encendida no se repiten.
@@ -27,7 +27,7 @@
     <string name="audio_focus">Pausar/apagar sonido multimedia</string>
     <string name="audio_focus_summary">Pedir otro sonido multimedia para pausar/apagar mientras se habla</string>
     <string name="shake_to_silence">Sacudir-Para-Silencio</string>
-    <string name="shake_to_silence_summary">Ajusta la sensibilidad del Sacudir-Para-Silencio.</string>
+    <string name="shake_to_silence_summary">Ajuste el umbral de sensibilidad de Shake-To-Silence</string>
     <string name="shake_to_silence_dialog_msg">Valores inferiores son más sensibles.
 \n
 \nDefecto: 100
@@ -40,10 +40,10 @@
         <item>Alarma</item>
     </string-array>
     <string name="ignore_strings">Ignorar texto</string>
-    <string name="ignore_strings_summary">Ignorar notificaciones que contienen determinado texto en el mensaje.</string>
-    <string name="require_ignore_strings_dialog_msg">Separar las entradas individuales con una línea nueva</string>
+    <string name="ignore_strings_summary">Ignorar las notificaciones que contienen cierto texto en el mensaje</string>
+    <string name="require_ignore_strings_dialog_msg">Separe las entradas individuales con una nueva línea.</string>
     <string name="ignore_empty">Ignorar vacías</string>
-    <string name="ignore_empty_summary_on">Notificaciones sin mensaje no serán habladas.</string>
+    <string name="ignore_empty_summary_on">Las notificaciones sin mensaje no se pronunciarán</string>
     <string name="ignore_empty_summary_off">Notificaciones sin mensaje no serán habladas como \"Notificación de [nombre de la aplicación].\"</string>
     <string name="ignore_repeat">Ignorar repeticiones</string>
     <string name="ignore_repeat_summary">Ignora notificaciones consecutivas idénticas dentro de un lapso de tiempo determinado</string>
@@ -64,29 +64,29 @@
     <string name="quiet_start_summary">No se habla pasada esta hora.
 \nDejar igual que la última para desactivar.</string>
     <string name="quiet_end">Fin de Hora Silenciosa</string>
-    <string name="quiet_end_summary">No habla antes de esta hora.
-\nDejar igual que la primera para desactivar</string>
+    <string name="quiet_end_summary">No hable antes de este tiempo.
+\nDeja lo mismo que empieza a desactivar.</string>
     <string name="test_summary">Genera una notificación (con un retraso de 5 segundos) para probar la configuración actual</string>
-    <string name="test_ignored">Notificación por voz ha sido ignorada en el listado de aplicaciones.
-\n La prueba se realizará, pero no habrá notificación hablada</string>
+    <string name="test_ignored">La notificación por voz se ignora en la lista de aplicaciones.
+\nLa prueba se ejecutará, pero no se hablará de la notificación.</string>
     <string name="notify_log_summary">Lista las últimas 20 notificaciones.
 \nMuestra tiempo, nombre de la aplicación, mensaje y razones de ignorar.</string>
-    <string name="support_summary">Donaciones, valoraciones/comentarios, traducciones, código fuente, contacto con desarrollador.</string>
+    <string name="support_summary">Valora/comenta, contacta con el desarrollador, traducciones, código fuente, política de privacidad</string>
     <!-- TextReplacePreference -->
     <!-- text_replace_row.xml -->
     <!-- MainActivity and xml/preferences.xml -->
     <string name="test">Prueba</string>
     <string name="notify_log">Registro de notificaciones</string>
-    <string name="support">Dar soporte a Notificación por voz</string>
+    <string name="support">Ayuda y soporte técnico</string>
     <!-- MainActivity -->
-    <string name="service_disabled">Servicio de Notificación por Voz está desactivado.</string>
-    <string name="status_summary_suspended">Selecciona para activar Servicio de Notificación por Voz.</string>
+    <string name="service_disabled">El servicio de notificación por voz está desactivado</string>
+    <string name="status_summary_suspended">Seleccione para activar la notificación por voz.</string>
     <string name="support_rate">Calificar/Comentar</string>
     <string name="support_contact">Contactar al Desarrollador</string>
     <string name="support_translations">Traducciones</string>
     <string name="support_source">Código fuente</string>
     <string name="error_market">Error: Incapaz de encontrar Google Play Store instalado.</string>
-    <string name="error_email">Error: No se pudo encontrar una aplicación de email instalada</string>
+    <string name="error_email">Error: No se puede encontrar una aplicación de correo electrónico instalada.</string>
     <!-- Service -->
     <string name="notification_from">Notificación de %s.</string>
     <string name="error_tts_init">Error: No se puede inicializar TTS!</string>
@@ -110,7 +110,7 @@
     <string name="reason_headset_off">Auriculares apagados</string>
     <string name="reason_headset_on">Auriculares encendidos</string>
     <string name="reason_shake">Silenciado por sacudida</string>
-    <string name="reason_suspended">Notificación por Voz suspendido por widget</string>
+    <string name="reason_suspended">Notificación de voz suspendida por el widget</string>
     <string name="tts_message_dialog">#a = Título de la aplicación
 \n#t = Ticker
 \n#s = Subtexto
@@ -126,4 +126,52 @@
     <string name="tts">Texto por voz</string>
     <string name="tts_summary">Configurar el comportamiento del texto por voz</string>
     <string name="tts_text_replace">Reemplazo de texto TTS</string>
+    <string name="replacement_text">Texto de sustitución</string>
+    <string name="test_content_text">Este es el contenido del mensaje.</string>
+    <string name="reason_service_stopped">Servicio detenido</string>
+    <string name="max_length_dialog_msg">Longitud máxima del mensaje para hablar
+\nLos mensajes más largos serán truncados.</string>
+    <string name="ignore_groups_summary_on">Las notificaciones que contengan varios mensajes no se leerán</string>
+    <string name="ignore_groups_summary_off">Las notificaciones que contengan varios mensajes se pronunciarán</string>
+    <string name="test_content_title">Título del contenido</string>
+    <string name="test_content_info">Información sobre el contenido</string>
+    <string name="tts_text_replace_dialog">Sustituir el texto a pronunciar, lo que le permite personalizar la forma en que Text-To-Speech pronuncia las palabras o reemplazar el texto por cualquier otra razón.
+\n
+\nEl texto a sustituir no distingue entre mayúsculas y minúsculas.</string>
+    <string name="ignore_groups">Ignorar mensajes de grupo</string>
+    <string name="reason_call">Llamada telefónica activa</string>
+    <string name="test_subtext">El subtexto</string>
+    <string name="tts_text_replace_summary">Sustituir el texto que se va a pronunciar, por ejemplo, para fijar la pronunciación</string>
+    <string name="max_length">Mensaje máximo</string>
+    <string name="max_length_summary">Longitud máxima del mensaje hablado. Los mensajes más grandes se truncarán.</string>
+    <string name="notification_channel_desc">Se utiliza para la notificación de prueba</string>
+    <string name="test_ticker">Este es el mensaje del teletipo</string>
+    <string name="status_summary_notification_access_disabled">Abre los ajustes de acceso a las notificaciones de Android para activar la notificación por voz</string>
+    <string name="support_privacy">Política de privacidad</string>
+    <string name="permission_rationale_read_phone_state">El permiso de llamadas telefónicas es necesario para evitar que Voice Notify hable durante una llamada.</string>
+    <string name="tts_message_reset_default">Configuración de mensajes TTS actualizada al nuevo valor predeterminado</string>
+    <string name="text_replace_error_duplicate">¡Duplicado! No será guardado.</string>
+    <string name="text_to_replace">Texto a reemplazar</string>
+    <string name="status_summary_notification_access_enabled">Abre los ajustes de acceso a las notificaciones de Android para desactivar Voice Notify</string>
+    <string name="support_privacy_message">Voice Notify no recoge ni transmite datos fuera del dispositivo. Sin embargo, utiliza aplicaciones o servicios de terceros que pueden transmitir datos, como se indica más adelante en el apartado \"Aplicaciones y servicios de terceros\".
+\n
+\nEn el improbable caso de que el desarrollador reciba información sensible o personal, ésta no se venderá, compartirá, copiará o utilizará sin el consentimiento expreso de la persona a la que pertenece la información. Si no hay consentimiento, la información se eliminará si es posible.
+\n
+\nLa finalidad de Voice Notify es emitir notificaciones por voz, por lo que es probable que las notificaciones habladas puedan ser escuchadas por personas o micrófonos cercanos. Se recomienda configurar Voice Notify y el dispositivo para evitar notificaciones habladas no deseadas. Utilícelo bajo su propia responsabilidad.
+\n
+\nLas notificaciones recibidas por Voice Notify sólo se guardan en la memoria para ser mostradas en el registro de notificaciones (hasta las 20 más recientes) y no se escriben en el almacenamiento. Esto impide que otras aplicaciones accedan a los datos, especialmente si el dispositivo está rooteado. Como resultado, si el proceso de Voice Notify se termina, el registro de notificaciones se borra.
+\n
+\nLas aplicaciones instaladas se leen y se enumeran para que los usuarios puedan elegir qué aplicaciones tienen sus notificaciones habladas. Los títulos de las aplicaciones y los nombres de los paquetes se guardan en una base de datos en el almacenamiento interno de datos privados de Voice Notify en el dispositivo para guardar las selecciones y actuar como caché para mejorar el rendimiento de la carga de la lista de aplicaciones.
+\n
+\nAplicaciones y servicios de terceros:
+\n- Motor de texto a voz: Voice Notify pasa el texto de las notificaciones para que sea hablado al motor de texto a voz predeterminado, que está fuera del control directo de Voice Notify. Lee la política de privacidad del motor TTS para saber cómo utiliza los datos.
+\n- Los servicios de Google Play pueden enviar datos analíticos básicos y anónimos al desarrollador para ayudar a mejorar la aplicación.
+\n- Aplicación de mensajería: la opción \"Contactar con el desarrollador\" abre la aplicación de mensajería elegida o predeterminada por el usuario, como una aplicación de correo electrónico, y rellena previamente el mensaje con la versión de Voice Notify, la versión de Android, el número de compilación de Android y el nombre del dispositivo. En el caso de una aplicación de correo electrónico, el campo \"Para\" se establece en la dirección del desarrollador (pilota51@gmail.com). Al enviar el mensaje, el usuario entiende y consiente que su nombre y su información de contacto se compartan con el destinatario o los destinatarios, según determine la aplicación de mensajería.
+\n- Otras opciones en \"Ayuda y soporte\" abren las aplicaciones o sitios web externos pertinentes (Play Store, Weblate.org, GitHub.com), enviando únicamente una URL codificada a la página de Voice Notify.
+\n
+\nA continuación se muestran los permisos utilizados por Voice Notify y por qué son necesarios:
+\n- Bluetooth - Se requiere para detectar si el auricular Bluetooth está conectado.
+\n- Vibrar - Necesario para la función de prueba mientras el teléfono está en modo de vibración.
+\n- Modificar la configuración de audio - Necesario para mejorar la detección de los auriculares con cable.
+\n- Leer el estado del teléfono - Necesario para interrumpir el TTS si se activa una llamada telefónica.</string>
 </resources>
