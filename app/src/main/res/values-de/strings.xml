@@ -80,9 +80,9 @@
     <!-- MainActivity and xml/preferences.xml -->
     <string name="test">Testen</string>
     <string name="notify_log">Benachrichtigungsprotokoll</string>
-    <string name="support">Unterstütze Voice Notify</string>
+    <string name="support">Hilfe &amp; Unterstützung</string>
     <!-- MainActivity -->
-    <string name="service_disabled">VN Service ist deaktiviert</string>
+    <string name="service_disabled"></string>
     <string name="status_summary_suspended">Tippe zum aktivieren von VN</string>
     <string name="support_rate">Bewerte/Kommentiere</string>
     <string name="support_contact">Entwickler kontaktieren</string>
@@ -114,4 +114,9 @@
     <string name="reason_headset_on">Headset einschalten</string>
     <string name="reason_shake">Durch Schütteln stumm geschaltet</string>
     <string name="reason_suspended">VN durch Widget angehalten</string>
+    <string name="tts_summary">Text-zu-Sprache-Verhalten konfigurieren</string>
+    <string name="tts">Text-zu-Sprache</string>
+    <string name="text_replace_error_duplicate">Duplikat! Wird nicht gespeichert.</string>
+    <string name="ignore_groups">Gruppennachrichten ignorieren</string>
+    <string name="tts_text_replace">TTS-Textersetzung</string>
 </resources>
