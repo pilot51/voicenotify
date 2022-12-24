@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">Voice Notify</string>
+    <string name="service_running">Voice Notify palvelu on käynnissä</string>
+    <string name="app_list">Sovellusluettelo</string>
+    <string name="app_list_summary">Luettele sovellukset mitkä voidaan ohittaa</string>
+    <string name="tts_settings">TTS Asetukset</string>
+    <string name="tts_message">TTS Viesti</string>
+    <string name="service_suspended">Voice Notify palvelu on pysäytetty</string>
+</resources>
