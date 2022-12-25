@@ -82,7 +82,6 @@
     <string name="notify_log">Benachrichtigungsprotokoll</string>
     <string name="support">Hilfe &amp; Unterstützung</string>
     <!-- MainActivity -->
-    <string name="service_disabled"></string>
     <string name="status_summary_suspended">Tippe zum aktivieren von VN</string>
     <string name="support_rate">Bewerte/Kommentiere</string>
     <string name="support_contact">Entwickler kontaktieren</string>
