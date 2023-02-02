@@ -1,5 +1,5 @@
 /*
- * Copyright 2017 Mark Injerd
+ * Copyright 2017-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,12 @@ import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.util.Pair
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
 import android.view.View.OnAttachStateChangeListener
 import android.view.View.OnFocusChangeListener
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.view.inputmethod.EditorInfo
 import android.widget.*
 import android.widget.TextView.OnEditorActionListener
@@ -32,10 +35,10 @@ import androidx.preference.DialogPreference
 import androidx.preference.PreferenceDialogFragmentCompat
 import com.pilot51.voicenotify.databinding.PreferenceDialogTextReplaceBinding
 import com.pilot51.voicenotify.databinding.TextReplaceRowBinding
-import java.util.*
 
 /**
- * Preference that provides a dynamic list with two EditTexts in each row for defining text replacement.
+ * Preference that provides a dynamic list with two
+ * EditTexts in each row for defining text replacement.
  */
 class TextReplacePreference(context: Context, attrs: AttributeSet?) : DialogPreference(context, attrs) {
 	private var isPersistedReplaceListSet = false

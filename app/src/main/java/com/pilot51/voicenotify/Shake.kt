@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Mark Injerd
+ * Copyright 2012-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,30 +15,29 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.Context
+import android.content.Context.SENSOR_SERVICE
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import com.pilot51.voicenotify.Common.getPrefs
+import com.pilot51.voicenotify.Common.prefs
+import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-class Shake(
-	private val context: Context
-) : SensorEventListener {
-	private val manager = context.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+class Shake : SensorEventListener {
+	private val manager = appContext.getSystemService(SENSOR_SERVICE) as SensorManager
 	private val sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-	private var listener: OnShakeListener? = null
+	var onShake: (() -> Unit)? = null
 	private var threshold = 0
 	private var overThresholdCount = 0
 	private var accelCurrent = 0f
 	private var accelLast = 0f
 
 	fun enable() {
-		if (listener == null) return
+		if (onShake == null) return
 		threshold = try {
-			getPrefs(context).getString(context.getString(R.string.key_shake_threshold), null)!!.toInt()
+			prefs.getString(appContext.getString(R.string.key_shake_threshold), null)!!.toInt()
 		} catch (e: NumberFormatException) {
 			// Don't enable if threshold setting is blank
 			return
@@ -53,10 +52,6 @@ class Shake(
 		overThresholdCount = 0
 	}
 
-	fun setOnShakeListener(listener: OnShakeListener?) {
-		this.listener = listener
-	}
-
 	override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
 
 	override fun onSensorChanged(event: SensorEvent) {
@@ -68,15 +63,11 @@ class Shake(
 		if (accelLast != 0f && abs(accel) > threshold / 10) {
 			overThresholdCount++
 			if (overThresholdCount >= 2) {
-				listener!!.onShake()
+				onShake!!.invoke()
 			}
 		} else {
 			overThresholdCount = 0
 		}
 		accelLast = accelCurrent
-	}
-
-	interface OnShakeListener {
-		fun onShake()
 	}
 }

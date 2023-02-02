@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Mark Injerd
+ * Copyright 2018-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.Context
+import com.pilot51.voicenotify.VNApplication.Companion.appContext
 
 enum class IgnoreReason(
 	private val stringId: Int
@@ -35,27 +35,6 @@ enum class IgnoreReason(
 	EMPTY_MSG(R.string.reason_empty_msg),
 	IDENTICAL(R.string.reason_identical);
 
-	/**
-	 * @param c Context required to get the string resource.
-	 * @return The user-visible string for this ignore reason.
-	 */
-	fun getString(c: Context) = c.getString(stringId)
-
-	companion object {
-		/**
-		 * Converts a set of ignore reasons to a comma-separated string.
-		 * @param reasons The set to be converted.
-		 * @param c Context required to get string resources.
-		 * @return The resulting string.
-		 */
-		fun convertSetToString(reasons: Set<IgnoreReason>, c: Context): String {
-			val builder = StringBuilder()
-			val iterator = reasons.iterator()
-			while (iterator.hasNext()) {
-				builder.append(iterator.next().getString(c))
-				if (iterator.hasNext()) builder.append(", ")
-			}
-			return builder.toString()
-		}
-	}
+	/** @return The user-visible string for this ignore reason. */
+	override fun toString() = appContext.getString(stringId)
 }

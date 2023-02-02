@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Mark Injerd
+ * Copyright 2022-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,11 +27,10 @@ import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
+import com.pilot51.voicenotify.Common.prefs
 import com.pilot51.voicenotify.PrefDialogID.*
 
 class PrefDialog : DialogFragment() {
-	private val prefs by lazy { Common.getPrefs(requireContext()) }
-
 	private val sTimeSetListener = OnTimeSetListener { _, hourOfDay, minute ->
 		prefs.edit()
 			.putInt(getString(R.string.key_quietStart), hourOfDay * 60 + minute)

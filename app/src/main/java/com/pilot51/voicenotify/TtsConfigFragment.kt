@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Mark Injerd
+ * Copyright 2022-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.pilot51.voicenotify
 
 import android.content.Intent
@@ -26,10 +25,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.preference.EditTextPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.pilot51.voicenotify.Common.prefs
 import com.pilot51.voicenotify.TextReplacePreference.TextReplaceFragment
 
 class TtsConfigFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
-	private val prefs by lazy { Common.getPrefs(requireContext()) }
 	private val ttsIntent: Intent?
 		get() {
 			val intent = Intent(Intent.ACTION_MAIN)

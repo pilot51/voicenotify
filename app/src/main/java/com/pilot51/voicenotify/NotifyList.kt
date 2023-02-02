@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Mark Injerd
+ * Copyright 2012-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,6 @@ import com.pilot51.voicenotify.databinding.NotifyLogItemBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.util.*
 
 class NotifyList(context: Context?) : ListView(context) {
 	private interface OnListChangeListener {
@@ -95,7 +94,7 @@ class NotifyList(context: Context?) : ListView(context) {
 				holder.message.visibility = VISIBLE
 			} else holder.message.visibility = GONE
 			if (item.getIgnoreReasons().isNotEmpty()) {
-				holder.ignoreReasons.text = item.getIgnoreReasonsAsText(context)
+				holder.ignoreReasons.text = item.getIgnoreReasonsAsText()
 				if (item.isSilenced) {
 					holder.ignoreReasons.setTextColor(Color.YELLOW)
 				} else holder.ignoreReasons.setTextColor(Color.RED)

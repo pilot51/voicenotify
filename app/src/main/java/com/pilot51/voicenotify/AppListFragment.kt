@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2022 Mark Injerd
+ * Copyright 2012-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,6 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.Context
 import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -29,7 +28,9 @@ import androidx.core.view.MenuProvider
 import androidx.fragment.app.ListFragment
 import androidx.lifecycle.Lifecycle
 import com.pilot51.voicenotify.AppDatabase.Companion.db
-import com.pilot51.voicenotify.Common.getPrefs
+import com.pilot51.voicenotify.Common.prefs
+import com.pilot51.voicenotify.Common.setVolumeStream
+import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.databinding.AppListItemBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -38,14 +39,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
-
 class AppListFragment : ListFragment(), MenuProvider {
-	private val prefs by lazy { getPrefs(requireContext()) }
 	private val adapter by lazy { Adapter() }
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		Common.init(requireActivity())
+		setVolumeStream(requireActivity())
 		defEnable = prefs.getBoolean(KEY_DEFAULT_ENABLE, true)
 	}
 
@@ -300,14 +299,13 @@ class AppListFragment : ListFragment(), MenuProvider {
 
 		/**
 		 * @param pkg Package name used to find [App] in current list or create a new one from system.
-		 * @param ctx Context required to get default enabled preference and to get package manager for searching system.
 		 * @return Found or created [App], otherwise null if app not found on system.
 		 */
-		fun findOrAddApp(pkg: String, ctx: Context): App? {
+		fun findOrAddApp(pkg: String): App? {
 			return runBlocking(Dispatchers.IO) {
 				SYNC_APPS.withLock {
 					if (!::apps.isInitialized) {
-						defEnable = getPrefs(ctx).getBoolean(KEY_DEFAULT_ENABLE, true)
+						defEnable = prefs.getBoolean(KEY_DEFAULT_ENABLE, true)
 						apps = db.appDao.getAll().toMutableList()
 					}
 					for (app in apps) {
@@ -316,7 +314,7 @@ class AppListFragment : ListFragment(), MenuProvider {
 						}
 					}
 					return@runBlocking try {
-						val packMan = ctx.packageManager
+						val packMan = appContext.packageManager
 						val app = App(
 							packageName = pkg,
 							label = packMan.getApplicationInfo(pkg, 0).loadLabel(packMan).toString(),

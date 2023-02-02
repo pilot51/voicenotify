@@ -1,5 +1,5 @@
 /*
- * Copyright 2018 Mark Injerd
+ * Copyright 2018-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,10 @@ package com.pilot51.voicenotify
 
 import android.annotation.SuppressLint
 import android.app.Notification
-import android.content.Context
 import android.text.TextUtils
 import android.util.Log
-import androidx.preference.PreferenceManager
-import com.pilot51.voicenotify.IgnoreReason.Companion.convertSetToString
+import com.pilot51.voicenotify.Common.prefs
+import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -32,14 +31,12 @@ import kotlin.math.min
  * Class for all the information about a notification that we use.
  * @param app The app that posted the notification.
  * @param notification The notification from which to get most of the info.
- * @param context Required to get preferences and string resources when building the TTS message.
  */
 // Suppressing lint because documentation says extras added in API 19 when actually added in API 18.
 // See reported issue: https://issuetracker.google.com/issues/69396548
 class NotificationInfo @SuppressLint("InlinedApi") constructor(
 	val app: App?,
-	notification: Notification,
-	context: Context
+	notification: Notification
 ) {
 	/** The notification's ticker message. */
 	private val ticker = notification.tickerText?.toString()
@@ -72,16 +69,12 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 		contentText = text?.toString()
 		contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT)
 		calendar = Calendar.getInstance()
-		buildTtsMessage(context)
+		buildTtsMessage()
 	}
 
-	/**
-	 * Generates the string to be used for TTS.
-	 * @param context Required to get preferences and string resources.
-	 */
-	private fun buildTtsMessage(context: Context) {
-		val prefs = PreferenceManager.getDefaultSharedPreferences(context)
-		val ttsStringPref = prefs.getString(context.getString(R.string.key_ttsString), "")!!
+	/** Generates the string to be used for TTS. */
+	private fun buildTtsMessage() {
+		val ttsStringPref = prefs.getString(appContext.getString(R.string.key_ttsString), "")!!
 		val ttsUnformattedMsg = ttsStringPref
 			.replace("#a", "%1\$s") // App Label
 			.replace("#t", "%2\$s") // Ticker
@@ -102,17 +95,19 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 			e.printStackTrace()
 		}
 		if (app != null && (ttsMessage == null || ttsMessage == app.label)) {
-			ttsMessage = context.getString(R.string.notification_from, app.label)
+			ttsMessage = appContext.getString(R.string.notification_from, app.label)
 		}
 		if (!TextUtils.isEmpty(ttsMessage)) {
-			val ttsTextReplace = prefs.getString(context.getString(R.string.key_ttsTextReplace), null)
+			val ttsTextReplace = prefs.getString(
+				appContext.getString(R.string.key_ttsTextReplace), null)
 			val textReplaceList = TextReplacePreference.convertStringToList(ttsTextReplace)
 			for (pair in textReplaceList) {
-				ttsMessage = ttsMessage!!.replace("(?i)${Pattern.quote(pair.first)}".toRegex(), pair.second)
+				ttsMessage = ttsMessage!!.replace(
+					"(?i)${Pattern.quote(pair.first)}".toRegex(), pair.second)
 			}
 		}
 		if (ttsMessage != null) {
-			val maxLengthStr = prefs.getString(context.getString(R.string.key_max_length), null)
+			val maxLengthStr = prefs.getString(appContext.getString(R.string.key_max_length), null)
 			if (!TextUtils.isEmpty(maxLengthStr)) {
 				val maxLength = maxLengthStr!!.toInt()
 				if (maxLength > 0) {
@@ -140,11 +135,10 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 
 	/**
 	 * Gets the reasons this notification was ignored as a single string.
-	 * @param c Context required to get string resources.
 	 * @return Comma-separated list of ignore reasons.
 	 */
-	fun getIgnoreReasonsAsText(c: Context?): String {
-		var text = convertSetToString(ignoreReasons, c!!)
+	fun getIgnoreReasonsAsText(): String {
+		var text = ignoreReasons.joinToString()
 		if (ignoreReasons.contains(IgnoreReason.IDENTICAL)) {
 			text = MessageFormat.format(text, ignoreRepeatSeconds)
 		}

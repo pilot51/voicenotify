@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Mark Injerd
+ * Copyright 2022-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,11 +21,9 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context.NOTIFICATION_SERVICE
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import android.provider.Settings
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
@@ -56,7 +54,7 @@ class MainFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickLis
 		super.onCreate(savedInstanceState)
 		val activity = requireActivity()
 		val context = requireContext()
-		Common.init(activity)
+		Common.setVolumeStream(activity)
 		if (ActivityCompat.checkSelfPermission(context, Manifest.permission.READ_PHONE_STATE)
 			!= PackageManager.PERMISSION_GRANTED
 		) {
@@ -112,7 +110,7 @@ class MainFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickLis
 		return when (preference) {
 			pStatus -> {
 				if (!Service.isRunning) {
-					startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
+					startActivity(Common.notificationListenerSettingsIntent)
 				} else Service.toggleSuspend()
 				true
 			}
@@ -138,7 +136,7 @@ class MainFragment : PreferenceFragmentCompat(), Preference.OnPreferenceClickLis
 			}
 			pTest -> {
 				val context = requireContext().applicationContext
-				val vnApp = AppListFragment.findOrAddApp(context.packageName, context)!!
+				val vnApp = AppListFragment.findOrAddApp(context.packageName)!!
 				if (!vnApp.enabled) {
 					Toast.makeText(context, getString(R.string.test_ignored), Toast.LENGTH_LONG).show()
 				}
