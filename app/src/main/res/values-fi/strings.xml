@@ -7,4 +7,147 @@
     <string name="tts_settings">TTS Asetukset</string>
     <string name="tts_message">TTS Viesti</string>
     <string name="service_suspended">Voice Notify palvelu on pysäytetty</string>
+    <string name="tts_message_summary">Muokkaa mitkä osat ilmoituksesta puhutaan</string>
+    <string name="quiet_end">Hiljainen aika päättyy</string>
+    <string name="app_is_ignored">%s ohitetaan</string>
+    <string name="app_is_not_ignored">%s ei ohiteta</string>
+    <string name="tts">Teksti puheeksi</string>
+    <string name="tts_summary">Määritä teksti puheeksi toiminnon käyttäytyminen</string>
+    <string name="tts_settings_summary">Avaa Androidin tekstistä puheeksi asetukset</string>
+    <string name="tts_settings_summary_fail">TTS asetuksia ei löydy! Jos se on laitteessasi (sen pitäisi olla), ota yhteyttä kehittäjään.</string>
+    <string name="tts_message_dialog">#a = Sovelluksen otsikko
+\n#t = Tunnus
+\n#s = Alateksti
+\n#c = Sisällön otsikko
+\n#m = Sisällön viesti
+\n#i = Sisällön tiedot
+\n
+\nOletus:
+\n#a. #c. #m.
+\n
+\nVanha oletus (v1.0.x):
+\n#a: #t</string>
+    <string name="tts_text_replace">TTS tekstin korvaaminen</string>
+    <string name="tts_text_replace_summary">Korvaava puhuttava teksti, kuten ääntämisen korjaaminen</string>
+    <string name="tts_delay">TTS viivästys</string>
+    <string name="tts_stream">TTS äänen toisto</string>
+    <string name="tts_stream_summary">Valitse äänen toisto jonka kautta teksti puheeksi toistaa</string>
+    <string name="audio_focus_summary">Pyydä muita medioita keskeyttämään/hiljentämään puhumisen aikana</string>
+    <string name="tts_delay_summary">Viivästytä TTS:ää asetetun sekuntimäärän verran ilmoituksen jälkeen</string>
+    <string name="tts_delay_dialog_msg">Sekuntien määrä mikä odoitetaan ilmoituksen jälkeen ennen puhumista.</string>
+    <string name="tts_repeat">TTS Toisto</string>
+    <string name="tts_repeat_summary">Toista jatkuvasti ilmoituksia TTS:n kautta, kunnes näyttö menee päälle</string>
+    <string name="audio_focus">Pysäytä/hiljennä median toisto</string>
+    <string name="shake_to_silence">Ravista hiljentääksesi</string>
+    <string name="shake_to_silence_summary">Säädä ravista hiljentääksesi toiminnon herkkyyden kynnystä</string>
+    <string name="shake_to_silence_dialog_msg">Matalemmat arvot ovat enemmän herkkiä.
+\n
+\nOletus: 100
+\nTyhjä poistaa käytöstä.</string>
+    <string name="ignore_strings">Ohita teksti</string>
+    <string name="ignore_strings_summary">Ohita ilmoitukset, jotka sisältävät tietyn tekstin viestissä</string>
+    <string name="ignore_strings_dialog_msg">Erota yksittäiset merkinnät uudella rivillä.</string>
+    <string name="ignore_empty">Ohita tyhjä</string>
+    <string name="ignore_empty_summary_on">Ilmoitukset joissa ei ole viestiä jätetään puhumatta</string>
+    <string name="ignore_empty_summary_off">Ilmoitukset ilman viestiä puhutaan muodossa \"Ilmoitus kohteesta [sovelluksen nimi].\"</string>
+    <string name="ignore_groups">Ohita tyhmäviestit</string>
+    <string name="ignore_groups_summary_on">Useita viestejä sisältäviä ilmoituksia ei puhuta</string>
+    <string name="ignore_repeat">Ohita toistot</string>
+    <string name="ignore_groups_summary_off">Useita viestejä sisältävät ilmoitukset puhutaan</string>
+    <string name="ignore_repeat_summary">Ohita myöhemmät identtiset ilmoitukset tietyn ajan kuluessa</string>
+    <string name="max_length">Viestin enimmäismäärä</string>
+    <string name="max_length_summary">Puhuttavan viestin enimmäispituus. Pidemmät viestit katkaistaan.</string>
+    <string name="max_length_dialog_msg">Puhuttavan viestin enimmäispituus.
+\nPidemmät viestit katkaistaan.</string>
+    <string name="device_state">Laitteen tilat</string>
+    <string name="quiet_start">Hiljainen aika alkaa</string>
+    <string name="device_state_summary">Valitse, puhutaanko tiettyjen laitteen tilojen aikana</string>
+    <string name="device_state_dialog_title">Puhu näiden laitteen tilojen aikana</string>
+    <string name="quiet_end_summary">Älä puhu ennen tätä aikaa.
+\nJätä samaksi kuin aloitusaika poistaaksesi käytöstä.</string>
+    <string name="test_summary">Lähetä ilmoitus (viivästetty 5 sekuntia) testataksesi nykyisiä asetuksia</string>
+    <string name="test_ignored">Voice Notify ohitetaan sovellusluettelossa.
+\nTesti suoritetaan, mutta ilmoitusta ei puhuta.</string>
+    <string name="support_summary">Arvostele / kommentoi, ota yhteyttä kehittäjään, käännökset, lähdekoodi, tietosuojakäytäntö</string>
+    <string name="notify_log_summary">Luettele viimeiset 20 ilmoitusta.
+\nNäyttää ajan, sovelluksen nimen, viestin ja ohittamisen syyt.</string>
+    <string name="text_replace_error_duplicate">Kaksoiskappale! Ei tallenneta.</string>
+    <string name="test">Testi</string>
+    <string name="notify_log">Ilmoitusloki</string>
+    <string name="support">Apu ja tuki</string>
+    <string name="replacement_text">Korvaava teksti</string>
+    <string name="service_disabled">Voice Notify palvelu on poistettu käytöstä</string>
+    <string name="status_summary_notification_access_disabled">Avaa Androidin ilmoitusten pääsyasetukset ottaaksesi Voice Notifyn käyttöön</string>
+    <string name="status_summary_suspended">Valitse aktivoidaksesi Voice Notifyn.</string>
+    <string name="notification_channel_desc">Käytetään testi-ilmoitukseen</string>
+    <string name="support_contact">Ota kehittäjään yhteyttä</string>
+    <string name="test_subtext">Alateksti</string>
+    <string name="test_content_title">Sisällön otsikko</string>
+    <string name="test_content_text">Tämä on sisältöviesti.</string>
+    <string name="test_content_info">Sisällön tiedot</string>
+    <string name="support_rate">Arvostele/kommentoi</string>
+    <string name="test_ticker">Tämä on uutisnauhaviesti</string>
+    <string name="support_source">Lähdekoodi</string>
+    <string name="support_translations">Käännökset</string>
+    <string name="support_privacy">Tietosuojakäytäntö</string>
+    <string name="error_market">Virhe: Google Play Kauppaa ei löydy asennettuna.</string>
+    <string name="error_tts_init">Virhe: TTS:ää ei voitu alustaa!</string>
+    <string name="error_email">Virhe: Asennettua sähköpostisovellusta ei löydy.</string>
+    <string name="tts_message_reset_default">TTS viestiasetus on päivitetty uuteen oletusarvoon</string>
+    <string name="notification_from">Ilmoituksen lähetti %s.</string>
+    <string name="yes">Kyllä</string>
+    <string name="ignore_app">Ohita %s\?</string>
+    <string name="filter">Suodatin</string>
+    <string name="ignore_all">Ohita kaikki</string>
+    <string name="reason_empty_msg">Tyhjä viesti</string>
+    <string name="ignore_none">Älä ohita mitään</string>
+    <string name="reason_app">Ohitettu sovellus</string>
+    <string name="unignore_app">Älä ohita %s\?</string>
+    <string name="reason_quiet">Hiljainen aika</string>
+    <string name="reason_silent">Hiljainen tai värinätila</string>
+    <string name="reason_service_stopped">Palvelu pysäytetty</string>
+    <string name="reason_call">Aktiivinen puhelu</string>
+    <string name="reason_suspended">Voice Notify keskeytetty widgetin toimesta</string>
+    <string name="reason_screen_on">Näyttö päällä</string>
+    <string name="reason_headset_off">Kuulokkeet pois käytöstä</string>
+    <string name="reason_headset_on">Kuulokkeet käytössä</string>
+    <string name="reason_shake">Hiljennetty ravistamalla</string>
+    <string name="reason_screen_off">Näyttö pois päältä</string>
+    <string name="tts_text_replace_dialog">Korvattava puhuttava teksti. Sallii sinun muokata miten teksti puheeksi ääntää sanoja, tai korvaa tekstiä minkä tahansa muun syyn takia.
+\n
+\nKorvattavassa tekstissä kirjainkoolla ei ole merkitystä.</string>
+    <string name="tts_repeat_dialog_msg">Ilmoitukset toistetaan määritetyin väliajoin, kunnes näyttöön laitetaan päälle. Näytön ollessa päällä luotuja ilmoituksia ei toisteta.
+\n
+\n Arvo on minuutteina. Tyhjä tai 0 poistaa käytöstä.</string>
+    <string name="quiet_start_summary">Älä puhu tämän ajan jälkeen.
+\nJätä samaksi kuin lopetusaika poistaaksesi käytöstä.</string>
+    <string name="ignore_repeat_dialog_msg">Aseta sekuntien määrä, jonka on kuluttava edellisestä ilmoituksesta, ennen kuin toisto voidaan puhua.
+\nOhitetut toistot nollaavat määrän ja erilaiset ilmoitukset tyhjentävät sen.
+\nTyhjä = ääretön.</string>
+    <string name="text_to_replace">Korvattava teksti</string>
+    <string name="status_summary_notification_access_enabled">Avaa Androidin ilmoitusten pääsyasetukset poistaaksesi Voice Notifyn käytöstä</string>
+    <string name="permission_rationale_read_phone_state">Lupa puheluihin vaaditaan, jotta Voice Nofify ei pysty puhumaan puhelun aikana.</string>
+    <string name="reason_string">Ohitettu teksti</string>
+    <string name="reason_identical">Identtinen viesti {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+    <string name="support_privacy_message">Voice Notify ei kerää tai lähetä tietoja laitteesta. Se käyttää kuitenkin kolmannen osapuolen sovelluksia tai palveluita, jotka voivat lähettää tietoja, kuten alla kohdassa \"Kolmannen osapuolen sovellukset ja palvelut\" on kuvattu.
+\n
+\nSiinä epätodennäköisessä tapauksessa, että kehittäjä saa arkaluontoisia tai henkilökohtaisia tietoja, niitä ei myydä, jaeta, kopioida tai käytetä ilman niiden nimenomaista suostumusta, kenelle tiedot kuuluvat. Jos suostumusta ei ole annettu, tiedot poistetaan, mikäli mahdollista.
+\n
+\nVoice Notifyn tarkoitus on puhua ilmoitukset, ja siksi on todennäköistä, että lähistöllä olevat ihmiset tai mikrofonit voivat kuulla puhutut ilmoitukset. On suositeltavaa määrittää Voice Notify ja laite estämään ei-toivotut puheilmoitukset. Käytä omalla vastuullasi.
+\n
+\nVoice Notifyn vastaanottamat ilmoitukset säilytetään vain muistissa, jotta ne voidaan näyttää ilmoituslokissa (viimeisimpään 20), eikä niitä kirjoiteta tallennustilaan. Tämä estää muita sovelluksia pääsemästä tietoihin, varsinkin jos laite on rootattu. Tämän seurauksena, jos Voice Notify -prosessi lopetetaan, ilmoitusloki tyhjennetään.
+\n
+\nAsennetut sovellukset luetaan ja luetellaan, jotta käyttäjät voivat valita, minkä sovellusten ilmoitukset sanotaan. Sovellusten nimet ja pakettien nimet tallennetaan tietokantaan Voice Notifyn laitteella sijaitsevaan sisäiseen yksityiseen datamuistiin valintojen tallentamiseksi ja välimuistina toimimiseksi sovellusluettelon lataamisen parantamiseksi.
+\n
+\nKolmannen osapuolen sovellukset ja palvelut:
+\n• Tekstistä puheeksi -moottori – Voice Notify välittää ilmoitustekstin puhuttavaksi oletusarvoiselle tekstistä puheeksi -moottorille, joka on Voice Notifyn suoran hallinnan ulkopuolella. Lue TTS-moottorin tietosuojakäytännöstä, kuinka se käyttää tietoja.
+\n• Google Play Palvelut voivat lähettää anonymisoituja kaatumis- ja perusanalyyttisiä tietoja takaisin kehittäjälle auttaakseen sovelluksen parantamisessa.
+\n• Viestisovellus - \"Ota yhteyttä kehittäjään\" -vaihtoehto avaa käyttäjän valitseman tai oletusviestintäsovelluksen, kuten sähköpostisovelluksen, ja esitäyttää viestiin Voice Notify -version, Android-version, Android-luonti numeron ja laitteen nimen. Sähköpostisovelluksessa Vastaanottaja-kenttä on asetettu kehittäjän osoitteeseen (pilota51@gmail.com). Lähettämällä viestin käyttäjä ymmärtää ja suostuu siihen, että hänen nimensä ja yhteystietonsa jaetaan vastaanottaja(i)lle viestintäsovelluksen määrittelemällä tavalla.
+\n• Muut \"Ohje ja tuki\" -kohdassa olevat vaihtoehdot avaavat asiaankuuluvat ulkoiset sovellukset tai verkkosivustot (Play Store, Weblate.org, GitHub.com) ja lähettävät vain kovakoodatun URL-osoitteen Voice Notify -sivulle.
+\n
+\nAlla on lueteltu Voice Notifyn käyttämät käyttöoikeudet ja miksi niitä tarvitaan:
+\n• Bluetooth - Pakollinen tunnistaminen, onko Bluetooth-kuulokkeet kytketty.
+\n• Värinä - Vaaditaan testiominaisuutta varten puhelimen ollessa värinätilassa.
+\n• Muokkaa ääniasetuksia – Pakollinen langallisten kuulokkeiden tunnistuksen parantamiseksi.
+\n• Lue puhelimen tila - Vaaditaan TTS:n keskeyttämiseen, jos puhelu aktivoituu.</string>
 </resources>
