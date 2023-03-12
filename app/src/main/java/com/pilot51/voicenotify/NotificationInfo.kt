@@ -17,7 +17,6 @@ package com.pilot51.voicenotify
 
 import android.annotation.SuppressLint
 import android.app.Notification
-import android.text.TextUtils
 import android.util.Log
 import com.pilot51.voicenotify.Common.prefs
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
@@ -97,7 +96,7 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 		if (app != null && (ttsMessage == null || ttsMessage == app.label)) {
 			ttsMessage = appContext.getString(R.string.notification_from, app.label)
 		}
-		if (!TextUtils.isEmpty(ttsMessage)) {
+		if (!ttsMessage.isNullOrEmpty()) {
 			val ttsTextReplace = prefs.getString(
 				appContext.getString(R.string.key_ttsTextReplace), null)
 			val textReplaceList = TextReplacePreference.convertStringToList(ttsTextReplace)
@@ -108,8 +107,8 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 		}
 		if (ttsMessage != null) {
 			val maxLengthStr = prefs.getString(appContext.getString(R.string.key_max_length), null)
-			if (!TextUtils.isEmpty(maxLengthStr)) {
-				val maxLength = maxLengthStr!!.toInt()
+			if (!maxLengthStr.isNullOrEmpty()) {
+				val maxLength = maxLengthStr.toInt()
 				if (maxLength > 0) {
 					ttsMessage = ttsMessage!!.substring(0, min(maxLength, ttsMessage!!.length))
 				}
@@ -125,7 +124,7 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 		get() {
 			val logBuilder = StringBuilder()
 			for (s in arrayOf(ticker, subtext, contentTitle, contentText, contentInfoText)) {
-				if (!TextUtils.isEmpty(s)) {
+				if (!s.isNullOrEmpty()) {
 					if (logBuilder.isNotEmpty()) logBuilder.append("\n")
 					logBuilder.append(s)
 				}

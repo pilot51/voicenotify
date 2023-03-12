@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2012-2022 Mark Injerd
+<!-- Copyright 2012-2023 Mark Injerd
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -137,6 +137,7 @@
 	<string name="error_email">Error: Unable to find an installed email app.</string>
 	<string name="tts_message_reset_default">TTS Message setting updated to new default value</string>
 	<string name="permission_rationale_read_phone_state">The phone calls permission is required to prevent Voice Notify from speaking during a call.</string>
+	<string name="permission_rationale_post_notifications">The post notifications permission is required for Voice Notify to post a test notification.</string>
 	
 	<!-- Service -->
 	<string name="notification_from">Notification from %s.</string>

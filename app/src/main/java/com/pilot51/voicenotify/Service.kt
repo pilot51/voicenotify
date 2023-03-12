@@ -23,7 +23,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.media.AudioAttributes
 import android.media.AudioDeviceInfo
 import android.media.AudioFocusRequest
@@ -39,15 +38,14 @@ import android.speech.tts.TextToSpeech.OnInitListener
 import android.speech.tts.UtteranceProgressListener
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
-import android.text.TextUtils
 import android.util.Log
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import com.pilot51.voicenotify.AppListFragment.Companion.findOrAddApp
 import com.pilot51.voicenotify.Common.getSelectedAudioStream
 import com.pilot51.voicenotify.Common.prefs
 import com.pilot51.voicenotify.NotifyList.Companion.addNotification
 import com.pilot51.voicenotify.NotifyList.Companion.refresh
+import com.pilot51.voicenotify.PermissionHelper.isPermissionGranted
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -164,14 +162,14 @@ class Service : NotificationListenerService() {
 		if (stringIgnored) {
 			info.addIgnoreReason(IgnoreReason.STRING)
 		}
-		if (TextUtils.isEmpty(ttsMsg)
+		if (ttsMsg.isNullOrEmpty()
 			&& prefs.getBoolean(getString(R.string.key_ignore_empty), false)) {
 			info.addIgnoreReason(IgnoreReason.EMPTY_MSG)
 		}
 		var ignoreRepeat = -1
 		val ignoreRepeatStr = prefs.getString(getString(R.string.key_ignore_repeat), null)
-		if (!TextUtils.isEmpty(ignoreRepeatStr)) {
-			ignoreRepeat = ignoreRepeatStr!!.toInt()
+		if (!ignoreRepeatStr.isNullOrEmpty()) {
+			ignoreRepeat = ignoreRepeatStr.toInt()
 		}
 		if (lastMsg.containsKey(app)) {
 			if (lastMsg[app] == ttsMsg && (ignoreRepeat == -1 || msgTime - lastMsgTime[app]!! < ignoreRepeat * 1000)) {
@@ -182,14 +180,14 @@ class Service : NotificationListenerService() {
 		if (info.getIgnoreReasons().isEmpty()) {
 			var delay = 0
 			val delayStr = prefs.getString(getString(R.string.key_ttsDelay), null)
-			if (!TextUtils.isEmpty(delayStr)) {
-				delay = delayStr!!.toInt()
+			if (!delayStr.isNullOrEmpty()) {
+				delay = delayStr.toInt()
 			}
 			if (!isScreenOn()) {
 				var interval = 0
 				val intervalStr = prefs.getString(getString(R.string.key_tts_repeat), null)
-				if (!TextUtils.isEmpty(intervalStr)) {
-					interval = intervalStr!!.toInt()
+				if (!intervalStr.isNullOrEmpty()) {
+					interval = intervalStr.toInt()
 				}
 				if (interval > 0) {
 					synchronized(repeatList) { repeatList.add(info) }
@@ -289,10 +287,9 @@ class Service : NotificationListenerService() {
 		val calTime = c[Calendar.HOUR_OF_DAY] * 60 + c[Calendar.MINUTE]
 		val quietStart = prefs.getInt(getString(R.string.key_quietStart), 0)
 		val quietEnd = prefs.getInt(getString(R.string.key_quietEnd), 0)
-		if ((quietStart < quietEnd) and (quietStart <= calTime) and (calTime < quietEnd)
-			|| quietEnd < quietStart && (quietStart <= calTime || calTime < quietEnd)) {
-			ignoreReasons.add(IgnoreReason.QUIET)
-		}
+		if ((quietStart < quietEnd && quietStart <= calTime && calTime < quietEnd)
+			|| (quietEnd < quietStart && (quietStart <= calTime || calTime < quietEnd))
+		) ignoreReasons.add(IgnoreReason.QUIET)
 		if ((audioMan.ringerMode == AudioManager.RINGER_MODE_SILENT
 				|| audioMan.ringerMode == AudioManager.RINGER_MODE_VIBRATE)
 			&& !prefs.getBoolean(Common.KEY_SPEAK_SILENT_ON, false)) {
@@ -300,9 +297,10 @@ class Service : NotificationListenerService() {
 		}
 		val isInCall = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 			val telecomMan = getSystemService(TELECOM_SERVICE) as TelecomManager
-			if (ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE)
-				== PackageManager.PERMISSION_GRANTED
-			) telecomMan.isInCall else false
+			@SuppressLint("MissingPermission")
+			if (isPermissionGranted(Manifest.permission.READ_PHONE_STATE)) {
+				telecomMan.isInCall
+			} else false
 		} else {
 			@Suppress("DEPRECATION")
 			telephony.callState == TelephonyManager.CALL_STATE_OFFHOOK

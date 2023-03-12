@@ -18,7 +18,6 @@ package com.pilot51.voicenotify
 import android.content.Context
 import android.database.DataSetObserver
 import android.os.Bundle
-import android.text.TextUtils
 import android.util.AttributeSet
 import android.util.Log
 import android.util.Pair
@@ -348,10 +347,8 @@ class TextReplacePreference(context: Context, attrs: AttributeSet?) : DialogPref
 		 */
 		fun convertStringToList(string: String?): List<Pair<String, String>> {
 			val list: MutableList<Pair<String, String>> = ArrayList()
-			if (TextUtils.isEmpty(string)) {
-				return list
-			}
-			val array = string!!.split("\n").dropLastWhile { it.isEmpty() }.toTypedArray()
+			if (string.isNullOrEmpty()) return list
+			val array = string.split("\n").dropLastWhile { it.isEmpty() }.toTypedArray()
 			var i = 0
 			while (i + 1 < array.size) {
 				list.add(Pair(array[i], array[i + 1]))

@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2022 Mark Injerd
+ * Copyright 2017-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 import java.io.FileInputStream
-import java.util.Properties
+import java.util.*
 
 plugins {
 	id("com.android.application")
@@ -31,11 +31,11 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-	compileSdk = 32
+	compileSdk = 33
 	defaultConfig {
 		applicationId = "com.pilot51.voicenotify"
 		minSdk = 18
-		targetSdk = 32
+		targetSdk = 33
 		versionName = "1.2.2"
 		versionCode = 26
 		viewBinding { isEnabled = true }
