@@ -40,7 +40,7 @@
     </string-array>
     <string name="ignore_strings">Ignorierter Text</string>
     <string name="ignore_strings_summary">Benachrichtigungen mit bestimmtem Inhalt ignorieren.</string>
-    <string name="ignore_strings_dialog_msg">Trenne einzelne Einträge durch eine neue Zeile.</string>
+    <string name="require_ignore_strings_dialog_msg">Trenne einzelne Einträge durch eine neue Zeile.</string>
     <string name="ignore_empty">Ignoriere leere Nachrichten</string>
     <string name="ignore_empty_summary_on">Benachrichtigungen ohne Nachricht werden nicht gesprochen.</string>
     <string name="ignore_empty_summary_off">Benachrichtigungen ohne Inhalt werden als \"Benachrichtigung von [App Name].\" gesprochen</string>
@@ -103,7 +103,7 @@
     <string name="filter">Filter</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">Ignorierte App</string>
-    <string name="reason_string">Ignorierter Text</string>
+    <string name="reason_string_ignored">Ignorierter Text</string>
     <string name="reason_empty_msg">Leere Nachricht</string>
     <string name="reason_identical">Identische Nachricht innerhalb {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
     <string name="reason_quiet">Ruhezeit</string>

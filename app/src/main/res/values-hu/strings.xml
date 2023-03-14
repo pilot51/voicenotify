@@ -19,7 +19,7 @@
     <string name="tts_repeat_dialog_msg">Addig ismétli amíg a beállított értékkel amíg a képernyő ki van kapcsolva.
 \nPercekben kell megadni. Ha 0 vagy üres akkor a funkció kikapcsolva.</string>
     <string name="ignore_strings">Szövegek, Amit Nem Mondok.</string>
-    <string name="ignore_strings_dialog_msg">Írj új sorba minden szövegrészt.</string>
+    <string name="require_ignore_strings_dialog_msg">Írj új sorba minden szövegrészt.</string>
     <string name="ignore_repeat">Ismétlések</string>
     <string name="ignore_repeat_summary">Add meg, hogy hány másodpercen belül ne ismételjem ugyanazt az eseményt.</string>
     <string name="ignore_repeat_dialog_msg">Add meg másodpercben, hogy ha ugyanattól a programtól több üzenet érkezik, hány másodpercen túl beszéljek újra.</string>

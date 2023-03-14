@@ -31,7 +31,8 @@ enum class IgnoreReason(
 	HEADSET_OFF(R.string.reason_headset_off),
 	HEADSET_ON(R.string.reason_headset_on),
 	APP(R.string.reason_app),
-	STRING(R.string.reason_string),
+	STRING_REQUIRED(R.string.reason_string_required),
+	STRING_IGNORED(R.string.reason_string_ignored),
 	EMPTY_MSG(R.string.reason_empty_msg),
 	IDENTICAL(R.string.reason_identical);
 

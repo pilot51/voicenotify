@@ -56,7 +56,7 @@
     </string-array>
     <string name="ignore_strings">Abaikan Teks</string>
     <string name="ignore_strings_summary">Abaikan notifikasi yang mengandungi teks didalam mesej</string>
-    <string name="ignore_strings_dialog_msg">Asingkan entri individu dengan perenggan baru.</string>
+    <string name="require_ignore_strings_dialog_msg">Asingkan entri individu dengan perenggan baru.</string>
     <string name="ignore_empty">Abaikan Kosong</string>
     <string name="ignore_empty_summary_on">Notifikasi tanpa mesej tidak diucapkan</string>
     <string name="ignore_empty_summary_off">Notifikasi tanpa mesej akan diucapkan sebagai \"Notifikasi dari [nama apl].\"</string>
@@ -130,7 +130,7 @@
     <string name="filter">Tapis</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">Abai apl</string>
-    <string name="reason_string">Abai teks</string>
+    <string name="reason_string_ignored">Abai teks</string>
     <string name="reason_empty_msg">Mesej kosong</string>
     <string name="reason_identical">Identiti mesej dalam {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
     <string name="reason_quiet">Masa senyap</string>

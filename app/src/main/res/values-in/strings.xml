@@ -60,7 +60,7 @@
     </string-array>
     <string name="ignore_strings">Teks Terabaikan</string>
     <string name="ignore_strings_summary">Abaikan pemberitahuan yang mengandung teks tertentu dalam pesan</string>
-    <string name="ignore_strings_dialog_msg">Pisahkan tiap masukan dengan baris baru.</string>
+    <string name="require_ignore_strings_dialog_msg">Pisahkan tiap masukan dengan baris baru.</string>
     <string name="ignore_empty">Abaikan Kosong</string>
     <string name="ignore_empty_summary_on">Pemberitahuan tanpa pesan tidak akan diucapkan</string>
     <string name="ignore_empty_summary_off">Pemberitahuan tanpa pesan akan diucapkan \"Pemberitahuan dari [nama aplikasi].\"</string>
@@ -135,7 +135,7 @@
     <string name="filter">Tapis</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">Aplikasi diabaikan</string>
-    <string name="reason_string">Teks diabaikan</string>
+    <string name="reason_string_ignored">Teks diabaikan</string>
     <string name="reason_empty_msg">Pesan kosong</string>
     <string name="reason_identical">Pesan sama dalam {0,choice,-1#detik tak terbatas|1#{0} detik|1&lt;{0} detik}</string>
     <string name="reason_quiet">Waktu Sunyi</string>

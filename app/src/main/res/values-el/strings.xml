@@ -60,7 +60,7 @@
     </string-array>
     <string name="ignore_strings">Αγνόηση κειμένου</string>
     <string name="ignore_strings_summary">Αγνόηση ανακοινώσεων που περιέχουν συγκεκριμένο κείμενο στο μήνυμα.</string>
-    <string name="ignore_strings_dialog_msg">Διαχωρίστε τις μεμονωμένες εγγραφές με μια νέα γραμμή.</string>
+    <string name="require_ignore_strings_dialog_msg">Διαχωρίστε τις μεμονωμένες εγγραφές με μια νέα γραμμή.</string>
     <string name="ignore_empty">Αγνόηση Κενών</string>
     <string name="ignore_empty_summary_on">Ανακοινώσεις χωρίς κάποιο μήνυμα δεν θα εκφωνούνται.</string>
     <string name="ignore_empty_summary_off">Ανακοινώσεις χωρίς κάποιο μήνυμα θα εκφωνούνται ως \"Ανακοίνωση απο [app name].\"</string>
@@ -135,7 +135,7 @@
     <string name="filter">Φίλτρο</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">Αγνοημένη Εφαρμογή</string>
-    <string name="reason_string">Αγνοημένο Κείμενο</string>
+    <string name="reason_string_ignored">Αγνοημένο Κείμενο</string>
     <string name="reason_empty_msg">Κενό Μήνυμα</string>
     <string name="reason_identical">Πανομοιότυπο μήνυμα σε {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
     <string name="reason_quiet">Ωρες σίγασης</string>

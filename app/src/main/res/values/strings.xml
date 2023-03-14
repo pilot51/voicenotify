@@ -56,9 +56,11 @@
 		<item>Ring</item>
 		<item>Alarm</item>
 	</string-array>
+	<string name="require_strings">Require Text</string>
+	<string name="require_strings_summary">Only speak notifications that contain certain text in the message</string>
 	<string name="ignore_strings">Ignore Text</string>
 	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message</string>
-	<string name="ignore_strings_dialog_msg">Separate individual entries with a new line.</string>
+	<string name="require_ignore_strings_dialog_msg">This is matched against the processed message sent to TTS, including text replacements.\n\nSeparate individual entries with a new line.\nThe message needs to match any entry, not all.\nCase insensitive.</string>
 	<string name="ignore_empty">Ignore Empty</string>
 	<string name="ignore_empty_summary_on">Notifications without a message will not be spoken</string>
 	<string name="ignore_empty_summary_off">Notifications without a message will be spoken as \"Notification from [app name].\"</string>
@@ -155,7 +157,8 @@
 	
 	<!-- Ignore/Silence reasons -->
 	<string name="reason_app">Ignored app</string>
-	<string name="reason_string">Ignored text</string>
+	<string name="reason_string_ignored">Ignored text</string>
+	<string name="reason_string_required">Required text missing</string>
 	<string name="reason_empty_msg">Empty message</string>
 	<string name="reason_identical">Identical message within {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
 	<string name="reason_quiet">Quiet time</string>

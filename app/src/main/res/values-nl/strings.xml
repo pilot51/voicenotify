@@ -41,7 +41,7 @@
     </string-array>
     <string name="ignore_strings">Negeer Tekst</string>
     <string name="ignore_strings_summary">Negeer notificaties die bepaalde tekst in het bericht bevatten.</string>
-    <string name="ignore_strings_dialog_msg">Gebruik voor elk item een nieuwe regel.</string>
+    <string name="require_ignore_strings_dialog_msg">Gebruik voor elk item een nieuwe regel.</string>
     <string name="ignore_empty">Negeer Lege Berichten</string>
     <string name="ignore_empty_summary_on">Notificaties zonder bericht wordt niet uitgesproken.</string>
     <string name="ignore_empty_summary_off">Notificaties die geen tekst bevatten worden uitgesproken als \"Notificatie met [app naam].\"</string>
@@ -100,7 +100,7 @@
     <string name="filter">Filter</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">Genegeerde app</string>
-    <string name="reason_string">Genegeerde tekst</string>
+    <string name="reason_string_ignored">Genegeerde tekst</string>
     <string name="reason_empty_msg">Leeg bericht</string>
     <string name="reason_identical">Dezelfde boodschap binnen {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
     <string name="reason_quiet">Stilte modus</string>

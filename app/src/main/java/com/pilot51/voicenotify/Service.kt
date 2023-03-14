@@ -148,23 +148,32 @@ class Service : NotificationListenerService() {
 		val info = NotificationInfo(app, notification)
 		val msgTime = info.calendar.timeInMillis
 		val ttsMsg = info.ttsMessage
-		val ignoreStrings = prefs.getString(getString(R.string.key_ignore_strings), "")!!.lowercase().split("\n").toTypedArray()
-		var stringIgnored = false
-		for (s in ignoreStrings) {
-			if (s.isNotEmpty() && ttsMsg != null && ttsMsg.lowercase().contains(s)) {
-				stringIgnored = true
-				break
-			}
-		}
 		if (app != null && !app.enabled) {
 			info.addIgnoreReason(IgnoreReason.APP)
-		}
-		if (stringIgnored) {
-			info.addIgnoreReason(IgnoreReason.STRING)
 		}
 		if (ttsMsg.isNullOrEmpty()
 			&& prefs.getBoolean(getString(R.string.key_ignore_empty), false)) {
 			info.addIgnoreReason(IgnoreReason.EMPTY_MSG)
+		}
+		if (ttsMsg != null) {
+			val requireStrings = prefs.getString(
+				getString(R.string.key_require_strings), null
+			)?.split("\n")
+			val stringRequired = requireStrings?.any {
+				it.isNotEmpty() && !ttsMsg.contains(it, true)
+			} ?: false
+			if (stringRequired) {
+				info.addIgnoreReason(IgnoreReason.STRING_REQUIRED)
+			}
+			val ignoreStrings = prefs.getString(
+				getString(R.string.key_ignore_strings), null
+			)?.split("\n")
+			val stringIgnored = ignoreStrings?.any {
+				it.isNotEmpty() && ttsMsg.contains(it, true)
+			} ?: false
+			if (stringIgnored) {
+				info.addIgnoreReason(IgnoreReason.STRING_IGNORED)
+			}
 		}
 		var ignoreRepeat = -1
 		val ignoreRepeatStr = prefs.getString(getString(R.string.key_ignore_repeat), null)

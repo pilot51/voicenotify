@@ -41,7 +41,7 @@
     </string-array>
     <string name="ignore_strings">Ignorovat Text</string>
     <string name="ignore_strings_summary">Ignorovat oznámení, které obsahují určitý text ve zprávě.</string>
-    <string name="ignore_strings_dialog_msg">Oddělte jednotlivé položky novým řádkem.</string>
+    <string name="require_ignore_strings_dialog_msg">Oddělte jednotlivé položky novým řádkem.</string>
     <string name="ignore_empty">Ignorovat prázdné</string>
     <string name="ignore_empty_summary_on">Oznámení bez zprávy nebude přečteno.</string>
     <string name="ignore_empty_summary_off">Oznámení bez zprávy bude přečteno jako \"Oznámení z [název aplikace].\"</string>
@@ -100,7 +100,7 @@
     <string name="filter">Filtr</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">Ignorované aplikace</string>
-    <string name="reason_string">Ignorovaný text</string>
+    <string name="reason_string_ignored">Ignorovaný text</string>
     <string name="reason_empty_msg">Prázdná zpráva</string>
     <string name="reason_identical">Identické zprávy v {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
     <string name="reason_quiet">Tichý režim</string>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2012 Mark Injerd
+<!-- Copyright 2012-2023 Mark Injerd
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -38,10 +38,15 @@
 		android:inputType="number"
 		android:defaultValue="100" />
 	<EditTextPreference
+		android:key="@string/key_require_strings"
+		android:title="@string/require_strings"
+		android:summary="@string/require_strings_summary"
+		android:dialogMessage="@string/require_ignore_strings_dialog_msg" />
+	<EditTextPreference
 		android:key="@string/key_ignore_strings"
 		android:title="@string/ignore_strings"
 		android:summary="@string/ignore_strings_summary"
-		android:dialogMessage="@string/ignore_strings_dialog_msg" />
+		android:dialogMessage="@string/require_ignore_strings_dialog_msg" />
 	<CheckBoxPreference
 		android:key="@string/key_ignore_empty"
 		android:title="@string/ignore_empty"

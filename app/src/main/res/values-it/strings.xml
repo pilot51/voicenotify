@@ -43,7 +43,7 @@
     </string-array>
     <string name="ignore_strings">Messaggi Da Ignorare</string>
     <string name="ignore_strings_summary">Ignora le notifiche che contengono determinate parole nel messaggio</string>
-    <string name="ignore_strings_dialog_msg">Separa le varie immissioni iniziando una nuova riga.</string>
+    <string name="require_ignore_strings_dialog_msg">Separa le varie immissioni iniziando una nuova riga.</string>
     <string name="ignore_empty">Ignora Notifiche Nulle</string>
     <string name="ignore_empty_summary_on">Le notifiche senza un messaggio non veranno annunciate.</string>
     <string name="ignore_empty_summary_off">Le notifiche senza messaggio verranno annuncite come \"Notifica da [app name].\"</string>
@@ -114,7 +114,7 @@
     <string name="filter">Filtro</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">App ignorata</string>
-    <string name="reason_string">Testo ignorato</string>
+    <string name="reason_string_ignored">Testo ignorato</string>
     <string name="reason_empty_msg">Messaggio vuoto</string>
     <string name="reason_identical">Messaggio identico entro {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
     <string name="reason_quiet">Ora del Silenzio</string>

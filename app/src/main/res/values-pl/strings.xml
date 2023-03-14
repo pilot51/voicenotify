@@ -47,7 +47,7 @@
     </string-array>
     <string name="ignore_strings">Ignoruj tekst</string>
     <string name="ignore_strings_summary">Ignoruj powiadomienie które posiadają konkretną litere</string>
-    <string name="ignore_strings_dialog_msg">Oddziel indywidualne wpisy nową linią</string>
+    <string name="require_ignore_strings_dialog_msg">Oddziel indywidualne wpisy nową linią</string>
     <string name="ignore_empty">Ignoruj puste</string>
     <string name="ignore_empty_summary_on">Powiadomienia bez wiadomości nie będę wymawiane</string>
     <string name="ignore_empty_summary_off">Powiadomienia będą wymawiane jako \"powiadomienie od [app name].\"</string>
@@ -121,7 +121,7 @@
     <string name="filter">Filter</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">Ignorowane aplikacje</string>
-    <string name="reason_string">Ignorowany tekst</string>
+    <string name="reason_string_ignored">Ignorowany tekst</string>
     <string name="reason_empty_msg">Pusta wiadomość</string>
     <string name="reason_identical">Identyczna wiadomość w ostatnich {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
     <string name="reason_quiet">Czas ciszy</string>
