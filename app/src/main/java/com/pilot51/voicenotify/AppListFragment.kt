@@ -71,7 +71,8 @@ class AppListFragment : ListFragment(), MenuProvider {
 		isUpdating = true
 		CoroutineScope(Dispatchers.IO).launch {
 			SYNC_APPS.withLock {
-				apps = db.appDao.getAll().toMutableList()
+				apps.clear()
+				apps.addAll(db.appDao.getAll())
 				onListUpdated()
 				val isFirstLoad = apps.isEmpty()
 				val packMan = requireContext().packageManager
@@ -172,11 +173,16 @@ class AppListFragment : ListFragment(), MenuProvider {
 	}
 
 	private fun massIgnore(ignoreType: Int) {
-		for (app in apps) {
-			setIgnore(app, ignoreType)
-		}
-		adapter.notifyDataSetChanged()
 		CoroutineScope(Dispatchers.IO).launch {
+			SYNC_APPS.withLock {
+				if (apps.isEmpty()) return@launch
+				for (app in apps) {
+					setIgnore(app, ignoreType)
+				}
+			}
+			launch(Dispatchers.Main) {
+				adapter.notifyDataSetChanged()
+			}
 			db.appDao.upsert(apps)
 		}
 	}
@@ -288,7 +294,7 @@ class AppListFragment : ListFragment(), MenuProvider {
 	}
 
 	companion object {
-		private lateinit var apps: MutableList<App>
+		private val apps by lazy { mutableListOf<App>() }
 		private var defEnable = false
 		private const val KEY_DEFAULT_ENABLE = "defEnable"
 		private const val IGNORE_TOGGLE = 0
@@ -304,9 +310,9 @@ class AppListFragment : ListFragment(), MenuProvider {
 		fun findOrAddApp(pkg: String): App? {
 			return runBlocking(Dispatchers.IO) {
 				SYNC_APPS.withLock {
-					if (!::apps.isInitialized) {
+					if (apps.isEmpty()) {
 						defEnable = prefs.getBoolean(KEY_DEFAULT_ENABLE, true)
-						apps = db.appDao.getAll().toMutableList()
+						apps.addAll(db.appDao.getAll())
 					}
 					for (app in apps) {
 						if (app.packageName == pkg) {
