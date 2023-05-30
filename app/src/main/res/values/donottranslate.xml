@@ -13,6 +13,8 @@
 	<string-array name="support_items">
 		<item>@string/support_rate</item>
 		<item>@string/support_contact</item>
+		<item>@string/support_discord</item>
+		<item>@string/support_matrix</item>
 		<item>@string/support_translations</item>
 		<item>@string/support_source</item>
 		<item>@string/support_privacy</item>

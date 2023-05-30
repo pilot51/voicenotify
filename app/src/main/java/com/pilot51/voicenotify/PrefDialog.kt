@@ -124,6 +124,18 @@ class PrefDialog : DialogFragment() {
 								).show()
 							}
 						}
+						getString(R.string.support_discord) -> startActivity(
+							Intent(
+								Intent.ACTION_VIEW,
+								Uri.parse("https://discord.gg/W6XxGT8WG3")
+							)
+						)
+						getString(R.string.support_matrix) -> startActivity(
+							Intent(
+								Intent.ACTION_VIEW,
+								Uri.parse("https://matrix.to/#/#voicenotify:p51.me")
+							)
+						)
 						getString(R.string.support_translations) -> startActivity(
 							Intent(
 								Intent.ACTION_VIEW,

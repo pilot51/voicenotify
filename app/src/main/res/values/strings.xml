@@ -90,7 +90,7 @@
 	<string name="test_summary">Post a notification (delayed 5 seconds) to test current settings</string>
 	<string name="test_ignored">Voice Notify is ignored in App List.\nTest will run, but notification will not be spoken.</string>
 	<string name="notify_log_summary">List last 20 notifications.\nDisplays time, app name, message, and ignore reasons.</string>
-	<string name="support_summary">Rate/comment, contact the developer, translations, source code, privacy policy</string>
+	<string name="support_summary">Rate &amp; review, email the developer, community chat, translations, source code, issue tracker, privacy policy</string>
 	
 	<!-- TextReplacePreference -->
 	<string name="text_replace_error_duplicate">Duplicate! Will not be saved.</string>
@@ -115,10 +115,12 @@
 	<string name="test_content_title">Content Title</string>
 	<string name="test_content_text">This is the content message.</string>
 	<string name="test_content_info">Content Info</string>
-	<string name="support_rate">Rate/Comment</string>
-	<string name="support_contact">Contact Developer</string>
+	<string name="support_rate">Rate &amp; Review</string>
+	<string name="support_contact">Email Developer</string>
+	<string name="support_discord">Discord</string>
+	<string name="support_matrix">Matrix</string>
 	<string name="support_translations">Translations</string>
-	<string name="support_source">Source Code</string>
+	<string name="support_source">GitHub (Source Code, Issue Tracker)</string>
 	<string name="support_privacy">Privacy Policy</string>
 	<string name="support_privacy_message">Voice Notify does not collect or transmit data off of the device. However, it does use third party apps or services that may transmit data, as outlined below under \"Third party apps and services\".
 \n\nIn the unlikely event that sensitive or personal information is received by the developer, it will not be sold, shared, copied, or used without the express consent of who the information belongs to. In the absence of consent, the information will be deleted if possible.
