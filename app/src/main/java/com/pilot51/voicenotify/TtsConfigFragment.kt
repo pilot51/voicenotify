@@ -18,7 +18,6 @@ package com.pilot51.voicenotify
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.DialogFragment
@@ -27,31 +26,19 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.pilot51.voicenotify.Common.prefs
 import com.pilot51.voicenotify.TextReplacePreference.TextReplaceFragment
+import com.pilot51.voicenotify.VNApplication.Companion.appContext
 
 class TtsConfigFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
-	private val ttsIntent: Intent?
-		get() {
-			val intent = Intent(Intent.ACTION_MAIN)
-			when {
-				checkActivityExist("com.android.settings.TextToSpeechSettings") ->
-					intent.setClassName("com.android.settings", "com.android.settings.TextToSpeechSettings")
-				checkActivityExist("com.android.settings.Settings\$TextToSpeechSettingsActivity") ->
-					intent.setClassName("com.android.settings", "com.android.settings.Settings\$TextToSpeechSettingsActivity")
-				checkActivityExist("com.google.tv.settings.TextToSpeechSettingsTop") ->
-					intent.setClassName("com.google.tv.settings", "com.google.tv.settings.TextToSpeechSettingsTop")
-				else -> return null
-			}
-			return intent
-		}
-
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 		addPreferencesFromResource(R.xml.preferences_tts)
 		val pTTS: Preference = findPreference(getString(R.string.key_ttsSettings))!!
-		ttsIntent?.let {
-			pTTS.intent = it
-		} ?: run {
-			pTTS.isEnabled = false
-			pTTS.setSummary(R.string.tts_settings_summary_fail)
+		Intent("com.android.settings.TTS_SETTINGS").let {
+			if (it.resolveActivity(appContext.packageManager) != null) {
+				pTTS.intent = it
+			} else {
+				pTTS.isEnabled = false
+				pTTS.setSummary(R.string.tts_settings_summary_fail)
+			}
 		}
 		val pTtsString: EditTextPreference = findPreference(getString(R.string.key_ttsString))!!
 		if (pTtsString.text!!.contains("%")) {
@@ -88,16 +75,5 @@ class TtsConfigFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeLi
 		if (key == getString(R.string.key_ttsStream)) {
 			Common.setVolumeStream(requireActivity())
 		}
-	}
-
-	private fun checkActivityExist(name: String): Boolean {
-		try {
-			val pkgInfo = requireContext().packageManager.getPackageInfo(
-				name.substring(0, name.lastIndexOf(".")), PackageManager.GET_ACTIVITIES)
-			return pkgInfo.activities?.any { it.name == name } ?: false
-		} catch (e: PackageManager.NameNotFoundException) {
-			e.printStackTrace()
-		}
-		return false
 	}
 }
