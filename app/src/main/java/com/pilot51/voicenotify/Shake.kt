@@ -20,6 +20,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.util.Log
 import com.pilot51.voicenotify.Common.prefs
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import kotlin.math.abs
@@ -29,7 +30,7 @@ class Shake : SensorEventListener {
 	private val manager = appContext.getSystemService(SENSOR_SERVICE) as SensorManager
 	private val sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 	var onShake: (() -> Unit)? = null
-	private var threshold = 0
+	private var threshold = 0.0
 	private var overThresholdCount = 0
 	private var accelCurrent = 0f
 	private var accelLast = 0f
@@ -37,9 +38,10 @@ class Shake : SensorEventListener {
 	fun enable() {
 		if (onShake == null) return
 		threshold = try {
-			prefs.getString(appContext.getString(R.string.key_shake_threshold), null)!!.toInt()
+			prefs.getString(appContext.getString(R.string.key_shake_threshold), null)
+				?.takeIf { it.isNotEmpty() }?.toDouble() ?: return
 		} catch (e: NumberFormatException) {
-			// Don't enable if threshold setting is blank
+			Log.w(TAG, "Failed to parse shake threshold: ${e.message}")
 			return
 		}
 		manager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
@@ -69,5 +71,9 @@ class Shake : SensorEventListener {
 			overThresholdCount = 0
 		}
 		accelLast = accelCurrent
+	}
+
+	companion object {
+		private val TAG = Shake::class.simpleName
 	}
 }

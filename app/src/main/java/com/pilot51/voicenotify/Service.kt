@@ -175,10 +175,12 @@ class Service : NotificationListenerService() {
 				info.addIgnoreReason(IgnoreReason.STRING_IGNORED)
 			}
 		}
-		var ignoreRepeat = -1
-		val ignoreRepeatStr = prefs.getString(getString(R.string.key_ignore_repeat), null)
-		if (!ignoreRepeatStr.isNullOrEmpty()) {
-			ignoreRepeat = ignoreRepeatStr.toInt()
+		val ignoreRepeat = try {
+			prefs.getString(getString(R.string.key_ignore_repeat), null)
+				?.takeIf { it.isNotEmpty() }?.toInt() ?: -1
+		} catch (e: NumberFormatException) {
+			Log.w(TAG, "Failed to parse Ignore Repeats: ${e.message}")
+			-1
 		}
 		if (lastMsg.containsKey(app)) {
 			if (lastMsg[app] == ttsMsg && (ignoreRepeat == -1 || msgTime - lastMsgTime[app]!! < ignoreRepeat * 1000)) {
@@ -187,16 +189,20 @@ class Service : NotificationListenerService() {
 		}
 		addNotification(info)
 		if (info.getIgnoreReasons().isEmpty()) {
-			var delay = 0
-			val delayStr = prefs.getString(getString(R.string.key_ttsDelay), null)
-			if (!delayStr.isNullOrEmpty()) {
-				delay = delayStr.toInt()
+			val delay = try {
+				prefs.getString(getString(R.string.key_ttsDelay), null)
+					?.takeIf { it.isNotEmpty() }?.toDouble()?.takeUnless { it < 0.0 } ?: 0.0
+			} catch (e: NumberFormatException) {
+				Log.w(TAG, "Failed to parse TTS Delay: ${e.message}")
+				0.0
 			}
 			if (!isScreenOn()) {
-				var interval = 0
-				val intervalStr = prefs.getString(getString(R.string.key_tts_repeat), null)
-				if (!intervalStr.isNullOrEmpty()) {
-					interval = intervalStr.toInt()
+				val interval = try {
+					prefs.getString(getString(R.string.key_tts_repeat), null)
+						?.takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0
+				} catch (e: NumberFormatException) {
+					Log.w(TAG, "Failed to parse TTS Repeat: ${e.message}")
+					0.0
 				}
 				if (interval > 0) {
 					synchronized(repeatList) { repeatList.add(info) }
@@ -204,9 +210,6 @@ class Service : NotificationListenerService() {
 						repeater = RepeatTimer(interval)
 					}
 				}
-			}
-			if (delay < 0) { // Just in case we get a weird value, don't want to try to make the Timer wait for negative time
-				delay = 0
 			}
 			Timer().schedule(object : TimerTask() {
 				override fun run() {
@@ -221,7 +224,7 @@ class Service : NotificationListenerService() {
 						speak(info)
 					}
 				}
-			}, delay * 1000L) // A delay of 0 works fine, and means that all speak calls anywhere are running in their own thread and not blocking.
+			}, (delay * 1000).toLong()) // A delay of 0 works fine, and means that all speak calls anywhere are running in their own thread and not blocking.
 			lastMsg[app] = ttsMsg
 			lastMsgTime[app] = msgTime
 		} else {
@@ -332,10 +335,10 @@ class Service : NotificationListenerService() {
 		return ignoreReasons
 	}
 
-	private inner class RepeatTimer(minuteInterval: Int) : TimerTask() {
+	private inner class RepeatTimer(minuteInterval: Double) : TimerTask() {
 		init {
 			if (minuteInterval > 0) {
-				val interval = minuteInterval * 60000L
+				val interval = (minuteInterval * 60000).toLong()
 				Timer().schedule(this, interval, interval)
 			}
 		}

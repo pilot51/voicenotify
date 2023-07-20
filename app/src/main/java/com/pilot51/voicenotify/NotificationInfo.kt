@@ -106,12 +106,14 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 			}
 		}
 		if (ttsMessage != null) {
-			val maxLengthStr = prefs.getString(appContext.getString(R.string.key_max_length), null)
-			if (!maxLengthStr.isNullOrEmpty()) {
-				val maxLength = maxLengthStr.toInt()
+			try {
+				val maxLength = prefs.getString(appContext.getString(R.string.key_max_length), null)
+					?.takeIf { it.isNotEmpty() }?.toInt() ?: 0
 				if (maxLength > 0) {
 					ttsMessage = ttsMessage!!.substring(0, min(maxLength, ttsMessage!!.length))
 				}
+			} catch (e: NumberFormatException) {
+				Log.w(TAG, "Failed to parse Maximum Message: ${e.message}")
 			}
 		}
 	}
@@ -189,5 +191,9 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 	 */
 	fun getIgnoreReasons(): Set<IgnoreReason> {
 		return ignoreReasons
+	}
+
+	companion object {
+		private val TAG = NotificationInfo::class.simpleName
 	}
 }
