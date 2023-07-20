@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2012-2023 Mark Injerd
+<!-- Copyright 2011-2023 Mark Injerd
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@
 		android:icon="@mipmap/ic_launcher"
 		android:roundIcon="@mipmap/ic_launcher_round"
 		android:label="@string/app_name"
-		android:theme="@style/AppTheme">
+		android:theme="@android:style/Theme.Material.NoActionBar">
 		<activity
 			android:name=".MainActivity"
 			android:exported="true">
@@ -52,12 +52,10 @@
 			</intent-filter>
 		</service>
 		<receiver
-			android:name=".WidgetProvider"
+			android:name=".AppWidgetReceiver"
 			android:exported="true">
 			<intent-filter>
 				<action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-				<action android:name="voicenotify.widget.TOGGLE" />
-				<action android:name="voicenotify.widget.UPDATE" />
 			</intent-filter>
 			<meta-data
 				android:name="android.appwidget.provider"

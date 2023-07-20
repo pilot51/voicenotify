@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Mark Injerd
+ * Copyright 2011-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,14 +15,39 @@
  */
 package com.pilot51.voicenotify
 
+import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.Window
-import androidx.fragment.app.FragmentActivity
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STREAM
+import com.pilot51.voicenotify.PreferenceHelper.prefs
 
-class MainActivity : FragmentActivity() {
+class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		window.requestFeature(Window.FEATURE_ACTION_BAR)
-		setContentView(R.layout.activity_main)
+		Common.setVolumeStream(this)
+		setContent {
+			MaterialTheme(colorScheme = darkColorScheme()) {
+				AppMain()
+			}
+		}
+	}
+
+	override fun onResume() {
+		super.onResume()
+		prefs.registerOnSharedPreferenceChangeListener(this)
+	}
+
+	override fun onPause() {
+		prefs.unregisterOnSharedPreferenceChangeListener(this)
+		super.onPause()
+	}
+
+	override fun onSharedPreferenceChanged(sp: SharedPreferences?, key: String?) {
+		if (key == KEY_TTS_STREAM) {
+			Common.setVolumeStream(this)
+		}
 	}
 }

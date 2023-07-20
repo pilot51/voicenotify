@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Mark Injerd
+ * Copyright 2011-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,47 +15,92 @@
  */
 package com.pilot51.voicenotify
 
-import android.app.AlertDialog
+import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
+import androidx.compose.material3.*
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
-import androidx.fragment.app.Fragment
+import com.google.accompanist.permissions.*
+import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
 
 object PermissionHelper {
-	/** Convenience to create a result launcher for requesting a permission. */
-	fun Fragment.requestPermissionLauncher(onResult: ((isGranted: Boolean) -> Unit) = {}) =
-		registerForActivityResult(ActivityResultContracts.RequestPermission(), onResult)
-
 	fun Context.isPermissionGranted(permission: String) =
 		ActivityCompat.checkSelfPermission(this, permission) == PERMISSION_GRANTED
 
 	/**
-	 * @param permission The permission from `Manifest.permission.*`.
-	 * @param rationaleMsgId The permission rationale string id if it should be shown.
-	 * @param launcher The result launcher used to request the permission.
+	 * Checks if this permission is granted. If not, checks if the rationale
+	 * should be shown and if not, launches the permission request.
+	 * @param onShowRationale Called when the rationale should be shown.
 	 * @return `true` if permission is already granted,
-	 * `false` if the user needs to approve it first and
-	 * the [launcher] callback will be used to proceed.
+	 * `false` if the user needs to approve it first.
 	 */
-	fun Fragment.requestPermission(
-		permission: String,
-		@StringRes rationaleMsgId: Int,
-		launcher: ActivityResultLauncher<String>
+	@OptIn(ExperimentalPermissionsApi::class)
+	fun PermissionState.requestPermission(
+		onShowRationale: () -> Unit
 	): Boolean {
-		val context = requireContext()
-		if (context.isPermissionGranted(permission)) return true
-		else if (shouldShowRequestPermissionRationale(permission)) {
-			AlertDialog.Builder(context)
-				.setMessage(rationaleMsgId)
-				.setPositiveButton(android.R.string.ok) { _, _ ->
-					launcher.launch(permission)
-				}
-				.setNegativeButton(android.R.string.cancel, null)
-				.show()
-		} else launcher.launch(permission)
+		if (status.isGranted) {
+			return true
+		} else if (status.shouldShowRationale) {
+			onShowRationale()
+		} else {
+			launchPermissionRequest()
+		}
 		return false
+	}
+
+	/**
+	 * @param permissionState The [PermissionState] to use.
+	 * @param rationaleMsgId The permission rationale string id if it should be shown.
+	 * @param onDismiss Called when the dialog should be dismissed.
+	 */
+	@OptIn(ExperimentalPermissionsApi::class)
+	@Composable
+	fun RationaleDialog(
+		permissionState: PermissionState,
+		@StringRes rationaleMsgId: Int,
+		onDismiss: () -> Unit
+	) {
+		AlertDialog(
+			onDismissRequest = onDismiss,
+			confirmButton = {
+				TextButton(
+					onClick = {
+						permissionState.launchPermissionRequest()
+						onDismiss()
+					}
+				) {
+					Text(stringResource(android.R.string.ok))
+				}
+			},
+			dismissButton = {
+				TextButton(onClick = onDismiss) {
+					Text(stringResource(android.R.string.cancel))
+				}
+			},
+			text = {
+				Text(stringResource(rationaleMsgId))
+			}
+		)
+	}
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Preview
+@Composable
+private fun RationaleDialogPreview() {
+	val permissionState = object : PermissionState {
+		override val permission = Manifest.permission.READ_PHONE_STATE
+		override val status = PermissionStatus.Granted
+		override fun launchPermissionRequest() {}
+	}
+	MaterialTheme(colorScheme = darkColorScheme()) {
+		RationaleDialog(
+			permissionState = permissionState,
+			rationaleMsgId = R.string.permission_rationale_read_phone_state
+		) {}
 	}
 }

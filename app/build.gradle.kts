@@ -1,5 +1,5 @@
 /*
- * Copyright 2017-2023 Mark Injerd
+ * Copyright 2011-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,6 @@ plugins {
 	id("com.android.application")
 	kotlin("android")
 	id("com.google.devtools.ksp")
-	id("androidx.navigation.safeargs.kotlin")
 }
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
@@ -43,11 +42,11 @@ val gitCommitHash by lazy {
 
 android {
 	namespace = "com.pilot51.voicenotify"
-	compileSdk = 33
+	compileSdk = 34
 	defaultConfig {
 		applicationId = "com.pilot51.voicenotify"
-		minSdk = 18
-		targetSdk = 33
+		minSdk = 21
+		targetSdk = 34
 		versionName = "1.2.3"
 		versionCode = 27
 		vectorDrawables.useSupportLibrary = true
@@ -58,6 +57,15 @@ android {
 
 	buildFeatures {
 		viewBinding = true
+	}
+
+	buildFeatures {
+		buildConfig = true
+		compose = true
+	}
+
+	composeOptions {
+		kotlinCompilerExtensionVersion = "1.5.7"
 	}
 
 	compileOptions {
@@ -78,8 +86,15 @@ android {
 
 	buildTypes {
 		getByName("release") {
-			isMinifyEnabled = false
 			signingConfig = signingConfigs.getByName("release")
+			versionNameSuffix = " [$gitCommitHash]"
+			@Suppress("UnstableApiUsage")
+			postprocessing {
+				isRemoveUnusedCode = true
+				isOptimizeCode = true
+				isShrinkResources = true
+				isObfuscate = false
+			}
 		}
 		getByName("debug") {
 			versionNameSuffix = "-debug [$gitCommitHash]"
@@ -95,10 +110,16 @@ android {
 }
 
 dependencies {
-	implementation("androidx.core:core-ktx:1.10.1")
+	implementation("androidx.core:core-ktx:1.12.0")
+	implementation("androidx.activity:activity-compose:1.8.2")
+	implementation("androidx.compose.material3:material3:1.1.2")
+	implementation("androidx.compose.material:material-icons-extended-android:1.5.4")
+	implementation("androidx.compose.ui:ui-tooling-preview:1.5.4")
+	debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
+	implementation("androidx.navigation:navigation-compose:2.7.6")
+	implementation("androidx.glance:glance-appwidget:1.0.0")
 	implementation("androidx.preference:preference-ktx:1.2.1")
-	implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
-	implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
-	implementation("androidx.room:room-ktx:2.5.2")
-	ksp("androidx.room:room-compiler:2.5.2")
+	implementation("androidx.room:room-ktx:2.6.1")
+	ksp("androidx.room:room-compiler:2.6.1")
+	implementation("com.google.accompanist:accompanist-permissions:0.32.0")
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2023 Mark Injerd
+ * Copyright 2011-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,130 +15,190 @@
  */
 package com.pilot51.voicenotify
 
-import android.app.AlertDialog
-import android.content.Context
-import android.graphics.Color
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.ListView
-import android.widget.TextView
+import android.app.Notification
 import android.widget.Toast
-import com.pilot51.voicenotify.databinding.NotifyLogItemBinding
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
-class NotifyList(context: Context?) : ListView(context) {
-	private interface OnListChangeListener {
-		fun onListChange()
+object NotifyList {
+	private const val HISTORY_LIMIT = 20
+	private val list = mutableStateListOf<NotificationInfo>()
+
+	fun addNotification(info: NotificationInfo) {
+		if (list.size == HISTORY_LIMIT) {
+			list.removeAt(list.size - 1)
+		}
+		list.add(0, info)
 	}
 
-	init {
-		adapter = Adapter()
+	fun updateInfo(info: NotificationInfo) {
+		val index = list.indexOf(info)
+		// Force update to list state by first setting copy
+		list[index] = info.copy()
+		// Set back to original to ensure future calls can find it again
+		list[index] = info
 	}
 
-	private inner class Adapter : BaseAdapter() {
-		private val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+	@Composable
+	fun NotificationLogDialog(onDismiss: () -> Unit) {
+		NotificationLogDialog(
+			list = list,
+			onDismiss = onDismiss
+		)
+	}
+}
 
-		init {
-			listener = object : OnListChangeListener {
-				override fun onListChange() {
-					CoroutineScope(Dispatchers.Main).launch {
-						notifyDataSetChanged()
-					}
+@Composable
+private fun NotificationLogDialog(
+	list: List<NotificationInfo>,
+	onDismiss: () -> Unit
+) {
+	AlertDialog(
+		onDismissRequest = onDismiss,
+		confirmButton = { },
+		dismissButton = {
+			TextButton(onClick = onDismiss) {
+				Text(stringResource(android.R.string.ok))
+			}
+		},
+		title = { Text(stringResource(R.string.notify_log)) },
+		text = { ItemList(list) }
+	)
+}
+
+@Composable
+private fun ItemList(list: List<NotificationInfo>) {
+	LazyColumn(modifier = Modifier.fillMaxWidth()) {
+		itemsIndexed(list) { index, item ->
+			Item(item)
+			if (index < list.lastIndex) {
+				Divider(
+					modifier = Modifier.padding(vertical = 16.dp),
+					color = Color.Gray,
+					thickness = 1.dp
+				)
+			}
+		}
+	}
+}
+
+@Composable
+private fun Item(item: NotificationInfo) {
+	var showIgnoreDialog by remember(item) { mutableStateOf(false) }
+	Column(modifier = Modifier
+		.fillMaxWidth()
+		.pointerInput(item) {
+			detectTapGestures(onLongPress = {
+				if (item.app == null) return@detectTapGestures
+				showIgnoreDialog = true
+			})
+		}
+	) {
+		Text(
+			text = item.time,
+			modifier = Modifier.fillMaxWidth(),
+			textAlign = TextAlign.Center
+		)
+		Text(
+			text = item.app!!.label,
+			modifier = Modifier.fillMaxWidth(),
+			fontSize = 24.sp,
+			textAlign = TextAlign.Center
+		)
+		val logMessage = item.logMessage
+		if (logMessage.isNotEmpty()) {
+			Text(
+				text = logMessage,
+				modifier = Modifier.fillMaxWidth(),
+				fontSize = 16.sp,
+				textAlign = TextAlign.Center
+			)
+		}
+		if (item.getIgnoreReasons().isNotEmpty()) {
+			Text(
+				text = item.getIgnoreReasonsAsText(),
+				modifier = Modifier.fillMaxWidth(),
+				color = if (item.isSilenced) Color.Yellow else Color.Red,
+				textAlign = TextAlign.Center
+			)
+		}
+	}
+	if (showIgnoreDialog && item.app != null) {
+		AlertDialog(
+			onDismissRequest = {
+				showIgnoreDialog = false
+			},
+			confirmButton = {
+				val context = LocalContext.current
+				Button(onClick = {
+					item.app.setEnabled(!item.app.enabled, true)
+					Toast.makeText(context,
+						context.getString(
+							if (item.app.enabled) R.string.app_is_not_ignored else R.string.app_is_ignored,
+							item.app.label
+						),
+						Toast.LENGTH_SHORT
+					).show()
+					showIgnoreDialog = false
+				}) {
+					Text(
+						text = stringResource(R.string.yes),
+						fontSize = 24.sp
+					)
 				}
-			}
-		}
-
-		override fun getCount(): Int {
-			return list.size
-		}
-
-		override fun getItem(position: Int): Any {
-			return list[position]
-		}
-
-		override fun getItemId(position: Int): Long {
-			return position.toLong()
-		}
-
-		private inner class ViewHolder {
-			lateinit var time: TextView
-			lateinit var title: TextView
-			lateinit var message: TextView
-			lateinit var ignoreReasons: TextView
-		}
-
-		override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-			lateinit var holder: ViewHolder
-			val binding = convertView?.let {
-				NotifyLogItemBinding.bind(it).apply {
-					holder = root.tag as ViewHolder
+			},
+			dismissButton = {
+				Button(onClick = {
+					showIgnoreDialog = false
+				}) {
+					Text(
+						text = stringResource(android.R.string.cancel),
+						fontSize = 24.sp
+					)
 				}
-			} ?: NotifyLogItemBinding.inflate(inflater, parent, false).apply {
-				holder = ViewHolder()
-				holder.time = time
-				holder.title = title
-				holder.message = message
-				holder.ignoreReasons = ignoreReasons
-				root.tag = holder
+			},
+			title = {
+				Text(stringResource(
+					if (item.app.enabled) R.string.ignore_app else R.string.unignore_app,
+					item.app.label
+				))
 			}
-			val item = list[position]
-			holder.time.text = item.time
-			holder.title.text = item.app!!.label
-			val logMessage = item.logMessage
-			if (logMessage.isNotEmpty()) {
-				holder.message.text = logMessage
-				holder.message.visibility = VISIBLE
-			} else holder.message.visibility = GONE
-			if (item.getIgnoreReasons().isNotEmpty()) {
-				holder.ignoreReasons.text = item.getIgnoreReasonsAsText()
-				if (item.isSilenced) {
-					holder.ignoreReasons.setTextColor(Color.YELLOW)
-				} else holder.ignoreReasons.setTextColor(Color.RED)
-				holder.ignoreReasons.visibility = VISIBLE
-			} else holder.ignoreReasons.visibility = GONE
-			binding.root.setOnLongClickListener {
-				AlertDialog.Builder(context)
-					.setTitle(resources.getString(
-						if (item.app.enabled) R.string.ignore_app else R.string.unignore_app,
-						item.app.label
-					))
-					.setPositiveButton(R.string.yes) { _, _ ->
-						item.app.setEnabled(!item.app.enabled, true)
-						Toast.makeText(context,
-							resources.getString(
-								if (item.app.enabled) R.string.app_is_not_ignored else R.string.app_is_ignored,
-								item.app.label
-							),
-							Toast.LENGTH_SHORT
-						).show()
-					}
-					.setNegativeButton(android.R.string.cancel, null)
-					.show()
-				false
-			}
-			return binding.root
+		)
+	}
+}
+
+@Preview
+@Composable
+private fun NotificationLogDialogPreview() {
+	val previewNotification = Notification().apply {
+		`when` = Long.MIN_VALUE
+		extras.apply {
+			putString(Notification.EXTRA_SUB_TEXT, "Subtext")
+			putString(Notification.EXTRA_TITLE, "Content Title")
+			putString(Notification.EXTRA_TEXT, "Content Text")
+			putString(Notification.EXTRA_INFO_TEXT, "Content Info")
 		}
 	}
-
-	companion object {
-		private const val HISTORY_LIMIT = 20
-		private val list: MutableList<NotificationInfo> = ArrayList(HISTORY_LIMIT)
-		private var listener: OnListChangeListener? = null
-
-		fun refresh() {
-			listener?.onListChange()
-		}
-
-		fun addNotification(info: NotificationInfo) {
-			if (list.size == HISTORY_LIMIT) {
-				list.removeAt(list.size - 1)
-			}
-			list.add(0, info)
-			refresh()
-		}
+	val list = listOf(
+		NotificationInfo(app = App(1, "package.name.one", "App Name 1", true), previewNotification),
+		NotificationInfo(app = App(2, "package.name.two", "App Name 2", false), previewNotification)
+	)
+	MaterialTheme(colorScheme = darkColorScheme()) {
+		NotificationLogDialog(list) {}
 	}
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-	android:initialLayout="@layout/appwidget"
-	android:previewImage="@drawable/widget_running"
+	android:initialLayout="@layout/glance_default_loading_layout"
+	android:previewImage="@drawable/widget"
 	android:resizeMode="none"
 	android:updatePeriodMillis="0"
 	android:minHeight="40dp"

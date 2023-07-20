@@ -8,7 +8,6 @@
 		<item>2</item>
 		<item>4</item>
 	</string-array>
-	<string name="ttsString_default_value">#a. #c. #m.</string>
 	<string name="notification_channel_id">test</string>
 	<string-array name="support_items">
 		<item>@string/support_rate</item>
@@ -23,29 +22,4 @@
 	<!-- Forcing English for user visible support email strings -->
 	<string name="email_subject">Contacting about Voice Notify</string>
 	<string name="email_body">\n\nVoice Notify version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
-	
-	<!-- Preference keys -->
-	<string name="key_status">status</string>
-	<string name="key_appList">appList</string>
-	<string name="key_ttsConfig">ttsConfig</string>
-	<string name="key_ttsSettings">ttsSettings</string>
-	<string name="key_ttsString">ttsString</string>
-	<string name="key_ttsTextReplace">ttsTextReplace</string>
-	<string name="key_ttsStream">ttsStream</string>
-	<string name="key_ttsDelay">ttsDelay</string>
-	<string name="key_tts_repeat">tts_repeat</string>
-	<string name="key_shake_threshold">shake_threshold</string>
-	<string name="key_require_strings">require_strings</string>
-	<string name="key_ignore_strings">ignore_strings</string>
-	<string name="key_ignore_empty">ignore_empty</string>
-	<string name="key_ignore_groups">ignore_groups</string>
-	<string name="key_ignore_repeat">ignore_repeat</string>
-	<string name="key_max_length">key_max_length</string>
-	<string name="key_device_state">device_state</string>
-	<string name="key_quietStart">quietStart</string>
-	<string name="key_quietEnd">quietEnd</string>
-	<string name="key_test">test</string>
-	<string name="key_notify_log">notify_log</string>
-	<string name="key_support">support</string>
-	<string name="key_audio_focus">audio_focus</string>
 </resources>

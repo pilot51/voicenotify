@@ -1,5 +1,5 @@
 /*
- * Copyright 2012-2023 Mark Injerd
+ * Copyright 2011-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,8 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
-import com.pilot51.voicenotify.Common.prefs
+import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
+import com.pilot51.voicenotify.PreferenceHelper.prefs
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -38,7 +39,7 @@ class Shake : SensorEventListener {
 	fun enable() {
 		if (onShake == null) return
 		threshold = try {
-			prefs.getString(appContext.getString(R.string.key_shake_threshold), null)
+			prefs.getString(KEY_SHAKE_THRESHOLD, null)
 				?.takeIf { it.isNotEmpty() }?.toDouble() ?: return
 		} catch (e: NumberFormatException) {
 			Log.w(TAG, "Failed to parse shake threshold: ${e.message}")

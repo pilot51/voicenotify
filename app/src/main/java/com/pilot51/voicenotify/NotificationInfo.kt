@@ -1,5 +1,5 @@
 /*
- * Copyright 2018-2023 Mark Injerd
+ * Copyright 2011-2023 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,10 +15,13 @@
  */
 package com.pilot51.voicenotify
 
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.util.Log
-import com.pilot51.voicenotify.Common.prefs
+import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_TTS_STRING
+import com.pilot51.voicenotify.PreferenceHelper.KEY_MAX_LENGTH
+import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STRING
+import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_TEXT_REPLACE
+import com.pilot51.voicenotify.PreferenceHelper.prefs
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
@@ -31,11 +34,9 @@ import kotlin.math.min
  * @param app The app that posted the notification.
  * @param notification The notification from which to get most of the info.
  */
-// Suppressing lint because documentation says extras added in API 19 when actually added in API 18.
-// See reported issue: https://issuetracker.google.com/issues/69396548
-class NotificationInfo @SuppressLint("InlinedApi") constructor(
+data class NotificationInfo(
 	val app: App?,
-	notification: Notification
+	private val notification: Notification
 ) {
 	/** The notification's ticker message. */
 	private val ticker = notification.tickerText?.toString()
@@ -64,16 +65,15 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 		val extras = notification.extras
 		subtext = extras.getString(Notification.EXTRA_SUB_TEXT)
 		contentTitle = extras.getString(Notification.EXTRA_TITLE)
-		val text = extras.getCharSequence(Notification.EXTRA_TEXT)
-		contentText = text?.toString()
+		contentText = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()
 		contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT)
 		calendar = Calendar.getInstance()
-		buildTtsMessage()
+		if (notification.`when` != Long.MIN_VALUE) buildTtsMessage()
 	}
 
 	/** Generates the string to be used for TTS. */
 	private fun buildTtsMessage() {
-		val ttsStringPref = prefs.getString(appContext.getString(R.string.key_ttsString), "")!!
+		val ttsStringPref = prefs.getString(KEY_TTS_STRING, DEFAULT_TTS_STRING)!!
 		val ttsUnformattedMsg = ttsStringPref
 			.replace("#a", "%1\$s") // App Label
 			.replace("#t", "%2\$s") // Ticker
@@ -90,16 +90,15 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 				contentText ?: "",
 				contentInfoText ?: "")
 		} catch (e: IllegalFormatException) {
-			Log.w(Service::class.simpleName, "Error formatting custom TTS string!")
+			Log.w(TAG, "Error formatting custom TTS string!")
 			e.printStackTrace()
 		}
 		if (app != null && (ttsMessage == null || ttsMessage == app.label)) {
 			ttsMessage = appContext.getString(R.string.notification_from, app.label)
 		}
 		if (!ttsMessage.isNullOrEmpty()) {
-			val ttsTextReplace = prefs.getString(
-				appContext.getString(R.string.key_ttsTextReplace), null)
-			val textReplaceList = TextReplacePreference.convertStringToList(ttsTextReplace)
+			val ttsTextReplace = prefs.getString(KEY_TTS_TEXT_REPLACE, null)
+			val textReplaceList = Common.convertTextReplaceStringToList(ttsTextReplace)
 			for (pair in textReplaceList) {
 				ttsMessage = ttsMessage!!.replace(
 					"(?i)${Pattern.quote(pair.first)}".toRegex(), pair.second)
@@ -107,7 +106,7 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 		}
 		if (ttsMessage != null) {
 			try {
-				val maxLength = prefs.getString(appContext.getString(R.string.key_max_length), null)
+				val maxLength = prefs.getString(KEY_MAX_LENGTH, null)
 					?.takeIf { it.isNotEmpty() }?.toInt() ?: 0
 				if (maxLength > 0) {
 					ttsMessage = ttsMessage!!.substring(0, min(maxLength, ttsMessage!!.length))
@@ -192,6 +191,10 @@ class NotificationInfo @SuppressLint("InlinedApi") constructor(
 	fun getIgnoreReasons(): Set<IgnoreReason> {
 		return ignoreReasons
 	}
+
+	// For some reason this is needed to force list state update with simple object copy
+	override fun equals(other: Any?) = super.equals(other)
+	override fun hashCode() = super.hashCode()
 
 	companion object {
 		private val TAG = NotificationInfo::class.simpleName
