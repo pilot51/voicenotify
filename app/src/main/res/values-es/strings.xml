@@ -71,7 +71,7 @@
 \nLa prueba se ejecutará, pero no se hablará de la notificación.</string>
     <string name="notify_log_summary">Lista las últimas 20 notificaciones.
 \nMuestra tiempo, nombre de la aplicación, mensaje y razones de ignorar.</string>
-    <string name="support_summary">Valora/comenta, contacta con el desarrollador, traducciones, código fuente, política de privacidad</string>
+    <string name="support_summary">Califica y revisa, envía un correo electrónico al desarrollador, chat de la comunidad, traducciones, código fuente, seguimiento de los problemas, política de privacidad</string>
     <!-- TextReplacePreference -->
     <!-- text_replace_row.xml -->
     <!-- MainActivity and xml/preferences.xml -->
@@ -81,10 +81,10 @@
     <!-- MainActivity -->
     <string name="service_disabled">El servicio de notificación por voz está desactivado</string>
     <string name="status_summary_suspended">Seleccione para activar la notificación por voz.</string>
-    <string name="support_rate">Calificar/Comentar</string>
-    <string name="support_contact">Contactar al Desarrollador</string>
+    <string name="support_rate">Revisión de las tasas</string>
+    <string name="support_contact">Correo electrónico del Desarrollador</string>
     <string name="support_translations">Traducciones</string>
-    <string name="support_source">Código fuente</string>
+    <string name="support_source">GitHub (código fuente, seguimiento de los problemas)</string>
     <string name="error_market">Error: Incapaz de encontrar Google Play Store instalado.</string>
     <string name="error_email">Error: No se puede encontrar una aplicación de correo electrónico instalada.</string>
     <!-- Service -->
@@ -174,4 +174,10 @@
 \n- Vibrar - Necesario para la función de prueba mientras el teléfono está en modo de vibración.
 \n- Modificar la configuración de audio - Necesario para mejorar la detección de los auriculares con cable.
 \n- Leer el estado del teléfono - Necesario para interrumpir el TTS si se activa una llamada telefónica.</string>
+    <string name="permission_rationale_post_notifications">Se requiere el permiso de publicación de las notificaciones para que Voice Notify publique una notificación de prueba.</string>
+    <string name="reason_string_required">Falta el texto requerido</string>
+    <string name="require_strings">Requerir un Texto</string>
+    <string name="require_strings_summary">Hablar solo las notificaciones que contengan cierto texto en el mensaje</string>
+    <string name="support_discord">Discord</string>
+    <string name="support_matrix">Matrix</string>
 </resources>
