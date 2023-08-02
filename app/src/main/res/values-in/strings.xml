@@ -60,7 +60,11 @@
     </string-array>
     <string name="ignore_strings">Teks Terabaikan</string>
     <string name="ignore_strings_summary">Abaikan pemberitahuan yang mengandung teks tertentu dalam pesan</string>
-    <string name="require_ignore_strings_dialog_msg">Pisahkan tiap masukan dengan baris baru.</string>
+    <string name="require_ignore_strings_dialog_msg">Ini cocok dengan pesan diproses yang dikirim ke TTS, termasuk penggantian teks.
+\n
+\nMemisahkan entri individu dengan garis baru.
+\nPesan harus sesuai dengan entri apapun, tidak semua.
+\nSensitif huruf besar dan kecil.</string>
     <string name="ignore_empty">Abaikan Kosong</string>
     <string name="ignore_empty_summary_on">Pemberitahuan tanpa pesan tidak akan diucapkan</string>
     <string name="ignore_empty_summary_off">Pemberitahuan tanpa pesan akan diucapkan \"Pemberitahuan dari [nama aplikasi].\"</string>
@@ -94,7 +98,7 @@
 \nTeks akan dijalankan, tapi pemberitahuan tidak akan diucapkan.</string>
     <string name="notify_log_summary">Daftar 20 pemberitahuan terakhir.
 \nMenampilkan waktu, nama aplikasi, pesan, dan pesan diabaikan.</string>
-    <string name="support_summary">Beri nilai/komentar, hubungi pengembang, terjemahan, kode sumber, kebijakan privasi</string>
+    <string name="support_summary">Nilai &amp; ulasan, email pengembang, obrolan komunitas, terjemahan, kode sumber, pelacak masalah, kebijakan privasi</string>
     <!-- TextReplacePreference -->
     <string name="text_replace_error_duplicate">Ganda! Tidak akan disimpan.</string>
     <!-- text_replace_row.xml -->
@@ -115,10 +119,10 @@
     <string name="test_content_title">Judul Isi</string>
     <string name="test_content_text">Ini adalah pesan isi.</string>
     <string name="test_content_info">Info Isi</string>
-    <string name="support_rate">Nilai/Komentar</string>
-    <string name="support_contact">Hubungi Pengembang</string>
+    <string name="support_rate">Nilai &amp; Ulas</string>
+    <string name="support_contact">Email Pengembang</string>
     <string name="support_translations">Alih Bahasa</string>
-    <string name="support_source">Kode Sumber</string>
+    <string name="support_source">GitHub (Kode Sumber, Issue Tracker)</string>
     <string name="error_market">Galat: Gagal menemukan Google Play Store terpasang.</string>
     <string name="error_email">Galat: Gagal menemukan aplikasi surel terpasang.</string>
     <string name="tts_message_reset_default">Pengaturan Teks-Ke-Ucapan diperbarui ke nilai asali baru</string>
@@ -174,4 +178,10 @@
 \n- Ubah Pengaturan Audio - Diperlukan untuk meningkatkan deteksi headset berkabel.
 \n- Baca Status Telepon - Diperlukan untuk menginterupsi TTS jika ada panggilan telepon yang aktif.</string>
     <string name="permission_rationale_read_phone_state">Izin panggilan telepon diperlukan untuk mencegah Voice Notify berbicara selama panggilan berlangsung.</string>
+    <string name="require_strings">Teks diperlukan</string>
+    <string name="require_strings_summary">Hanya berbicara pemberitahuan yang berisi teks tertentu dalam pesan</string>
+    <string name="support_discord">Discord</string>
+    <string name="support_matrix">Matrix</string>
+    <string name="permission_rationale_post_notifications">Izin pemberitahuan posting diperlukan untuk Voice Notify untuk memposting pemberitahuan pengujian.</string>
+    <string name="reason_string_required">Teks yang diperlukan hilang</string>
 </resources>
