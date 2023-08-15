@@ -18,6 +18,7 @@ package com.pilot51.voicenotify
 import androidx.room.*
 
 @Database(version = 1, entities = [App::class])
+@RewriteQueriesToDropUnusedColumns
 abstract class AppDatabase : RoomDatabase() {
 	abstract val appDao: AppDao
 

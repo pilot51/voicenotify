@@ -17,6 +17,8 @@ package com.pilot51.voicenotify
 
 import android.content.Context.LAYOUT_INFLATER_SERVICE
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.ApplicationInfoFlags
+import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
@@ -81,7 +83,12 @@ class AppListFragment : ListFragment(), MenuProvider {
 				for (a in apps.indices.reversed()) {
 					val app = apps[a]
 					try {
-						packMan.getApplicationInfo(app.packageName, 0)
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+							packMan.getApplicationInfo(app.packageName, ApplicationInfoFlags.of(0L))
+						} else {
+							@Suppress("DEPRECATION")
+							packMan.getApplicationInfo(app.packageName, 0)
+						}
 					} catch (e: PackageManager.NameNotFoundException) {
 						if (!isFirstLoad) app.remove()
 						apps.removeAt(a)
@@ -90,7 +97,13 @@ class AppListFragment : ListFragment(), MenuProvider {
 				}
 
 				// Add new
-				inst@ for (appInfo in packMan.getInstalledApplications(0)) {
+				val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+					packMan.getInstalledApplications(ApplicationInfoFlags.of(0L))
+				} else {
+					@Suppress("DEPRECATION")
+					packMan.getInstalledApplications(0)
+				}
+				inst@ for (appInfo in installedApps) {
 					for (app in apps) {
 						if (app.packageName == appInfo.packageName) {
 							continue@inst
@@ -321,9 +334,15 @@ class AppListFragment : ListFragment(), MenuProvider {
 					}
 					return@runBlocking try {
 						val packMan = appContext.packageManager
+						val appInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+							packMan.getApplicationInfo(pkg, ApplicationInfoFlags.of(0L))
+						} else {
+							@Suppress("DEPRECATION")
+							packMan.getApplicationInfo(pkg, 0)
+						}
 						val app = App(
 							packageName = pkg,
-							label = packMan.getApplicationInfo(pkg, 0).loadLabel(packMan).toString(),
+							label = appInfo.loadLabel(packMan).toString(),
 							isEnabled = defEnable
 						)
 						apps.add(app.updateDb())

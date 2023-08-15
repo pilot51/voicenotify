@@ -49,13 +49,8 @@ class TextReplacePreference(context: Context, attrs: AttributeSet?) : DialogPref
 		setNegativeButtonText(android.R.string.cancel)
 	}
 
-	@Deprecated("Deprecated in Java")
-	override fun onSetInitialValue(restorePersistedValue: Boolean, defaultValue: Any?) {
-		setPersistedReplaceList(
-			if (restorePersistedValue) {
-				getPersistedString(convertListToString(persistedReplaceList))
-			} else defaultValue as String
-		)
+	override fun onSetInitialValue(defaultValue: Any?) {
+		setPersistedReplaceList(getPersistedString(convertListToString(persistedReplaceList)))
 	}
 
 	fun setPersistedReplaceList(list: List<Pair<String, String>?>) {

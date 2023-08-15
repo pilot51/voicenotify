@@ -22,6 +22,7 @@ import android.app.TimePickerDialog.OnTimeSetListener
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.PackageInfoFlags
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -103,11 +104,17 @@ class PrefDialog : DialogFragment() {
 							iEmail.type = "plain/text"
 							iEmail.putExtra(Intent.EXTRA_EMAIL, arrayOf(getString(R.string.dev_email)))
 							iEmail.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.email_subject))
-							var version: String? = null
-							try {
-								version = activity.packageManager.getPackageInfo(activity.packageName, 0).versionName
+							val pm = activity.packageManager
+							val version = try {
+								if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+									pm.getPackageInfo(activity.packageName, PackageInfoFlags.of(0L))
+								} else {
+									@Suppress("DEPRECATION")
+									pm.getPackageInfo(activity.packageName, 0)
+								}.versionName
 							} catch (e: PackageManager.NameNotFoundException) {
 								e.printStackTrace()
+								null
 							}
 							iEmail.putExtra(Intent.EXTRA_TEXT,
 								getString(R.string.email_body,

@@ -15,7 +15,6 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	package="com.pilot51.voicenotify"
 	android:installLocation="internalOnly">
 	<uses-permission android:name="android.permission.BLUETOOTH" />
 	<uses-permission android:name="android.permission.VIBRATE" />

@@ -64,6 +64,7 @@ class TtsConfigFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeLi
 		}
 		if (preference is TextReplacePreference) {
 			val f: DialogFragment = TextReplaceFragment.newInstance(preference.getKey())
+			@Suppress("DEPRECATION") // https://issuetracker.google.com/issues/181793702
 			f.setTargetFragment(this, 0)
 			f.show(parentFragmentManager, textReplaceFragmentTag)
 		} else {
@@ -71,7 +72,7 @@ class TtsConfigFragment : PreferenceFragmentCompat(), OnSharedPreferenceChangeLi
 		}
 	}
 
-	override fun onSharedPreferenceChanged(sp: SharedPreferences, key: String) {
+	override fun onSharedPreferenceChanged(sp: SharedPreferences?, key: String?) {
 		if (key == getString(R.string.key_ttsStream)) {
 			Common.setVolumeStream(requireActivity())
 		}

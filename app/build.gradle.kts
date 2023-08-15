@@ -20,17 +20,18 @@ import java.util.*
 plugins {
 	id("com.android.application")
 	kotlin("android")
-	kotlin("kapt")
+	id("com.google.devtools.ksp")
 	id("androidx.navigation.safeargs.kotlin")
 }
 
-val keystorePropertiesFile = rootProject.file("keystore.properties")
+val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
 if (keystorePropertiesFile.exists()) {
 	keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
+	namespace = "com.pilot51.voicenotify"
 	compileSdk = 33
 	defaultConfig {
 		applicationId = "com.pilot51.voicenotify"
@@ -38,22 +39,19 @@ android {
 		targetSdk = 33
 		versionName = "1.2.2"
 		versionCode = 26
-		viewBinding { isEnabled = true }
 		vectorDrawables.useSupportLibrary = true
-		javaCompileOptions {
-			annotationProcessorOptions {
-				arguments += mapOf(
-					"room.schemaLocation" to "$projectDir/schemas",
-					"room.incremental" to "true",
-					"room.expandProjection" to "true"
-				)
-			}
+		ksp {
+			arg("room.schemaLocation", "$projectDir/schemas")
 		}
 	}
 
+	buildFeatures {
+		viewBinding = true
+	}
+
 	compileOptions {
-		sourceCompatibility = JavaVersion.VERSION_1_8
-		targetCompatibility = JavaVersion.VERSION_1_8
+		sourceCompatibility = JavaVersion.VERSION_17
+		targetCompatibility = JavaVersion.VERSION_17
 	}
 
 	signingConfigs {
@@ -79,10 +77,10 @@ android {
 }
 
 dependencies {
-	implementation("androidx.core:core-ktx:1.8.0")
-	implementation("androidx.preference:preference-ktx:1.2.0")
-	implementation("androidx.navigation:navigation-fragment-ktx:2.5.1")
-	implementation("androidx.navigation:navigation-ui-ktx:2.5.1")
-	implementation("androidx.room:room-ktx:2.5.0-alpha02")
-	kapt("androidx.room:room-compiler:2.5.0-alpha02")
+	implementation("androidx.core:core-ktx:1.10.1")
+	implementation("androidx.preference:preference-ktx:1.2.1")
+	implementation("androidx.navigation:navigation-fragment-ktx:2.6.0")
+	implementation("androidx.navigation:navigation-ui-ktx:2.6.0")
+	implementation("androidx.room:room-ktx:2.5.2")
+	ksp("androidx.room:room-compiler:2.5.2")
 }
