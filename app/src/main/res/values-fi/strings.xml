@@ -46,7 +46,6 @@
 \nTyhjä poistaa käytöstä.</string>
     <string name="ignore_strings">Ohita teksti</string>
     <string name="ignore_strings_summary">Ohita ilmoitukset, jotka sisältävät tietyn tekstin viestissä</string>
-    <string name="ignore_strings_dialog_msg">Erota yksittäiset merkinnät uudella rivillä.</string>
     <string name="ignore_empty">Ohita tyhjä</string>
     <string name="ignore_empty_summary_on">Ilmoitukset joissa ei ole viestiä jätetään puhumatta</string>
     <string name="ignore_empty_summary_off">Ilmoitukset ilman viestiä puhutaan muodossa \"Ilmoitus kohteesta [sovelluksen nimi].\"</string>
@@ -127,7 +126,6 @@
     <string name="text_to_replace">Korvattava teksti</string>
     <string name="status_summary_notification_access_enabled">Avaa Androidin ilmoitusten pääsyasetukset poistaaksesi Voice Notifyn käytöstä</string>
     <string name="permission_rationale_read_phone_state">Lupa puheluihin vaaditaan, jotta Voice Nofify ei pysty puhumaan puhelun aikana.</string>
-    <string name="reason_string">Ohitettu teksti</string>
     <string name="reason_identical">Identtinen viesti {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
     <string name="support_privacy_message">Voice Notify ei kerää tai lähetä tietoja laitteesta. Se käyttää kuitenkin kolmannen osapuolen sovelluksia tai palveluita, jotka voivat lähettää tietoja, kuten alla kohdassa \"Kolmannen osapuolen sovellukset ja palvelut\" on kuvattu.
 \n
