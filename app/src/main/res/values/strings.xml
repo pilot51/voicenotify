@@ -24,31 +24,31 @@
 	
 	<!-- xml/preferences.xml and xml/preferences_tts.xml -->
 	<string name="app_list">App List</string>
-	<string name="app_list_summary">List installed apps which can be ignored</string>
+	<string name="app_list_summary">Installed ignorable apps</string>
 	<string name="tts">Text-To-Speech</string>
-	<string name="tts_summary">Configure Text-To-Speech behavior</string>
+	<string name="tts_summary">Configure text-to-speech behavior</string>
 	<string name="tts_settings">TTS Settings</string>
-	<string name="tts_settings_summary">Open the Android Text-To-Speech settings</string>
+	<string name="tts_settings_summary">Open the Android text-to-speech settings</string>
 	<string name="tts_settings_summary_fail">Unable to find TTS settings! If it exists on your device (it should), please contact the developer.</string>
 	<string name="tts_message">TTS Message</string>
 	<string name="tts_message_summary">Customize which parts of notifications are spoken</string>
 	<string name="tts_message_dialog">#a = App title\n#t = Ticker\n#s = Subtext\n#c = Content title\n#m = Content message\n#i = Content info\n\nDefault:\n#a. #c. #m.\n\nOld default (v1.0.x):\n#a: #t</string>
 	<string name="tts_text_replace">TTS Text Replacement</string>
 	<string name="tts_text_replace_summary">Substitute text to be spoken, such as to fix pronunciation</string>
-	<string name="tts_text_replace_dialog">Substitute text to be spoken, allowing you to customize how Text-To-Speech pronounces words or replace text for any other reason.\n\nText to replace is case insensitive.</string>
+	<string name="tts_text_replace_dialog">Substitute text to be spoken, allowing you to customize how text-to-speech pronounces words or replace text for any other reason.\n\nText to replace is case insensitive.</string>
 	<string name="tts_stream">TTS Audio Stream</string>
-	<string name="tts_stream_summary">Choose the audio stream that Text-To-Speech plays through</string>
+	<string name="tts_stream_summary">Choose the audio stream that text-to-speech plays through</string>
 	<string name="tts_delay">TTS Delay</string>
 	<string name="tts_delay_summary">Delay TTS a set number of seconds after notification</string>
 	<string name="tts_delay_dialog_msg">Number of seconds to wait after notification before speaking.</string>
 	<string name="tts_repeat">TTS Repeat</string>
 	<string name="tts_repeat_summary">Continually repeat notifications over TTS until screen turns on</string>
-	<string name="tts_repeat_dialog_msg">Notifications are repeated at the defined interval until the screen is turned on. Notifications created while the screen is on are not repeated.\n\nValue is in minutes. Blank or 0 to disable.</string>
+	<string name="tts_repeat_dialog_msg">Notifications are repeated at the defined interval until the screen is turned off. Notifications created while the screen is on are not repeated.\n\nValue is in minutes. Leave empty to turn off.</string>
 	<string name="audio_focus">Pause/dim media</string>
-	<string name="audio_focus_summary">Request other media to pause/dim when speaking</string>
+	<string name="audio_focus_summary">Request dimming/pausing other media for spoken messages</string>
 	<string name="shake_to_silence">Shake-To-Silence</string>
-	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence</string>
-	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: 100\nBlank to disable.</string>
+	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of shake-to-silence</string>
+	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: 100\nLeave empty to turn off.</string>
 	<string-array name="stream_name">
 		<item>Media</item>
 		<item>Notification</item>
@@ -74,7 +74,7 @@
 	<string name="max_length_summary">Maximum message length to speak. Larger messages will be truncated.</string>
 	<string name="max_length_dialog_msg">Maximum message length to speak\nLarger messages will be truncated.</string>
 	<string name="device_state">Device States</string>
-	<string name="device_state_summary">Select whether to speak during certain device states</string>
+	<string name="device_state_summary">Pick device states where TTS is on</string>
 	<string name="device_state_dialog_title">Speak during these device states</string>
 	<string-array name="device_states">
 		<item>Screen Off</item>
@@ -84,16 +84,16 @@
 		<item>Silent/Vibrate</item>
 	</string-array>
 	<string name="quiet_start">Quiet Time Start</string>
-	<string name="quiet_start_summary">Don\'t speak after this time.\nLeave the same as end to disable.</string>
+	<string name="quiet_start_summary">Don\'t speak after this time.\nLeave the same as end to turn off.</string>
 	<string name="quiet_end">Quiet Time End</string>
-	<string name="quiet_end_summary">Don\'t speak before this time.\nLeave the same as start to disable.</string>
+	<string name="quiet_end_summary">Don\'t speak before this time.\nLeave the same as start to turn off.</string>
 	<string name="test_summary">Post a notification (delayed 5 seconds) to test current settings</string>
-	<string name="test_ignored">Voice Notify is ignored in App List.\nTest will run, but notification will not be spoken.</string>
-	<string name="notify_log_summary">List last 20 notifications.\nDisplays time, app name, message, and ignore reasons.</string>
-	<string name="support_summary">Rate &amp; review, email the developer, community chat, translations, source code, issue tracker, privacy policy</string>
+	<string name="test_ignored">Voice Notify is ignored in the app list.\nThe test will run, but notifications are not spoken.</string>
+	<string name="notify_log_summary">List the last 20 notifications.\nDisplays time, app name, message, and reasons to ignore.</string>
+	<string name="support_summary">Rate and review, e-mail the developer, community chat, translations, source code, issue tracker, privacy policy</string>
 	
 	<!-- TextReplacePreference -->
-	<string name="text_replace_error_duplicate">Duplicate! Will not be saved.</string>
+	<string name="text_replace_error_duplicate">Duplicate. Will not be saved.</string>
 	
 	<!-- text_replace_row.xml -->
 	<string name="text_to_replace">Text to replace</string>
@@ -102,12 +102,12 @@
 	<!-- MainFragment and xml/preferences.xml -->
 	<string name="test">Test</string>
 	<string name="notify_log">Notification Log</string>
-	<string name="support">Help &amp; Support</string>
+	<string name="support">Help and Support</string>
 	
 	<!-- MainFragment -->
-	<string name="service_disabled">Voice Notify service is disabled</string>
-	<string name="status_summary_notification_access_enabled">Open the Android notification access settings to disable Voice Notify</string>
-	<string name="status_summary_notification_access_disabled">Open the Android notification access settings to enable Voice Notify</string>
+	<string name="service_disabled">The Voice Notify service off</string>
+	<string name="status_summary_notification_access_enabled">Open the Android notification access settings to turn it off</string>
+	<string name="status_summary_notification_access_disabled">Open the Android notification access settings to turn it on</string>
 	<string name="status_summary_suspended">Select to activate Voice Notify.</string>
 	<string name="notification_channel_desc">Used for test notification</string>
 	<string name="test_ticker">This is the ticker message</string>
@@ -115,8 +115,8 @@
 	<string name="test_content_title">Content Title</string>
 	<string name="test_content_text">This is the content message.</string>
 	<string name="test_content_info">Content Info</string>
-	<string name="support_rate">Rate &amp; Review</string>
-	<string name="support_contact">Email Developer</string>
+	<string name="support_rate">Rate and Review</string>
+	<string name="support_contact">E-mail the Developer</string>
 	<string name="support_discord">Discord</string>
 	<string name="support_matrix">Matrix</string>
 	<string name="support_translations">Translations</string>
@@ -128,24 +128,24 @@
 \n\nThe notifications received by Voice Notify are only held in memory to be displayed in the Notification Log (up to the most recent 20) and are not written to storage. This prevents other apps from accessing the data, especially if the device is rooted. As a result, if the Voice Notify process is terminated, the notification log is cleared.
 \n\nInstalled apps are read and listed to allow users to choose which apps have their notifications spoken. The app titles and package names are stored in a database in Voice Notify\'s internal private data storage on the device to save selections and act as a cache to improve performance of loading the app list.
 \n\nThird party apps and services:
-\n• Text-To-Speech engine - Voice Notify passes notification text to be spoken to the default Text-To-Speech engine, which is outside the direct control of Voice Notify. Please read the privacy policy of the TTS engine for how it uses data.
+\n• Text-to-speech engine - Voice Notify passes notification text to be spoken to the default text-to-speech engine, which is outside the direct control of Voice Notify. Please read the privacy policy of the TTS engine for how it uses data.
 \n• Google Play Services may send anonymized crash and basic analytical data back to the developer to assist in improving the app.
-\n• Messaging app - The \"Contact Developer\" option opens the user\'s chosen or default messaging app, such as an email app, and pre-populates the message with the Voice Notify version, Android version, Android build number, and device name. For an email app, the \"To\" field is set to the developer\'s address (pilota51@gmail.com). By sending the message, the user understands and consents to their name and contact information being shared with the recipient(s), as determined by the messaging app.
-\n• Other options under \"Help &amp; Support\" open the relevant external apps or websites (Play Store, Weblate.org, GitHub.com), only sending a hard coded URL to the Voice Notify page.
+\n• Messaging app - The \"Contact Developer\" option opens the user\'s chosen or default messaging app, such as an e-mail app, and pre-populates the message with the Voice Notify version, Android version, Android build number, and device name. For an e-mail app, the \"To\" field is set to the developer\'s address (pilota51@gmail.com). By sending the message, the user understands and consents to their name and contact information being shared with the recipient(s), as determined by the messaging app.
+\n• Other options under \"Help &amp; Support\" open the relevant external apps or websites (Play Store, Weblate.org, GitHub.com), only sending a hard-coded URL to the Voice Notify page.
 \n\nBelow are the permissions used by Voice Notify and why they\'re needed:
 \n• Bluetooth - Required to detect whether Bluetooth headset is connected.
 \n• Vibrate - Required for Test feature while phone is in vibrate mode.
 \n• Modify Audio Settings - Required for improved wired headset detection.
 \n• Read Phone State - Required to interrupt TTS if a phone call becomes active.</string>
 	<string name="error_market">Error: Unable to find Google Play Store installed.</string>
-	<string name="error_email">Error: Unable to find an installed email app.</string>
+	<string name="error_email">Error: Unable to find an installed e-mail app.</string>
 	<string name="tts_message_reset_default">TTS Message setting updated to new default value</string>
 	<string name="permission_rationale_read_phone_state">The phone calls permission is required to prevent Voice Notify from speaking during a call.</string>
 	<string name="permission_rationale_post_notifications">The post notifications permission is required for Voice Notify to post a test notification.</string>
 	
 	<!-- Service -->
 	<string name="notification_from">Notification from %s.</string>
-	<string name="error_tts_init">Error: Could not initialize TTS!</string>
+	<string name="error_tts_init">Error: Could not initialize TTS</string>
 	
 	<!-- NotifyList -->
 	<string name="yes">Yes</string>
