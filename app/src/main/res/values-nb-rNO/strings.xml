@@ -1,2 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="tts_stream_summary">Velg lydstrømmen tekst til tale leser opp</string>
+    <string name="tts_delay_dialog_msg">Antall sekunder å vente før merknaden leses opp.</string>
+    <string name="tts_repeat_summary">Gjenta merknader over TTS kontinuerlig til skjermen skrur seg av</string>
+    <string name="require_strings">Påkrevd tekst</string>
+    <string name="shake_to_silence_dialog_msg">Lavere verdier er mer sensitive.
+\n
+\nForvalg: 100
+\nLa stå tom for å skru av.</string>
+    <string name="tts_text_replace_dialog">Erstatt tekst å lese opp, for å tilpasse hvordan tekst til tale uttaler ord eller erstatt tekst av andre grunner.
+\n
+\nDet er ingen forskjell på små og store bokstaver.</string>
+    <string name="tts_repeat_dialog_msg">Merknader gjentas ved angitt intervall til skjermen slår seg av. Merknader opprettes mens skjermen er på gjentas ikke.
+\n
+\nVerdien er i minutter. Lå stå tom eller skriv «0» for å skru av.</string>
+    <string name="shake_to_silence">Rist for forstumming</string>
+    <string name="audio_focus_summary">Forespør forstumming av annen media ved kunngjøring</string>
+    <string name="shake_to_silence_summary">Juster sensitivitetsterskel for rist for forstummelse</string>
+    <string name="require_strings_summary">Kun kunngjør merknader som inneholder gitt tekst i meldingen</string>
+    <string name="audio_focus">Pause/tilslør media</string>
+    <string name="require_ignore_strings_dialog_msg">Dette jamføres mot behandlet melding sendt til TTS, inkludert teksterstattelser.
+\n
+\nLegg til nye oppføringer på ny linje.
+\nMeldingen må samsvare med én oppføring, ikke alle.
+\nDet er ingen forskjell på små og store bokstaver.</string>
+    <string name="ignore_empty_summary_off">Merknader uten melding vil leses opp som «Merknad fra [app name].»</string>
+    <string name="test_subtext">Underteksten</string>
+    <string name="test_content_title">Innholdsnavn</string>
+    <string name="test_content_text">Dette er innholdsmeldingen.</string>
+    <string name="quiet_end_summary">Ikke les opp før denne angitte tiden.
+\nLå stå urørt for å skru av.</string>
+    <string name="test_summary">Post en merknad (forsinket fem sekunder) for å teste nåværende innstillinger</string>
+    <string name="text_to_replace">Tekst å erstatte</string>
+    <string name="replacement_text">Erstattelsestekst</string>
+    <string name="service_disabled">Voice Notify-tjenesten er avskrudd</string>
+    <string name="status_summary_suspended">Velg for å aktivere Voice Notify.</string>
+    <string name="notification_channel_desc">Brukt for testmerknad</string>
+    <string name="status_summary_notification_access_enabled">Åpne tilgangsinnnstillinger for merknader i Android for å skru av Voice Notify</string>
+    <string name="status_summary_notification_access_disabled">Åpne tilgangsinnnstillinger for merknader i Android for å skru på Voice Notify</string>
+    <string name="quiet_end">Stilletidsslutt</string>
+    <string name="quiet_start">Stilletidsstart</string>
+    <string name="ignore_repeat_summary">Ignorer gjentatte identiske merknader innenfor avgrenset tidsperiode</string>
+    <string name="support_matrix">Matrix</string>
+    <string name="support_translations">Oversettelser</string>
+    <string name="tts_message_reset_default">TTS-meldingsinnstilling oppdatert til ny forvalgt verdi</string>
+    <string name="filter">Filter</string>
+    <string name="reason_identical">Identisk melding innen {0,choice,-1#infinite seconds|1#{0} sekund|1&lt;{0} sekunder}</string>
+    <string name="permission_rationale_read_phone_state">Anropstilgang kreves for å forhindre Voice Notify fra å kunngjøre under anrop.</string>
+    <string name="permission_rationale_post_notifications">Merknadstilgang kreves for å sende testmerknad.</string>
+    <string name="error_tts_init">Feil: Kunne ikke igangsette TTS.</string>
+    <string name="app_name">Voice Notify</string>
+    <string name="app_list">Programliste</string>
+    <string name="support_source">GitHub (kidekoder, feilsporer)</string>
+    <string name="support">Hjelp og støtte</string>
+    <string name="notification_from">Merknad fra %s.</string>
+    <string name="ignore_all">Ingorer alle</string>
+    <string name="app_is_ignored">%s ignoreres</string>
+    <string name="service_running">Voice Notify-tjenesten kjører</string>
+    <string name="app_list_summary">Liste over installerte programmer som kan ignoreres</string>
+    <string name="support_privacy">Personvernspraksis</string>
+    <string name="test_content_info">Innholdsinfo</string>
+    <string name="yes">Ja</string>
+    <string name="unignore_app">Opphev ignorering av %s\?</string>
+    <string name="reason_string_ignored">Ignorert tekst</string>
+    <string name="app_is_not_ignored">%s ignoreres ikke</string>
+    <string name="service_suspended">Voice Notify-tjenesten er i hvilemodus</string>
+    <string name="tts_settings">TTS-innstillinger</string>
+    <string name="tts_settings_summary">Åpne innstillinger for tekst til tale i Android</string>
+    <string name="test">Test</string>
+    <string name="notify_log">Merknadslogg</string>
+    <string name="ignore_app">Ignorer %s\?</string>
+    <string name="ignore_none">Ikke ignorer noen</string>
+    <string name="tts">Tekst-til-tale</string>
+    <string name="support_discord">Discord</string>
+    <string name="reason_app">Ignorert program</string>
+    <string name="reason_string_required">Påkrevd tekst mangler</string>
+    <string name="tts_summary">Sett opp tekst-til-tale-adferd</string>
+    <string name="reason_empty_msg">Tom melding</string>
+    <string name="reason_quiet">Stilletid</string>
+    <string name="reason_screen_on">Skjerm påslått</string>
+    <string name="tts_settings_summary_fail">Fant ikke TTS-innstillingene. Hvis de er å finne på enheten bær du kontakte utvikleren av VN.</string>
+    <string name="reason_screen_off">Skjerm avslått</string>
+    <string name="tts_message">TTS-melding</string>
+    <string name="reason_headset_off">Hodesett av</string>
+    <string name="reason_headset_on">Hodesett på</string>
+    <string name="reason_service_stopped">Tjeneste stoppet</string>
+    <string name="tts_message_summary">Tilpass hvilke deler av merknadene som leses opp</string>
+    <string name="tts_text_replace">TTS-teksterstattelse</string>
+    <string name="tts_text_replace_summary">Erstatt tekst å lese opp, for eksempel for å fikse uttale</string>
+    <string name="reason_silent">Stille- eller vibreringsmodus</string>
+    <string name="tts_stream">TTS-lydstrøm</string>
+    <string name="reason_call">Aktivt anrop</string>
+    <string name="reason_shake">Forstummet av risting</string>
+    <string name="tts_delay">TTS-forsinkelse</string>
+    <string name="tts_delay_summary">Antall sekunder TTS-forsinkelse etter marknad</string>
+    <string name="reason_suspended">Miniprogram satt Voice Notify i hvilemodus</string>
+    <string name="tts_repeat">TTS-gjentagelse</string>
+    <string name="ignore_strings">Ignorer tekst</string>
+    <string name="support_rate">Vurder og angi anmeldelse</string>
+    <string name="tts_message_dialog">#a = Programnavn
+\n#t = Løpetekst
+\n#s = Undertekst
+\n#c = Innholdsnavn
+\n#m = Innholdsmelding
+\n#i = Innholdsinfo
+\n
+\nForvalg:
+\n#a. #c. #m.
+\n
+\nGammelt forvag (v1.0.x):
+\n#a: #t</string>
+    <string name="ignore_strings_summary">Ignorer merknader som inneholder gitt tekst i meldingen</string>
+    <string name="support_contact">Send e-post til utvikleren</string>
+    <string name="ignore_empty">Ingenting ignoreres</string>
+    <string name="error_market">Feil: Google Play-butikken er ikke installert.</string>
+    <string name="error_email">Feil: Fant ikke noe installert e-postprogram.</string>
+    <string name="ignore_empty_summary_on">Merknader uten en melding vil ikke bli opplest</string>
+    <string name="ignore_groups">Ignorer gruppemeldinger</string>
+    <string name="ignore_repeat">Ignorer gjentagelser</string>
+    <string name="max_length">Maks. melding</string>
+    <string name="max_length_summary">Maks. meldingslengde å lese opp. Lengre meldinger forkortes.</string>
+    <string name="device_state">Enhetstilstander</string>
+    <string name="test_ticker">Dette er en løpemelding</string>
+    <string name="notify_log_summary">Opplisting av de siste 20 merknadene.
+\nViser tid, programnavn, melding og ignoreringsgrunner.</string>
+    <string name="support_summary">Vurder og gi tilbakemelding, send e-post til utvikleren, gemenskapssludring, oversettelser, kildekode, feilsporer, personvernspraksis</string>
+    <string name="text_replace_error_duplicate">Duplikat. Vil ikke bli lagret.</string>
+    <string name="ignore_repeat_dialog_msg">Sett antall sekunder fra forrige merknad før ny kan kunngjøres.
+\nIgnorerte gjentagelser tilbakestiller telleren og forskjellige merknader fjerner den.
+\nLa stå tom for uendelighet.</string>
+    <string name="quiet_start_summary">Ikke annonser etter denne tiden.
+\nLevn samme som slutt for å skru av.</string>
+    <string name="test_ignored">Voice Notify er ignorert i programlisten.
+\nTesten vil kjøre, men merknader vil ikke leses opp.</string>
+    <string name="ignore_groups_summary_on">Merknader som inneholder flere meldinger vil ikke leses opp</string>
+    <string name="ignore_groups_summary_off">Merknader som inneholder flere meldinger vil leses opp</string>
+    <string name="device_state_summary">Velg hvilke enhetstilstander TTS skal være aktiv i</string>
+    <string name="max_length_dialog_msg">Maks. meldingslengde å kunngjøre
+\nLengre meldinger vil forkortes.</string>
+    <string name="device_state_dialog_title">Les opp under disse enhetstilstandene</string>
+    <string name="support_privacy_message">Voice Notify samler ikke inn eller sender data far enheten. Den bruker dog tredjepartstjenester som kan sende data, som beskrevet nedenfor under «Tredjepartsprogrammer og tjenester».
+\n
+\nHvis i sjeldent fall sensitiv eller personvernsinfo mottas av utvikleren vil den ikke bli solgt, delt, kopiert, eller brukt uten uttrykt samtykke fra personen den tilhører. Hvis samtykke ikke forefinnes vil den bli slettet hvis mulig.
+\n
+\nFormålet med Voice Notify er å lese opp merknader, og derfor er det sannsynlig at meldinger blir hørt av mikrofoner eller andre i nærheten. Det anbefales å sette opp Voice Notify og enheten for å forhindre uønskede oppleste meldinger. Bruk på egen risiko.
+\n
+\nMerknader som mottas av Voice Notify holdes kun i minnet for visning i merknadsloggen (de 20 nyligste) og skrives ikke til lagring. Dette forhindrer andre programmer fra å få tilgang til enheten, spesielt hvis enheten har rot-tilgang. Som resultat vil det å terminere prosessen slette merknadsloggen.
+\n
+\nInstallerte programmer leses og opplistes for å tillate brukere å velge hvilke som skal få sine merknader opplest. Programtitler og pakkenavn lagres i databasen i Voice Notifys interne private datalager på enheten for å tjene som hurtiglager for bedret ytelse ved innlasting av programlisten.
+\n
+\nTredjepartsprogrammer og tjenester:
+\n• Tekst-til-tale -motor. - Voice Notify sender merknader som skal oppleses til forvalgt TTS-motor, som er utenfor direkte kontrol for Voice Notify. Merk deg personvernspraksis for TTS-motoren og hvordan den bruker data.
+\n• Google Play-tjenester kan sende anonymisert krasjdata og grunnleggende analysedata tilbake til utvikleren for å forbedre programmet.
+\n•Meldingsprogram - «Kontakt utvikleren»-alternativet åpner brukerens valgte meldingsprogram, som f.eks. et meldingsprogram, som f.eks. forvalgt meldingsprogram, som f.eks. et e-postprogram, og forhåndsutfyller meldingen med Voice Notify-versjonen, Android-versjonen, Android-byggnummeret, og enhetsnavnet. For e-postprogrammet settes «Til»-feltet til utviklerens adresse (pilota51@gmail.com). Ved å sende meldingen forstår og samtykker brukeren til å bruke eget navn og at kontaktinfo deles med mottager(ene), som angitt i e-postprogrammet.
+\n• Andre alternativer under «Hjelp og støtte» åpner relevante eksterne programmer eller nettsider (Play-butikken, Weblate.org, GitHub.com), og sender kun en hardkodedet nettadresse til Voice Notify-siden.
+\n
+\nDisse tilgangene trengs
+\n• Blåtann - For å finne ut om Blåtannshodesett er tilkoblet.
+\n• Vibrering - For testfunksjon når enheten er i vibrasjonsmodus.
+\n• Endring av lydinnstillinger - For bedre oppdagelse av kablet hodesett.
+\n• Lesing av telefontilstand - For å forstyrre TTS under anrop.</string>
+</resources>
