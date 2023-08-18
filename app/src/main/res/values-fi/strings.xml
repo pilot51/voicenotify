@@ -67,7 +67,7 @@
     <string name="test_summary">Lähetä ilmoitus (viivästetty 5 sekuntia) testataksesi nykyisiä asetuksia</string>
     <string name="test_ignored">Voice Notify ohitetaan sovellusluettelossa.
 \nTesti suoritetaan, mutta ilmoitusta ei puhuta.</string>
-    <string name="support_summary">Arvostele / kommentoi, ota yhteyttä kehittäjään, käännökset, lähdekoodi, tietosuojakäytäntö</string>
+    <string name="support_summary">Arvostele ja arvioi, lähetä sähköpostia kehittäjälle, yhteisöchatti, käännökset, lähdekoodi, ongelman jäljitys, tietosuojakäytäntö</string>
     <string name="notify_log_summary">Luettele viimeiset 20 ilmoitusta.
 \nNäyttää ajan, sovelluksen nimen, viestin ja ohittamisen syyt.</string>
     <string name="text_replace_error_duplicate">Kaksoiskappale! Ei tallenneta.</string>
@@ -79,14 +79,14 @@
     <string name="status_summary_notification_access_disabled">Avaa Androidin ilmoitusten pääsyasetukset ottaaksesi Voice Notifyn käyttöön</string>
     <string name="status_summary_suspended">Valitse aktivoidaksesi Voice Notifyn.</string>
     <string name="notification_channel_desc">Käytetään testi-ilmoitukseen</string>
-    <string name="support_contact">Ota kehittäjään yhteyttä</string>
+    <string name="support_contact">Lähetä kehittäjälle sähköpostia</string>
     <string name="test_subtext">Alateksti</string>
     <string name="test_content_title">Sisällön otsikko</string>
     <string name="test_content_text">Tämä on sisältöviesti.</string>
     <string name="test_content_info">Sisällön tiedot</string>
-    <string name="support_rate">Arvostele/kommentoi</string>
+    <string name="support_rate">Arvostele &amp; arvioi</string>
     <string name="test_ticker">Tämä on uutisnauhaviesti</string>
-    <string name="support_source">Lähdekoodi</string>
+    <string name="support_source">Github (Lähdekoodi, Ongelman jäljitys)</string>
     <string name="support_translations">Käännökset</string>
     <string name="support_privacy">Tietosuojakäytäntö</string>
     <string name="error_market">Virhe: Google Play Kauppaa ei löydy asennettuna.</string>
@@ -148,4 +148,16 @@
 \n• Värinä - Vaaditaan testiominaisuutta varten puhelimen ollessa värinätilassa.
 \n• Muokkaa ääniasetuksia – Pakollinen langallisten kuulokkeiden tunnistuksen parantamiseksi.
 \n• Lue puhelimen tila - Vaaditaan TTS:n keskeyttämiseen, jos puhelu aktivoituu.</string>
+    <string name="require_strings_summary">Puhu ainoastaan ilmoitukset jotka sisältävät tietyn tekstin viestissä</string>
+    <string name="require_strings">Vaadi teksti</string>
+    <string name="support_discord">Discord</string>
+    <string name="support_matrix">Matrix</string>
+    <string name="permission_rationale_post_notifications">Ilmoitusten lähettämisoikeus tarvitaan, jotta Voice Notify voi lähettää testi-ilmoituksen.</string>
+    <string name="reason_string_ignored">Ohitettu teksti</string>
+    <string name="reason_string_required">Vaadittu teksti puuttu</string>
+    <string name="require_ignore_strings_dialog_msg">Tätä verrataan TTS:lle lähetettyyn käsiteltyyn viestiin, mukaan lukien tekstikorvaukset.
+\n
+\nEroittele yksittäiset merkinnät uudella rivillä.
+\nViestin on vastattava mitä tahansa merkintää, ei kaikkia.
+\nIsoja ja pieniä kirjaimia ei oteta huomioon.</string>
 </resources>
