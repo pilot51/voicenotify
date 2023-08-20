@@ -124,7 +124,7 @@ class AppListFragment : ListFragment(), MenuProvider {
 			}
 			isUpdating = false
 			CoroutineScope(Dispatchers.Main).launch {
-				setListShown(true)
+				if (view != null) setListShown(true)
 			}
 		}
 	}
