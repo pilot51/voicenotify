@@ -49,7 +49,7 @@
     <string name="ignore_empty">Ohita tyhjä</string>
     <string name="ignore_empty_summary_on">Ilmoitukset joissa ei ole viestiä jätetään puhumatta</string>
     <string name="ignore_empty_summary_off">Ilmoitukset ilman viestiä puhutaan muodossa \"Ilmoitus kohteesta [sovelluksen nimi].\"</string>
-    <string name="ignore_groups">Ohita tyhmäviestit</string>
+    <string name="ignore_groups">Ohita ryhmäviestit</string>
     <string name="ignore_groups_summary_on">Useita viestejä sisältäviä ilmoituksia ei puhuta</string>
     <string name="ignore_repeat">Ohita toistot</string>
     <string name="ignore_groups_summary_off">Useita viestejä sisältävät ilmoitukset puhutaan</string>
