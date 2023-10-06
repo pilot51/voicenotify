@@ -41,7 +41,11 @@
     </string-array>
     <string name="ignore_strings">Ignorar texto</string>
     <string name="ignore_strings_summary">Ignorar las notificaciones que contienen cierto texto en el mensaje</string>
-    <string name="require_ignore_strings_dialog_msg">Separe las entradas individuales con una nueva línea.</string>
+    <string name="require_ignore_strings_dialog_msg">Se coteja con el mensaje procesado enviado a TTS, incluidas las sustituciones del texto.
+\n
+\nSepara las entradas individuales con una nueva línea.
+\nEl mensaje debe coincidir con cualquier entrada, no con todas.
+\nNo se distingue entre mayúsculas y minúsculas.</string>
     <string name="ignore_empty">Ignorar vacías</string>
     <string name="ignore_empty_summary_on">Las notificaciones sin mensaje no se pronunciarán</string>
     <string name="ignore_empty_summary_off">Notificaciones sin mensaje no serán habladas como \"Notificación de [nombre de la aplicación].\"</string>
