@@ -1,2 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="service_running">Voice Notify サービスが動作しています</string>
+    <string name="max_length_dialog_msg">読み上げるメッセージの最大長
+\n最大長を超えるメッセージは切り捨てられます。</string>
+    <string name="ignore_groups">グループメッセージを無視</string>
+    <string name="tts_delay">音声読み上げ遅延</string>
+    <string name="shake_to_silence_summary">「振って停止」の感度を調整します</string>
+    <string name="device_state_summary">読み上げを行うデバイス状態を選択します</string>
+    <string name="tts_message_summary">通知のどの部分を読み上げるかをカスタマイズ</string>
+    <string name="device_state">読み上げを行うデバイス状態</string>
+    <string name="shake_to_silence">振って停止</string>
+    <string name="tts_settings">音声読み上げ設定</string>
+    <string name="ignore_repeat_summary">設定した時間内の同じ通知を無視します</string>
+    <string name="tts_message">音声読み上げメッセージ</string>
+    <string name="tts_summary">音声読み上げの動作設定</string>
+    <string name="shake_to_silence_dialog_msg">値を低くするとより感度が高くなります。
+\n
+\nデフォルト:100
+\n空白の場合は無効。</string>
+    <string name="tts">音声読み上げ</string>
+    <string name="tts_message_dialog">#a = App title
+\n#t = Ticker
+\n#s = Subtext
+\n#c = Content title
+\n#m = Content message
+\n#i = Content info
+\n
+\nデフォルト:
+\n#a. #c. #m.
+\n
+\n以前のデフォルト (v1.0.x):
+\n#a: #t</string>
+    <string name="max_length_summary">読み上げる最大メッセージ長、これを超えるメッセージは切り捨てられます。</string>
+    <string name="device_state_dialog_title">これらのデバイス状態で読み上げを行います</string>
+    <string name="tts_repeat_dialog_msg">通知は、画面がオンになるまで指定された間隔で繰り返されます。画面がオンになっている間に作成された通知は繰り返されません。
+\n
+\n値の単位は分です。空白または0を指定すると無効になります。</string>
+    <string name="tts_delay_summary">通知後に指定された秒数の間、音声読み上げを遅らせます</string>
+    <string name="tts_delay_dialog_msg">通知後、読み上げるまでの待機秒数。</string>
+    <string name="ignore_repeat_dialog_msg">最後の通知から何秒経てば同じメッセージを読み上げられるかを設定します。
+\n同じメッセージが無視された場合カウントはリセットされ、異なる通知が来た場合カウントはクリアされます。
+\n空白 = 無限。</string>
+    <string name="require_strings">テキストの必要性</string>
+    <string name="ignore_empty">空を無視</string>
+    <string name="tts_stream_summary">音声読み上げに使用するオーディオストリームを選択します</string>
+    <string name="require_ignore_strings_dialog_msg">これは、テキスト置換を含め音声読み上げに送られた処理済みメッセージと比較されます。
+\n
+\n個々のエントリーは改行で区切ります。
+\nメッセージはいずれかのエントリにマッチする必要があります、すべてではありません。
+\n大文字と小文字は区別されません。</string>
+    <string name="app_list">アプリケーションリスト</string>
+    <string name="ignore_repeat">同じメッセージを無視</string>
+    <string name="tts_text_replace_summary">発音を直すなど、話すテキストを置き換えます</string>
+    <string name="app_list_summary">無視可能なアプリケーションのリスト</string>
+    <string name="audio_focus">一時停止/メディア音量を下げる</string>
+    <string name="ignore_groups_summary_on">複数のメッセージを含む通知は読み上げられません</string>
+    <string name="tts_repeat">音声読み上げの繰り返し</string>
+    <string name="audio_focus_summary">読み上げ中、他のメディアに一時停止または音量を下げるようリクエストします</string>
+    <string name="app_is_ignored">%s は無視されました</string>
+    <string name="tts_stream">音声読み上げオーディオストリーム</string>
+    <string name="ignore_strings">無視する文字列</string>
+    <string name="tts_text_replace">音声読み上げテキスト置換</string>
+    <string name="ignore_groups_summary_off">複数のメッセージを含む通知を読み上げます</string>
+    <string name="tts_text_replace_dialog">テキストを置き換えることで、音声読み上げがどのように単語を発音するかをカスタマイズしたり、その他の目的でテキストを置き換えたりできます。
+\n
+\n置換するテキストの大文字と小文字は区別されません。</string>
+    <string name="service_suspended">Voice Notify サービスは停止中です</string>
+    <string name="max_length">最大メッセージ長</string>
+    <string name="ignore_empty_summary_on">メッセージのない通知を読み上げません</string>
+    <string name="tts_repeat_summary">画面がオンの間、音声読み上げによる通知を繰り返します</string>
+    <string name="ignore_strings_summary">指定の文字列がメッセージに含まれている場合、通知を無視します</string>
+    <string name="tts_settings_summary_fail">音声読み上げ設定がみつかりません! もしあなたのデバイスに存在するはずなら（あるはずです）開発者に連絡してください。</string>
+    <string name="ignore_empty_summary_off">メッセージのない通知は\"(アプリ名)からの通知です\"と読み上げられます</string>
+    <string name="app_is_not_ignored">%s は無視されません</string>
+    <string name="app_name">Voice Notify</string>
+    <string name="tts_settings_summary">Androidの音声読み上げ設定を開く</string>
+    <string name="require_strings_summary">メッセージに文字列が含まれている場合のみ通知を読み上げます</string>
+</resources>
