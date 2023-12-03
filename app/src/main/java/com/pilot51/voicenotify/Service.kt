@@ -159,7 +159,7 @@ class Service : NotificationListenerService() {
 			val requireStrings = prefs.getString(
 				getString(R.string.key_require_strings), null
 			)?.split("\n")
-			val stringRequired = requireStrings?.any {
+			val stringRequired = requireStrings?.all {
 				it.isNotEmpty() && !ttsMsg.contains(it, true)
 			} ?: false
 			if (stringRequired) {

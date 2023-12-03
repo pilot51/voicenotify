@@ -60,7 +60,7 @@
 	<string name="require_strings_summary">Only speak notifications that contain certain text in the message</string>
 	<string name="ignore_strings">Ignore Text</string>
 	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message</string>
-	<string name="require_ignore_strings_dialog_msg">This is matched against the processed message sent to TTS, including text replacements.\n\nSeparate individual entries with a new line.\nThe message needs to match any entry, not all.\nCase insensitive.</string>
+	<string name="require_ignore_strings_dialog_msg">This is matched against the processed message sent to TTS, including text replacements.\n\nSeparate individual entries with a new line.\nThe message needs to contain any entry, not all.\nCase insensitive.</string>
 	<string name="ignore_empty">Ignore Empty</string>
 	<string name="ignore_empty_summary_on">Notifications without a message will not be spoken</string>
 	<string name="ignore_empty_summary_off">Notifications without a message will be spoken as \"Notification from [app name].\"</string>
