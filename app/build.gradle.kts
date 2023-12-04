@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 import java.util.*
 
@@ -28,6 +30,15 @@ val keystorePropertiesFile: File = rootProject.file("keystore.properties")
 val keystoreProperties = Properties()
 if (keystorePropertiesFile.exists()) {
 	keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+}
+
+val gitCommitHash by lazy {
+	val stdout = ByteArrayOutputStream()
+	exec {
+		commandLine("git", "rev-parse", "--short", "HEAD")
+		standardOutput = stdout
+	}
+	stdout.toString().trim()
 }
 
 android {
@@ -71,7 +82,14 @@ android {
 			signingConfig = signingConfigs.getByName("release")
 		}
 		getByName("debug") {
-			versionNameSuffix = "-debug"
+			versionNameSuffix = "-debug [$gitCommitHash]"
+		}
+	}
+
+	applicationVariants.all {
+		outputs.all {
+			this as BaseVariantOutputImpl
+			outputFileName = "VoiceNotify_v${defaultConfig.versionName}-${name}_$gitCommitHash.apk"
 		}
 	}
 }
