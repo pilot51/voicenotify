@@ -89,7 +89,7 @@
     <string name="error_email">Fout: Er is geen e-mail app geinstalleerd.</string>
     <!-- Service -->
     <string name="notification_from">Notificatie van %s</string>
-    <string name="error_tts_init">Fout: Kan TTS niet initialiseren!</string>
+    <string name="error_tts_init">Fout: Kan TTS niet initialiseren! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Ja</string>
     <string name="ignore_app">Negeren %s\?</string>

@@ -124,7 +124,7 @@
     <string name="tts_message_reset_default">Κείμενο TTS ρύθμιση μηνυμάτων ενημερώθηκε στη νέα προεπιλεγμένη τιμή</string>
     <!-- Service -->
     <string name="notification_from">Ανακοίνωση απο %s.</string>
-    <string name="error_tts_init">Σφάλμα: Αδυναμία προετοιμασίας TTS!</string>
+    <string name="error_tts_init">Σφάλμα: Αδυναμία προετοιμασίας TTS! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Ναί</string>
     <string name="ignore_app">Αγνόηση %s;</string>

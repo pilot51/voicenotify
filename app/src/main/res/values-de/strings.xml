@@ -91,7 +91,7 @@
     <string name="error_email">Fehler: Konnte kein E-Mail-Programm finden.</string>
     <!-- Service -->
     <string name="notification_from">Benachrichtigung von %s.</string>
-    <string name="error_tts_init">Fehler: Text-zu-Sprache konnte nicht inizialisiert werden!</string>
+    <string name="error_tts_init">Fehler: Text-zu-Sprache konnte nicht inizialisiert werden! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Ja</string>
     <string name="ignore_app">%s ignorieren\?</string>

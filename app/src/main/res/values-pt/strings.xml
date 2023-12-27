@@ -89,7 +89,7 @@
     <string name="error_email">Erro: Não é possível encontrar um aplicativo de e-mail instalado.</string>
     <!-- Service -->
     <string name="notification_from">Notificação de %s.</string>
-    <string name="error_tts_init">Erro: Não foi possível inicializar a conversão do texto em voz!</string>
+    <string name="error_tts_init">Erro: Não foi possível inicializar a conversão do texto em voz! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Sim</string>
     <string name="ignore_app">Ignorar %s\?</string>

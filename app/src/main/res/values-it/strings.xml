@@ -103,7 +103,7 @@
     <string name="error_email">Errore: impossibile trovare un\'applicazione e-mail installata.</string>
     <!-- Service -->
     <string name="notification_from">Notifica da %s.</string>
-    <string name="error_tts_init">Errore: impossibile inizializzare TTS!</string>
+    <string name="error_tts_init">Errore: impossibile inizializzare TTS! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Sì</string>
     <string name="ignore_app">Vuoi ignorare %s\?</string>

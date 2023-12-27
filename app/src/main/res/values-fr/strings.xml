@@ -92,7 +92,7 @@
     <string name="test_content_info">Informations sur le contenu</string>
     <string name="error_market">Erreur : impossible de trouver le Google Play Store installé.</string>
     <string name="notification_from">Notification de %s.</string>
-    <string name="error_tts_init">Erreur : impossible d\'initialiser la synthèse vocale !</string>
+    <string name="error_tts_init">Erreur : impossible d\'initialiser la synthèse vocale ! [%d]</string>
     <string name="tts_message_dialog">#a = Titre de l\'application
 \n#t = Ticker
 \n#s = Sous-texte

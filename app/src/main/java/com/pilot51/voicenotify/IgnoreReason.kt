@@ -34,7 +34,10 @@ enum class IgnoreReason(
 	STRING_REQUIRED(R.string.reason_string_required),
 	STRING_IGNORED(R.string.reason_string_ignored),
 	EMPTY_MSG(R.string.reason_empty_msg),
-	IDENTICAL(R.string.reason_identical);
+	IDENTICAL(R.string.reason_identical),
+	TTS_FAILED(R.string.reason_tts_failed),
+	TTS_INTERRUPTED(R.string.reason_tts_interrupted),
+	TTS_LENGTH_LIMIT(R.string.reason_tts_length_limit);
 
 	/** @return The user-visible string for this ignore reason. */
 	override fun toString() = appContext.getString(stringId)

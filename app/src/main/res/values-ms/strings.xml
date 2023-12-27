@@ -119,7 +119,7 @@
     <string name="tts_message_reset_default">Tetapan baru seting Mesej TTS dikemaskini</string>
     <!-- Service -->
     <string name="notification_from">Notifikasi dari %s.</string>
-    <string name="error_tts_init">Ralat: TTS gagal!</string>
+    <string name="error_tts_init">Ralat: TTS gagal! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Ya</string>
     <string name="ignore_app">Abai %s\?</string>

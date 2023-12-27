@@ -145,7 +145,7 @@
 	
 	<!-- Service -->
 	<string name="notification_from">Notification from %s.</string>
-	<string name="error_tts_init">Error: Could not initialize TTS!</string>
+	<string name="error_tts_init">Error: Could not initialize TTS! Status code %d</string>
 	
 	<!-- NotifyList -->
 	<string name="yes">Yes</string>
@@ -173,4 +173,7 @@
 	<string name="reason_shake">Silenced by shake</string>
 	<string name="reason_suspended">Voice Notify suspended by widget</string>
 	<string name="reason_service_stopped">Service stopped</string>
+	<string name="reason_tts_failed">TTS failed. Please try restarting the Voice Notify service.</string>
+	<string name="reason_tts_interrupted">TTS interrupted for unknown reason</string>
+	<string name="reason_tts_length_limit">Message exceeded TTS length limit</string>
 </resources>

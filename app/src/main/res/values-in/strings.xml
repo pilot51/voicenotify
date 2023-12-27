@@ -128,7 +128,7 @@
     <string name="tts_message_reset_default">Pengaturan Teks-Ke-Ucapan diperbarui ke nilai asali baru</string>
     <!-- Service -->
     <string name="notification_from">Pemberitahuan dari %s.</string>
-    <string name="error_tts_init">Galat: Gagal memulai Teks-Ke-Ucapan!</string>
+    <string name="error_tts_init">Galat: Gagal memulai Teks-Ke-Ucapan! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Ya</string>
     <string name="ignore_app">Abaikan %s\?</string>

@@ -93,7 +93,7 @@
     <string name="error_email">Error: No se puede encontrar una aplicación de correo electrónico instalada.</string>
     <!-- Service -->
     <string name="notification_from">Notificación de %s.</string>
-    <string name="error_tts_init">Error: No se puede inicializar TTS!</string>
+    <string name="error_tts_init">Error: No se puede inicializar TTS! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Sí</string>
     <string name="ignore_app">Ignorar %s\?</string>

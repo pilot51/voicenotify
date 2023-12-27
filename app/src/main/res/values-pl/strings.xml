@@ -110,7 +110,7 @@
     <string name="tts_message_reset_default">Ustawianie wiadomości TTS zaktualizowane do nowej domyślnej wartości</string>
     <!-- Service -->
     <string name="notification_from">Powiadomienie od %s.</string>
-    <string name="error_tts_init">Error: Nie można było zainicjalizować TTS.</string>
+    <string name="error_tts_init">Error: Nie można było zainicjalizować TTS. [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Tak</string>
     <string name="ignore_app">Ignorować %s\?</string>

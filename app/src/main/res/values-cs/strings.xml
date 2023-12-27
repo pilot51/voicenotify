@@ -89,7 +89,7 @@
     <string name="error_email">Chyba: Nelze najít nainstalovanou e-mailovou aplikaci.</string>
     <!-- Service -->
     <string name="notification_from">Oznámení z %s.</string>
-    <string name="error_tts_init">Chyba: Nepodařilo se spustit TTS!</string>
+    <string name="error_tts_init">Chyba: Nepodařilo se spustit TTS! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Ano</string>
     <string name="ignore_app">Ignorovat %s\?</string>

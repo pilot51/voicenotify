@@ -88,7 +88,7 @@
     <string name="error_email">Ошибка: Не удалось найти установленный почтовый клиент.</string>
     <!-- Service -->
     <string name="notification_from">Уведомление от %s.</string>
-    <string name="error_tts_init">Ошибка: Не удалось запустить TTS!</string>
+    <string name="error_tts_init">Ошибка: Не удалось запустить TTS! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Да</string>
     <string name="ignore_app">Игнорировать %s\?</string>

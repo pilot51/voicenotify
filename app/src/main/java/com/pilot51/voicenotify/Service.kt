@@ -95,9 +95,11 @@ class Service : NotificationListenerService() {
 
 	override fun onCreate() {
 		tts = TextToSpeech(applicationContext, OnInitListener { status ->
-			if (status == TextToSpeech.ERROR) {
-				Log.w(TAG, getString(R.string.error_tts_init))
-				Toast.makeText(applicationContext, R.string.error_tts_init, Toast.LENGTH_LONG).show()
+			if (status != TextToSpeech.SUCCESS) {
+				tts = null
+				val errorMsg = getString(R.string.error_tts_init, status)
+				Log.w(TAG, errorMsg)
+				Toast.makeText(applicationContext, errorMsg, Toast.LENGTH_LONG).show()
 				return@OnInitListener
 			}
 			tts!!.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
@@ -107,6 +109,9 @@ class Service : NotificationListenerService() {
 						val info = ttsQueue[utteranceId.toLong()]
 						if (info != null) {
 							info.setSilenced()
+							if (info.getIgnoreReasons().isEmpty()) {
+								info.addIgnoreReason(IgnoreReason.TTS_INTERRUPTED)
+							}
 							refresh()
 						}
 						ttsQueue.clear()
@@ -282,7 +287,12 @@ class Service : NotificationListenerService() {
 		} != TextToSpeech.SUCCESS
 		if (isSpeakFailed) {
 			Log.e(TAG, "Error adding notification to TTS queue")
+			info.addIgnoreReason(IgnoreReason.TTS_FAILED)
 			synchronized(ttsQueue) { ttsQueue.remove(notificationTime) }
+		}
+		if ((info.ttsMessage?.length ?: 0) > TextToSpeech.getMaxSpeechInputLength()) {
+			info.addIgnoreReason(IgnoreReason.TTS_LENGTH_LIMIT)
+			if (!isSpeakFailed) info.setSilenced()
 		}
 	}
 
