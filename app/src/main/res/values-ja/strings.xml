@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="service_running">Voice Notify サービスが動作しています</string>
+    <string name="max_length_dialog_msg">読み上げるメッセージの最大長
+\n最大長を超えるメッセージは切り捨てられます。</string>
+    <string name="ignore_groups">グループメッセージを無視</string>
+    <string name="tts_delay">音声読み上げ遅延</string>
+    <string name="shake_to_silence_summary">「振って停止」の感度を調整します</string>
+    <string name="device_state_summary">読み上げを行うデバイス状態を選択します</string>
+    <string name="tts_message_summary">通知のどの部分を読み上げるかをカスタマイズ</string>
+    <string name="device_state">読み上げを行うデバイス状態</string>
+    <string name="shake_to_silence">振って停止</string>
+    <string name="tts_settings">音声読み上げ設定</string>
+    <string name="ignore_repeat_summary">設定した時間内の同じ通知を無視します</string>
+    <string name="tts_message">音声読み上げメッセージ</string>
+    <string name="tts_summary">音声読み上げの動作設定</string>
+    <string name="shake_to_silence_dialog_msg">値を低くするとより感度が高くなります。
+\n
+\nデフォルト:100
+\n空白の場合は無効。</string>
+    <string name="tts">音声読み上げ</string>
+    <string name="tts_message_dialog">#a = App title
+\n#t = Ticker
+\n#s = Subtext
+\n#c = Content title
+\n#m = Content message
+\n#i = Content info
+\n
+\nデフォルト:
+\n#a. #c. #m.
+\n
+\n以前のデフォルト (v1.0.x):
+\n#a: #t</string>
+    <string name="max_length_summary">読み上げる最大メッセージ長、これを超えるメッセージは切り捨てられます。</string>
+    <string name="device_state_dialog_title">これらのデバイス状態で読み上げを行います</string>
+    <string name="tts_repeat_dialog_msg">通知は、画面がオンになるまで指定された間隔で繰り返されます。画面がオンになっている間に作成された通知は繰り返されません。
+\n
+\n値の単位は分です。空白または0を指定すると無効になります。</string>
+    <string name="tts_delay_summary">通知後に指定された秒数の間、音声読み上げを遅らせます</string>
+    <string name="tts_delay_dialog_msg">通知後、読み上げるまでの待機秒数。</string>
+    <string name="ignore_repeat_dialog_msg">最後の通知から何秒経てば同じメッセージを読み上げられるかを設定します。
+\n同じメッセージが無視された場合カウントはリセットされ、異なる通知が来た場合カウントはクリアされます。
+\n空白 = 無限。</string>
+    <string name="require_strings">テキストの必要性</string>
+    <string name="ignore_empty">空を無視</string>
+    <string name="tts_stream_summary">音声読み上げに使用するオーディオストリームを選択します</string>
+    <string name="require_ignore_strings_dialog_msg">これは、テキスト置換を含め音声読み上げに送られた処理済みメッセージと比較されます。
+\n
+\n個々のエントリーは改行で区切ります。
+\nメッセージはいずれかのエントリにマッチする必要があります、すべてではありません。
+\n大文字と小文字は区別されません。</string>
+    <string name="app_list">アプリケーションリスト</string>
+    <string name="ignore_repeat">同じメッセージを無視</string>
+    <string name="tts_text_replace_summary">発音を直すなど、話すテキストを置き換えます</string>
+    <string name="app_list_summary">無視可能なアプリケーションのリスト</string>
+    <string name="audio_focus">一時停止/メディア音量を下げる</string>
+    <string name="ignore_groups_summary_on">複数のメッセージを含む通知は読み上げられません</string>
+    <string name="tts_repeat">音声読み上げの繰り返し</string>
+    <string name="audio_focus_summary">読み上げ中、他のメディアに一時停止または音量を下げるようリクエストします</string>
+    <string name="app_is_ignored">%s は無視されました</string>
+    <string name="tts_stream">音声読み上げオーディオストリーム</string>
+    <string name="ignore_strings">無視する文字列</string>
+    <string name="tts_text_replace">音声読み上げテキスト置換</string>
+    <string name="ignore_groups_summary_off">複数のメッセージを含む通知を読み上げます</string>
+    <string name="tts_text_replace_dialog">テキストを置き換えることで、音声読み上げがどのように単語を発音するかをカスタマイズしたり、その他の目的でテキストを置き換えたりできます。
+\n
+\n置換するテキストの大文字と小文字は区別されません。</string>
+    <string name="service_suspended">Voice Notify サービスは停止中です</string>
+    <string name="max_length">最大メッセージ長</string>
+    <string name="ignore_empty_summary_on">メッセージのない通知を読み上げません</string>
+    <string name="tts_repeat_summary">画面がオンの間、音声読み上げによる通知を繰り返します</string>
+    <string name="ignore_strings_summary">指定の文字列がメッセージに含まれている場合、通知を無視します</string>
+    <string name="tts_settings_summary_fail">音声読み上げ設定がみつかりません! もしあなたのデバイスに存在するはずなら（あるはずです）開発者に連絡してください。</string>
+    <string name="ignore_empty_summary_off">メッセージのない通知は\"(アプリ名)からの通知です\"と読み上げられます</string>
+    <string name="app_is_not_ignored">%s は無視されません</string>
+    <string name="app_name">Voice Notify</string>
+    <string name="tts_settings_summary">Androidの音声読み上げ設定を開く</string>
+    <string name="require_strings_summary">メッセージに文字列が含まれている場合のみ通知を読み上げます</string>
+    <string name="reason_string_ignored">無視された文字列</string>
+    <string name="replacement_text">置換後の文字列</string>
+    <string name="support_summary">評価＆レビュー、開発者にメール、コミュニティチャット、翻訳、ソースコード、イシュートラッカー、プライバシーポリシー</string>
+    <string name="ignore_app">%sを無視しますか？</string>
+    <string name="permission_rationale_post_notifications">テスト通知送信のため、通知送信の許可が必要です。</string>
+    <string name="reason_suspended">ウィジェットによってVoice Notify停止</string>
+    <string name="error_market">エラー: Google Playストアが見つかりません。</string>
+    <string name="filter">フィルター</string>
+    <string name="error_tts_init">エラー: 音声読み上げを初期化できません！</string>
+    <string name="tts_message_reset_default">音声読み上げ設定が新しいデフォルト値に更新されました</string>
+    <string name="test_summary">現在の設定をテストするため、5秒後にテスト通知を送ります</string>
+    <string name="test_ignored">Voice Notifyがアプリ一覧で無視されています。
+\nテストは行われますが通知は読み上げられません。</string>
+    <string name="unignore_app">%s を無視しないようにしますか？</string>
+    <string name="reason_headset_off">ヘッドセットオフ</string>
+    <string name="reason_empty_msg">空のメッセージ</string>
+    <string name="quiet_end">非通知終了時間</string>
+    <string name="test_ticker">これはtickerメッセージです</string>
+    <string name="support_matrix">Matrix</string>
+    <string name="test_content_text">これはコンテントメッセージです。</string>
+    <string name="status_summary_suspended">選択するとVoice Notifyを有効化。</string>
+    <string name="ignore_all">すべて無視</string>
+    <string name="status_summary_notification_access_enabled">Androidの通知設定を開いてVoice Notifyを無効化</string>
+    <string name="service_disabled">Voice Notifyサービスは無効です</string>
+    <string name="reason_headset_on">ヘッドセットオン</string>
+    <string name="permission_rationale_read_phone_state">通話中に音声を読み上げてしまう事を防ぐため、通話発信の許可が必要です。</string>
+    <string name="reason_identical">{0,choice,-1#無限秒|1#{0} 秒|1&lt;{0} 秒} 以内の同一メッセージ</string>
+    <string name="ignore_none">すべて無視しない</string>
+    <string name="yes">はい</string>
+    <string name="reason_string_required">必要な文字列が不足しています</string>
+    <string name="support_privacy_message">Voice Notifyはデバイスからデータを収集したり送信したりしません。ただし、以下の「サードパーティのアプリとサービス」で説明するように、データを送信する可能性のあるサードパーティのアプリやサービスを使用しています。
+\n
+\n万が一、機密情報や個人情報が開発者によって受信された場合、その情報が誰のものであるかの明示的な同意なしに、販売、共有、コピー、使用されることはありません。同意がない場合、情報は可能な限り削除されます。
+\n
+\nVoice Notifyの目的は通知を話すことであるため、話した通知が周囲の人やマイクに聞こえる可能性があります。望ましくない音声通知を防ぐために、音声通知とデバイスを設定することをお勧めします。自己責任で使用してください。
+\n
+\nVoice Notifyが受信した通知は、通知ログ（最新の20件まで）に表示されるためにのみメモリーに保持され、ストレージには書き込まれません。これにより、特にデバイスがroot化されている場合、他のアプリがデータにアクセスすることを防ぎます。その結果、Voice Notifyプロセスを終了すると、通知ログはクリアされます。
+\n
+\nインストールされているアプリは読み込まれ、一覧表示されるため、ユーザーはどのアプリに通知を話させるかを選択できます。アプリのタイトルとパッケージ名は、デバイス上のVoice Notifyの内部プライベートデータストレージのデータベースに保存され、選択を保存し、アプリリストの読み込みのパフォーマンスを向上させるキャッシュとして機能します。
+\n
+\nサードパーティのアプリやサービス
+\n- 音声合成エンジン - Voice Notifyは通知テキストをデフォルトの音声合成エンジンに渡します。音声合成エンジンがどのようにデータを使用するかについては、音声合成エンジンのプライバシーポリシーをお読みください。
+\n- Google Playサービスでは、アプリの改善に役立てるため、匿名化されたクラッシュデータや基本的な分析データを開発者に送り返すことがあります。
+\n- メッセージングアプリ - 「開発者に連絡」オプションは、ユーザーが選択した、またはメールアプリなどのデフォルトのメッセージングアプリを開き、メッセージにVoice Notifyのバージョン、Androidのバージョン、Androidのビルド番号、デバイス名を事前に入力します。メールアプリの場合、「宛先」フィールドには開発者のアドレス（pilota51@gmail.com）が設定されます。メッセージを送信することで、ユーザーは、メッセージングアプリが決定するように、自分の名前と連絡先情報が受信者と共有されることを理解し、同意します。
+\n- Help &amp; Support \"の下にあるその他のオプションは、関連する外部アプリやウェブサイト（Play Store、Weblate.org、GitHub.com）を開き、Voice NotifyページへのハードコードされたURLのみを送信します。
+\n
+\n以下は、Voice Notifyが使用するパーミッションと、それが必要な理由です：
+\n- Bluetooth - Bluetoothヘッドセットが接続されているかどうかを検出するために必要です。
+\n- バイブレーション - 電話がバイブレーションモードになっている間のテスト機能に必要です。
+\n- オーディオ設定の変更 - 有線ヘッドセットの検出を改善するために必要です。
+\n- 電話状態の読み取り - 電話がアクティブになった場合にTTSを中断するために必要です。</string>
+    <string name="notify_log_summary">直近20の通知一覧。
+\n表示時間,アプリケーション名,メッセージ及び無視された理由。</string>
+    <string name="test_content_info">Content Info</string>
+    <string name="support">ヘルプ＆サポート</string>
+    <string name="text_to_replace">置換する文字列</string>
+    <string name="test">テスト</string>
+    <string name="support_rate">評価＆レビュー</string>
+    <string name="support_contact">開発者にメール</string>
+    <string name="notification_from">%s からの通知。</string>
+    <string name="quiet_end_summary">この時間以前は読み上げを行いません。
+\n開始時間と同じ値を設定すると無効化されます。</string>
+    <string name="quiet_start_summary">この時間以降は読み上げを行いません。
+\n終了時間と同じ値を設定すると無効化されます。</string>
+    <string name="support_discord">Discord</string>
+    <string name="reason_service_stopped">サービス停止</string>
+    <string name="notification_channel_desc">テスト通知に使用</string>
+    <string name="reason_screen_off">画面オフ</string>
+    <string name="test_subtext">サブテキスト</string>
+    <string name="reason_screen_on">画面オン</string>
+    <string name="support_translations">翻訳</string>
+    <string name="status_summary_notification_access_disabled">Androidの通知設定を開いてVoice Notifyを有効化</string>
+    <string name="error_email">エラー: メールアプリが見つかりません。</string>
+    <string name="support_source">GitHub (ソースコード,イシュートラッカー)</string>
+    <string name="text_replace_error_duplicate">重複してます！保存されません。</string>
+    <string name="test_content_title">コンテンツタイトル</string>
+    <string name="support_privacy">プライバシーポリシー</string>
+    <string name="reason_shake">シェイクによって停止</string>
+    <string name="reason_call">通話中</string>
+    <string name="reason_app">無視されたアプリ</string>
+    <string name="reason_silent">サイレントもしくはバイブモード</string>
+    <string name="quiet_start">非通知の開始時間</string>
+    <string name="notify_log">通知ログ</string>
+    <string name="reason_quiet">非通知時間</string>
+</resources>
