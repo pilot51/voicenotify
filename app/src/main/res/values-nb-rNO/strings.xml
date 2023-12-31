@@ -43,7 +43,6 @@
     <string name="ignore_repeat_summary">Ignorer gjentatte identiske merknader innenfor avgrenset tidsperiode</string>
     <string name="support_matrix">Matrix</string>
     <string name="support_translations">Oversettelser</string>
-    <string name="tts_message_reset_default">TTS-meldingsinnstilling oppdatert til ny forvalgt verdi</string>
     <string name="filter">Filter</string>
     <string name="reason_identical">Identisk melding innen {0,choice,-1#infinite seconds|1#{0} sekund|1&lt;{0} sekunder}</string>
     <string name="permission_rationale_read_phone_state">Anropstilgang kreves for å forhindre Voice Notify fra å kunngjøre under anrop.</string>

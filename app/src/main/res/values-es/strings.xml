@@ -153,7 +153,6 @@
     <string name="status_summary_notification_access_disabled">Abre los ajustes de acceso a las notificaciones de Android para activar la notificación por voz</string>
     <string name="support_privacy">Política de privacidad</string>
     <string name="permission_rationale_read_phone_state">El permiso de llamadas telefónicas es necesario para evitar que Voice Notify hable durante una llamada.</string>
-    <string name="tts_message_reset_default">Configuración de mensajes TTS actualizada al nuevo valor predeterminado</string>
     <string name="text_replace_error_duplicate">¡Duplicado! No será guardado.</string>
     <string name="text_to_replace">Texto a reemplazar</string>
     <string name="status_summary_notification_access_enabled">Abre los ajustes de acceso a las notificaciones de Android para desactivar Voice Notify</string>

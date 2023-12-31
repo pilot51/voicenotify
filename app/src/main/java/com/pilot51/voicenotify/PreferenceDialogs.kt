@@ -125,13 +125,7 @@ fun IgnoreRepeatsDialog(onDismiss: () -> Unit) {
 
 @Composable
 fun TtsMessageDialog(onDismiss: () -> Unit) {
-	val text = prefs.getString(KEY_TTS_STRING, null)?.let {
-		return@let if (it.contains("%")) {
-			val context = LocalContext.current
-			Toast.makeText(context, R.string.tts_message_reset_default, Toast.LENGTH_LONG).show()
-			DEFAULT_TTS_STRING
-		} else it
-	} ?: DEFAULT_TTS_STRING
+	val text = prefs.getString(KEY_TTS_STRING, null) ?: DEFAULT_TTS_STRING
 	TextEditDialog(
 		titleRes = R.string.tts_message,
 		messageRes = R.string.tts_message_dialog,

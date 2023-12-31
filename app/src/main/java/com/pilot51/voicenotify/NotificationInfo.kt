@@ -73,7 +73,7 @@ data class NotificationInfo(
 
 	/** Generates the string to be used for TTS. */
 	private fun buildTtsMessage() {
-		val ttsStringPref = prefs.getString(KEY_TTS_STRING, DEFAULT_TTS_STRING)!!
+		val ttsStringPref = prefs.getString(KEY_TTS_STRING, null) ?: DEFAULT_TTS_STRING
 		val ttsUnformattedMsg = ttsStringPref
 			.replace("#a", "%1\$s") // App Label
 			.replace("#t", "%2\$s") // Ticker

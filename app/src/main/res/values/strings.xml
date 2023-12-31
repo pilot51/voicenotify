@@ -50,7 +50,7 @@
 	<string name="require_strings_summary">Only speak notifications that contain certain text in the message</string>
 	<string name="ignore_strings">Ignore Text</string>
 	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message</string>
-	<string name="require_ignore_strings_dialog_msg">This is matched against the processed message sent to TTS, including text replacements.\n\nSeparate individual entries with a new line.\nThe message needs to contain any entry, not all.\nCase insensitive.</string>
+	<string name="require_ignore_strings_dialog_msg">This is matched against the message sent to TTS, after TTS Message formatting and Text Replacement, including punctuation.\n\nSeparate individual entries with a new line.\nThe message needs to contain any entry, not all, to be a match.\nCase insensitive.</string>
 	<string name="ignore_empty">Ignore Empty</string>
 	<string name="ignore_empty_summary_on">Notifications without a message will not be spoken</string>
 	<string name="ignore_empty_summary_off">Notifications without a message will be spoken as \"Notification from [app name].\"</string>
@@ -128,10 +128,9 @@
 	<string name="tts_message">TTS Message</string>
 	<string name="tts_message_summary">Customize which parts of notifications are spoken</string>
 	<string name="tts_message_dialog">#a = App title\n#t = Ticker\n#s = Subtext\n#c = Content title\n#m = Content message\n#i = Content info\n\nDefault:\n#a. #c. #m.\n\nOld default (v1.0.x):\n#a: #t</string>
-	<string name="tts_message_reset_default">TTS Message setting updated to new default value</string>
 	<string name="tts_text_replace">TTS Text Replacement</string>
 	<string name="tts_text_replace_summary">Substitute text to be spoken, such as to fix pronunciation</string>
-	<string name="tts_text_replace_dialog">Substitute text to be spoken, allowing you to customize how Text-To-Speech pronounces words or replace text for any other reason.\n\nText to replace is case insensitive.</string>
+	<string name="tts_text_replace_dialog">Substitute text to be spoken, allowing you to customize how Text-To-Speech pronounces words or replace text for any other reason.\n\nText to replace is case insensitive and applies after the formatting set in TTS Message, including punctuation.</string>
 	<string name="text_replace_error_duplicate">Duplicate! Will not be saved.</string>
 	<string name="text_to_replace">Text to replace</string>
 	<string name="replacement_text">Replacement text</string>

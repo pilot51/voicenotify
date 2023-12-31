@@ -116,7 +116,6 @@
     <string name="support_source">Kod Punca</string>
     <string name="error_market">Ralat: Gagal Google Play Store tiada</string>
     <string name="error_email">Ralat: Gagal cari aplikasi emel.</string>
-    <string name="tts_message_reset_default">Tetapan baru seting Mesej TTS dikemaskini</string>
     <!-- Service -->
     <string name="notification_from">Notifikasi dari %s.</string>
     <string name="error_tts_init">Ralat: TTS gagal! [%d]</string>

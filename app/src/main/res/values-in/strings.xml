@@ -125,7 +125,6 @@
     <string name="support_source">GitHub (Kode Sumber, Issue Tracker)</string>
     <string name="error_market">Galat: Gagal menemukan Google Play Store terpasang.</string>
     <string name="error_email">Galat: Gagal menemukan aplikasi surel terpasang.</string>
-    <string name="tts_message_reset_default">Pengaturan Teks-Ke-Ucapan diperbarui ke nilai asali baru</string>
     <!-- Service -->
     <string name="notification_from">Pemberitahuan dari %s.</string>
     <string name="error_tts_init">Galat: Gagal memulai Teks-Ke-Ucapan! [%d]</string>

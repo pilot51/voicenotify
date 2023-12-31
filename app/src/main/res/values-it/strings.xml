@@ -125,7 +125,6 @@
     <string name="reason_headset_on">Cuffie collegate</string>
     <string name="reason_shake">Zittito su movimento</string>
     <string name="reason_suspended">VN sospeso dalla widget</string>
-    <string name="tts_message_reset_default">Impostazione dei messaggi TTS aggiornata al nuovo valore predefinito</string>
     <string name="test_content_text">Questo è il messaggio di contenuto.</string>
     <string name="test_content_info">Informazioni sui contenuti</string>
     <string name="test_content_title">Titolo del contenuto</string>

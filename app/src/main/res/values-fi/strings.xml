@@ -92,7 +92,6 @@
     <string name="error_market">Virhe: Google Play Kauppaa ei löydy asennettuna.</string>
     <string name="error_tts_init">Virhe: TTS:ää ei voitu alustaa! [%d]</string>
     <string name="error_email">Virhe: Asennettua sähköpostisovellusta ei löydy.</string>
-    <string name="tts_message_reset_default">TTS viestiasetus on päivitetty uuteen oletusarvoon</string>
     <string name="notification_from">Ilmoituksen lähetti %s.</string>
     <string name="yes">Kyllä</string>
     <string name="ignore_app">Ohita %s\?</string>

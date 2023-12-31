@@ -121,7 +121,6 @@
     <string name="support_source">Πηγαίος Κώδικας</string>
     <string name="error_market">Σφάλμα: αδυναμία εύρεσης της εφαρμογής Google Play Store.</string>
     <string name="error_email">Σφάλμα: αδυναμία εύρεσης εφαρμογής για αποστολή email.</string>
-    <string name="tts_message_reset_default">Κείμενο TTS ρύθμιση μηνυμάτων ενημερώθηκε στη νέα προεπιλεγμένη τιμή</string>
     <!-- Service -->
     <string name="notification_from">Ανακοίνωση απο %s.</string>
     <string name="error_tts_init">Σφάλμα: Αδυναμία προετοιμασίας TTS! [%d]</string>

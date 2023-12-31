@@ -85,7 +85,6 @@
     <string name="error_market">エラー: Google Playストアが見つかりません。</string>
     <string name="filter">フィルター</string>
     <string name="error_tts_init">エラー: 音声読み上げを初期化できません！ [%d]</string>
-    <string name="tts_message_reset_default">音声読み上げ設定が新しいデフォルト値に更新されました</string>
     <string name="test_summary">現在の設定をテストするため、5秒後にテスト通知を送ります</string>
     <string name="test_ignored">Voice Notifyがアプリ一覧で無視されています。
 \nテストは行われますが通知は読み上げられません。</string>
