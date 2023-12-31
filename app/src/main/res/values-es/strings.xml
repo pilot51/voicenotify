@@ -41,10 +41,10 @@
     </string-array>
     <string name="ignore_strings">Ignorar texto</string>
     <string name="ignore_strings_summary">Ignorar las notificaciones que contienen cierto texto en el mensaje</string>
-    <string name="require_ignore_strings_dialog_msg">Se coteja con el mensaje procesado enviado a TTS, incluidas las sustituciones del texto.
+    <string name="require_ignore_strings_dialog_msg">Se coteja con el mensaje procesado enviado a TTS, incluidas las sustituciones de texto.
 \n
-\nSepara las entradas individuales con una nueva línea.
-\nEl mensaje debe coincidir con cualquier entrada, no con todas.
+\nSepare las entradas individuales con una nueva línea.
+\nEl mensaje debe contener cualquier entrada, no todas.
 \nNo se distingue entre mayúsculas y minúsculas.</string>
     <string name="ignore_empty">Ignorar vacías</string>
     <string name="ignore_empty_summary_on">Las notificaciones sin mensaje no se pronunciarán</string>
@@ -183,4 +183,11 @@
     <string name="require_strings_summary">Hablar solo las notificaciones que contengan cierto texto en el mensaje</string>
     <string name="support_discord">Discord</string>
     <string name="support_matrix">Matrix</string>
+    <string name="close">Cerrar</string>
+    <string name="remove">Eliminar</string>
+    <string name="reason_tts_length_limit">El mensaje ha superado el límite de longitud del TTS</string>
+    <string name="reason_tts_failed">TTS ha fallado. Intente reiniciar el servicio de Notificación por voz.</string>
+    <string name="back">Atrás</string>
+    <string name="error">Error</string>
+    <string name="reason_tts_interrupted">TTS interrumpido por motivo desconocido</string>
 </resources>
