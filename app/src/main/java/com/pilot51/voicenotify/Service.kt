@@ -40,6 +40,7 @@ import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import com.pilot51.voicenotify.PermissionHelper.isPermissionGranted
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IGNORE_EMPTY
@@ -69,6 +70,7 @@ import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_DELAY
 import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_REPEAT
 import com.pilot51.voicenotify.PreferenceHelper.getSelectedAudioStream
 import com.pilot51.voicenotify.PreferenceHelper.prefs
+import com.pilot51.voicenotify.Utils.isAny
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -437,10 +439,25 @@ class Service : NotificationListenerService() {
 		return isScreenOn
 	}
 
+	@get:RequiresApi(Build.VERSION_CODES.M)
+	@delegate:RequiresApi(Build.VERSION_CODES.M)
+	private val audioDeviceTypes by lazy {
+		mutableListOf(
+			AudioDeviceInfo.TYPE_BLUETOOTH_A2DP,
+			AudioDeviceInfo.TYPE_WIRED_HEADSET,
+			AudioDeviceInfo.TYPE_WIRED_HEADPHONES
+		).apply {
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return@apply
+			add(AudioDeviceInfo.TYPE_USB_HEADSET)
+			if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return@apply
+			add(AudioDeviceInfo.TYPE_BLE_HEADSET)
+		}.toTypedArray()
+	}
+
 	private fun isHeadsetOn(): Boolean {
 		return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 			audioMan.getDevices(AudioManager.GET_DEVICES_OUTPUTS).any {
-				it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP || it.type == AudioDeviceInfo.TYPE_WIRED_HEADSET
+				it.type.isAny(*audioDeviceTypes)
 			}
 		} else {
 			@Suppress("DEPRECATION")

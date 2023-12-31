@@ -48,7 +48,7 @@
     <string name="reason_identical">Identisk melding innen {0,choice,-1#infinite seconds|1#{0} sekund|1&lt;{0} sekunder}</string>
     <string name="permission_rationale_read_phone_state">Anropstilgang kreves for å forhindre Voice Notify fra å kunngjøre under anrop.</string>
     <string name="permission_rationale_post_notifications">Merknadstilgang kreves for å sende testmerknad.</string>
-    <string name="error_tts_init">Feil: Kunne ikke igangsette TTS.</string>
+    <string name="error_tts_init">Feil: Kunne ikke igangsette TTS. [%d]</string>
     <string name="app_name">Voice Notify</string>
     <string name="app_list">Programliste</string>
     <string name="support_source">GitHub (kidekoder, feilsporer)</string>
