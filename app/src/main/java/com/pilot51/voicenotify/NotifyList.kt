@@ -129,11 +129,11 @@ private fun Item(item: NotificationInfo) {
 				textAlign = TextAlign.Center
 			)
 		}
-		if (item.getIgnoreReasons().isNotEmpty()) {
+		if (item.ignoreReasons.isNotEmpty()) {
 			Text(
 				text = item.getIgnoreReasonsAsText(),
 				modifier = Modifier.fillMaxWidth(),
-				color = if (item.isSilenced) Color.Yellow else Color.Red,
+				color = if (item.isInterrupted) Color.Yellow else Color.Red,
 				textAlign = TextAlign.Center
 			)
 		}

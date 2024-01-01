@@ -174,7 +174,8 @@
 	<string name="reason_shake">Silenced by shake</string>
 	<string name="reason_suspended">Voice Notify suspended by widget</string>
 	<string name="reason_service_stopped">Service stopped</string>
-	<string name="reason_tts_failed">TTS failed. Please try restarting the Voice Notify service.</string>
+	<string name="reason_tts_failed">TTS failed. Restart and retry attempted.\nThis text should be yellow if retry successful or red if not.\nPlease try restarting the Voice Notify service if notifications fail to be spoken.</string>
+	<string name="reason_tts_restarted">TTS restarted while message in queue or speaking. Re-queued.</string>
 	<string name="reason_tts_interrupted">TTS interrupted for unknown reason</string>
 	<string name="reason_tts_length_limit">Message exceeded TTS length limit</string>
 </resources>

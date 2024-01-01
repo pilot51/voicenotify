@@ -80,8 +80,8 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class Service : NotificationListenerService() {
-	private val lastMsg: MutableMap<App?, String?> = HashMap()
-	private val lastMsgTime: MutableMap<App?, Long> = HashMap()
+	private val lastMsg = mutableMapOf<App?, String?>()
+	private val lastMsgTime = mutableMapOf<App?, Long>()
 	private var tts: TextToSpeech? = null
 	private var shouldRequestFocus = false
 	private lateinit var audioMan: AudioManager
@@ -96,6 +96,10 @@ class Service : NotificationListenerService() {
 				.setLegacyStreamType(AudioManager.STREAM_MUSIC).build())
 			.build()
 	} else null
+	private val ttsParams: Bundle
+		get() = Bundle().apply {
+			putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, getSelectedAudioStream())
+		}
 
 	/**
 	 * this is used to determine if we are the first, middle, or last thing to be spoken at the moment, for enabling/disabling shake and audio focus request
@@ -104,13 +108,13 @@ class Service : NotificationListenerService() {
 	 * if the list is empty when we finish speaking a message, we untrigger them.
 	 */
 	@SuppressLint("UseSparseArrays")
-	private val ttsQueue: MutableMap<Long, NotificationInfo> = HashMap()
+	private val ttsQueue = linkedMapOf<Long, NotificationInfo>()
 	private val statusListener = object : OnStatusChangeListener {
 		override fun onStatusChanged() {
 			if (isSuspended.value && tts != null) {
 				synchronized(ttsQueue) {
 					for (info in ttsQueue.values) {
-						info.addIgnoreReason(IgnoreReason.SUSPENDED)
+						info.ignoreReasons.add(IgnoreReason.SUSPENDED)
 					}
 				}
 				tts!!.stop()
@@ -119,8 +123,15 @@ class Service : NotificationListenerService() {
 	}
 
 	override fun onCreate() {
+		initTts()
+		super.onCreate()
+	}
+
+	private fun initTts(onInit: (() -> Unit)? = null)  {
 		tts = TextToSpeech(applicationContext, OnInitListener { status ->
-			if (status != TextToSpeech.SUCCESS) {
+			if (status == TextToSpeech.SUCCESS) {
+				onInit?.invoke()
+			} else {
 				tts = null
 				val errorMsg = getString(R.string.error_tts_init, status)
 				Log.w(TAG, errorMsg)
@@ -133,9 +144,9 @@ class Service : NotificationListenerService() {
 					if (interrupted) {
 						val info = ttsQueue[utteranceId.toLong()]
 						if (info != null) {
-							info.setSilenced()
-							if (info.getIgnoreReasons().isEmpty()) {
-								info.addIgnoreReason(IgnoreReason.TTS_INTERRUPTED)
+							info.isInterrupted = true
+							if (info.ignoreReasons.isEmpty()) {
+								info.ignoreReasons.add(IgnoreReason.TTS_INTERRUPTED)
 							}
 							NotifyList.updateInfo(info)
 						}
@@ -165,7 +176,38 @@ class Service : NotificationListenerService() {
 				}
 			})
 		})
-		super.onCreate()
+	}
+
+	private fun restartTts() {
+		synchronized(ttsQueue) {
+			ttsQueue.values.forEach {
+				if (it.ignoreReasons.contains(IgnoreReason.TTS_FAILED)) return@forEach
+				it.ignoreReasons.add(IgnoreReason.TTS_RESTARTED)
+				it.isInterrupted = true
+				NotifyList.updateInfo(it)
+			}
+		}
+		tts?.shutdown()
+		initTts {
+			synchronized(ttsQueue) {
+				val queueIterator = ttsQueue.iterator()
+				queueIterator.forEach {
+					val info = it.value
+					val isFailed = tts!!.speak(
+						info.ttsMessage, TextToSpeech.QUEUE_ADD, ttsParams, it.key.toString()
+					) != TextToSpeech.SUCCESS
+					if (isFailed) {
+						Log.e(TAG, "Error adding notification to queue after TTS restart. Not retrying again.")
+						info.ignoreReasons.add(IgnoreReason.TTS_FAILED)
+						info.isInterrupted = false
+						queueIterator.remove()
+					} else if (info.ignoreReasons.contains(IgnoreReason.TTS_FAILED)) {
+						info.isInterrupted = true
+					}
+					NotifyList.updateInfo(info)
+				}
+			}
+		}
 	}
 
 	override fun onNotificationPosted(sbn: StatusBarNotification) {
@@ -179,11 +221,11 @@ class Service : NotificationListenerService() {
 		val msgTime = info.calendar.timeInMillis
 		val ttsMsg = info.ttsMessage
 		if (app != null && !app.enabled) {
-			info.addIgnoreReason(IgnoreReason.APP)
+			info.ignoreReasons.add(IgnoreReason.APP)
 		}
 		if (ttsMsg.isNullOrEmpty()
 			&& prefs.getBoolean(KEY_IGNORE_EMPTY, DEFAULT_IGNORE_EMPTY)) {
-			info.addIgnoreReason(IgnoreReason.EMPTY_MSG)
+			info.ignoreReasons.add(IgnoreReason.EMPTY_MSG)
 		}
 		if (ttsMsg != null) {
 			val requireStrings = prefs.getString(KEY_REQUIRE_STRINGS, null)?.split("\n")
@@ -191,14 +233,14 @@ class Service : NotificationListenerService() {
 				it.isNotEmpty() && !ttsMsg.contains(it, true)
 			} ?: false
 			if (stringRequired) {
-				info.addIgnoreReason(IgnoreReason.STRING_REQUIRED)
+				info.ignoreReasons.add(IgnoreReason.STRING_REQUIRED)
 			}
 			val ignoreStrings = prefs.getString(KEY_IGNORE_STRINGS, null)?.split("\n")
 			val stringIgnored = ignoreStrings?.any {
 				it.isNotEmpty() && ttsMsg.contains(it, true)
 			} ?: false
 			if (stringIgnored) {
-				info.addIgnoreReason(IgnoreReason.STRING_IGNORED)
+				info.ignoreReasons.add(IgnoreReason.STRING_IGNORED)
 			}
 		}
 		val ignoreRepeat = try {
@@ -214,7 +256,7 @@ class Service : NotificationListenerService() {
 			}
 		}
 		NotifyList.addNotification(info)
-		if (info.getIgnoreReasons().isEmpty()) {
+		if (info.ignoreReasons.isEmpty()) {
 			val delay = try {
 				prefs.getString(KEY_TTS_DELAY, null)
 					?.takeIf { it.isNotEmpty() }?.toDouble()?.takeUnless { it < 0.0 } ?: 0.0
@@ -243,7 +285,7 @@ class Service : NotificationListenerService() {
 					if (ignoreReasons.isNotEmpty()) {
 						Log.i(TAG, "Notification ignored for reason(s): "
 							+ ignoreReasons.joinToString())
-						info.addIgnoreReasons(ignoreReasons)
+						info.ignoreReasons.addAll(ignoreReasons)
 						return
 					}
 					CoroutineScope(Dispatchers.Main).launch {
@@ -268,9 +310,13 @@ class Service : NotificationListenerService() {
 	private fun speak(info: NotificationInfo) {
 		if (tts == null) {
 			Log.w(TAG, "Speak failed due to service destroyed")
-			info.addIgnoreReason(IgnoreReason.SERVICE_STOPPED)
+			info.ignoreReasons.add(IgnoreReason.SERVICE_STOPPED)
 			NotifyList.updateInfo(info)
 			return
+		}
+		if ((info.ttsMessage?.length ?: 0) > TextToSpeech.getMaxSpeechInputLength()) {
+			info.ignoreReasons.add(IgnoreReason.TTS_LENGTH_LIMIT)
+			info.isInterrupted = true
 		}
 		val notificationTime = info.calendar.timeInMillis
 		synchronized(ttsQueue) {
@@ -291,21 +337,18 @@ class Service : NotificationListenerService() {
 			ttsQueue.put(notificationTime, info)
 		}
 		//once the message is in our queue, send it to the real one with the necessary parameters
-		val audioStream = getSelectedAudioStream()
 		val utteranceId = notificationTime.toString()
-		val ttsParams = Bundle()
-		ttsParams.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, audioStream)
 		val isSpeakFailed = tts!!.speak(
 			info.ttsMessage, TextToSpeech.QUEUE_ADD, ttsParams, utteranceId
 		) != TextToSpeech.SUCCESS
 		if (isSpeakFailed) {
-			Log.e(TAG, "Error adding notification to TTS queue")
-			info.addIgnoreReason(IgnoreReason.TTS_FAILED)
-			synchronized(ttsQueue) { ttsQueue.remove(notificationTime) }
+			Log.e(TAG, "Error adding notification to TTS queue. Attempting to restart TTS.")
+			info.ignoreReasons.add(IgnoreReason.TTS_FAILED)
+			info.isInterrupted = false
+			restartTts()
 		}
-		if ((info.ttsMessage?.length ?: 0) > TextToSpeech.getMaxSpeechInputLength()) {
-			info.addIgnoreReason(IgnoreReason.TTS_LENGTH_LIMIT)
-			if (!isSpeakFailed) info.setSilenced()
+		if (info.ignoreReasons.isNotEmpty()) {
+			NotifyList.updateInfo(info)
 		}
 	}
 
@@ -393,7 +436,7 @@ class Service : NotificationListenerService() {
 			Log.i(TAG, "TTS silenced by shake")
 			synchronized(ttsQueue) {
 				for (info in ttsQueue.values) {
-					info.addIgnoreReason(IgnoreReason.SHAKE)
+					info.ignoreReasons.add(IgnoreReason.SHAKE)
 					NotifyList.updateInfo(info)
 				}
 			}
@@ -501,7 +544,7 @@ class Service : NotificationListenerService() {
 						+ ignoreReasons.joinToString())
 					synchronized(ttsQueue) {
 						for (info in ttsQueue.values) {
-							info.addIgnoreReasons(ignoreReasons)
+							info.ignoreReasons.addAll(ignoreReasons)
 						}
 					}
 					tts!!.stop()

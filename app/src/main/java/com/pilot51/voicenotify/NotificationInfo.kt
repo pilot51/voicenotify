@@ -50,11 +50,15 @@ data class NotificationInfo(
 	private val contentInfoText: String?
 	/** Calendar representing the time that this instance of NotificationInfo was created. */
 	val calendar: Calendar
-	/** Set of reasons this notification was ignored. */
-	private val ignoreReasons: MutableSet<IgnoreReason> = HashSet()
-	/** Indicates if the notification was silenced (interrupted). */
-	var isSilenced = false
-		private set
+	/** Set of reasons this notification was ignored, or an empty set if not ignored. */
+	val ignoreReasons = linkedSetOf<IgnoreReason>()
+	/**
+	 * Indicates if the notification was interrupted during speech.
+	 * Used to set the color of the ignore reasons in [NotifyList].
+	 * Set to `true` to make the ignore message yellow.
+	 * Default is red for never spoken.
+	 */
+	var isInterrupted = false
 	/** The Ignore Repeats setting in seconds, set by [.addIgnoreReasonIdentical]. */
 	private var ignoreRepeatSeconds = -1
 	/** The message that was or shall be spoken. */
@@ -139,6 +143,10 @@ data class NotificationInfo(
 	 */
 	fun getIgnoreReasonsAsText(): String {
 		var text = ignoreReasons.joinToString()
+			// If message ends with period and isn't last, replaces comma after it with newline
+			.replace("., ", ".\n")
+			// If message ends with period and isn't first, replaces comma before it with newline
+			.replace(Regex(", (.+\\.)$"), "\n$1")
 		if (ignoreReasons.contains(IgnoreReason.IDENTICAL)) {
 			text = MessageFormat.format(text, ignoreRepeatSeconds)
 		}
@@ -153,43 +161,12 @@ data class NotificationInfo(
 		get() = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(calendar.time)
 
 	/**
-	 * Used to indicate the color of the ignore reasons in [NotifyList].
-	 * Call this to set it yellow for silenced (interrupted). Default is red for never spoken.
-	 */
-	fun setSilenced() {
-		isSilenced = true
-	}
-
-	/**
 	 * Set this notification as ignored for being identical to a previous notification within the configured time
 	 * @param ignoreRepeatTime The time in seconds that identical notifications are not to be spoken.
 	 */
 	fun addIgnoreReasonIdentical(ignoreRepeatTime: Int) {
 		ignoreRepeatSeconds = ignoreRepeatTime
 		ignoreReasons.add(IgnoreReason.IDENTICAL)
-	}
-
-	/**
-	 * Add a reason this notification was ignored.
-	 * @param reason The ignore reason to add.
-	 */
-	fun addIgnoreReason(reason: IgnoreReason) {
-		ignoreReasons.add(reason)
-	}
-
-	/**
-	 * Add a set of reasons this notification was ignored.
-	 * @param reasons The ignore reasons to add.
-	 */
-	fun addIgnoreReasons(reasons: Set<IgnoreReason>?) {
-		ignoreReasons.addAll(reasons!!)
-	}
-
-	/**
-	 * @return Set of reasons this notification was ignored, or an empty set if not ignored.
-	 */
-	fun getIgnoreReasons(): Set<IgnoreReason> {
-		return ignoreReasons
 	}
 
 	// For some reason this is needed to force list state update with simple object copy

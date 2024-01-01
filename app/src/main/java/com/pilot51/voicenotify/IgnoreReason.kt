@@ -36,6 +36,7 @@ enum class IgnoreReason(
 	EMPTY_MSG(R.string.reason_empty_msg),
 	IDENTICAL(R.string.reason_identical),
 	TTS_FAILED(R.string.reason_tts_failed),
+	TTS_RESTARTED(R.string.reason_tts_restarted),
 	TTS_INTERRUPTED(R.string.reason_tts_interrupted),
 	TTS_LENGTH_LIMIT(R.string.reason_tts_length_limit);
 
