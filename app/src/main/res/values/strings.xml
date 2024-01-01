@@ -27,9 +27,9 @@
 	<string name="permission_rationale_read_phone_state">The phone calls permission is required to prevent Voice Notify from speaking during a call.</string>
 	<string name="permission_rationale_post_notifications">The post notifications permission is required for Voice Notify to post a test notification.</string>
 	<string name="service_disabled">Voice Notify service is disabled</string>
-	<string name="status_summary_notification_access_enabled">Open the Android notification access settings to disable Voice Notify</string>
-	<string name="status_summary_notification_access_disabled">Open the Android notification access settings to enable Voice Notify</string>
-	<string name="status_summary_suspended">Select to activate Voice Notify.</string>
+	<string name="status_summary_notification_access_enabled">Tap to suspend Voice Notify.\nLong press to open the Android notification access settings to disable the service.</string>
+	<string name="status_summary_notification_access_disabled">Tap to open the Android notification access settings to enable the service.</string>
+	<string name="status_summary_suspended">Tap to activate Voice Notify.\nLong press to open the Android notification access settings to disable the service.</string>
 	<string name="app_list">App List</string>
 	<string name="app_list_summary">List installed apps which can be ignored</string>
 	<string name="tts">Text-To-Speech</string>

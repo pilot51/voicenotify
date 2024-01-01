@@ -16,7 +16,8 @@
 package com.pilot51.voicenotify
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.*
@@ -33,7 +34,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
-import com.pilot51.voicenotify.PreferenceHelper.KEY_IGNORE_GROUPS
 import com.pilot51.voicenotify.PreferenceHelper.prefs
 import kotlin.reflect.KProperty
 
@@ -44,36 +44,37 @@ fun PreferenceRowLink(
 	@StringRes title: Int,
 	@StringRes subtitle: Int,
 	onClick: () -> Unit
-) {
-	PreferenceRowLink(
-		title = stringResource(title),
-		subtitle = stringResource(subtitle),
-		onClick = onClick
-	)
-}
+) = PreferenceRowLink(
+	title = stringResource(title),
+	subtitle = stringResource(subtitle),
+	onClick = onClick
+)
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PreferenceRowLink(
 	enabled: Boolean = true,
 	title: String,
 	subtitle: String,
-	onClick: () -> Unit
+	onClick: () -> Unit,
+	onLongClick: (() -> Unit)? = null
 ) {
 	Surface {
 		Row(
 			modifier = Modifier
 				.fillMaxWidth()
-				.clickable(
+				.height(IntrinsicSize.Min)
+				.combinedClickable(
 					enabled = enabled,
-					onClick = onClick
+					onClick = onClick,
+					onLongClick = onLongClick
 				),
 			verticalAlignment = Alignment.CenterVertically
 		) {
 			PreferenceRowScaffold(
 				title = title,
 				enabled = enabled,
-				subtitle = subtitle,
-				actionDivider = true
+				subtitle = subtitle
 			)
 		}
 	}
@@ -92,6 +93,7 @@ fun PreferenceRowCheckbox(
 	Row(
 		modifier = Modifier
 			.fillMaxWidth()
+			.height(IntrinsicSize.Min)
 			.toggleable(
 				value = prefValue,
 				role = Role.Checkbox,
@@ -117,13 +119,10 @@ private fun PreferenceRowScaffold(
 	enabled: Boolean = true,
 	title: String,
 	subtitle: String,
-	action: (@Composable (Boolean) -> Unit)? = null,
-	actionDivider: Boolean = false
+	action: (@Composable (Boolean) -> Unit)? = null
 ) {
 	ListItem(
-		modifier = Modifier
-			.height(IntrinsicSize.Min)
-			.defaultMinSize(minHeight = 88.dp),
+		modifier = Modifier.defaultMinSize(minHeight = 88.dp),
 		headlineContent = {
 			ColorWrap(enabled) {
 				Text(title)
@@ -140,18 +139,6 @@ private fun PreferenceRowScaffold(
 					modifier = Modifier.fillMaxHeight(),
 					verticalAlignment = Alignment.CenterVertically
 				) {
-					if (actionDivider) {
-						Divider(
-							color = DividerDefaults.color.let {
-								if (enabled) it else it.copy(alpha = 0.6f)
-							},
-							modifier = Modifier
-								.padding(vertical = 4.dp)
-								.fillMaxHeight()
-								.width(1.dp),
-						)
-						Spacer(modifier = Modifier.width(2.dp))
-					}
 					action(enabled)
 				}
 			}
@@ -172,11 +159,13 @@ private fun ColorWrap(
 	}
 }
 
-class PreferenceBooleanState(
+private class PreferenceBooleanState(
 	val key: String,
 	val defaultValue: Boolean
 ) {
-	private var _value by mutableStateOf(prefs.getBoolean(key, defaultValue))
+	private var _value by mutableStateOf(
+		if (key == "isPreview") defaultValue else prefs.getBoolean(key, defaultValue)
+	)
 	var value: Boolean
 		set(value) {
 			_value = value
@@ -219,7 +208,7 @@ private fun SettingsCheckboxCheckedPreview() {
 		PreferenceRowCheckbox(
 			title = R.string.ignore_groups,
 			subtitle = R.string.ignore_groups_summary_on,
-			key = KEY_IGNORE_GROUPS,
+			key = "isPreview",
 			default = true
 		)
 	}
@@ -232,7 +221,7 @@ private fun SettingsCheckboxUncheckedPreview() {
 		PreferenceRowCheckbox(
 			title = R.string.ignore_groups,
 			subtitle = R.string.ignore_groups_summary_off,
-			key = KEY_IGNORE_GROUPS,
+			key = "isPreview",
 			default = false
 		)
 	}

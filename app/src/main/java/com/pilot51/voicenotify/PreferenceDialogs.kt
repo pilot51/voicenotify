@@ -450,83 +450,93 @@ fun SupportDialog(onDismiss: () -> Unit) {
 		title = { Text(stringResource(R.string.support)) },
 		text = {
 			val items = stringArrayResource(R.array.support_items)
-			LazyColumn {
-				items(items) { item ->
-					Text(
-						text = item,
-						modifier = Modifier
-							.clickable {
-								when (item) {
-									rate -> {
-										val iMarket = Intent(
-											Intent.ACTION_VIEW,
-											Uri.parse("market://details?id=com.pilot51.voicenotify")
-										).apply {
-											addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+			Column {
+				LazyColumn {
+					items(items) { item ->
+						Text(
+							text = item,
+							modifier = Modifier
+								.clickable {
+									when (item) {
+										rate -> {
+											val iMarket = Intent(
+												Intent.ACTION_VIEW,
+												Uri.parse("market://details?id=com.pilot51.voicenotify")
+											).apply {
+												addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+											}
+											try {
+												context.startActivity(iMarket)
+											} catch (e: ActivityNotFoundException) {
+												e.printStackTrace()
+												Toast
+													.makeText(
+														context, R.string.error_market, Toast.LENGTH_LONG
+													)
+													.show()
+											}
 										}
-										try {
-											context.startActivity(iMarket)
-										} catch (e: ActivityNotFoundException) {
-											e.printStackTrace()
-											Toast
-												.makeText(
-													context, R.string.error_market, Toast.LENGTH_LONG
-												)
-												.show()
+										contact -> {
+											val iEmail = Intent(Intent.ACTION_SEND).apply {
+												type = "plain/text"
+												putExtra(Intent.EXTRA_EMAIL, arrayOf(devEmail))
+												putExtra(Intent.EXTRA_SUBJECT, emailSubject)
+												putExtra(Intent.EXTRA_TEXT, emailBody)
+											}
+											try {
+												context.startActivity(iEmail)
+											} catch (e: ActivityNotFoundException) {
+												e.printStackTrace()
+												Toast
+													.makeText(
+														context, R.string.error_email, Toast.LENGTH_LONG
+													)
+													.show()
+											}
 										}
+										discord -> context.startActivity(
+											Intent(
+												Intent.ACTION_VIEW,
+												Uri.parse("https://discord.gg/W6XxGT8WG3")
+											)
+										)
+										matrix -> context.startActivity(
+											Intent(
+												Intent.ACTION_VIEW,
+												Uri.parse("https://matrix.to/#/#voicenotify:p51.me")
+											)
+										)
+										translations -> context.startActivity(
+											Intent(
+												Intent.ACTION_VIEW,
+												Uri.parse("https://hosted.weblate.org/projects/voice-notify")
+											)
+										)
+										source -> context.startActivity(
+											Intent(
+												Intent.ACTION_VIEW,
+												Uri.parse("https://github.com/pilot51/voicenotify")
+											)
+										)
+										privacy -> showPrivacy = true
 									}
-									contact -> {
-										val iEmail = Intent(Intent.ACTION_SEND).apply {
-											type = "plain/text"
-											putExtra(Intent.EXTRA_EMAIL, arrayOf(devEmail))
-											putExtra(Intent.EXTRA_SUBJECT, emailSubject)
-											putExtra(Intent.EXTRA_TEXT, emailBody)
-										}
-										try {
-											context.startActivity(iEmail)
-										} catch (e: ActivityNotFoundException) {
-											e.printStackTrace()
-											Toast
-												.makeText(
-													context, R.string.error_email, Toast.LENGTH_LONG
-												)
-												.show()
-										}
-									}
-									discord -> context.startActivity(
-										Intent(
-											Intent.ACTION_VIEW,
-											Uri.parse("https://discord.gg/W6XxGT8WG3")
-										)
-									)
-									matrix -> context.startActivity(
-										Intent(
-											Intent.ACTION_VIEW,
-											Uri.parse("https://matrix.to/#/#voicenotify:p51.me")
-										)
-									)
-									translations -> context.startActivity(
-										Intent(
-											Intent.ACTION_VIEW,
-											Uri.parse("https://hosted.weblate.org/projects/voice-notify")
-										)
-									)
-									source -> context.startActivity(
-										Intent(
-											Intent.ACTION_VIEW,
-											Uri.parse("https://github.com/pilot51/voicenotify")
-										)
-									)
-									privacy -> showPrivacy = true
 								}
-							}
-							.fillMaxWidth()
-							.heightIn(min = 56.dp)
-							.wrapContentHeight(align = Alignment.CenterVertically)
-							.padding(horizontal = 16.dp),
-						fontSize = 16.sp
-					)
+								.wrapContentWidth()
+								.heightIn(min = 56.dp)
+								.wrapContentHeight(align = Alignment.CenterVertically)
+								.padding(horizontal = 16.dp),
+							fontSize = 16.sp
+						)
+					}
 				}
+				Text(
+					text = BuildConfig.VERSION_NAME,
+					modifier = Modifier
+						.align(Alignment.CenterHorizontally)
+						.padding(top = 10.dp)
+					,
+					fontSize = 12.sp
+				)
 			}
 		}
 	)

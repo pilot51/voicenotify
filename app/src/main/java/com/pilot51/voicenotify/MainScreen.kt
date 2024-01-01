@@ -159,18 +159,16 @@ private fun MainScreen(
 		} else null
 	var statusTitle by remember { mutableStateOf("") }
 	var statusSummary by remember { mutableStateOf("") }
-	var statusIntent by remember { mutableStateOf<Intent?>(null) }
+	val statusIntent = remember { Common.notificationListenerSettingsIntent }
 	if (isPreview) {
 		statusTitle = context.getString(R.string.service_running)
 		statusSummary = context.getString(R.string.status_summary_notification_access_enabled)
-		statusIntent = null
 	}
 	val isRunning by Service.isRunning.collectAsState()
 	val isSuspended by Service.isSuspended.collectAsState()
 	if (isSuspended && isRunning) {
 		statusTitle = stringResource(R.string.service_suspended)
 		statusSummary = stringResource(R.string.status_summary_suspended)
-		statusIntent = null
 	} else {
 		statusTitle = stringResource(
 			if (isRunning) R.string.service_running else R.string.service_disabled
@@ -184,7 +182,6 @@ private fun MainScreen(
 				R.string.status_summary_notification_access_disabled
 			}
 		)
-		statusIntent = Common.notificationListenerSettingsIntent
 	}
 	var showShakeToSilence by remember { mutableStateOf(false) }
 	var showRequireText by remember { mutableStateOf(false) }
@@ -222,10 +219,10 @@ private fun MainScreen(
 			title = statusTitle,
 			subtitle = statusSummary,
 			onClick = {
-				if (!isRunning) {
-					statusIntent?.let { context.startActivity(it) }
-				} else Service.toggleSuspend()
-			}
+				if (isRunning) Service.toggleSuspend()
+				else context.startActivity(statusIntent)
+			},
+			onLongClick = { context.startActivity(statusIntent) }
 		)
 		PreferenceRowLink(
 			title = R.string.app_list,
