@@ -223,8 +223,7 @@ class Service : NotificationListenerService() {
 		if (app != null && !app.enabled) {
 			info.ignoreReasons.add(IgnoreReason.APP)
 		}
-		if (ttsMsg.isNullOrEmpty()
-			&& prefs.getBoolean(KEY_IGNORE_EMPTY, DEFAULT_IGNORE_EMPTY)) {
+		if (info.isEmpty && prefs.getBoolean(KEY_IGNORE_EMPTY, DEFAULT_IGNORE_EMPTY)) {
 			info.ignoreReasons.add(IgnoreReason.EMPTY_MSG)
 		}
 		if (ttsMsg != null) {

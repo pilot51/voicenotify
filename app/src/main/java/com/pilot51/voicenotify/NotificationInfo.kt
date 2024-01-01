@@ -50,6 +50,8 @@ data class NotificationInfo(
 	private val contentInfoText: String?
 	/** Calendar representing the time that this instance of NotificationInfo was created. */
 	val calendar: Calendar
+	var isEmpty = false
+		private set
 	/** Set of reasons this notification was ignored, or an empty set if not ignored. */
 	val ignoreReasons = linkedSetOf<IgnoreReason>()
 	/**
@@ -72,7 +74,9 @@ data class NotificationInfo(
 		contentText = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()
 		contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT)
 		calendar = Calendar.getInstance()
-		if (notification.`when` != Long.MIN_VALUE) buildTtsMessage()
+		if (notification.`when` != Long.MIN_VALUE) { // If not Compose preview
+			buildTtsMessage()
+		}
 	}
 
 	/** Generates the string to be used for TTS. */
@@ -97,6 +101,8 @@ data class NotificationInfo(
 			Log.w(TAG, "Error formatting custom TTS string!")
 			e.printStackTrace()
 		}
+		isEmpty = ttsMessage.isNullOrBlank() ||
+			ttsMessage == ttsStringPref.replace(Regex("#[atscmi]"), "")
 		if (app != null && (ttsMessage == null || ttsMessage == app.label)) {
 			ttsMessage = appContext.getString(R.string.notification_from, app.label)
 		}
