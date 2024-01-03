@@ -41,18 +41,18 @@
     <string name="ignore_repeat_dialog_msg">最後の通知から何秒経てば同じメッセージを読み上げられるかを設定します。
 \n同じメッセージが無視された場合カウントはリセットされ、異なる通知が来た場合カウントはクリアされます。
 \n空白 = 無限。</string>
-    <string name="require_strings">テキストの必要性</string>
+    <string name="require_strings">特定の文字がある場合のみ読み上げ</string>
     <string name="ignore_empty">空を無視</string>
     <string name="tts_stream_summary">音声読み上げに使用するオーディオストリームを選択します</string>
-    <string name="require_ignore_strings_dialog_msg">これは、テキスト置換を含め音声読み上げに送られた処理済みメッセージと比較されます。
+    <string name="require_ignore_strings_dialog_msg">これは、テキスト置換とメッセージフォーマットの変更が行われた後に句読点を含めて音声読み上げに送られたメッセージと比較されます。
 \n
 \n個々のエントリーは改行で区切ります。
-\nメッセージはいずれかのエントリにマッチする必要があります、すべてではありません。
+\nメッセージはいずれかのエントリにマッチする必要があります、完全一致ではありません。
 \n大文字と小文字は区別されません。</string>
-    <string name="app_list">アプリケーションリスト</string>
+    <string name="app_list">読み上げ対象外アプリ</string>
     <string name="ignore_repeat">同じメッセージを無視</string>
-    <string name="tts_text_replace_summary">発音を直すなど、話すテキストを置き換えます</string>
-    <string name="app_list_summary">無視可能なアプリケーションのリスト</string>
+    <string name="tts_text_replace_summary">単語を置き換えるなど、読み上げるテキストの変換ルール</string>
+    <string name="app_list_summary">ここで指定したアプリケーションは読み上げの対象外になります</string>
     <string name="audio_focus">一時停止/メディア音量を下げる</string>
     <string name="ignore_groups_summary_on">複数のメッセージを含む通知は読み上げられません</string>
     <string name="tts_repeat">音声読み上げの繰り返し</string>
@@ -64,7 +64,7 @@
     <string name="ignore_groups_summary_off">複数のメッセージを含む通知を読み上げます</string>
     <string name="tts_text_replace_dialog">テキストを置き換えることで、音声読み上げがどのように単語を発音するかをカスタマイズしたり、その他の目的でテキストを置き換えたりできます。
 \n
-\n置換するテキストの大文字と小文字は区別されません。</string>
+\n置換するテキストは大文字小文字を区別せず、句読点を含め音声読み上げメッセージで設定された書式が適用されます。</string>
     <string name="service_suspended">Voice Notify サービスは停止中です</string>
     <string name="max_length">最大メッセージ長</string>
     <string name="ignore_empty_summary_on">メッセージのない通知を読み上げません</string>
@@ -95,9 +95,11 @@
     <string name="test_ticker">これはtickerメッセージです</string>
     <string name="support_matrix">Matrix</string>
     <string name="test_content_text">これはコンテントメッセージです。</string>
-    <string name="status_summary_suspended">選択するとVoice Notifyを有効化。</string>
+    <string name="status_summary_suspended">タップでVoice Notifyを有効化。
+\nサービスを無効化する場合は長押しでAndroidの通知設定を開きます。</string>
     <string name="ignore_all">すべて無視</string>
-    <string name="status_summary_notification_access_enabled">Androidの通知設定を開いてVoice Notifyを無効化</string>
+    <string name="status_summary_notification_access_enabled">タップでVoice Notifyを停止。
+\nサービスを無効化する場合は長押しでAndroidの通知設定を開きます。</string>
     <string name="service_disabled">Voice Notifyサービスは無効です</string>
     <string name="reason_headset_on">ヘッドセットオン</string>
     <string name="permission_rationale_read_phone_state">通話中に音声を読み上げてしまう事を防ぐため、通話発信の許可が必要です。</string>
@@ -146,9 +148,9 @@
     <string name="test_subtext">サブテキスト</string>
     <string name="reason_screen_on">画面オン</string>
     <string name="support_translations">翻訳</string>
-    <string name="status_summary_notification_access_disabled">Androidの通知設定を開いてVoice Notifyを有効化</string>
+    <string name="status_summary_notification_access_disabled">タップすることでサービスを有効化するためにAndroidの通知設定を開きます。</string>
     <string name="error_email">エラー: メールアプリが見つかりません。</string>
-    <string name="support_github">GitHub (ソースコード,イシュートラッカー)</string>
+    <string name="support_github">GitHub</string>
     <string name="text_replace_error_duplicate">重複してます！保存されません。</string>
     <string name="test_content_title">コンテンツタイトル</string>
     <string name="support_privacy">プライバシーポリシー</string>
@@ -159,4 +161,14 @@
     <string name="quiet_start">非通知の開始時間</string>
     <string name="notify_log">通知ログ</string>
     <string name="reason_quiet">非通知時間</string>
+    <string name="close">閉じる</string>
+    <string name="reason_tts_restarted">メッセージが待機中、または話している間に 読み上げが再スタートしました。再度待機します。</string>
+    <string name="remove">取り除く</string>
+    <string name="reason_tts_length_limit">メッセージが読み上げの長さ制限を超えています</string>
+    <string name="reason_tts_failed">読み上げ失敗。再起動を試みています。
+\nテキストはリトライに成功した場合は黄色、失敗した場合は赤色で表示されます。
+\n音声通知に失敗した場合は、音声通知サービスを再起動してください。</string>
+    <string name="back">戻る</string>
+    <string name="error">エラー</string>
+    <string name="reason_tts_interrupted">不明な理由で読み上げが中断されました</string>
 </resources>

@@ -41,10 +41,10 @@
     </string-array>
     <string name="ignore_strings">Ignorar texto</string>
     <string name="ignore_strings_summary">Ignorar las notificaciones que contienen cierto texto en el mensaje</string>
-    <string name="require_ignore_strings_dialog_msg">Se coteja con el mensaje procesado enviado a TTS, incluidas las sustituciones de texto.
+    <string name="require_ignore_strings_dialog_msg">Se coteja con el mensaje enviado a TTS, después de formatear el mensaje TTS y sustituir el texto, incluida la puntuación.
 \n
 \nSepare las entradas individuales con una nueva línea.
-\nEl mensaje debe contener cualquier entrada, no todas.
+\nEl mensaje debe contener cualquier entrada, no todas, para que coincida.
 \nNo se distingue entre mayúsculas y minúsculas.</string>
     <string name="ignore_empty">Ignorar vacías</string>
     <string name="ignore_empty_summary_on">Las notificaciones sin mensaje no se pronunciarán</string>
@@ -84,11 +84,12 @@
     <string name="support">Ayuda y soporte técnico</string>
     <!-- MainActivity -->
     <string name="service_disabled">El servicio de notificación por voz está desactivado</string>
-    <string name="status_summary_suspended">Seleccione para activar la notificación por voz.</string>
+    <string name="status_summary_suspended">Pulse para activar Notificación por voz.
+\nMantenga pulsado para abrir los ajustes de acceso a notificaciones de Android y desactivar el servicio.</string>
     <string name="support_rate">Revisión de las tasas</string>
     <string name="support_email">Correo electrónico del Desarrollador</string>
     <string name="support_translations">Traducciones</string>
-    <string name="support_github">GitHub (código fuente, seguimiento de los problemas)</string>
+    <string name="support_github">GitHub</string>
     <string name="error_market">Error: Incapaz de encontrar Google Play Store instalado.</string>
     <string name="error_email">Error: No se puede encontrar una aplicación de correo electrónico instalada.</string>
     <!-- Service -->
@@ -139,9 +140,9 @@
     <string name="ignore_groups_summary_off">Las notificaciones que contengan varios mensajes se pronunciarán</string>
     <string name="test_content_title">Título del contenido</string>
     <string name="test_content_info">Información sobre el contenido</string>
-    <string name="tts_text_replace_dialog">Sustituir el texto a pronunciar, lo que le permite personalizar la forma en que Text-To-Speech pronuncia las palabras o reemplazar el texto por cualquier otra razón.
+    <string name="tts_text_replace_dialog">Sustituir texto para que se pronuncie, lo que le permite personalizar la forma en que Text-To-Speech pronuncia las palabras o sustituir texto por cualquier otro motivo.
 \n
-\nEl texto a sustituir no distingue entre mayúsculas y minúsculas.</string>
+\nEl texto a sustituir no distingue entre mayúsculas y minúsculas y se aplica después del formato establecido en Mensaje TTS, incluida la puntuación.</string>
     <string name="ignore_groups">Ignorar mensajes de grupo</string>
     <string name="reason_call">Llamada telefónica activa</string>
     <string name="test_subtext">El subtexto</string>
@@ -150,12 +151,13 @@
     <string name="max_length_summary">Longitud máxima del mensaje hablado. Los mensajes más grandes se truncarán.</string>
     <string name="notification_channel_desc">Se utiliza para la notificación de prueba</string>
     <string name="test_ticker">Este es el mensaje del teletipo</string>
-    <string name="status_summary_notification_access_disabled">Abre los ajustes de acceso a las notificaciones de Android para activar la notificación por voz</string>
+    <string name="status_summary_notification_access_disabled">Pulse para abrir los ajustes de acceso a notificaciones de Android y habilitar el servicio.</string>
     <string name="support_privacy">Política de privacidad</string>
     <string name="permission_rationale_read_phone_state">El permiso de llamadas telefónicas es necesario para evitar que Voice Notify hable durante una llamada.</string>
     <string name="text_replace_error_duplicate">¡Duplicado! No será guardado.</string>
     <string name="text_to_replace">Texto a reemplazar</string>
-    <string name="status_summary_notification_access_enabled">Abre los ajustes de acceso a las notificaciones de Android para desactivar Voice Notify</string>
+    <string name="status_summary_notification_access_enabled">Pulse para suspender Voice Notify.
+\nMantenga pulsado para abrir los ajustes de acceso a notificaciones de Android y desactivar el servicio.</string>
     <string name="support_privacy_message">Voice Notify no recoge ni transmite datos fuera del dispositivo. Sin embargo, utiliza aplicaciones o servicios de terceros que pueden transmitir datos, como se indica más adelante en el apartado \"Aplicaciones y servicios de terceros\".
 \n
 \nEn el improbable caso de que el desarrollador reciba información sensible o personal, ésta no se venderá, compartirá, copiará o utilizará sin el consentimiento expreso de la persona a la que pertenece la información. Si no hay consentimiento, la información se eliminará si es posible.
@@ -186,8 +188,11 @@
     <string name="close">Cerrar</string>
     <string name="remove">Eliminar</string>
     <string name="reason_tts_length_limit">El mensaje ha superado el límite de longitud del TTS</string>
-    <string name="reason_tts_failed">TTS ha fallado. Intente reiniciar el servicio de Notificación por voz.</string>
+    <string name="reason_tts_failed">TTS ha fallado. Intento de reinicio y reintento.
+\nEste texto debe ser amarillo si el reintento se realiza correctamente o rojo en caso contrario.
+\nPor favor, intente reiniciar el servicio de Notificación por Voz si las notificaciones no pueden ser habladas.</string>
     <string name="back">Atrás</string>
     <string name="error">Error</string>
     <string name="reason_tts_interrupted">TTS interrumpido por motivo desconocido</string>
+    <string name="reason_tts_restarted">TTS reiniciado mientras el mensaje estaba en cola o hablando. Se ha vuelto a poner en cola.</string>
 </resources>
