@@ -82,9 +82,9 @@
     <string name="service_disabled">Сервис Уведомлений Голосом остановлен</string>
     <string name="status_summary_suspended">Выберите для активации Уведомлений Голосом.</string>
     <string name="support_rate">Оставить отзыв</string>
-    <string name="support_contact">Связаться с разработчиком</string>
+    <string name="support_email">Связаться с разработчиком</string>
     <string name="support_translations">Переводы</string>
-    <string name="support_source">Исходный Код</string>
+    <string name="support_github">Исходный Код</string>
     <string name="error_email">Ошибка: Не удалось найти установленный почтовый клиент.</string>
     <!-- Service -->
     <string name="notification_from">Уведомление от %s.</string>

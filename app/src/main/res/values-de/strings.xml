@@ -84,9 +84,9 @@
     <!-- MainActivity -->
     <string name="status_summary_suspended">Tippe zum aktivieren von VN</string>
     <string name="support_rate">Bewerte/Kommentiere</string>
-    <string name="support_contact">Entwickler kontaktieren</string>
+    <string name="support_email">Entwickler kontaktieren</string>
     <string name="support_translations">Übersetzungen</string>
-    <string name="support_source">Quellcode</string>
+    <string name="support_github">Quellcode</string>
     <string name="error_market">Fehler: Google Play Store ist nicht installiert.</string>
     <string name="error_email">Fehler: Konnte kein E-Mail-Programm finden.</string>
     <!-- Service -->

@@ -61,9 +61,9 @@
     <string name="service_disabled">Service VN désactivé</string>
     <string name="status_summary_suspended">Selectionner pour activer le VN</string>
     <string name="support_rate">Noter/Commenter</string>
-    <string name="support_contact">Contacter le développeur</string>
+    <string name="support_email">Contacter le développeur</string>
     <string name="support_translations">Traductions</string>
-    <string name="support_source">Code source</string>
+    <string name="support_github">Code source</string>
     <string name="error_email">Erreur : impossible de trouver un client de messagerie installé.</string>
     <!-- Service -->
     <!-- NotifyList -->

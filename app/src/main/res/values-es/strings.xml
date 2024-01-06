@@ -86,9 +86,9 @@
     <string name="service_disabled">El servicio de notificación por voz está desactivado</string>
     <string name="status_summary_suspended">Seleccione para activar la notificación por voz.</string>
     <string name="support_rate">Revisión de las tasas</string>
-    <string name="support_contact">Correo electrónico del Desarrollador</string>
+    <string name="support_email">Correo electrónico del Desarrollador</string>
     <string name="support_translations">Traducciones</string>
-    <string name="support_source">GitHub (código fuente, seguimiento de los problemas)</string>
+    <string name="support_github">GitHub (código fuente, seguimiento de los problemas)</string>
     <string name="error_market">Error: Incapaz de encontrar Google Play Store instalado.</string>
     <string name="error_email">Error: No se puede encontrar una aplicación de correo electrónico instalada.</string>
     <!-- Service -->

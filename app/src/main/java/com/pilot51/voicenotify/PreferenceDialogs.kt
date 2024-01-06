@@ -17,6 +17,7 @@ package com.pilot51.voicenotify
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
@@ -24,7 +25,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
@@ -229,7 +230,13 @@ private fun TextEditDialog(
 @Composable
 fun TtsStreamDialog(onDismiss: () -> Unit) {
 	val streamNames = stringArrayResource(R.array.stream_name)
-	val streamValues = stringArrayResource(R.array.stream_value)
+	val streamValues = arrayOf(
+		AudioManager.STREAM_MUSIC.toString(),
+		AudioManager.STREAM_NOTIFICATION.toString(),
+		AudioManager.STREAM_VOICE_CALL.toString(),
+		AudioManager.STREAM_RING.toString(),
+		AudioManager.STREAM_ALARM.toString()
+	)
 	val isPreview = LocalInspectionMode.current
 	val savedValue = remember {
 		if (isPreview) DEFAULT_TTS_STREAM
@@ -420,24 +427,11 @@ fun QuietTimeDialog(
 	)
 }
 
+private const val DEV_EMAIL = "pilota51@gmail.com"
+
 @Composable
 fun SupportDialog(onDismiss: () -> Unit) {
 	val context = LocalContext.current
-	val rate = stringResource(R.string.support_rate)
-	val contact = stringResource(R.string.support_contact)
-	val discord = stringResource(R.string.support_discord)
-	val matrix = stringResource(R.string.support_matrix)
-	val translations = stringResource(R.string.support_translations)
-	val source = stringResource(R.string.support_source)
-	val privacy = stringResource(R.string.support_privacy)
-	val devEmail = stringResource(R.string.dev_email)
-	val emailSubject = stringResource(R.string.email_subject)
-	val emailBody = stringResource(R.string.email_body,
-		BuildConfig.VERSION_NAME,
-		Build.VERSION.RELEASE,
-		Build.ID,
-		"${Build.MANUFACTURER} ${Build.BRAND} ${Build.MODEL}"
-	)
 	var showPrivacy by remember { mutableStateOf(false) }
 	AlertDialog(
 		onDismissRequest = onDismiss,
@@ -449,84 +443,94 @@ fun SupportDialog(onDismiss: () -> Unit) {
 		},
 		title = { Text(stringResource(R.string.support)) },
 		text = {
-			val items = stringArrayResource(R.array.support_items)
 			Column {
 				LazyColumn {
-					items(items) { item ->
-						Text(
-							text = item,
-							modifier = Modifier
-								.clickable {
-									when (item) {
-										rate -> {
-											val iMarket = Intent(
-												Intent.ACTION_VIEW,
-												Uri.parse("market://details?id=com.pilot51.voicenotify")
-											).apply {
-												addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-											}
-											try {
-												context.startActivity(iMarket)
-											} catch (e: ActivityNotFoundException) {
-												e.printStackTrace()
-												Toast
-													.makeText(
-														context, R.string.error_market, Toast.LENGTH_LONG
-													)
-													.show()
-											}
-										}
-										contact -> {
-											val iEmail = Intent(Intent.ACTION_SEND).apply {
-												type = "plain/text"
-												putExtra(Intent.EXTRA_EMAIL, arrayOf(devEmail))
-												putExtra(Intent.EXTRA_SUBJECT, emailSubject)
-												putExtra(Intent.EXTRA_TEXT, emailBody)
-											}
-											try {
-												context.startActivity(iEmail)
-											} catch (e: ActivityNotFoundException) {
-												e.printStackTrace()
-												Toast
-													.makeText(
-														context, R.string.error_email, Toast.LENGTH_LONG
-													)
-													.show()
-											}
-										}
-										discord -> context.startActivity(
-											Intent(
-												Intent.ACTION_VIEW,
-												Uri.parse("https://discord.gg/W6XxGT8WG3")
-											)
-										)
-										matrix -> context.startActivity(
-											Intent(
-												Intent.ACTION_VIEW,
-												Uri.parse("https://matrix.to/#/#voicenotify:p51.me")
-											)
-										)
-										translations -> context.startActivity(
-											Intent(
-												Intent.ACTION_VIEW,
-												Uri.parse("https://hosted.weblate.org/projects/voice-notify")
-											)
-										)
-										source -> context.startActivity(
-											Intent(
-												Intent.ACTION_VIEW,
-												Uri.parse("https://github.com/pilot51/voicenotify")
-											)
-										)
-										privacy -> showPrivacy = true
-									}
-								}
-								.wrapContentWidth()
-								.heightIn(min = 56.dp)
-								.wrapContentHeight(align = Alignment.CenterVertically)
-								.padding(horizontal = 16.dp),
-							fontSize = 16.sp
+					supportItem(title = R.string.support_rate) {
+						val iMarket = Intent(
+							Intent.ACTION_VIEW,
+							Uri.parse("market://details?id=com.pilot51.voicenotify")
+						).apply {
+							addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+						}
+						try {
+							context.startActivity(iMarket)
+						} catch (e: ActivityNotFoundException) {
+							e.printStackTrace()
+							Toast
+								.makeText(context, R.string.error_market,
+									Toast.LENGTH_LONG)
+								.show()
+						}
+					}
+					supportItem(
+						title = R.string.support_email,
+						subtext = R.string.support_email_subtext
+					) {
+						val iEmail = Intent(Intent.ACTION_SEND).apply {
+							type = "plain/text"
+							putExtra(Intent.EXTRA_EMAIL, arrayOf(DEV_EMAIL))
+							putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.email_subject))
+							putExtra(Intent.EXTRA_TEXT, context.getString(
+								R.string.email_body,
+								BuildConfig.VERSION_NAME,
+								Build.VERSION.RELEASE,
+								Build.ID,
+								"${Build.MANUFACTURER} ${Build.BRAND} ${Build.MODEL}"
+							))
+						}
+						try {
+							context.startActivity(iEmail)
+						} catch (e: ActivityNotFoundException) {
+							e.printStackTrace()
+							Toast
+								.makeText(context, R.string.error_email,
+									Toast.LENGTH_LONG)
+								.show()
+						}
+					}
+					supportItem(
+						title = R.string.support_discord,
+						subtext = R.string.support_chat_subtext
+					) {
+						context.startActivity(
+							Intent(
+								Intent.ACTION_VIEW,
+								Uri.parse("https://discord.gg/W6XxGT8WG3")
+							)
 						)
+					}
+					supportItem(
+						title = R.string.support_matrix,
+						subtext = R.string.support_chat_subtext
+					) {
+						context.startActivity(
+							Intent(
+								Intent.ACTION_VIEW,
+								Uri.parse("https://matrix.to/#/#voicenotify:p51.me")
+							)
+						)
+					}
+					supportItem(title = R.string.support_translations) {
+						context.startActivity(
+							Intent(
+								Intent.ACTION_VIEW,
+								Uri.parse("https://hosted.weblate.org/projects/voice-notify")
+							)
+						)
+					}
+					supportItem(
+						title = R.string.support_github,
+						subtext = R.string.support_github_subtext
+					) {
+						context.startActivity(
+							Intent(
+								Intent.ACTION_VIEW,
+								Uri.parse("https://github.com/pilot51/voicenotify")
+							)
+						)
+					}
+					supportItem(title = R.string.support_privacy) {
+						showPrivacy = true
 					}
 				}
 				Text(
@@ -558,6 +562,33 @@ fun SupportDialog(onDismiss: () -> Unit) {
 				)
 			}
 		)
+	}
+}
+
+private fun LazyListScope.supportItem(
+	@StringRes title: Int,
+	@StringRes subtext: Int? = null,
+	onClick: () -> Unit
+) {
+	item {
+		Column(modifier = Modifier
+			.clickable { onClick() }
+			.fillMaxWidth()
+			.heightIn(min = 56.dp)
+			.wrapContentHeight(align = Alignment.CenterVertically)
+			.padding(horizontal = 16.dp, vertical = 6.dp)
+		) {
+			Text(
+				text = stringResource(title),
+				fontSize = 16.sp
+			)
+			subtext?.let {
+				Text(
+					text = stringResource(it),
+					fontSize = 12.sp
+				)
+			}
+		}
 	}
 }
 

@@ -91,11 +91,14 @@
 	<string name="support">Help &amp; Support</string>
 	<string name="support_summary">Rate &amp; review, email the developer, community chat, translations, source code, issue tracker, privacy policy</string>
 	<string name="support_rate">Rate &amp; Review</string>
-	<string name="support_contact">Email Developer</string>
+	<string name="support_email">Email Developer</string>
+	<string name="support_email_subtext">General feedback</string>
 	<string name="support_discord">Discord</string>
 	<string name="support_matrix">Matrix</string>
+	<string name="support_chat_subtext">User chat, fastest developer response</string>
 	<string name="support_translations">Translations</string>
-	<string name="support_source">GitHub (Source Code, Issue Tracker)</string>
+	<string name="support_github">GitHub</string>
+	<string name="support_github_subtext">Bug reports, feature requests, source code</string>
 	<string name="support_privacy">Privacy Policy</string>
 	<string name="support_privacy_message">Voice Notify does not collect or transmit data off of the device. However, it does use third party apps or services that may transmit data, as outlined below under \"Third party apps and services\".
 \n\nIn the unlikely event that sensitive or personal information is received by the developer, it will not be sold, shared, copied, or used without the express consent of who the information belongs to. In the absence of consent, the information will be deleted if possible.

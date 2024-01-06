@@ -82,9 +82,9 @@
     <string name="service_disabled">VN služba je zakázána</string>
     <string name="status_summary_suspended">Vyberte, chcete-li aktivovat VN.</string>
     <string name="support_rate">Hodnotit/Komentovat</string>
-    <string name="support_contact">Kontaktovat Vývojáře</string>
+    <string name="support_email">Kontaktovat Vývojáře</string>
     <string name="support_translations">Překlady</string>
-    <string name="support_source">Zdrojový Kód</string>
+    <string name="support_github">Zdrojový Kód</string>
     <string name="error_market">Chyba: Nelze najít nainstalovaný Google Play Obchod.</string>
     <string name="error_email">Chyba: Nelze najít nainstalovanou e-mailovou aplikaci.</string>
     <!-- Service -->

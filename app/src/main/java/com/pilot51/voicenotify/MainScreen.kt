@@ -354,6 +354,8 @@ private fun MainScreen(
 	}
 }
 
+private const val NOTIFICATION_CHANNEL_ID = "test"
+
 private fun runTestNotification(context: Context) {
 	val vnApp = Common.findOrAddApp(context.packageName)!!
 	if (!vnApp.enabled) {
@@ -363,7 +365,7 @@ private fun runTestNotification(context: Context) {
 	val intent = Intent(context, MainActivity::class.java)
 	Timer().schedule(object : TimerTask() {
 		override fun run() {
-			val id = context.getString(R.string.notification_channel_id)
+			val id = NOTIFICATION_CHANNEL_ID
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 				var channel = notificationManager.getNotificationChannel(id)
 				if (channel == null) {

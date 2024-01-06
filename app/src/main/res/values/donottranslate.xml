@@ -1,25 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="dev_email">pilota51@gmail.com</string>
-	<string-array name="stream_value">
-		<item>3</item>
-		<item>5</item>
-		<item>0</item>
-		<item>2</item>
-		<item>4</item>
-	</string-array>
-	<string name="notification_channel_id">test</string>
-	<string-array name="support_items">
-		<item>@string/support_rate</item>
-		<item>@string/support_contact</item>
-		<item>@string/support_discord</item>
-		<item>@string/support_matrix</item>
-		<item>@string/support_translations</item>
-		<item>@string/support_source</item>
-		<item>@string/support_privacy</item>
-	</string-array>
-	
 	<!-- Forcing English for user visible support email strings -->
-	<string name="email_subject">Contacting about Voice Notify</string>
+	<string name="email_subject">Voice Notify feedback</string>
 	<string name="email_body">\n\nVoice Notify version: %1$s\nAndroid version: %2$s\nAndroid build number: %3$s\nDevice: %4$s\n</string>
 </resources>

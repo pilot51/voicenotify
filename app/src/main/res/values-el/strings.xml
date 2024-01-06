@@ -116,9 +116,9 @@
     <string name="test_content_text">Αυτό είναι το μήνυμα περιεχομένου.</string>
     <string name="test_content_info">Πληροφορίες Περιεχομένου</string>
     <string name="support_rate">Αξιολόγηση/Σχόλια</string>
-    <string name="support_contact">Επικοινωνία με προγραμματιστή</string>
+    <string name="support_email">Επικοινωνία με προγραμματιστή</string>
     <string name="support_translations">Μεταφράσεις</string>
-    <string name="support_source">Πηγαίος Κώδικας</string>
+    <string name="support_github">Πηγαίος Κώδικας</string>
     <string name="error_market">Σφάλμα: αδυναμία εύρεσης της εφαρμογής Google Play Store.</string>
     <string name="error_email">Σφάλμα: αδυναμία εύρεσης εφαρμογής για αποστολή email.</string>
     <!-- Service -->

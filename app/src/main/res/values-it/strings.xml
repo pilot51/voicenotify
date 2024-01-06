@@ -96,9 +96,9 @@
     <string name="notification_channel_desc">Da usare per test notifiche</string>
     <string name="test_ticker">Questo è il messaggio del ticker</string>
     <string name="support_rate">Vota/Commenta</string>
-    <string name="support_contact">Contatta Sviluppatore</string>
+    <string name="support_email">Contatta Sviluppatore</string>
     <string name="support_translations">Traduzioni</string>
-    <string name="support_source">Codice sorgente</string>
+    <string name="support_github">Codice sorgente</string>
     <string name="error_market">Errore: Impossibile rilevare Google Play Store.</string>
     <string name="error_email">Errore: impossibile trovare un\'applicazione e-mail installata.</string>
     <!-- Service -->

@@ -79,14 +79,14 @@
     <string name="status_summary_notification_access_disabled">Avaa Androidin ilmoitusten pääsyasetukset ottaaksesi Voice Notifyn käyttöön</string>
     <string name="status_summary_suspended">Valitse aktivoidaksesi Voice Notifyn.</string>
     <string name="notification_channel_desc">Käytetään testi-ilmoitukseen</string>
-    <string name="support_contact">Lähetä kehittäjälle sähköpostia</string>
+    <string name="support_email">Lähetä kehittäjälle sähköpostia</string>
     <string name="test_subtext">Alateksti</string>
     <string name="test_content_title">Sisällön otsikko</string>
     <string name="test_content_text">Tämä on sisältöviesti.</string>
     <string name="test_content_info">Sisällön tiedot</string>
     <string name="support_rate">Arvostele &amp; arvioi</string>
     <string name="test_ticker">Tämä on uutisnauhaviesti</string>
-    <string name="support_source">Github (Lähdekoodi, Ongelman jäljitys)</string>
+    <string name="support_github">Github (Lähdekoodi, Ongelman jäljitys)</string>
     <string name="support_translations">Käännökset</string>
     <string name="support_privacy">Tietosuojakäytäntö</string>
     <string name="error_market">Virhe: Google Play Kauppaa ei löydy asennettuna.</string>

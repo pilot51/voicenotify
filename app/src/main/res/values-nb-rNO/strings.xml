@@ -50,7 +50,7 @@
     <string name="error_tts_init">Feil: Kunne ikke igangsette TTS. [%d]</string>
     <string name="app_name">Voice Notify</string>
     <string name="app_list">Programliste</string>
-    <string name="support_source">GitHub (kidekoder, feilsporer)</string>
+    <string name="support_github">GitHub (kidekoder, feilsporer)</string>
     <string name="support">Hjelp og støtte</string>
     <string name="notification_from">Merknad fra %s.</string>
     <string name="ignore_all">Ingorer alle</string>
@@ -110,7 +110,7 @@
 \nGammelt forvag (v1.0.x):
 \n#a: #t</string>
     <string name="ignore_strings_summary">Ignorer merknader som inneholder gitt tekst i meldingen</string>
-    <string name="support_contact">Send e-post til utvikleren</string>
+    <string name="support_email">Send e-post til utvikleren</string>
     <string name="ignore_empty">Ingenting ignoreres</string>
     <string name="error_market">Feil: Google Play-butikken er ikke installert.</string>
     <string name="error_email">Feil: Fant ikke noe installert e-postprogram.</string>

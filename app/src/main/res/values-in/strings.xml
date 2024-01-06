@@ -120,9 +120,9 @@
     <string name="test_content_text">Ini adalah pesan isi.</string>
     <string name="test_content_info">Info Isi</string>
     <string name="support_rate">Nilai &amp; Ulas</string>
-    <string name="support_contact">Email Pengembang</string>
+    <string name="support_email">Email Pengembang</string>
     <string name="support_translations">Alih Bahasa</string>
-    <string name="support_source">GitHub (Kode Sumber, Issue Tracker)</string>
+    <string name="support_github">GitHub (Kode Sumber, Issue Tracker)</string>
     <string name="error_market">Galat: Gagal menemukan Google Play Store terpasang.</string>
     <string name="error_email">Galat: Gagal menemukan aplikasi surel terpasang.</string>
     <!-- Service -->

@@ -133,7 +133,7 @@
     <string name="text_to_replace">置換する文字列</string>
     <string name="test">テスト</string>
     <string name="support_rate">評価＆レビュー</string>
-    <string name="support_contact">開発者にメール</string>
+    <string name="support_email">開発者にメール</string>
     <string name="notification_from">%s からの通知。</string>
     <string name="quiet_end_summary">この時間以前は読み上げを行いません。
 \n開始時間と同じ値を設定すると無効化されます。</string>
@@ -148,7 +148,7 @@
     <string name="support_translations">翻訳</string>
     <string name="status_summary_notification_access_disabled">Androidの通知設定を開いてVoice Notifyを有効化</string>
     <string name="error_email">エラー: メールアプリが見つかりません。</string>
-    <string name="support_source">GitHub (ソースコード,イシュートラッカー)</string>
+    <string name="support_github">GitHub (ソースコード,イシュートラッカー)</string>
     <string name="text_replace_error_duplicate">重複してます！保存されません。</string>
     <string name="test_content_title">コンテンツタイトル</string>
     <string name="support_privacy">プライバシーポリシー</string>

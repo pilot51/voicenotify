@@ -102,9 +102,9 @@
     <string name="test_content_text">To jest kontent wiadomości</string>
     <string name="test_content_info">Informacja kontentu</string>
     <string name="support_rate">Oceń/skomentuj </string>
-    <string name="support_contact">Kontakt z deweloperem</string>
+    <string name="support_email">Kontakt z deweloperem</string>
     <string name="support_translations">Tłumaczenie</string>
-    <string name="support_source">Kod źródłowy</string>
+    <string name="support_github">Kod źródłowy</string>
     <string name="error_market">Error: nie można odnaleźć Sklepu Google Play</string>
     <string name="error_email">Error: Nie można znaleźć zainstalowanej aplikacji Email.</string>
     <!-- Service -->

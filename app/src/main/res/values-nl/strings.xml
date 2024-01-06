@@ -82,9 +82,9 @@
     <string name="service_disabled">VN service is uitgeschakeld</string>
     <string name="status_summary_suspended">Selecteer om VN te activeren.</string>
     <string name="support_rate">Waarderen/Comentaar</string>
-    <string name="support_contact">Contact met de maker</string>
+    <string name="support_email">Contact met de maker</string>
     <string name="support_translations">Vertalingen</string>
-    <string name="support_source">Broncode</string>
+    <string name="support_github">Broncode</string>
     <string name="error_market">Fout: Google Play Store is niet geïnstalleerd.</string>
     <string name="error_email">Fout: Er is geen e-mail app geinstalleerd.</string>
     <!-- Service -->
