@@ -4,8 +4,8 @@
     <!-- Used by multiple files -->
     <string name="app_is_ignored">%s игнорировано</string>
     <string name="app_is_not_ignored">%s не игнорированно</string>
-    <string name="service_running">Сервис Уведомлений Голосом работает</string>
-    <string name="service_suspended">Сервис Уведомлений Голосом приостановлен</string>
+    <string name="service_running">Служба Уведомлений Голосом работает</string>
+    <string name="service_suspended">Служба Уведомлений Голосом приостановлена</string>
     <!-- xml/preferences.xml -->
     <string name="app_list">Список приложений</string>
     <string name="app_list_summary">Список выбранных для обработки приложений.</string>
@@ -41,7 +41,11 @@
     </string-array>
     <string name="ignore_strings">Игнорирование текста</string>
     <string name="ignore_strings_summary">Игнорировать уведомления, содержащие определенный текст.</string>
-    <string name="require_ignore_strings_dialog_msg">Разделяйте текстовые фрагменты переходом на новую строку.</string>
+    <string name="require_ignore_strings_dialog_msg">Это сопоставляется с сообщением, отправленным в TTS, после форматирования сообщения TTS и замены текста, включая знаки препинания.
+\n
+\nОтделяйте отдельные записи новой строкой.
+\nЧтобы сообщение соответствовало, оно должно содержать любую запись, а не все.
+\nБез учета регистра.</string>
     <string name="ignore_empty">Игнорирование пустых</string>
     <string name="ignore_empty_summary_on">Игнорировать пустые уведомления.</string>
     <string name="ignore_empty_summary_off">Пустые уведомления будут читаться как \"Уведомление от [имя приложения].\"</string>
@@ -71,20 +75,21 @@
 \nТест будет запущен, но уведомление не будет прочитано.</string>
     <string name="notify_log_summary">Показать 20 последних уведомлений.
 \nОтображает время, имя приложения и причины игнорирования.</string>
-    <string name="support_summary">Пожертвования, рейтинг/комментарии, перевод, исходный код, связь с разработчиком.</string>
+    <string name="support_summary">Оценить/оставить комментарий, написать разработчику, чаты сообщества, переводы, исходный код, сервис отслеживания ошибок, политика конфиденциальности</string>
     <!-- TextReplacePreference -->
     <!-- text_replace_row.xml -->
     <!-- MainActivity and xml/preferences.xml -->
     <string name="test">Тест</string>
     <string name="notify_log">Лог уведомлений</string>
-    <string name="support">Поддержать приложение</string>
+    <string name="support">Помощь. Поддержать приложение</string>
     <!-- MainActivity -->
-    <string name="service_disabled">Сервис Уведомлений Голосом остановлен</string>
-    <string name="status_summary_suspended">Выберите для активации Уведомлений Голосом.</string>
-    <string name="support_rate">Оставить отзыв</string>
-    <string name="support_contact">Связаться с разработчиком</string>
+    <string name="service_disabled">Служба Уведомлений Голосом отключена</string>
+    <string name="status_summary_suspended">Нажмите для включения Уведомлений Голосом.
+\nНажмите и удерживайте, чтобы открыть настройки доступа к уведомлениям Андроид и отключить сервис.</string>
+    <string name="support_rate">Оценить, оставить отзыв</string>
+    <string name="support_contact">Написать разработчику</string>
     <string name="support_translations">Переводы</string>
-    <string name="support_source">Исходный Код</string>
+    <string name="support_source">Github (Исходный код, Отслеживание ошибок)</string>
     <string name="error_email">Ошибка: Не удалось найти установленный почтовый клиент.</string>
     <!-- Service -->
     <string name="notification_from">Уведомление от %s.</string>
@@ -109,5 +114,45 @@
     <string name="reason_headset_off">Гарнитура выкл.</string>
     <string name="reason_headset_on">Гарнитура вкл.</string>
     <string name="reason_shake">Чтение приостановлено встряской</string>
-    <string name="reason_suspended">Уведомления Голосом приостановлены с помощью виджета.</string>
+    <string name="reason_suspended">Уведомления Голосом приостановлены с помощью виджета</string>
+    <string name="back">Назад</string>
+    <string name="close">Закрыть</string>
+    <string name="tts_text_replace_summary">Текст для замены. Например, для исправления произношения</string>
+    <string name="tts_text_replace">Замена текста для TTS</string>
+    <string name="remove">Удалить</string>
+    <string name="error">Ошибка</string>
+    <string name="max_length">Максимальная длина сообщения</string>
+    <string name="reason_tts_interrupted">TTS прервана по неизвестной причине</string>
+    <string name="reason_tts_length_limit">Превышен лимит длины сообщения для TTS</string>
+    <string name="require_strings">Требовать наличие текста</string>
+    <string name="require_strings_summary">Озвучить только уведомления, содержащие определенный текст в сообщении</string>
+    <string name="status_summary_notification_access_disabled">Нажмите, чтобы открыть настройки доступа к уведомлениям Андроид и включить сервис.</string>
+    <string name="permission_rationale_post_notifications">Разрешение на Уведомления требуется Приложению для отправки тестового уведомления.</string>
+    <string name="tts"></string>
+    <string name="text_to_replace">Текст для замены</string>
+    <string name="text_replace_error_duplicate">Дубликат! Не будет сохранено.</string>
+    <string name="max_length_summary">Максимальная длина сообщения для произнесения. Сообщения большего размера будут обрезаны.</string>
+    <string name="ignore_groups_summary_off">Уведомления, содержащие несколько сообщений, будут озвучены</string>
+    <string name="tts_summary">Настроить обработку Текст-в-Речь</string>
+    <string name="notification_channel_desc">Используется для тестового уведомления</string>
+    <string name="ignore_groups_summary_on">Уведомления, содержащие несколько сообщений, не будут озвучены</string>
+    <string name="ignore_groups">Игнорировать Групповые Сообщения</string>
+    <string name="support_privacy">Политика конфиденциальности</string>
+    <string name="error_market">Ошибка: не установлен Google Play Store.</string>
+    <string name="permission_rationale_read_phone_state">Разрешение на Телефонные звонки требуется, чтобы Приложение не разговаривало во время звонка.</string>
+    <string name="reason_service_stopped">Служба остановлена</string>
+    <string name="tts_text_replace_dialog">Замените текст, который будет произноситься, что позволит вам настроить способ произнесения слов Text-To-Speech или заменить текст по любой другой причине.
+\n
+\nТекст для замены нечувствителен к регистру и применяется после форматирования, установленного в сообщении TTS, включая пунктуацию.</string>
+    <string name="replacement_text">Заменить на</string>
+    <string name="reason_string_required">Отсутствует обязательный текст</string>
+    <string name="max_length_dialog_msg">Максимальная длина сообщения для произнесения.
+\nСообщения большего размера будут обрезаны.</string>
+    <string name="status_summary_notification_access_enabled">Нажмите, чтобы приостановить Уведомления голосом.
+\nНажмите и удерживайте, чтобы открыть настройки доступа к уведомлениям Андроид и отключить сервис.</string>
+    <string name="reason_call">Активный телефонный вызов</string>
+    <string name="reason_tts_failed">Сбой TTS. Попытка перезапуска и повтора.
+\nЭтот текст должен быть желтым, если повторная попытка успешна, или красным, если нет.
+\nПопробуйте перезапустить службу Приложения, если уведомления не будут произнесены.</string>
+    <string name="reason_tts_restarted">TTS перезапущена в то время, как сообщение было в очереди или произносилось. Поставлено в очередь повторно.</string>
 </resources>
