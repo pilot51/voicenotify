@@ -128,7 +128,6 @@
     <string name="require_strings_summary">Озвучить только уведомления, содержащие определенный текст в сообщении</string>
     <string name="status_summary_notification_access_disabled">Нажмите, чтобы открыть настройки доступа к уведомлениям Андроид и включить сервис.</string>
     <string name="permission_rationale_post_notifications">Разрешение на Уведомления требуется Приложению для отправки тестового уведомления.</string>
-    <string name="tts"></string>
     <string name="text_to_replace">Текст для замены</string>
     <string name="text_replace_error_duplicate">Дубликат! Не будет сохранено.</string>
     <string name="max_length_summary">Максимальная длина сообщения для произнесения. Сообщения большего размера будут обрезаны.</string>
