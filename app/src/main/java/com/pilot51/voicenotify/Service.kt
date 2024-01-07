@@ -71,7 +71,6 @@ import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_REPEAT
 import com.pilot51.voicenotify.PreferenceHelper.getSelectedAudioStream
 import com.pilot51.voicenotify.PreferenceHelper.prefs
 import com.pilot51.voicenotify.Utils.isAny
-import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -88,7 +87,7 @@ class Service : NotificationListenerService() {
 	private lateinit var telephony: TelephonyManager
 	private val stateReceiver = DeviceStateReceiver()
 	private var repeater: RepeatTimer? = null
-	private val shake = Shake()
+	private val shake by lazy { Shake(applicationContext) }
 	private val repeatList = mutableListOf<NotificationInfo>()
 	private val audioFocusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 		AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
@@ -107,17 +106,18 @@ class Service : NotificationListenerService() {
 	 * if the list is empty when we enqueue a message, we trigger shaking and audio focus requesting
 	 * if the list is empty when we finish speaking a message, we untrigger them.
 	 */
-	@SuppressLint("UseSparseArrays")
 	private val ttsQueue = linkedMapOf<Long, NotificationInfo>()
 	private val statusListener = object : OnStatusChangeListener {
 		override fun onStatusChanged() {
-			if (isSuspended.value && tts != null) {
-				synchronized(ttsQueue) {
-					for (info in ttsQueue.values) {
-						info.ignoreReasons.add(IgnoreReason.SUSPENDED)
+			if (isSuspended.value) {
+				tts?.run {
+					synchronized(ttsQueue) {
+						for (info in ttsQueue.values) {
+							info.ignoreReasons.add(IgnoreReason.SUSPENDED)
+						}
 					}
+					stop()
 				}
-				tts!!.stop()
 			}
 		}
 	}
@@ -138,7 +138,7 @@ class Service : NotificationListenerService() {
 				Toast.makeText(applicationContext, errorMsg, Toast.LENGTH_LONG).show()
 				return@OnInitListener
 			}
-			tts!!.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
+			tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
 				override fun onStart(utteranceId: String) {}
 				override fun onStop(utteranceId: String, interrupted: Boolean) {
 					if (interrupted) {
@@ -193,7 +193,7 @@ class Service : NotificationListenerService() {
 				val queueIterator = ttsQueue.iterator()
 				queueIterator.forEach {
 					val info = it.value
-					val isFailed = tts!!.speak(
+					val isFailed = tts?.speak(
 						info.ttsMessage, TextToSpeech.QUEUE_ADD, ttsParams, it.key.toString()
 					) != TextToSpeech.SUCCESS
 					if (isFailed) {
@@ -337,7 +337,7 @@ class Service : NotificationListenerService() {
 		}
 		//once the message is in our queue, send it to the real one with the necessary parameters
 		val utteranceId = notificationTime.toString()
-		val isSpeakFailed = tts!!.speak(
+		val isSpeakFailed = tts?.speak(
 			info.ttsMessage, TextToSpeech.QUEUE_ADD, ttsParams, utteranceId
 		) != TextToSpeech.SUCCESS
 		if (isSpeakFailed) {
@@ -477,8 +477,8 @@ class Service : NotificationListenerService() {
 	}
 
 	private fun isScreenOn(): Boolean {
-		isScreenOn = CheckScreen.isScreenOn()
-		return isScreenOn
+		val powerMan = applicationContext.getSystemService(POWER_SERVICE) as PowerManager
+		return powerMan.isInteractive
 	}
 
 	@get:RequiresApi(Build.VERSION_CODES.M)
@@ -507,17 +507,6 @@ class Service : NotificationListenerService() {
 		}
 	}
 
-	private object CheckScreen {
-		private lateinit var powerMan: PowerManager
-
-		fun isScreenOn(): Boolean {
-			if (!::powerMan.isInitialized) {
-				powerMan = appContext.getSystemService(POWER_SERVICE) as PowerManager
-			}
-			return powerMan.isInteractive
-		}
-	}
-
 	private inner class DeviceStateReceiver : BroadcastReceiver() {
 		override fun onReceive(context: Context, intent: Intent) {
 			val action = intent.action
@@ -536,17 +525,19 @@ class Service : NotificationListenerService() {
 					interruptIfIgnored = false
 				}
 			}
-			if (interruptIfIgnored && tts != null) {
-				val ignoreReasons = ignore()
-				if (ignoreReasons.isNotEmpty()) {
-					Log.i(TAG, "Notifications silenced/ignored for reason(s): "
-						+ ignoreReasons.joinToString())
-					synchronized(ttsQueue) {
-						for (info in ttsQueue.values) {
-							info.ignoreReasons.addAll(ignoreReasons)
+			if (interruptIfIgnored) {
+				tts?.run {
+					val ignoreReasons = ignore()
+					if (ignoreReasons.isNotEmpty()) {
+						Log.i(TAG, "Notifications silenced/ignored for reason(s): "
+							+ ignoreReasons.joinToString())
+						synchronized(ttsQueue) {
+							for (info in ttsQueue.values) {
+								info.ignoreReasons.addAll(ignoreReasons)
+							}
 						}
+						stop()
 					}
-					tts!!.stop()
 				}
 			}
 		}

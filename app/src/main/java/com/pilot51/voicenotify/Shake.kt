@@ -15,6 +15,7 @@
  */
 package com.pilot51.voicenotify
 
+import android.content.Context
 import android.content.Context.SENSOR_SERVICE
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -23,12 +24,11 @@ import android.hardware.SensorManager
 import android.util.Log
 import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.PreferenceHelper.prefs
-import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import kotlin.math.abs
 import kotlin.math.sqrt
 
-class Shake : SensorEventListener {
-	private val manager = appContext.getSystemService(SENSOR_SERVICE) as SensorManager
+class Shake(context: Context) : SensorEventListener {
+	private val manager = context.getSystemService(SENSOR_SERVICE) as SensorManager
 	private val sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 	var onShake: (() -> Unit)? = null
 	private var threshold = 0.0

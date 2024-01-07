@@ -89,9 +89,11 @@ abstract class AppDatabase : RoomDatabase() {
 	}
 
 	companion object {
-		val db = Room.databaseBuilder(
-			VNApplication.appContext,
-			AppDatabase::class.java, "apps.db"
-		).build()
+		val db by lazy {
+			Room.databaseBuilder(
+				VNApplication.appContext,
+				AppDatabase::class.java, "apps.db"
+			).build()
+		}
 	}
 }

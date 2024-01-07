@@ -15,6 +15,7 @@
  */
 package com.pilot51.voicenotify
 
+import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
@@ -22,17 +23,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import com.pilot51.voicenotify.AppListViewModel.IgnoreType.*
 import com.pilot51.voicenotify.PreferenceHelper.KEY_APP_DEFAULT_ENABLE
 import com.pilot51.voicenotify.PreferenceHelper.prefs
-import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 
-class AppListViewModel : ViewModel() {
+class AppListViewModel(application: Application) : AndroidViewModel(application) {
+	private val appContext = application.applicationContext
 	private val apps by Common::apps
 	val filteredApps = apps.toMutableStateList()
 	private var isUpdating = false

@@ -68,6 +68,8 @@ fun AppListActions() {
 			trailingIcon = {
 				IconButton(onClick = {
 					showSearchBar = false
+					vm.searchQuery = null
+					vm.filterApps(null)
 				}) {
 					Icon(
 						imageVector = Icons.Filled.Close,

@@ -47,7 +47,7 @@ object NotifyList {
 	}
 
 	fun updateInfo(info: NotificationInfo) {
-		val index = list.indexOf(info)
+		val index = list.indexOf(info).takeUnless { it == -1 } ?: return
 		// Force update to list state by first setting copy
 		list[index] = info.copy()
 		// Set back to original to ensure future calls can find it again
