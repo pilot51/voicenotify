@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.hardware.display.DisplayManager
 import android.media.AudioAttributes
 import android.media.AudioDeviceInfo
 import android.media.AudioFocusRequest
@@ -39,6 +40,7 @@ import android.speech.tts.UtteranceProgressListener
 import android.telecom.TelecomManager
 import android.telephony.TelephonyManager
 import android.util.Log
+import android.view.Display
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.pilot51.voicenotify.PermissionHelper.isPermissionGranted
@@ -79,6 +81,7 @@ import kotlinx.coroutines.launch
 import java.util.*
 
 class Service : NotificationListenerService() {
+	private val appContext by ::applicationContext
 	private val lastMsg = mutableMapOf<App?, String?>()
 	private val lastMsgTime = mutableMapOf<App?, Long>()
 	private var tts: TextToSpeech? = null
@@ -87,7 +90,7 @@ class Service : NotificationListenerService() {
 	private lateinit var telephony: TelephonyManager
 	private val stateReceiver = DeviceStateReceiver()
 	private var repeater: RepeatTimer? = null
-	private val shake by lazy { Shake(applicationContext) }
+	private val shake by lazy { Shake(appContext) }
 	private val repeatList = mutableListOf<NotificationInfo>()
 	private val audioFocusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 		AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
@@ -128,14 +131,14 @@ class Service : NotificationListenerService() {
 	}
 
 	private fun initTts(onInit: (() -> Unit)? = null)  {
-		tts = TextToSpeech(applicationContext, OnInitListener { status ->
+		tts = TextToSpeech(appContext, OnInitListener { status ->
 			if (status == TextToSpeech.SUCCESS) {
 				onInit?.invoke()
 			} else {
 				tts = null
 				val errorMsg = getString(R.string.error_tts_init, status)
 				Log.w(TAG, errorMsg)
-				Toast.makeText(applicationContext, errorMsg, Toast.LENGTH_LONG).show()
+				Toast.makeText(appContext, errorMsg, Toast.LENGTH_LONG).show()
 				return@OnInitListener
 			}
 			tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
@@ -476,10 +479,10 @@ class Service : NotificationListenerService() {
 		onStatusChanged()
 	}
 
-	private fun isScreenOn(): Boolean {
-		val powerMan = applicationContext.getSystemService(POWER_SERVICE) as PowerManager
-		return powerMan.isInteractive
-	}
+	private fun isScreenOn() =
+		(appContext.getSystemService(POWER_SERVICE) as PowerManager).isInteractive &&
+			(appContext.getSystemService(DISPLAY_SERVICE) as DisplayManager)
+				.getDisplay(Display.DEFAULT_DISPLAY).state == Display.STATE_ON
 
 	@get:RequiresApi(Build.VERSION_CODES.M)
 	@delegate:RequiresApi(Build.VERSION_CODES.M)
@@ -513,7 +516,7 @@ class Service : NotificationListenerService() {
 			var interruptIfIgnored = true
 			when (action) {
 				Intent.ACTION_SCREEN_ON -> {
-					isScreenOn = true
+					if (!isScreenOn()) return
 					if (repeater != null) {
 						repeater!!.cancel()
 						synchronized(repeatList) { repeatList.clear() }
@@ -521,7 +524,7 @@ class Service : NotificationListenerService() {
 					interruptIfIgnored = false
 				}
 				Intent.ACTION_SCREEN_OFF -> {
-					isScreenOn = false
+					if (isScreenOn()) return
 					interruptIfIgnored = false
 				}
 			}
@@ -551,7 +554,6 @@ class Service : NotificationListenerService() {
 			prefs.getBoolean(KEY_IS_SUSPENDED, DEFAULT_IS_SUSPENDED)
 		)
 		val isSuspended: StateFlow<Boolean> = _isSuspended
-		private var isScreenOn = false
 		private val statusListeners = mutableListOf<OnStatusChangeListener>()
 
 		fun registerOnStatusChangeListener(listener: OnStatusChangeListener) {
