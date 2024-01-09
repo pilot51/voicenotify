@@ -195,4 +195,7 @@
     <string name="error">Error</string>
     <string name="reason_tts_interrupted">TTS interrumpido por motivo desconocido</string>
     <string name="reason_tts_restarted">TTS reiniciado mientras el mensaje estaba en cola o hablando. Se ha vuelto a poner en cola.</string>
+    <string name="support_email_subtext">Retroalimentación general</string>
+    <string name="support_github_subtext">Informes de errores, solicitudes de funciones, código fuente</string>
+    <string name="support_chat_subtext">Chat de usuario, respuesta más rápida de los desarrolladores</string>
 </resources>
