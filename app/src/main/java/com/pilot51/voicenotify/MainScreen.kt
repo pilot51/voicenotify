@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,11 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -32,13 +34,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -64,12 +60,25 @@ import com.pilot51.voicenotify.PreferenceHelper.KEY_IGNORE_EMPTY
 import com.pilot51.voicenotify.PreferenceHelper.KEY_IGNORE_GROUPS
 import com.pilot51.voicenotify.PreferenceHelper.KEY_QUIET_END
 import com.pilot51.voicenotify.PreferenceHelper.KEY_QUIET_START
+import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 
-enum class Screen(@StringRes val title: Int) {
+private enum class Screen(@StringRes val title: Int) {
 	MAIN(R.string.app_name),
 	APP_LIST(R.string.app_list),
 	TTS(R.string.tts)
+}
+
+@Composable
+fun AppTheme(content: @Composable () -> Unit) {
+	MaterialTheme(
+		colorScheme = if (isSystemInDarkTheme()) {
+			darkColorScheme(primary = Color(0xFF1CB7D5), primaryContainer = Color(0xFF1E4696))
+		} else {
+			lightColorScheme(primary = Color(0xFF2A54A5), primaryContainer = Color(0xFF64F0FF))
+		},
+		content = content
+	)
 }
 
 @Composable
@@ -136,7 +145,7 @@ private fun AppBar(
 			}
 		},
 		colors = TopAppBarDefaults.mediumTopAppBarColors(
-			containerColor = Color(0xFF333333)
+			containerColor = MaterialTheme.colorScheme.primaryContainer
 		)
 	)
 }
@@ -164,8 +173,8 @@ private fun MainScreen(
 		statusTitle = context.getString(R.string.service_running)
 		statusSummary = context.getString(R.string.status_summary_notification_access_enabled)
 	}
-	val isRunning by Service.isRunning.collectAsState()
-	val isSuspended by Service.isSuspended.collectAsState()
+	val isRunning by (if (isPreview) MutableStateFlow(false) else Service.isRunning).collectAsState()
+	val isSuspended by (if (isPreview) MutableStateFlow(false) else Service.isSuspended).collectAsState()
 	if (isSuspended && isRunning) {
 		statusTitle = stringResource(R.string.service_suspended)
 		statusSummary = stringResource(R.string.status_summary_suspended)
@@ -392,10 +401,11 @@ private fun runTestNotification(context: Context) {
 	}, 5000)
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun AppPreview() {
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		AppMain()
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
  */
 package com.pilot51.voicenotify
 
+import android.content.res.Configuration
 import android.util.Pair
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -219,7 +220,8 @@ private fun TextReplaceListItem(
 	}
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun TextReplaceListPreview() {
 	val replaceList = mutableListOf(
@@ -227,7 +229,7 @@ private fun TextReplaceListPreview() {
 		Pair("this", "that"),
 		null
 	)
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		TextReplaceDialog(
 			replaceList = replaceList,
 			onSave = {},

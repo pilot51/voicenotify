@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,10 @@
 package com.pilot51.voicenotify
 
 import android.app.Notification
+import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -30,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -130,10 +133,12 @@ private fun Item(item: NotificationInfo) {
 			)
 		}
 		if (item.ignoreReasons.isNotEmpty()) {
+			val interruptedColor = if (isSystemInDarkTheme()) Color.Yellow else Color(0xFFBBBB00)
 			Text(
 				text = item.getIgnoreReasonsAsText(),
 				modifier = Modifier.fillMaxWidth(),
-				color = if (item.isInterrupted) Color.Yellow else Color.Red,
+				color = if (item.isInterrupted) interruptedColor else Color.Red,
+				fontWeight = FontWeight.Bold,
 				textAlign = TextAlign.Center
 			)
 		}
@@ -182,7 +187,8 @@ private fun Item(item: NotificationInfo) {
 	}
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun NotificationLogDialogPreview() {
 	val previewNotification = Notification().apply {
@@ -198,7 +204,7 @@ private fun NotificationLogDialogPreview() {
 		NotificationInfo(app = App(1, "package.name.one", "App Name 1", true), previewNotification),
 		NotificationInfo(app = App(2, "package.name.two", "App Name 2", false), previewNotification)
 	)
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		NotificationLogDialog(list) {}
 	}
 }

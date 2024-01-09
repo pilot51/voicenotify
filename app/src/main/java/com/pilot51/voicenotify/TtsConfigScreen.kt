@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +16,9 @@
 package com.pilot51.voicenotify
 
 import android.content.Intent
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -47,68 +46,69 @@ fun TtsConfigScreen() {
 	var showTtsStream by remember { mutableStateOf(false) }
 	var showTtsDelay by remember { mutableStateOf(false) }
 	var showTtsRepeat by remember { mutableStateOf(false) }
-	MaterialTheme(colorScheme = darkColorScheme()) {
-		Column(modifier = Modifier.fillMaxSize()) {
-			PreferenceRowLink(
-				enabled = ttsEnabled,
-				title = stringResource(R.string.tts_settings),
-				subtitle = ttsSummary,
-				onClick = { ttsIntent?.let { context.startActivity(it) } }
-			)
-			PreferenceRowLink(
-				title = R.string.tts_message,
-				subtitle = R.string.tts_message_summary,
-				onClick = { showTtsMessage = true }
-			)
-			PreferenceRowLink(
-				title = R.string.tts_text_replace,
-				subtitle = R.string.tts_text_replace_summary,
-				onClick = { showTextReplaceDialog = true }
-			)
-			PreferenceRowLink(
-				title = R.string.max_length,
-				subtitle = R.string.max_length_summary,
-				onClick = { showMaxMessage = true }
-			)
-			PreferenceRowLink(
-				title = R.string.tts_stream,
-				subtitle = R.string.tts_stream_summary,
-				onClick = { showTtsStream = true }
-			)
-			PreferenceRowLink(
-				title = R.string.tts_delay,
-				subtitle = R.string.tts_delay_summary,
-				onClick = { showTtsDelay = true }
-			)
-			PreferenceRowLink(
-				title = R.string.tts_repeat,
-				subtitle = R.string.tts_repeat_summary,
-				onClick = { showTtsRepeat = true }
-			)
-		}
-		if (showTtsMessage) {
-			TtsMessageDialog { showTtsMessage = false }
-		}
-		if (showTextReplaceDialog) {
-			TextReplaceDialog { showTextReplaceDialog = false }
-		}
-		if (showMaxMessage) {
-			TtsMaxLengthDialog { showMaxMessage = false }
-		}
-		if (showTtsStream) {
-			TtsStreamDialog { showTtsStream = false }
-		}
-		if (showTtsDelay) {
-			TtsDelayDialog { showTtsDelay = false }
-		}
-		if (showTtsRepeat) {
-			TtsRepeatDialog { showTtsRepeat = false }
-		}
+	Column(modifier = Modifier.fillMaxSize()) {
+		PreferenceRowLink(
+			title = stringResource(R.string.tts_settings),
+			subtitle = ttsSummary,
+			enabled = ttsEnabled,
+			onClick = { ttsIntent?.let { context.startActivity(it) } }
+		)
+		PreferenceRowLink(
+			title = R.string.tts_message,
+			subtitle = R.string.tts_message_summary,
+			onClick = { showTtsMessage = true }
+		)
+		PreferenceRowLink(
+			title = R.string.tts_text_replace,
+			subtitle = R.string.tts_text_replace_summary,
+			onClick = { showTextReplaceDialog = true }
+		)
+		PreferenceRowLink(
+			title = R.string.max_length,
+			subtitle = R.string.max_length_summary,
+			onClick = { showMaxMessage = true }
+		)
+		PreferenceRowLink(
+			title = R.string.tts_stream,
+			subtitle = R.string.tts_stream_summary,
+			onClick = { showTtsStream = true }
+		)
+		PreferenceRowLink(
+			title = R.string.tts_delay,
+			subtitle = R.string.tts_delay_summary,
+			onClick = { showTtsDelay = true }
+		)
+		PreferenceRowLink(
+			title = R.string.tts_repeat,
+			subtitle = R.string.tts_repeat_summary,
+			onClick = { showTtsRepeat = true }
+		)
+	}
+	if (showTtsMessage) {
+		TtsMessageDialog { showTtsMessage = false }
+	}
+	if (showTextReplaceDialog) {
+		TextReplaceDialog { showTextReplaceDialog = false }
+	}
+	if (showMaxMessage) {
+		TtsMaxLengthDialog { showMaxMessage = false }
+	}
+	if (showTtsStream) {
+		TtsStreamDialog { showTtsStream = false }
+	}
+	if (showTtsDelay) {
+		TtsDelayDialog { showTtsDelay = false }
+	}
+	if (showTtsRepeat) {
+		TtsRepeatDialog { showTtsRepeat = false }
 	}
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun TtsConfigScreenPreview() {
-	TtsConfigScreen()
+	AppTheme {
+		TtsConfigScreen()
+	}
 }

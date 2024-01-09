@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,11 @@ package com.pilot51.voicenotify
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
+import android.content.res.Configuration
 import androidx.annotation.StringRes
-import androidx.compose.material3.*
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -89,7 +92,8 @@ object PermissionHelper {
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun RationaleDialogPreview() {
 	val permissionState = object : PermissionState {
@@ -97,7 +101,7 @@ private fun RationaleDialogPreview() {
 		override val status = PermissionStatus.Granted
 		override fun launchPermissionRequest() {}
 	}
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		RationaleDialog(
 			permissionState = permissionState,
 			rationaleMsgId = R.string.permission_rationale_read_phone_state

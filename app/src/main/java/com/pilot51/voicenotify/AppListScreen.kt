@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,14 @@
  */
 package com.pilot51.voicenotify
 
-import androidx.compose.foundation.clickable
+import android.content.res.Configuration
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
@@ -27,14 +30,13 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -62,9 +64,16 @@ fun AppListActions() {
 			},
 			modifier = Modifier
 				.fillMaxWidth()
+				.padding(horizontal = 4.dp)
 				.focusRequester(focusRequester),
 			maxLines = 1,
 			singleLine = true,
+			leadingIcon = {
+				Icon(
+					imageVector = Icons.Filled.Search,
+					contentDescription = null
+				)
+			},
 			trailingIcon = {
 				IconButton(onClick = {
 					showSearchBar = false
@@ -136,46 +145,40 @@ private fun AppList(
 
 @Composable
 private fun AppListItem(app: App, toggleIgnore: (app: App) -> Unit) {
-	Row(modifier = Modifier
-		.fillMaxWidth()
-		.clickable { toggleIgnore(app) }
-		.padding(
-			horizontal = 20.dp,
-			vertical = 10.dp
-		)
-	) {
-		Column(modifier = Modifier.weight(1f)) {
+	ListItem(
+		modifier = Modifier.toggleable(
+			value = app.enabled,
+			role = Role.Checkbox,
+			onValueChange = { toggleIgnore(app) }
+		),
+		headlineContent = {
 			Text(
 				text = app.label,
-				modifier = Modifier.fillMaxWidth(),
-				color = Color.White,
 				fontSize = 24.sp
 			)
-			Text(
-				text = app.packageName,
-				modifier = Modifier.fillMaxWidth(),
-				color = Color.White
+		},
+		supportingContent = {
+			Text(app.packageName)
+		},
+		trailingContent = {
+			Checkbox(
+				checked = app.enabled,
+				modifier = Modifier.focusable(false),
+				onCheckedChange = { toggleIgnore(app) }
 			)
 		}
-		Checkbox(
-			checked = app.enabled,
-			modifier = Modifier
-				.size(40.dp)
-				.align(Alignment.CenterVertically)
-				.focusable(false),
-			onCheckedChange = null
-		)
-	}
+	)
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun AppListPreview() {
 	val apps = listOf(
 		App(1, "package.name.one", "App Name 1", true),
 		App(2, "package.name.two", "App Name 2", false)
 	)
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		AppList(apps, true) {}
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.darkColorScheme
 import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STREAM
 import com.pilot51.voicenotify.PreferenceHelper.prefs
 
@@ -29,7 +27,7 @@ class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceCh
 		super.onCreate(savedInstanceState)
 		Common.setVolumeStream(this)
 		setContent {
-			MaterialTheme(colorScheme = darkColorScheme()) {
+			AppTheme {
 				AppMain()
 			}
 		}

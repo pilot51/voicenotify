@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@ package com.pilot51.voicenotify
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.content.res.Configuration
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
@@ -592,10 +593,11 @@ private fun LazyListScope.supportItem(
 	}
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun TextEditDialogPreview() {
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		TextEditDialog(
 			titleRes = R.string.ignore_strings,
 			messageRes = R.string.require_ignore_strings_dialog_msg,
@@ -605,34 +607,38 @@ private fun TextEditDialogPreview() {
 	}
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun TtsStreamDialogPreview() {
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		TtsStreamDialog {}
 	}
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun DeviceStatesDialogPreview() {
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		DeviceStatesDialog {}
 	}
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun QuietTimeDialogPreview() {
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		QuietTimeDialog(KEY_QUIET_START) {}
 	}
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun SupportDialogPreview() {
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		SupportDialog {}
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,16 @@
  */
 package com.pilot51.voicenotify
 
+import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material3.*
+import androidx.compose.material3.Checkbox
+import androidx.compose.material3.ListItem
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -29,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,40 +48,40 @@ import kotlin.reflect.KProperty
 fun PreferenceRowLink(
 	@StringRes title: Int,
 	@StringRes subtitle: Int,
+	enabled: Boolean = true,
 	onClick: () -> Unit
 ) = PreferenceRowLink(
 	title = stringResource(title),
 	subtitle = stringResource(subtitle),
+	enabled = enabled,
 	onClick = onClick
 )
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PreferenceRowLink(
-	enabled: Boolean = true,
 	title: String,
 	subtitle: String,
+	enabled: Boolean = true,
 	onClick: () -> Unit,
 	onLongClick: (() -> Unit)? = null
 ) {
-	Surface {
-		Row(
-			modifier = Modifier
-				.fillMaxWidth()
-				.height(IntrinsicSize.Min)
-				.combinedClickable(
-					enabled = enabled,
-					onClick = onClick,
-					onLongClick = onLongClick
-				),
-			verticalAlignment = Alignment.CenterVertically
-		) {
-			PreferenceRowScaffold(
-				title = title,
+	Row(
+		modifier = Modifier
+			.fillMaxWidth()
+			.height(IntrinsicSize.Min)
+			.combinedClickable(
 				enabled = enabled,
-				subtitle = subtitle
-			)
-		}
+				onClick = onClick,
+				onLongClick = onLongClick
+			),
+		verticalAlignment = Alignment.CenterVertically
+	) {
+		PreferenceRowScaffold(
+			title = title,
+			enabled = enabled,
+			subtitle = subtitle
+		)
 	}
 }
 
@@ -87,8 +92,9 @@ fun PreferenceRowCheckbox(
 	key: String,
 	default: Boolean
 ) {
+	val isPreview = LocalInspectionMode.current
 	var prefValue by remember {
-		PreferenceBooleanState(key = key, defaultValue = default)
+		PreferenceBooleanState(key = if (isPreview) "isPreview" else key, defaultValue = default)
 	}
 	Row(
 		modifier = Modifier
@@ -189,22 +195,25 @@ private inline operator fun PreferenceBooleanState.setValue(
 	this.value = value
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun SettingsMenuLinkPreview() {
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		PreferenceRowLink(
-			title = R.string.service_running,
-			subtitle = R.string.status_summary_notification_access_enabled,
+			title = R.string.tts_settings,
+			subtitle = R.string.tts_settings_summary_fail,
+			enabled = false,
 			onClick = {}
 		)
 	}
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun SettingsCheckboxCheckedPreview() {
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		PreferenceRowCheckbox(
 			title = R.string.ignore_groups,
 			subtitle = R.string.ignore_groups_summary_on,
@@ -214,10 +223,11 @@ private fun SettingsCheckboxCheckedPreview() {
 	}
 }
 
-@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun SettingsCheckboxUncheckedPreview() {
-	MaterialTheme(colorScheme = darkColorScheme()) {
+	AppTheme {
 		PreferenceRowCheckbox(
 			title = R.string.ignore_groups,
 			subtitle = R.string.ignore_groups_summary_off,
