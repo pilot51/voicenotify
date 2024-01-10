@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2011-2023 Mark Injerd
+<!-- Copyright 2011-2024 Mark Injerd
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -83,8 +83,23 @@
 	<string name="test_content_title">Content Title</string>
 	<string name="test_content_text">This is the content message.</string>
 	<string name="test_content_info">Content Info</string>
+	<string name="test_big_content_title">Big Content Title</string>
+	<string name="test_big_content_summary">This is the big content summary</string>
+	<string name="test_big_content_text">This is the big content text.</string>
 	<string name="notify_log">Notification Log</string>
 	<string name="notify_log_summary">List last 20 notifications.\nDisplays time, app name, message, and ignore reasons.</string>
+	<string name="notification_details">Notification Details</string>
+	<string name="enable">Enable</string>
+	<string name="ticker">Ticker</string>
+	<string name="subtext">Subtext</string>
+	<string name="title">Title</string>
+	<string name="content_text">Content Text</string>
+	<string name="content_info_text">Content Info Text</string>
+	<string name="big_content_summary">Big Content Summary</string>
+	<string name="big_content_title">Big Content Title</string>
+	<string name="big_content_text">Big Content Text</string>
+	<string name="ignored_reasons">Ignored Reasons</string>
+	<string name="interrupted_reason">Interrupted Reason</string>
 	<string name="ignore_app">Ignore %s?</string>
 	<string name="unignore_app">Unignore %s?</string>
 	<string name="yes">Yes</string>
@@ -130,7 +145,7 @@
 	<string name="tts_settings_summary_fail">Unable to find TTS settings! If it exists on your device (it should), please contact the developer.</string>
 	<string name="tts_message">TTS Message</string>
 	<string name="tts_message_summary">Customize which parts of notifications are spoken</string>
-	<string name="tts_message_dialog">#a = App title\n#t = Ticker\n#s = Subtext\n#c = Content title\n#m = Content message\n#i = Content info\n\nDefault:\n#a. #c. #m.\n\nOld default (v1.0.x):\n#a: #t</string>
+	<string name="tts_message_dialog">#a = App title\n#t = Ticker\n#s = Subtext\n#c = Content title\n#m = Content message\n#i = Content info\n#h = Big content title\n#y = Big content summary\n#b = Big content text\n\nDefault:\n#a. #c. #m.\n\nOld default (v1.0.x):\n#a: #t</string>
 	<string name="tts_text_replace">TTS Text Replacement</string>
 	<string name="tts_text_replace_summary">Substitute text to be spoken, such as to fix pronunciation</string>
 	<string name="tts_text_replace_dialog">Substitute text to be spoken, allowing you to customize how Text-To-Speech pronounces words or replace text for any other reason.\n\nText to replace is case insensitive and applies after the formatting set in TTS Message, including punctuation.</string>

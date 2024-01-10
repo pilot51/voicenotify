@@ -41,7 +41,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
@@ -77,6 +81,16 @@ fun AppTheme(content: @Composable () -> Unit) {
 		} else {
 			lightColorScheme(primary = Color(0xFF2A54A5), primaryContainer = Color(0xFF64F0FF))
 		},
+		typography = MaterialTheme.typography.copy(
+			// Increased font size for dialog buttons
+			labelLarge = TextStyle(
+				fontFamily = FontFamily.SansSerif,
+				fontWeight = FontWeight.Medium,
+				fontSize = 20.sp,
+				lineHeight = 20.sp,
+				letterSpacing = 0.1.sp,
+			)
+		),
 		content = content
 	)
 }
@@ -396,6 +410,11 @@ private fun runTestNotification(context: Context) {
 				.setContentTitle(context.getString(R.string.test_content_title))
 				.setContentText(context.getString(R.string.test_content_text))
 				.setContentInfo(context.getString(R.string.test_content_info))
+				.setStyle(NotificationCompat.BigTextStyle()
+					.setBigContentTitle(context.getString(R.string.test_big_content_title))
+					.setSummaryText(context.getString(R.string.test_big_content_summary))
+					.bigText(context.getString(R.string.test_big_content_text))
+				)
 			notificationManager.notify(0, builder.build())
 		}
 	}, 5000)

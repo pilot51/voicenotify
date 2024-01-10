@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,15 +39,21 @@ data class NotificationInfo(
 	private val notification: Notification
 ) {
 	/** The notification's ticker message. */
-	private val ticker = notification.tickerText?.toString()
+	val ticker = notification.tickerText?.toString()
 	/** The notification's subtext. */
-	private val subtext: String?
+	val subtext: String?
 	/** The notification's content title. */
-	private val contentTitle: String?
+	val contentTitle: String?
 	/** The notification's content text. */
-	private val contentText: String?
+	val contentText: String?
 	/** The notification's content info. */
-	private val contentInfoText: String?
+	val contentInfoText: String?
+	/** The notification's big content title. */
+	val bigContentTitle: String?
+	/** The notification's big content summary. */
+	val bigContentSummary: String?
+	/** The notification's big content text. */
+	val bigContentText: String?
 	/** Calendar representing the time that this instance of NotificationInfo was created. */
 	val calendar: Calendar
 	var isEmpty = false
@@ -73,15 +79,19 @@ data class NotificationInfo(
 		contentTitle = extras.getString(Notification.EXTRA_TITLE)
 		contentText = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()
 		contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT)
+		bigContentTitle = extras.getString(Notification.EXTRA_TITLE_BIG)
+		bigContentSummary = extras.getString(Notification.EXTRA_SUMMARY_TEXT)
+		bigContentText = extras.getString(Notification.EXTRA_BIG_TEXT)
 		calendar = Calendar.getInstance()
-		if (notification.`when` != Long.MIN_VALUE) { // If not Compose preview
-			buildTtsMessage()
-		}
+		buildTtsMessage()
 	}
 
 	/** Generates the string to be used for TTS. */
 	private fun buildTtsMessage() {
-		val ttsStringPref = prefs.getString(KEY_TTS_STRING, null) ?: DEFAULT_TTS_STRING
+		val isComposePreview = notification.`when` == Long.MIN_VALUE
+		val ttsStringPref = if (isComposePreview) DEFAULT_TTS_STRING else {
+			prefs.getString(KEY_TTS_STRING, null) ?: DEFAULT_TTS_STRING
+		}
 		val ttsUnformattedMsg = ttsStringPref
 			.replace("#a", "%1\$s") // App Label
 			.replace("#t", "%2\$s") // Ticker
@@ -89,6 +99,9 @@ data class NotificationInfo(
 			.replace("#c", "%4\$s") // Content Title
 			.replace("#m", "%5\$s") // Content Text
 			.replace("#i", "%6\$s") // Content Info Text
+			.replace("#h", "%7\$s") // Big Content Title
+			.replace("#y", "%8\$s") // Big Content Summary
+			.replace("#b", "%9\$s") // Big Content Text
 		try {
 			ttsMessage = String.format(ttsUnformattedMsg,
 				app?.label ?: "",
@@ -96,18 +109,23 @@ data class NotificationInfo(
 				subtext ?: "",
 				contentTitle ?: "",
 				contentText ?: "",
-				contentInfoText ?: "")
+				contentInfoText ?: "",
+				bigContentTitle ?: "",
+				bigContentSummary ?: "",
+				bigContentText ?: "")
 		} catch (e: IllegalFormatException) {
 			Log.w(TAG, "Error formatting custom TTS string!")
 			e.printStackTrace()
 		}
 		isEmpty = ttsMessage.isNullOrBlank() ||
 			ttsMessage == ttsStringPref.replace(Regex("#[atscmi]"), "")
-		if (app != null && (ttsMessage == null || ttsMessage == app.label)) {
+		if (app != null && (ttsMessage == null || ttsMessage == app.label) && !isComposePreview) {
 			ttsMessage = appContext.getString(R.string.notification_from, app.label)
 		}
 		if (!ttsMessage.isNullOrEmpty()) {
-			val ttsTextReplace = prefs.getString(KEY_TTS_TEXT_REPLACE, null)
+			val ttsTextReplace = if (isComposePreview) null else {
+				prefs.getString(KEY_TTS_TEXT_REPLACE, null)
+			}
 			val textReplaceList = Common.convertTextReplaceStringToList(ttsTextReplace)
 			for (pair in textReplaceList) {
 				ttsMessage = ttsMessage!!.replace(
@@ -116,8 +134,10 @@ data class NotificationInfo(
 		}
 		if (ttsMessage != null) {
 			try {
-				val maxLength = prefs.getString(KEY_MAX_LENGTH, null)
-					?.takeIf { it.isNotEmpty() }?.toInt() ?: 0
+				val maxLength = if (isComposePreview) 0 else {
+					prefs.getString(KEY_MAX_LENGTH, null)
+						?.takeIf { it.isNotEmpty() }?.toInt() ?: 0
+				}
 				if (maxLength > 0) {
 					ttsMessage = ttsMessage!!.substring(0, min(maxLength, ttsMessage!!.length))
 				}
@@ -126,22 +146,6 @@ data class NotificationInfo(
 			}
 		}
 	}
-
-	/**
-	 * Builds a string from the various notification texts to be displayed in [NotifyList].
-	 * @return The string containing notification details.
-	 */
-	val logMessage: String
-		get() {
-			val logBuilder = StringBuilder()
-			for (s in arrayOf(ticker, subtext, contentTitle, contentText, contentInfoText)) {
-				if (!s.isNullOrEmpty()) {
-					if (logBuilder.isNotEmpty()) logBuilder.append("\n")
-					logBuilder.append(s)
-				}
-			}
-			return logBuilder.toString()
-		}
 
 	/**
 	 * Gets the reasons this notification was ignored as a single string.

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,9 @@
  */
 package com.pilot51.voicenotify
 
+import android.content.Context
 import android.provider.BaseColumns
+import android.widget.Toast
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
@@ -51,11 +53,22 @@ data class App(
 		return this
 	}
 
-	fun setEnabled(enable: Boolean, updateDb: Boolean) {
+	fun setEnabled(enable: Boolean, updateDb: Boolean = true) {
 		enabled = enable
-		CoroutineScope(Dispatchers.IO).launch {
-			if (updateDb) db.appDao.updateAppEnable(this@App)
+		if (updateDb) CoroutineScope(Dispatchers.IO).launch {
+			db.appDao.updateAppEnable(this@App)
 		}
+	}
+
+	fun setEnabledWithToast(enable: Boolean, context: Context) {
+		setEnabled(enable)
+		Toast.makeText(context,
+			context.getString(
+				if (enable) R.string.app_is_not_ignored else R.string.app_is_ignored,
+				label
+			),
+			Toast.LENGTH_SHORT
+		).show()
 	}
 
 	/** Removes self from database. */
