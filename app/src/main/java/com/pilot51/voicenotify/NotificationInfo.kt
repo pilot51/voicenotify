@@ -17,6 +17,7 @@ package com.pilot51.voicenotify
 
 import android.app.Notification
 import android.util.Log
+import androidx.core.app.NotificationCompat
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_TTS_STRING
 import com.pilot51.voicenotify.PreferenceHelper.KEY_MAX_LENGTH
 import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STRING
@@ -38,24 +39,32 @@ data class NotificationInfo(
 	val app: App?,
 	private val notification: Notification
 ) {
+	private val extras by notification::extras
+	val id = extras.getInt(NotificationCompat.EXTRA_NOTIFICATION_ID)
+	val category: String? = notification.category
+	val progress = extras.getInt(Notification.EXTRA_PROGRESS).takeUnless { it == 0 }
+	val progressMax = extras.getInt(Notification.EXTRA_PROGRESS_MAX).takeUnless { it == 0 }
+	val progressIndeterminate = extras.getBoolean(Notification.EXTRA_PROGRESS_INDETERMINATE)
 	/** The notification's ticker message. */
 	val ticker = notification.tickerText?.toString()
 	/** The notification's subtext. */
-	val subtext: String?
+	val subtext = extras.getCharSequence(Notification.EXTRA_SUB_TEXT)?.toString()
 	/** The notification's content title. */
-	val contentTitle: String?
+	val contentTitle = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString()
 	/** The notification's content text. */
-	val contentText: String?
+	val contentText = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()
 	/** The notification's content info. */
-	val contentInfoText: String?
+	val contentInfoText = extras.getCharSequence(Notification.EXTRA_INFO_TEXT)?.toString()
 	/** The notification's big content title. */
-	val bigContentTitle: String?
+	val bigContentTitle = extras.getCharSequence(Notification.EXTRA_TITLE_BIG)?.toString()
 	/** The notification's big content summary. */
-	val bigContentSummary: String?
+	val bigContentSummary = extras.getCharSequence(Notification.EXTRA_SUMMARY_TEXT)?.toString()
 	/** The notification's big content text. */
-	val bigContentText: String?
+	val bigContentText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString()
+	/** The notification's lines of text for [Notification.InboxStyle]. */
+	val textLines: Array<CharSequence>? = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)
 	/** Calendar representing the time that this instance of NotificationInfo was created. */
-	val calendar: Calendar
+	val calendar: Calendar = Calendar.getInstance()
 	var isEmpty = false
 		private set
 	/** Set of reasons this notification was ignored, or an empty set if not ignored. */
@@ -67,22 +76,13 @@ data class NotificationInfo(
 	 * Default is red for never spoken.
 	 */
 	var isInterrupted = false
-	/** The Ignore Repeats setting in seconds, set by [.addIgnoreReasonIdentical]. */
+	/** The Ignore Repeats setting in seconds, set by [addIgnoreReasonIdentical]. */
 	private var ignoreRepeatSeconds = -1
 	/** The message that was or shall be spoken. */
 	var ttsMessage: String? = null
 		private set
 
 	init {
-		val extras = notification.extras
-		subtext = extras.getString(Notification.EXTRA_SUB_TEXT)
-		contentTitle = extras.getString(Notification.EXTRA_TITLE)
-		contentText = extras.getCharSequence(Notification.EXTRA_TEXT)?.toString()
-		contentInfoText = extras.getString(Notification.EXTRA_INFO_TEXT)
-		bigContentTitle = extras.getString(Notification.EXTRA_TITLE_BIG)
-		bigContentSummary = extras.getString(Notification.EXTRA_SUMMARY_TEXT)
-		bigContentText = extras.getString(Notification.EXTRA_BIG_TEXT)
-		calendar = Calendar.getInstance()
 		buildTtsMessage()
 	}
 
@@ -93,15 +93,16 @@ data class NotificationInfo(
 			prefs.getString(KEY_TTS_STRING, null) ?: DEFAULT_TTS_STRING
 		}
 		val ttsUnformattedMsg = ttsStringPref
-			.replace("#a", "%1\$s") // App Label
-			.replace("#t", "%2\$s") // Ticker
-			.replace("#s", "%3\$s") // Subtext
-			.replace("#c", "%4\$s") // Content Title
-			.replace("#m", "%5\$s") // Content Text
-			.replace("#i", "%6\$s") // Content Info Text
-			.replace("#h", "%7\$s") // Big Content Title
-			.replace("#y", "%8\$s") // Big Content Summary
-			.replace("#b", "%9\$s") // Big Content Text
+			.replace("#A", "%1\$s", true) // App Label
+			.replace("#T", "%2\$s", true) // Ticker
+			.replace("#S", "%3\$s", true) // Subtext
+			.replace("#C", "%4\$s", true) // Content Title
+			.replace("#M", "%5\$s", true) // Content Text
+			.replace("#I", "%6\$s", true) // Content Info Text
+			.replace("#H", "%7\$s", true) // Big Content Title
+			.replace("#Y", "%8\$s", true) // Big Content Summary
+			.replace("#B", "%9\$s", true) // Big Content Text
+			.replace("#L", "%10\$s", true) // Text Lines
 		try {
 			ttsMessage = String.format(ttsUnformattedMsg,
 				app?.label ?: "",
@@ -112,7 +113,8 @@ data class NotificationInfo(
 				contentInfoText ?: "",
 				bigContentTitle ?: "",
 				bigContentSummary ?: "",
-				bigContentText ?: "")
+				bigContentText ?: "",
+				textLines?.joinToString("\n") ?: "")
 		} catch (e: IllegalFormatException) {
 			Log.w(TAG, "Error formatting custom TTS string!")
 			e.printStackTrace()

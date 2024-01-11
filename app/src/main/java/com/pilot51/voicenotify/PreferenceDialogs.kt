@@ -79,8 +79,8 @@ import com.pilot51.voicenotify.PreferenceHelper.prefs
 fun ShakeThresholdDialog(onDismiss: () -> Unit) {
 	TextEditDialog(
 		titleRes = R.string.shake_to_silence,
-		messageRes = R.string.shake_to_silence_dialog_msg,
-		initialText = prefs.getString(KEY_SHAKE_THRESHOLD, null) ?: DEFAULT_SHAKE_THRESHOLD,
+		message = stringResource(R.string.shake_to_silence_dialog_msg, DEFAULT_SHAKE_THRESHOLD),
+		initialText = prefs.getString(KEY_SHAKE_THRESHOLD, null) ?: DEFAULT_SHAKE_THRESHOLD.toString(),
 		keyboardType = KeyboardType.Decimal,
 		onDismiss = onDismiss
 	) {
@@ -117,7 +117,7 @@ fun IgnoreRepeatsDialog(onDismiss: () -> Unit) {
 	TextEditDialog(
 		titleRes = R.string.ignore_repeat,
 		messageRes = R.string.ignore_repeat_dialog_msg,
-		initialText = prefs.getString(KEY_IGNORE_REPEAT, null) ?: DEFAULT_IGNORE_REPEAT,
+		initialText = prefs.getString(KEY_IGNORE_REPEAT, null) ?: DEFAULT_IGNORE_REPEAT.toString(),
 		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss
 	) {
@@ -130,7 +130,7 @@ fun TtsMessageDialog(onDismiss: () -> Unit) {
 	val text = prefs.getString(KEY_TTS_STRING, null) ?: DEFAULT_TTS_STRING
 	TextEditDialog(
 		titleRes = R.string.tts_message,
-		messageRes = R.string.tts_message_dialog,
+		message = stringResource(R.string.tts_message_dialog, DEFAULT_TTS_STRING),
 		initialText = text,
 		onDismiss = onDismiss
 	) {
@@ -143,7 +143,7 @@ fun TtsMaxLengthDialog(onDismiss: () -> Unit) {
 	TextEditDialog(
 		titleRes = R.string.max_length,
 		messageRes = R.string.max_length_dialog_msg,
-		initialText = prefs.getString(KEY_MAX_LENGTH, null) ?: DEFAULT_MAX_LENGTH,
+		initialText = prefs.getString(KEY_MAX_LENGTH, null) ?: DEFAULT_MAX_LENGTH.toString(),
 		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss
 	) {
@@ -177,10 +177,16 @@ fun TtsRepeatDialog(onDismiss: () -> Unit) {
 	}
 }
 
+/**
+ * A dialog with a text field.
+ * [title] and [message] are required if their respective [titleRes] or [messageRes] isn't set.
+ */
 @Composable
 private fun TextEditDialog(
-	@StringRes titleRes: Int,
-	@StringRes messageRes: Int,
+	@StringRes titleRes: Int = 0,
+	@StringRes messageRes: Int = 0,
+	title: String = titleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
+	message: String = messageRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
 	initialText: String,
 	keyboardType: KeyboardType = KeyboardOptions.Default.keyboardType,
 	onDismiss: () -> Unit,
@@ -204,13 +210,18 @@ private fun TextEditDialog(
 				Text(stringResource(android.R.string.cancel))
 			}
 		},
-		title = { Text(stringResource(titleRes)) },
+		title = { Text(title) },
 		text = {
 			val decimalPattern = remember { Regex("^\\d*\\.?\\d*\$") }
 			Column(
 				verticalArrangement = Arrangement.spacedBy(20.dp)
 			) {
-				Text(stringResource(messageRes))
+				Text(
+					text = message,
+					modifier = Modifier
+						.weight(1f, false)
+						.verticalScroll(rememberScrollState())
+				)
 				TextField(
 					value = textValue,
 					onValueChange = {
@@ -232,25 +243,25 @@ private fun TextEditDialog(
 fun TtsStreamDialog(onDismiss: () -> Unit) {
 	val streamNames = stringArrayResource(R.array.stream_name)
 	val streamValues = arrayOf(
-		AudioManager.STREAM_MUSIC.toString(),
-		AudioManager.STREAM_NOTIFICATION.toString(),
-		AudioManager.STREAM_VOICE_CALL.toString(),
-		AudioManager.STREAM_RING.toString(),
-		AudioManager.STREAM_ALARM.toString()
+		AudioManager.STREAM_MUSIC,
+		AudioManager.STREAM_NOTIFICATION,
+		AudioManager.STREAM_VOICE_CALL,
+		AudioManager.STREAM_RING,
+		AudioManager.STREAM_ALARM
 	)
 	val isPreview = LocalInspectionMode.current
 	val savedValue = remember {
 		if (isPreview) DEFAULT_TTS_STREAM
-		else prefs.getString(KEY_TTS_STREAM, null) ?: DEFAULT_TTS_STREAM
+		else prefs.getString(KEY_TTS_STREAM, null)?.toIntOrNull() ?: DEFAULT_TTS_STREAM
 	}
-	var value by remember { mutableStateOf(savedValue) }
+	var value by remember { mutableIntStateOf(savedValue) }
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
 			TextButton(
 				onClick = {
 					if (value != savedValue) {
-						prefs.edit().putString(KEY_TTS_STREAM, value).apply()
+						prefs.edit().putString(KEY_TTS_STREAM, value.toString()).apply()
 					}
 					onDismiss()
 				}
@@ -556,10 +567,9 @@ fun SupportDialog(onDismiss: () -> Unit) {
 			},
 			title = { Text(stringResource(R.string.support_privacy)) },
 			text = {
-				val scrollState = rememberScrollState()
 				Text(
 					text = stringResource(R.string.support_privacy_message),
-					modifier = Modifier.verticalScroll(scrollState)
+					modifier = Modifier.verticalScroll(rememberScrollState())
 				)
 			}
 		)

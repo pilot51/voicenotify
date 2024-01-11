@@ -45,7 +45,7 @@
     <string name="shake_to_silence_summary">Ubah sensitiviti tetapan Goyang-Ke-Senyap</string>
     <string name="shake_to_silence_dialog_msg">Nilai rendah adalah lebih sensitif.
 \n
-\nAsal: 100
+\nAsal: %d
 \nKosongkan untuk nyahaktif.</string>
     <string-array name="stream_name">
         <item>Media</item>

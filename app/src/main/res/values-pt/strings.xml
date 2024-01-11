@@ -30,7 +30,7 @@
     <string name="shake_to_silence_summary">Ajustar o limite de sensibilidade para o Agitar-Para-Sossegar.</string>
     <string name="shake_to_silence_dialog_msg">Menores valores indicam maior sensibilidade.
 \n
-\nPadrão: 100
+\nPadrão: %d
 \nValor vazio para desabilitar.</string>
     <string-array name="stream_name">
         <item>Mídia</item>
@@ -69,7 +69,7 @@
     <string name="test_summary">Criar uma notificação com atraso de 5 segundos para testar as configurações atuais.</string>
     <string name="test_ignored">Voice Notify está como ignorado na lista de aplicativos.
 \nO teste correrá mas nenhuma notificação será falada.</string>
-    <string name="notify_log_summary">Lista as últimas as 20 notificações.
+    <string name="notify_log_summary">Lista as últimas as %d notificações.
 \nExibe horário, nome do aplicativo, mensagem e motivos considerados para ignorar.</string>
     <string name="support_summary">Doação, avaliação/comentário, traduções, código fonte ou contato com o desenvolvedor.</string>
     <!-- TextReplacePreference -->

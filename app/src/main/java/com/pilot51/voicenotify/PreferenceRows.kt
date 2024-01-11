@@ -44,24 +44,17 @@ import kotlin.reflect.KProperty
 
 // Simplified and heavily modified from https://github.com/alorma/Compose-Settings
 
-@Composable
-fun PreferenceRowLink(
-	@StringRes title: Int,
-	@StringRes subtitle: Int,
-	enabled: Boolean = true,
-	onClick: () -> Unit
-) = PreferenceRowLink(
-	title = stringResource(title),
-	subtitle = stringResource(subtitle),
-	enabled = enabled,
-	onClick = onClick
-)
-
+/**
+ * A preference row with click callbacks.
+ * [title] and [subtitle] are required if their respective [titleRes] or [subtitleRes] isn't set.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PreferenceRowLink(
-	title: String,
-	subtitle: String,
+	@StringRes titleRes: Int = 0,
+	@StringRes subtitleRes: Int = 0,
+	title: String = titleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
+	subtitle: String = subtitleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
 	enabled: Boolean = true,
 	onClick: () -> Unit,
 	onLongClick: (() -> Unit)? = null
@@ -87,8 +80,8 @@ fun PreferenceRowLink(
 
 @Composable
 fun PreferenceRowCheckbox(
-	@StringRes title: Int,
-	@StringRes subtitle: Int,
+	@StringRes titleRes: Int,
+	@StringRes subtitleRes: Int,
 	key: String,
 	default: Boolean
 ) {
@@ -108,8 +101,8 @@ fun PreferenceRowCheckbox(
 		verticalAlignment = Alignment.CenterVertically
 	) {
 		PreferenceRowScaffold(
-			title = stringResource(title),
-			subtitle = stringResource(subtitle),
+			title = stringResource(titleRes),
+			subtitle = stringResource(subtitleRes),
 			action = {
 				Checkbox(
 					checked = prefValue,
@@ -201,8 +194,8 @@ private inline operator fun PreferenceBooleanState.setValue(
 private fun SettingsMenuLinkPreview() {
 	AppTheme {
 		PreferenceRowLink(
-			title = R.string.tts_settings,
-			subtitle = R.string.tts_settings_summary_fail,
+			titleRes = R.string.tts_settings,
+			subtitleRes = R.string.tts_settings_summary_fail,
 			enabled = false,
 			onClick = {}
 		)
@@ -215,8 +208,8 @@ private fun SettingsMenuLinkPreview() {
 private fun SettingsCheckboxCheckedPreview() {
 	AppTheme {
 		PreferenceRowCheckbox(
-			title = R.string.ignore_groups,
-			subtitle = R.string.ignore_groups_summary_on,
+			titleRes = R.string.ignore_groups,
+			subtitleRes = R.string.ignore_groups_summary_on,
 			key = "isPreview",
 			default = true
 		)
@@ -229,8 +222,8 @@ private fun SettingsCheckboxCheckedPreview() {
 private fun SettingsCheckboxUncheckedPreview() {
 	AppTheme {
 		PreferenceRowCheckbox(
-			title = R.string.ignore_groups,
-			subtitle = R.string.ignore_groups_summary_off,
+			titleRes = R.string.ignore_groups,
+			subtitleRes = R.string.ignore_groups_summary_off,
 			key = "isPreview",
 			default = false
 		)

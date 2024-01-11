@@ -30,7 +30,7 @@
     <string name="shake_to_silence_summary">Pas de gevoeligheid aan die gebruikt wordt bij het schudden.</string>
     <string name="shake_to_silence_dialog_msg">Hoe lager de waarde hoe gevoeliger
 \n
-\nStandaard: 100
+\nStandaard: %d
 \nLeeg is uitgeschakeld.</string>
     <string-array name="stream_name">
         <item>Media</item>
@@ -69,7 +69,7 @@
     <string name="test_summary">Stuur een test notificatie (met 5 seconden vertraging) om de huidige instellingen te testen.</string>
     <string name="test_ignored">Voice Notify wordt genegeerd in de App Lijst.
 \nTest kan worden uitgevoerd, maar wordt niet uitgesproken.</string>
-    <string name="notify_log_summary">Lijst van de laatste 20 meldingen.
+    <string name="notify_log_summary">Lijst van de laatste %d meldingen.
 \nGeeft de tijd, app naam, bericht en de reden waarom er notificaties zijn overgeslagen.</string>
     <string name="support_summary">Doneren, waarderen/commentaar, vertalingen, broncode, of contact opnemen met de ontwikkelaar.</string>
     <!-- TextReplacePreference -->

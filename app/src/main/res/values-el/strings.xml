@@ -49,7 +49,7 @@
     <string name="shake_to_silence_summary">Ρύθμιση ευαισθησίας της ανακίνησης για σίγαση.</string>
     <string name="shake_to_silence_dialog_msg">Χαμηλότερες τιμές αυξάνουν την ευαισθησία.
 \n
-\nΠροκαθορισμένο: 100
+\nΠροκαθορισμένο: %d
 \nΚενό για απενεργοποίηση.</string>
     <string-array name="stream_name">
         <item>Αναπαραγωγή</item>
@@ -92,7 +92,7 @@
     <string name="test_summary">Δείτε ένα δείγμα (με καθυστέρηση 5 δευτερολέπτων) εκφώνησης ανακοίνωσης με τις τωρινές σας ρυθμίσεις.</string>
     <string name="test_ignored">Η εφαρμογή Voice Notify είναι στην λίστα αγνοημένων εφαρμογών.
 \nΘα δείτε εμφάνιση του δείγματος, αλλα χωρίς ηχητική ανακοίνωση.</string>
-    <string name="notify_log_summary">Λίστα τελευταίων 20 ανακοινώσεων.
+    <string name="notify_log_summary">Λίστα τελευταίων %d ανακοινώσεων.
 \nΕμφανίζει ώρα, όνομα εφαρμογής, μήνυμα και λόγους αγνόησης.</string>
     <string name="support_summary">Συνισφορά, αξιολόγηση/σχολιασμός, μετάφραση, πηγαίος κώδικας ή επικοινωνήστε με τον προγραμματισμό.</string>
     <!-- TextReplacePreference -->

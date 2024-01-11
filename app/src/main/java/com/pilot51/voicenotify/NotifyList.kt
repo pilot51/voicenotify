@@ -39,7 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
 object NotifyList {
-	private const val HISTORY_LIMIT = 20
+	const val HISTORY_LIMIT = 100
 	private val list = mutableStateListOf<NotificationInfo>()
 
 	fun addNotification(info: NotificationInfo) {
@@ -112,16 +112,14 @@ private fun Item(item: NotificationInfo) {
 	var showDetailDialog by remember(item) { mutableStateOf(false) }
 	var showIgnoreDialog by remember(item) { mutableStateOf(false) }
 	val logMessage = remember(item) {
-		item.run {
-			val logBuilder = StringBuilder()
-			arrayOf(ticker, subtext, contentTitle, contentText, contentInfoText).forEach {
+		StringBuilder().apply {
+			arrayOf(item.contentTitle, item.contentText).forEach {
 				if (!it.isNullOrEmpty()) {
-					if (logBuilder.isNotEmpty()) logBuilder.append("\n")
-					logBuilder.append(it)
+					if (isNotEmpty()) appendLine()
+					append(it)
 				}
 			}
-			logBuilder.toString()
-		}
+		}.toString()
 	}
 	Column(modifier = Modifier
 		.fillMaxWidth()
@@ -174,7 +172,6 @@ private fun DetailDialog(
 	onDismiss: () -> Unit
 ) {
 	val context = LocalContext.current
-	val scrollState = rememberScrollState()
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = { },
@@ -219,7 +216,7 @@ private fun DetailDialog(
 					}
 				}
 				Column(
-					modifier = Modifier.verticalScroll(scrollState),
+					modifier = Modifier.verticalScroll(rememberScrollState()),
 					horizontalAlignment = Alignment.CenterHorizontally,
 					verticalArrangement = Arrangement.spacedBy(10.dp)
 				) {
@@ -247,9 +244,29 @@ private fun DetailDialog(
 					item.bigContentText?.let {
 						NotificationPart(R.string.big_content_text, it)
 					}
+					item.textLines?.let {
+						NotificationPart(R.string.text_lines, it.joinToString("\n"))
+					}
 					item.ttsMessage?.let {
 						NotificationPart(R.string.tts_message, it)
 					}
+					NotificationPart(
+						partName = R.string.metadata,
+						text = StringBuilder(stringResource(R.string.metadata_id, item.id)).apply {
+							item.category?.let {
+								appendLine()
+								append(stringResource(R.string.metadata_category, it))
+							}
+							item.progress?.let {
+								appendLine()
+								append(if (item.progressIndeterminate) {
+									stringResource(R.string.metadata_progress_indeterminate)
+								} else {
+									stringResource(R.string.metadata_progress, it, item.progressMax!!)
+								})
+							}
+						}.toString()
+					)
 					if (item.ignoreReasons.isNotEmpty()) {
 						val interruptedColor = if (isSystemInDarkTheme()) {
 							Color.Yellow
@@ -328,13 +345,17 @@ private fun previewNotification() = Notification().apply {
 	`when` = Long.MIN_VALUE
 	tickerText = "Ticker"
 	extras.apply {
-		putString(Notification.EXTRA_SUB_TEXT, stringResource(R.string.test_subtext))
-		putString(Notification.EXTRA_TITLE, stringResource(R.string.test_content_title))
-		putString(Notification.EXTRA_TEXT, stringResource(R.string.test_content_text))
-		putString(Notification.EXTRA_INFO_TEXT, stringResource(R.string.test_content_info))
-		putString(Notification.EXTRA_TITLE_BIG, stringResource(R.string.test_big_content_title))
-		putString(Notification.EXTRA_SUMMARY_TEXT, stringResource(R.string.test_big_content_summary))
-		putString(Notification.EXTRA_BIG_TEXT, stringResource(R.string.test_big_content_text))
+		putCharSequence(Notification.EXTRA_SUB_TEXT, stringResource(R.string.test_subtext))
+		putCharSequence(Notification.EXTRA_TITLE, stringResource(R.string.test_content_title))
+		putCharSequence(Notification.EXTRA_TEXT, stringResource(R.string.test_content_text))
+		putCharSequence(Notification.EXTRA_INFO_TEXT, stringResource(R.string.test_content_info))
+		putCharSequence(Notification.EXTRA_TITLE_BIG, stringResource(R.string.test_big_content_title))
+		putCharSequence(Notification.EXTRA_SUMMARY_TEXT, stringResource(R.string.test_big_content_summary))
+		putCharSequence(Notification.EXTRA_BIG_TEXT, stringResource(R.string.test_big_content_text))
+		putCharSequenceArray(Notification.EXTRA_TEXT_LINES,
+			stringResource(R.string.test_text_lines).split("\n").toTypedArray())
+		putInt(Notification.EXTRA_PROGRESS, 50)
+		putInt(Notification.EXTRA_PROGRESS_MAX, 100)
 	}
 }
 

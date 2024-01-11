@@ -6,7 +6,7 @@
     <string name="require_strings">Påkrevd tekst</string>
     <string name="shake_to_silence_dialog_msg">Lavere verdier er mer sensitive.
 \n
-\nForvalg: 100
+\nForvalg: %d
 \nLa stå tom for å skru av.</string>
     <string name="tts_text_replace_dialog">Erstatt tekst å lese opp, for å tilpasse hvordan tekst til tale uttaler ord eller erstatt tekst av andre grunner.
 \n
@@ -121,7 +121,7 @@
     <string name="max_length_summary">Maks. meldingslengde å lese opp. Lengre meldinger forkortes.</string>
     <string name="device_state">Enhetstilstander</string>
     <string name="test_ticker">Dette er en løpemelding</string>
-    <string name="notify_log_summary">Opplisting av de siste 20 merknadene.
+    <string name="notify_log_summary">Opplisting av de siste %d merknadene.
 \nViser tid, programnavn, melding og ignoreringsgrunner.</string>
     <string name="support_summary">Vurder og gi tilbakemelding, send e-post til utvikleren, gemenskapssludring, oversettelser, kildekode, feilsporer, personvernspraksis</string>
     <string name="text_replace_error_duplicate">Duplikat. Vil ikke bli lagret.</string>

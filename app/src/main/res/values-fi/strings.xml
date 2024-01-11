@@ -42,7 +42,7 @@
     <string name="shake_to_silence_summary">Säädä ravista hiljentääksesi toiminnon herkkyyden kynnystä</string>
     <string name="shake_to_silence_dialog_msg">Matalemmat arvot ovat enemmän herkkiä.
 \n
-\nOletus: 100
+\nOletus: %d
 \nTyhjä poistaa käytöstä.</string>
     <string name="ignore_strings">Ohita teksti</string>
     <string name="ignore_strings_summary">Ohita ilmoitukset, jotka sisältävät tietyn tekstin viestissä</string>
@@ -68,7 +68,7 @@
     <string name="test_ignored">Voice Notify ohitetaan sovellusluettelossa.
 \nTesti suoritetaan, mutta ilmoitusta ei puhuta.</string>
     <string name="support_summary">Arvostele ja arvioi, lähetä sähköpostia kehittäjälle, yhteisöchatti, käännökset, lähdekoodi, ongelman jäljitys, tietosuojakäytäntö</string>
-    <string name="notify_log_summary">Luettele viimeiset 20 ilmoitusta.
+    <string name="notify_log_summary">Luettele viimeiset %d ilmoitusta.
 \nNäyttää ajan, sovelluksen nimen, viestin ja ohittamisen syyt.</string>
     <string name="text_replace_error_duplicate">Kaksoiskappale! Ei tallenneta.</string>
     <string name="test">Testi</string>

@@ -30,7 +30,7 @@
     <string name="shake_to_silence_summary">Nastavte práh citlivosti pro Umlčení.</string>
     <string name="shake_to_silence_dialog_msg">Nižší hodnoty jsou citlivější.
 \n
-\nVýchozí: 100
+\nVýchozí: %d
 \nPrázdné zakázat.</string>
     <string-array name="stream_name">
         <item>Média</item>
@@ -69,7 +69,7 @@
     <string name="test_summary">Zkouška oznámení (zpoždění 5 sekund) pro otestování aktuálního nastavení.</string>
     <string name="test_ignored">Voice Notify je ignorován v seznamu aplikací.
 \nZkouška bude zahájena, ale oznámení nebude přečteno.</string>
-    <string name="notify_log_summary">Seznam posledních 20 oznámení.
+    <string name="notify_log_summary">Seznam posledních %d oznámení.
 \nZobrazí čas, název aplikace a důvody pro ignorování.</string>
     <string name="support_summary">Darovat, hodnocení/komentář, překlady, zdrojový kód, nebo kontaktujte vývojáře.</string>
     <!-- TextReplacePreference -->

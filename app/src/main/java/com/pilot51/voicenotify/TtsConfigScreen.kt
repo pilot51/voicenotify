@@ -48,39 +48,39 @@ fun TtsConfigScreen() {
 	var showTtsRepeat by remember { mutableStateOf(false) }
 	Column(modifier = Modifier.fillMaxSize()) {
 		PreferenceRowLink(
-			title = stringResource(R.string.tts_settings),
+			titleRes = R.string.tts_settings,
 			subtitle = ttsSummary,
 			enabled = ttsEnabled,
 			onClick = { ttsIntent?.let { context.startActivity(it) } }
 		)
 		PreferenceRowLink(
-			title = R.string.tts_message,
-			subtitle = R.string.tts_message_summary,
+			titleRes = R.string.tts_message,
+			subtitleRes = R.string.tts_message_summary,
 			onClick = { showTtsMessage = true }
 		)
 		PreferenceRowLink(
-			title = R.string.tts_text_replace,
-			subtitle = R.string.tts_text_replace_summary,
+			titleRes = R.string.tts_text_replace,
+			subtitleRes = R.string.tts_text_replace_summary,
 			onClick = { showTextReplaceDialog = true }
 		)
 		PreferenceRowLink(
-			title = R.string.max_length,
-			subtitle = R.string.max_length_summary,
+			titleRes = R.string.max_length,
+			subtitleRes = R.string.max_length_summary,
 			onClick = { showMaxMessage = true }
 		)
 		PreferenceRowLink(
-			title = R.string.tts_stream,
-			subtitle = R.string.tts_stream_summary,
+			titleRes = R.string.tts_stream,
+			subtitleRes = R.string.tts_stream_summary,
 			onClick = { showTtsStream = true }
 		)
 		PreferenceRowLink(
-			title = R.string.tts_delay,
-			subtitle = R.string.tts_delay_summary,
+			titleRes = R.string.tts_delay,
+			subtitleRes = R.string.tts_delay_summary,
 			onClick = { showTtsDelay = true }
 		)
 		PreferenceRowLink(
-			title = R.string.tts_repeat,
-			subtitle = R.string.tts_repeat_summary,
+			titleRes = R.string.tts_repeat,
+			subtitleRes = R.string.tts_repeat_summary,
 			onClick = { showTtsRepeat = true }
 		)
 	}

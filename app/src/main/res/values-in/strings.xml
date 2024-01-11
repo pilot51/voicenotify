@@ -49,7 +49,7 @@
     <string name="shake_to_silence_summary">Atur nilai kepekaan Buncang-Tuk-Bungkam</string>
     <string name="shake_to_silence_dialog_msg">Semakin rendah nilai makan semakin peka.
 \n
-\nAsali:100
+\nAsali:%d
 \nKosong untuk mematikan.</string>
     <string-array name="stream_name">
         <item>Media</item>
@@ -96,7 +96,7 @@
     <string name="test_summary">Kirim sebuah pemberitahuan (jeda 5 detik) untuk menguji pengaturan</string>
     <string name="test_ignored">Pemberitahuan Suara diabaikan dalam Daftar Aplikasi.
 \nTeks akan dijalankan, tapi pemberitahuan tidak akan diucapkan.</string>
-    <string name="notify_log_summary">Daftar 20 pemberitahuan terakhir.
+    <string name="notify_log_summary">Daftar %d pemberitahuan terakhir.
 \nMenampilkan waktu, nama aplikasi, pesan, dan pesan diabaikan.</string>
     <string name="support_summary">Nilai &amp; ulasan, email pengembang, obrolan komunitas, terjemahan, kode sumber, pelacak masalah, kebijakan privasi</string>
     <!-- TextReplacePreference -->

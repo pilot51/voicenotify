@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,19 +56,19 @@ object PreferenceHelper {
 
 	// Defaults
 	const val DEFAULT_AUDIO_FOCUS = true
-	const val DEFAULT_SHAKE_THRESHOLD = "100"
+	const val DEFAULT_SHAKE_THRESHOLD = 100
 	const val DEFAULT_IGNORE_EMPTY = true
 	const val DEFAULT_IGNORE_GROUPS = true
-	const val DEFAULT_IGNORE_REPEAT = "10"
+	const val DEFAULT_IGNORE_REPEAT = 10
 	const val DEFAULT_QUIET_TIME = 0
 	const val DEFAULT_SPEAK_SCREEN_OFF = true
 	const val DEFAULT_SPEAK_SCREEN_ON = true
 	const val DEFAULT_SPEAK_HEADSET_OFF = true
 	const val DEFAULT_SPEAK_HEADSET_ON = true
 	const val DEFAULT_SPEAK_SILENT_ON = false
-	const val DEFAULT_TTS_STRING = "#a. #c. #m."
-	const val DEFAULT_MAX_LENGTH = "100"
-	const val DEFAULT_TTS_STREAM = AudioManager.STREAM_MUSIC.toString()
+	const val DEFAULT_TTS_STRING = "#A\n#C\n#M"
+	const val DEFAULT_MAX_LENGTH = 500
+	const val DEFAULT_TTS_STREAM = AudioManager.STREAM_MUSIC
 	const val DEFAULT_APP_DEFAULT_ENABLE = true
 	const val DEFAULT_IS_SUSPENDED = false
 
@@ -80,19 +80,19 @@ object PreferenceHelper {
 	}
 
 	/** @return The selected audio stream matching the `STREAM_` constant from [AudioManager]. */
-	fun getSelectedAudioStream() = prefs.getString(KEY_TTS_STREAM, DEFAULT_TTS_STREAM)!!.toInt()
+	fun getSelectedAudioStream() = prefs.getString(KEY_TTS_STREAM, null)?.toIntOrNull() ?: DEFAULT_TTS_STREAM
 
 	private fun SharedPreferences.initDefaultPrefs() {
 		if (!contains(KEY_SHAKE_THRESHOLD)) {
 			edit {
 				initPref(this, KEY_AUDIO_FOCUS, DEFAULT_AUDIO_FOCUS)
-				initPref(this, KEY_SHAKE_THRESHOLD, DEFAULT_SHAKE_THRESHOLD)
+				initPref(this, KEY_SHAKE_THRESHOLD, DEFAULT_SHAKE_THRESHOLD.toString())
 				initPref(this, KEY_IGNORE_EMPTY, DEFAULT_IGNORE_EMPTY)
 				initPref(this, KEY_IGNORE_GROUPS, DEFAULT_IGNORE_GROUPS)
-				initPref(this, KEY_IGNORE_REPEAT, DEFAULT_IGNORE_REPEAT)
+				initPref(this, KEY_IGNORE_REPEAT, DEFAULT_IGNORE_REPEAT.toString())
 				initPref(this, KEY_TTS_STRING, DEFAULT_TTS_STRING)
-				initPref(this, KEY_MAX_LENGTH, DEFAULT_MAX_LENGTH)
-				initPref(this, KEY_TTS_STREAM, DEFAULT_TTS_STREAM)
+				initPref(this, KEY_MAX_LENGTH, DEFAULT_MAX_LENGTH.toString())
+				initPref(this, KEY_TTS_STREAM, DEFAULT_TTS_STREAM.toString())
 				apply()
 			}
 		}
