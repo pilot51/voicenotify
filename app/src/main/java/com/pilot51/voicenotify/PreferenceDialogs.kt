@@ -16,6 +16,7 @@
 package com.pilot51.voicenotify
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.media.AudioManager
@@ -74,6 +75,15 @@ import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_REPEAT
 import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STREAM
 import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STRING
 import com.pilot51.voicenotify.PreferenceHelper.prefs
+
+private fun openBrowser(context: Context, url: String) {
+	try {
+		context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+	} catch (e: ActivityNotFoundException) {
+		e.printStackTrace()
+		Toast.makeText(context, R.string.error_browser, Toast.LENGTH_LONG).show()
+	}
+}
 
 @Composable
 fun ShakeThresholdDialog(onDismiss: () -> Unit) {
@@ -468,10 +478,7 @@ fun SupportDialog(onDismiss: () -> Unit) {
 							context.startActivity(iMarket)
 						} catch (e: ActivityNotFoundException) {
 							e.printStackTrace()
-							Toast
-								.makeText(context, R.string.error_market,
-									Toast.LENGTH_LONG)
-								.show()
+							Toast.makeText(context, R.string.error_market, Toast.LENGTH_LONG).show()
 						}
 					}
 					supportItem(
@@ -494,52 +501,29 @@ fun SupportDialog(onDismiss: () -> Unit) {
 							context.startActivity(iEmail)
 						} catch (e: ActivityNotFoundException) {
 							e.printStackTrace()
-							Toast
-								.makeText(context, R.string.error_email,
-									Toast.LENGTH_LONG)
-								.show()
+							Toast.makeText(context, R.string.error_email, Toast.LENGTH_LONG).show()
 						}
 					}
 					supportItem(
 						title = R.string.support_discord,
 						subtext = R.string.support_chat_subtext
 					) {
-						context.startActivity(
-							Intent(
-								Intent.ACTION_VIEW,
-								Uri.parse("https://discord.gg/W6XxGT8WG3")
-							)
-						)
+						openBrowser(context, "https://discord.gg/W6XxGT8WG3")
 					}
 					supportItem(
 						title = R.string.support_matrix,
 						subtext = R.string.support_chat_subtext
 					) {
-						context.startActivity(
-							Intent(
-								Intent.ACTION_VIEW,
-								Uri.parse("https://matrix.to/#/#voicenotify:p51.me")
-							)
-						)
+						openBrowser(context, "https://matrix.to/#/#voicenotify:p51.me")
 					}
 					supportItem(title = R.string.support_translations) {
-						context.startActivity(
-							Intent(
-								Intent.ACTION_VIEW,
-								Uri.parse("https://hosted.weblate.org/projects/voice-notify")
-							)
-						)
+						openBrowser(context, "https://hosted.weblate.org/projects/voice-notify")
 					}
 					supportItem(
 						title = R.string.support_github,
 						subtext = R.string.support_github_subtext
 					) {
-						context.startActivity(
-							Intent(
-								Intent.ACTION_VIEW,
-								Uri.parse("https://github.com/pilot51/voicenotify")
-							)
-						)
+						openBrowser(context, "https://github.com/pilot51/voicenotify")
 					}
 					supportItem(title = R.string.support_privacy) {
 						showPrivacy = true

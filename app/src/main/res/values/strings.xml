@@ -139,6 +139,7 @@
 \n• Read Phone State - Required to interrupt TTS if a phone call becomes active.</string>
 	<string name="error_market">Error: Unable to find Google Play Store installed.</string>
 	<string name="error_email">Error: Unable to find an installed email app.</string>
+	<string name="error_browser">Error: Unable to find an installed browser app.</string>
 
 	<!-- AppListScreen -->
 	<string name="close">Close</string>
