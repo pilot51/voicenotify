@@ -92,9 +92,15 @@ private fun LogDialog(
 
 @Composable
 private fun ItemList(list: List<NotificationInfo>) {
+	var detailDialogInfo by remember { mutableStateOf<NotificationInfo?>(null) }
+	var ignoreDialogApp by remember { mutableStateOf<App?>(null) }
 	LazyColumn(modifier = Modifier.fillMaxWidth()) {
 		itemsIndexed(list) { index, item ->
-			Item(item)
+			Item(
+				item = item,
+				onShowDetail = { detailDialogInfo = item },
+				onShowIgnore = { ignoreDialogApp = item.app }
+			)
 			if (index < list.lastIndex) {
 				Divider(
 					modifier = Modifier.padding(vertical = 16.dp),
@@ -104,13 +110,21 @@ private fun ItemList(list: List<NotificationInfo>) {
 			}
 		}
 	}
+	detailDialogInfo?.let {
+		DetailDialog(it) { detailDialogInfo = null }
+	}
+	ignoreDialogApp?.let {
+		IgnoreDialog(it) { ignoreDialogApp = null }
+	}
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun Item(item: NotificationInfo) {
-	var showDetailDialog by remember(item) { mutableStateOf(false) }
-	var showIgnoreDialog by remember(item) { mutableStateOf(false) }
+private fun Item(
+	item: NotificationInfo,
+	onShowDetail: () -> Unit,
+	onShowIgnore: () -> Unit
+) {
 	val logMessage = remember(item) {
 		StringBuilder().apply {
 			arrayOf(item.contentTitle, item.contentText).forEach {
@@ -124,8 +138,8 @@ private fun Item(item: NotificationInfo) {
 	Column(modifier = Modifier
 		.fillMaxWidth()
 		.combinedClickable(
-			onClick = { showDetailDialog = true },
-			onLongClick = { if (item.app != null) showIgnoreDialog = true }
+			onClick = onShowDetail,
+			onLongClick = item.app?.run { onShowIgnore }
 		)
 	) {
 		Text(
@@ -157,12 +171,6 @@ private fun Item(item: NotificationInfo) {
 				textAlign = TextAlign.Center
 			)
 		}
-	}
-	if (showDetailDialog) {
-		DetailDialog(item) { showDetailDialog = false }
-	}
-	if (showIgnoreDialog) {
-		item.app?.let { IgnoreDialog(it) { showIgnoreDialog = false } }
 	}
 }
 
