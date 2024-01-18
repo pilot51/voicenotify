@@ -59,6 +59,9 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.pilot51.voicenotify.NotifyList.NotificationLogDialog
 import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
 import com.pilot51.voicenotify.PermissionHelper.requestPermission
+import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_AUDIO_FOCUS
+import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IGNORE_EMPTY
+import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IGNORE_GROUPS
 import com.pilot51.voicenotify.PreferenceHelper.KEY_AUDIO_FOCUS
 import com.pilot51.voicenotify.PreferenceHelper.KEY_IGNORE_EMPTY
 import com.pilot51.voicenotify.PreferenceHelper.KEY_IGNORE_GROUPS
@@ -261,7 +264,7 @@ private fun MainScreen(
 			titleRes = R.string.audio_focus,
 			subtitleRes = R.string.audio_focus_summary,
 			key = KEY_AUDIO_FOCUS,
-			default = true
+			default = DEFAULT_AUDIO_FOCUS
 		)
 		PreferenceRowLink(
 			titleRes = R.string.shake_to_silence,
@@ -282,13 +285,13 @@ private fun MainScreen(
 			titleRes = R.string.ignore_empty,
 			subtitleRes = R.string.ignore_empty_summary_on,
 			key = KEY_IGNORE_EMPTY,
-			default = true
+			default = DEFAULT_IGNORE_EMPTY
 		)
 		PreferenceRowCheckbox(
 			titleRes = R.string.ignore_groups,
 			subtitleRes = R.string.ignore_groups_summary_on,
 			key = KEY_IGNORE_GROUPS,
-			default = true
+			default = DEFAULT_IGNORE_GROUPS
 		)
 		PreferenceRowLink(
 			titleRes = R.string.ignore_repeat,

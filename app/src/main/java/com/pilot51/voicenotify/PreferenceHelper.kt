@@ -17,7 +17,7 @@ package com.pilot51.voicenotify
 
 import android.content.SharedPreferences
 import android.media.AudioManager
-import androidx.core.content.edit
+import androidx.core.text.isDigitsOnly
 import androidx.preference.PreferenceManager
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 
@@ -75,56 +75,27 @@ object PreferenceHelper {
 	val prefs: SharedPreferences by lazy {
 		PreferenceManager.getDefaultSharedPreferences(appContext).apply {
 			convertOldStreamPref()
-			initDefaultPrefs()
 		}
 	}
 
 	/** @return The selected audio stream matching the `STREAM_` constant from [AudioManager]. */
-	fun getSelectedAudioStream() = prefs.getString(KEY_TTS_STREAM, null)?.toIntOrNull() ?: DEFAULT_TTS_STREAM
-
-	private fun SharedPreferences.initDefaultPrefs() {
-		if (!contains(KEY_SHAKE_THRESHOLD)) {
-			edit {
-				initPref(this, KEY_AUDIO_FOCUS, DEFAULT_AUDIO_FOCUS)
-				initPref(this, KEY_SHAKE_THRESHOLD, DEFAULT_SHAKE_THRESHOLD.toString())
-				initPref(this, KEY_IGNORE_EMPTY, DEFAULT_IGNORE_EMPTY)
-				initPref(this, KEY_IGNORE_GROUPS, DEFAULT_IGNORE_GROUPS)
-				initPref(this, KEY_IGNORE_REPEAT, DEFAULT_IGNORE_REPEAT.toString())
-				initPref(this, KEY_TTS_STRING, DEFAULT_TTS_STRING)
-				initPref(this, KEY_MAX_LENGTH, DEFAULT_MAX_LENGTH.toString())
-				initPref(this, KEY_TTS_STREAM, DEFAULT_TTS_STREAM.toString())
-				apply()
-			}
-		}
-	}
-
-	/**
-	 * Initializes a preference to [default] if it doesn't already have a value.
-	 * This only calls the `put` function matching [default]'s type and does not commit.
-	 */
-	private fun <T> SharedPreferences.initPref(
-		editor: SharedPreferences.Editor,
-		key: String,
-		default: T
-	) {
-		if (!contains(key)) {
-			when (default) {
-				is String -> editor.putString(key, default)
-				is Boolean -> editor.putBoolean(key, default)
-			}
-		}
-	}
+	fun getSelectedAudioStream() = prefs.getString(KEY_TTS_STREAM, null)
+		?.toIntOrNull() ?: DEFAULT_TTS_STREAM
 
 	/**
 	 * If necessary, converts audio stream preference from obsolete word string to integer string.
 	 * @since v1.0.11
 	 */
 	private fun SharedPreferences.convertOldStreamPref() {
-		val currentStream = getString(KEY_TTS_STREAM, null)
-		currentStream?.toIntOrNull() ?: run {
-			val newStream = if (currentStream == "notification") {
-				AudioManager.STREAM_NOTIFICATION
-			} else AudioManager.STREAM_MUSIC
+		getString(KEY_TTS_STREAM, null)?.takeUnless { it.isDigitsOnly() }?.let {
+			val newStream = when (it) {
+				"media" -> AudioManager.STREAM_MUSIC
+				"notification" -> AudioManager.STREAM_NOTIFICATION
+				else -> {
+					edit().remove(KEY_TTS_STREAM).apply()
+					return
+				}
+			}
 			edit().putString(KEY_TTS_STREAM, newStream.toString()).apply()
 		}
 	}

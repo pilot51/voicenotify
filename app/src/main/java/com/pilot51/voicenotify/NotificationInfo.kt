@@ -18,6 +18,7 @@ package com.pilot51.voicenotify
 import android.app.Notification
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_MAX_LENGTH
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_TTS_STRING
 import com.pilot51.voicenotify.PreferenceHelper.KEY_MAX_LENGTH
 import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STRING
@@ -124,27 +125,20 @@ data class NotificationInfo(
 		if (app != null && (ttsMessage == null || ttsMessage == app.label) && !isComposePreview) {
 			ttsMessage = appContext.getString(R.string.notification_from, app.label)
 		}
-		if (!ttsMessage.isNullOrEmpty()) {
+		ttsMessage?.takeIf { it.isNotEmpty() }?.let {
 			val ttsTextReplace = if (isComposePreview) null else {
 				prefs.getString(KEY_TTS_TEXT_REPLACE, null)
 			}
 			val textReplaceList = Common.convertTextReplaceStringToList(ttsTextReplace)
 			for (pair in textReplaceList) {
-				ttsMessage = ttsMessage!!.replace(
+				ttsMessage = it.replace(
 					"(?i)${Pattern.quote(pair.first)}".toRegex(), pair.second)
 			}
-		}
-		if (ttsMessage != null) {
-			try {
-				val maxLength = if (isComposePreview) 0 else {
-					prefs.getString(KEY_MAX_LENGTH, null)
-						?.takeIf { it.isNotEmpty() }?.toInt() ?: 0
-				}
-				if (maxLength > 0) {
-					ttsMessage = ttsMessage!!.substring(0, min(maxLength, ttsMessage!!.length))
-				}
-			} catch (e: NumberFormatException) {
-				Log.w(TAG, "Failed to parse Maximum Message: ${e.message}")
+			val maxLength = if (isComposePreview) 0 else {
+				prefs.getString(KEY_MAX_LENGTH, null)?.toIntOrNull() ?: DEFAULT_MAX_LENGTH
+			}
+			if (maxLength > 0 && maxLength < it.length) {
+				ttsMessage = it.substring(0, min(maxLength, it.length))
 			}
 		}
 	}

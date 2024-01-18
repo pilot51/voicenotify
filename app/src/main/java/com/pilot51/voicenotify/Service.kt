@@ -47,6 +47,7 @@ import com.pilot51.voicenotify.PermissionHelper.isPermissionGranted
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IGNORE_EMPTY
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IGNORE_GROUPS
+import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IGNORE_REPEAT
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IS_SUSPENDED
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_QUIET_TIME
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SPEAK_HEADSET_OFF
@@ -245,13 +246,8 @@ class Service : NotificationListenerService() {
 				info.ignoreReasons.add(IgnoreReason.STRING_IGNORED)
 			}
 		}
-		val ignoreRepeat = try {
-			prefs.getString(KEY_IGNORE_REPEAT, null)
-				?.takeIf { it.isNotEmpty() }?.toInt() ?: -1
-		} catch (e: NumberFormatException) {
-			Log.w(TAG, "Failed to parse Ignore Repeats: ${e.message}")
-			-1
-		}
+		val ignoreRepeat = prefs.getString(KEY_IGNORE_REPEAT, DEFAULT_IGNORE_REPEAT.toString())
+				?.toIntOrNull() ?: -1
 		if (lastMsg.containsKey(app)) {
 			if (lastMsg[app] == ttsMsg && (ignoreRepeat == -1 || msgTime - lastMsgTime[app]!! < ignoreRepeat * 1000)) {
 				info.addIgnoreReasonIdentical(ignoreRepeat)
@@ -259,21 +255,10 @@ class Service : NotificationListenerService() {
 		}
 		NotifyList.addNotification(info)
 		if (info.ignoreReasons.isEmpty()) {
-			val delay = try {
-				prefs.getString(KEY_TTS_DELAY, null)
-					?.takeIf { it.isNotEmpty() }?.toDouble()?.takeUnless { it < 0.0 } ?: 0.0
-			} catch (e: NumberFormatException) {
-				Log.w(TAG, "Failed to parse TTS Delay: ${e.message}")
-				0.0
-			}
+			val delay = prefs.getString(KEY_TTS_DELAY, null)
+					?.toDoubleOrNull()?.coerceAtLeast(0.0) ?: 0.0
 			if (!isScreenOn()) {
-				val interval = try {
-					prefs.getString(KEY_TTS_REPEAT, null)
-						?.takeIf { it.isNotEmpty() }?.toDouble() ?: 0.0
-				} catch (e: NumberFormatException) {
-					Log.w(TAG, "Failed to parse TTS Repeat: ${e.message}")
-					0.0
-				}
+				val interval = prefs.getString(KEY_TTS_REPEAT, null)?.toDoubleOrNull() ?: 0.0
 				if (interval > 0) {
 					synchronized(repeatList) { repeatList.add(info) }
 					if (repeater == null) {
