@@ -29,16 +29,21 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Build Debug APK
-        id: build-debug
-        run: ./gradlew assembleDebug
+      - name: Create keystore files
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -di > release.keystore
+          echo "${{ secrets.KEYSTORE_PROPERTIES }}" > keystore.properties
+
+      - name: Build
+        id: build
+        run: ./gradlew assembleRelease
 
       - name: Automatic Releases
         uses: marvinpinto/action-automatic-releases@latest
-        if: ${{ steps.build-debug.outcome == 'success' }}
+        if: ${{ steps.build.outcome == 'success' }}
         with:
           repo_token: "${{ secrets.GITHUB_TOKEN }}"
           automatic_release_tag: "latest"
           prerelease: true
-          title: "Auto build [debug]"
+          title: "Auto build"
           files: 'app/build/outputs/apk/**/*.apk'
