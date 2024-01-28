@@ -101,6 +101,10 @@ android {
 		}
 	}
 
+	androidResources {
+		generateLocaleConfig = true
+	}
+
 	applicationVariants.all {
 		outputs.all {
 			this as BaseVariantOutputImpl
