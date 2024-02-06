@@ -229,4 +229,5 @@
     <string name="metadata_progress">Progreso: %1$d / %2$d</string>
     <string name="metadata_progress_indeterminate">Progreso: Indeterminado</string>
     <string name="ticker">Ticker</string>
+    <string name="error_browser">Error: No se puede encontrar una aplicación de navegador instalada.</string>
 </resources>
