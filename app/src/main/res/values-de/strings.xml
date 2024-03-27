@@ -8,25 +8,26 @@
     <string name="service_suspended">Sprachbenachrichtigungsdienst wurde angehalten</string>
     <!-- xml/preferences.xml -->
     <string name="app_list">Liste der Anwendungen</string>
-    <string name="app_list_summary">Wähle Apps, die ignoriert werden sollen.</string>
+    <string name="app_list_summary">Wähle Apps, die ignoriert werden sollen</string>
     <string name="tts_settings">Sprachausgabe Einstellungen</string>
-    <string name="tts_settings_summary">Android Text-in-Sprache Einstellungen öffnen.</string>
-    <string name="tts_settings_summary_fail">Kann Text-zu-Sprache Einstellungen nicht finden! Wenn es auf Deinem Gerät existiert (das sollte es), kontaktiere bitte den Entwickler.</string>
+    <string name="tts_settings_summary">Android Text-To-Speech-Einstellungen öffnen</string>
+    <string name="tts_settings_summary_fail">Kann Text-To-Speech Einstellungen nicht finden! Wenn es auf Deinem Gerät existiert (das sollte es), kontaktiere bitte den Entwickler.</string>
     <string name="tts_message">gesprochene Benachrichtigung</string>
-    <string name="tts_message_summary">Passe die Art und Weise an, wie Benachrichtigungen ausgesprochen werden sollen.</string>
+    <string name="tts_message_summary">Passe die Art und Weise an, wie Benachrichtigungen vorgelesen werden sollen</string>
     <string name="tts_stream">Sprachausgabekanal (Stream)</string>
-    <string name="tts_stream_summary">Wähle den Kanal über den die gesprochene Benachrichtigung ausgegeben werden soll.</string>
+    <string name="tts_stream_summary">Wähle den Audio-Stream, über den die gesprochene Benachrichtigung ausgegeben werden soll</string>
     <string name="tts_delay">Verzögerung der Sprachausgabe</string>
-    <string name="tts_delay_summary">Warte \'x\' Sekunden bis eine Benachrichtigung ausgesprochen wird.</string>
-    <string name="tts_delay_dialog_msg">Anzahl der Sekunden um die die Sprachausgabe verzögert werden soll.</string>
+    <string name="tts_delay_summary">Warte x Sekunden, bevor eine Benachrichtigung vorgelesen wird</string>
+    <string name="tts_delay_dialog_msg">Anzahl der Sekunden, um die die Sprachausgabe verzögert werden soll.</string>
     <string name="tts_repeat">Sprachausgabe wiederholen</string>
-    <string name="tts_repeat_summary">Wiederhole die Sprachausgabe so lange, bis der Bildschirm eingeschaltet wird.</string>
-    <string name="tts_repeat_dialog_msg">Benachrichtigungen werden im definierten Zeitraum wiederholt (Wert in Minuten), bis der Bildschirm eingeschaltet wird. Benachrichtigungen die erscheinen während der Bildschirm eingeschaltet ist, werden nicht wiederholt.
-\n Leer lassen oder 0 eingeben um Wiederholung zu deaktivieren.</string>
+    <string name="tts_repeat_summary">Wiederhole die Sprachausgabe so lange, bis der Bildschirm eingeschaltet wird</string>
+    <string name="tts_repeat_dialog_msg">Benachrichtigungen werden im definierten Zeitraum wiederholt (Wert in Minuten), bis der Bildschirm eingeschaltet wird. Benachrichtigungen die erscheinen während der Bildschirm eingeschaltet ist werden nicht wiederholt.
+\n
+\nLeer lassen oder 0 eingeben, um Wiederholung zu deaktivieren.</string>
     <string name="audio_focus">Apps pausieren/stumm schalten</string>
-    <string name="audio_focus_summary">Andere Apps anfragen, den Ton stumm zu schalten oder die Musik zu pausieren.</string>
+    <string name="audio_focus_summary">Andere Apps anfragen, den Ton während dem Vorlesen stumm zu schalten oder die Musik zu pausieren</string>
     <string name="shake_to_silence">Schütteln zum Stummschalten</string>
-    <string name="shake_to_silence_summary">Empfindlichkeit der Shake-To-Silence Funktion einstellen.</string>
+    <string name="shake_to_silence_summary">Empfindlichkeit der Shake-To-Silence Funktion einstellen</string>
     <string name="shake_to_silence_dialog_msg">Je kleiner der Wert, desto höher ist die Empfindlichkeit.
 \n
 \nStandard: %d
@@ -39,21 +40,25 @@
         <item>Alarm</item>
     </string-array>
     <string name="ignore_strings">Ignorierter Text</string>
-    <string name="ignore_strings_summary">Benachrichtigungen mit bestimmtem Inhalt ignorieren.</string>
-    <string name="require_ignore_strings_dialog_msg">Trenne einzelne Einträge durch eine neue Zeile.</string>
+    <string name="ignore_strings_summary">Benachrichtigungen mit bestimmtem Inhalt ignorieren</string>
+    <string name="require_ignore_strings_dialog_msg">Übereinstimmungen werden anhand der Nachricht überprüft, die an TTS gesendet wird, nach TTS-Nachrichtenformatierung und Textersetzung, einschließlich Zeichensetzung.
+\n
+\nTrenne einzelne Einträge durch eine neue Zeile.
+\nDie Nachricht muss einen Eintrag enthalten, aber nicht alle, um ein Treffer zu sein.
+\nGroß-/Kleinschreibung wird ignoriert.</string>
     <string name="ignore_empty">Ignoriere leere Nachrichten</string>
-    <string name="ignore_empty_summary_on">Benachrichtigungen ohne Nachricht werden nicht gesprochen.</string>
-    <string name="ignore_empty_summary_off">Benachrichtigungen ohne Inhalt werden als \"Benachrichtigung von [App Name].\" gesprochen</string>
+    <string name="ignore_empty_summary_on">Benachrichtigungen ohne Inhalt werden nicht vorgelesen</string>
+    <string name="ignore_empty_summary_off">Benachrichtigungen ohne Inhalt werden als \"Benachrichtigung von [App Name].\" vorgelesen</string>
     <string name="ignore_repeat">Ignoriere sich wiederholende Benachrichtigungen</string>
-    <string name="ignore_repeat_summary">Ignoriere aufeinanderfolgende, identische Benachrichtigungen in einem bestimmten Zeitraum.</string>
+    <string name="ignore_repeat_summary">Ignoriere aufeinanderfolgende, identische Benachrichtigungen in einem bestimmten Zeitraum</string>
     <string name="ignore_repeat_dialog_msg">Stelle den Zeitraum ein (in Sekunden), in dem wiederholte Benachrichtigungen ignoriert werden sollen.
 \nJede ignorierte Benachrichtigung in diesem Zeitraum lässt die Wartezeit von vorn beginnen. Bei neuen Benachrichtigungen entfällt die Wartezeit.
 \nleer = Wartezeit wird auf \'unendlich\' gesetzt.</string>
     <string name="max_length">Maximale Textlänge</string>
     <string name="max_length_summary">Anzahl der Zeichen die vorgelesen werden.</string>
     <string name="device_state">Gerätezustände</string>
-    <string name="device_state_summary">In welchem Gerätezustand sollen Benachrichtigungen ausgesprochen werden\?</string>
-    <string name="device_state_dialog_title">Sprich, wenn folgende Bedingungen erfüllt sind:</string>
+    <string name="device_state_summary">Wähle aus, in welchen Gerätezuständen Benachrichtigungen vorgelesen werden sollen</string>
+    <string name="device_state_dialog_title">Vorlesen in diesen Geräte-Zuständen aktivieren</string>
     <string-array name="device_states">
         <item>Bildschirm ausschalten</item>
         <item>Bildschirm einschalten</item>
@@ -67,12 +72,12 @@
     <string name="quiet_end">Ende der Ruhezeit</string>
     <string name="quiet_end_summary">Keine Sprachausgabe vor dieser Uhrzeit.
 \nStell den gleichen Wert wie bei \'Beginn der Ruhezeit\' ein um keine Ruhezeit festzulegen.</string>
-    <string name="test_summary">Erzeuge eine Benachrichtigung (5 Sekunden verzögert) um die aktuellen Einstellungen zu testen.</string>
+    <string name="test_summary">Erzeuge eine Benachrichtigung (5 Sekunden verzögert), um die aktuellen Einstellungen zu testen</string>
     <string name="test_ignored">Voice Notify wurde in der Liste der Anwendungen abgewählt und wird daher ignoriert.
 \nDie Testbenachrichtigung wird ausgelöst, aber nicht gesprochen.</string>
     <string name="notify_log_summary">Die letzten %d Benachrichtigungen auflisten.
 \nZeigt Zeit, App Name, Nachricht und Ignorier-Ursache.</string>
-    <string name="support_summary">Spenden, bewerten oder den Entwickler kontaktieren; Übersetzungen, Quellcode</string>
+    <string name="support_summary">Bewerten &amp; Kommentieren, Entwickler kontaktieren, Community-Chat, Übersetzungen, Quellcode, Issue-Tracker, Datenschutzerklärung</string>
     <!-- TextReplacePreference -->
     <!-- text_replace_row.xml -->
     <string name="text_to_replace">Zu ersetzender Text</string>
@@ -82,8 +87,9 @@
     <string name="notify_log">Benachrichtigungsprotokoll</string>
     <string name="support">Hilfe &amp; Unterstützung</string>
     <!-- MainActivity -->
-    <string name="status_summary_suspended">Tippe zum aktivieren von VN</string>
-    <string name="support_rate">Bewerte/Kommentiere</string>
+    <string name="status_summary_suspended">Tippen, um Voice Notify zu aktivieren.
+\nGedrückt halten, um Android-Berechtigungseinstellungen zu öffnen.</string>
+    <string name="support_rate">Bewerten &amp; Kommentieren</string>
     <string name="support_email">Entwickler kontaktieren</string>
     <string name="support_translations">Übersetzungen</string>
     <string name="support_github">Quellcode</string>
@@ -91,7 +97,7 @@
     <string name="error_email">Fehler: Konnte kein E-Mail-Programm finden.</string>
     <!-- Service -->
     <string name="notification_from">Benachrichtigung von %s.</string>
-    <string name="error_tts_init">Fehler: Text-zu-Sprache konnte nicht inizialisiert werden! [%d]</string>
+    <string name="error_tts_init">Fehler: Text-To-Speech konnte nicht inizialisiert werden! [%d]</string>
     <!-- NotifyList -->
     <string name="yes">Ja</string>
     <string name="ignore_app">%s ignorieren\?</string>
@@ -112,10 +118,116 @@
     <string name="reason_headset_off">Headset ausschalten</string>
     <string name="reason_headset_on">Headset einschalten</string>
     <string name="reason_shake">Durch Schütteln stumm geschaltet</string>
-    <string name="reason_suspended">VN durch Widget angehalten</string>
-    <string name="tts_summary">Text-zu-Sprache-Verhalten konfigurieren</string>
-    <string name="tts">Text-zu-Sprache</string>
+    <string name="reason_suspended">Voice Notify durch Widget angehalten</string>
+    <string name="tts_summary">Text-To-Speech Verhalten konfigurieren</string>
+    <string name="tts">Text-To-Speech</string>
     <string name="text_replace_error_duplicate">Duplikat! Wird nicht gespeichert.</string>
     <string name="ignore_groups">Gruppennachrichten ignorieren</string>
     <string name="tts_text_replace">TTS-Textersetzung</string>
+    <string name="back">Zurück</string>
+    <string name="ignored_reasons">Ignorier-Ursachen</string>
+    <string name="metadata_category">Kategorie: %s</string>
+    <string name="support_github_subtext">Fehlerberichte, Funktionsanfragen, Quellcode</string>
+    <string name="support_privacy_message">Weder versendet noch sammelt Voice Notify Daten außerhalb des Geräts. Allerdings werden Drittanbieter-Apps oder -Dienste verwendet, die möglicherweise Daten übertragen, wie weiter unten unter \"Drittanbieter-Apps und -Dienste\" dargestellt.
+\n
+\nIn dem unwahrscheinlichen Fall, dass sensible oder private Informationen an den Entwickler gesendet wurden, werden diese weder verkauft, verteilt, kopiert oder ohne explizite Zustimmung des Besitzers benutzt. Ohne Zustimmung werden diese Informationen wenn möglich sofort gelöscht.
+\n
+\nDer Zweck von Voice Notify ist das Vorlesen von Benachrichtigungen und so kann es vorkommen, dass gesprochene Benachrichtigungen von Leuten oder Mikrofonen in der Umgebung mitgehört werden könnten. Es wird empfohlen, Voice Notify und das Gerät so zu konfigurieren, das private Benachrichtigungen nicht vorgelesen werden, wenn dies nicht erwünscht ist. Benutzung der App auf eigene Gefahr.
+\n
+\nDie erhaltenen Benachrichtigungen werden von Voice Notify nur im Arbeitsspeicher gehalten, um sie im Benachrichtigungsprotokoll (maximal letzte 20) anzuzeigen und werden nicht in den persistenten Speicher geschrieben. Dies hindert andere Apps an diese Daten zu kommen, z.b. wenn das Gerät gerootet wurde. Daher ist das Benachrichtigungsprotokoll leer, wenn der Voice Notify Prozess beendet wurde.
+\n
+\nInstallierte Apps werden ausgelesen und aufgelistet, sodass der Benutzer auswählen kann, welche Benachrichtigungen welcher Apps vorgelesen werden. Die Appnamen und App-Packetnamen werden in einer Datenbank von Voice Notifys internem privaten Speicher auf dem Gerät gespeichert, um die Auswahl des Benutzers zu sichern und um als Cache das Laden dieser Liste zu beschleunigen.
+\n
+\nDrittanbieter-Apps und -Dienste:
+\n• Text-To-Speech Engine - Voice Notify überträgt den Text der Benachrichtigungen die vorgelesen werden sollen an die voreingestellte Text-To-Speech Engine, über die Voice Notify keine direkte Kontrolle hat. Bitte lesen sie deshalb die Datenschutzerklärung der TTS-Engine, um zu erfahren wie diese Daten nutzt.
+\n• Google Play Services kann anonymisierte Absturz- und Analyse-Daten zurück an den Entwickler senden, um bei der Verbesserung der App zu helfen.
+\n• Messaging-App - Die \"Entwickler kontaktieren\"-Option öffnet die vom Benutzer ausgewählte oder voreingestellte Nachrichten-App, wie etwa die Email-App, und füllt die Nachricht mit der Voice Notify-Version, Android-Version, Android-Buildnummer und dem Gerätenamen. Bei Email-Apps wird die Entwickleradresse (pilota51@gmail.com) als Empfänger eingetragen. Mit dem Senden der Nachricht stimmt der Benutzer zu, dass sein Name und seine Kontaktinformation mit dem oder den Adressat(en), so wie sie in der Nachrichten-App angegeben sind, geteilt werden.
+\n• Andere Optionen unter \"Hilfe &amp; Support\" öffnen die relevanten externen Apps und Webseiten (Play Store, Weblate.org, GitHub.com) und senden einzig eine fest-programmierte URL an die Voice Notify Seite.
+\n
+\nIm Folgenden sind die Berechtigungen, die von Voice Notify benutzt werden sowie der Grund dafür aufgelistet:
+\n• Bluetooth - Benötigt um verbundene Bluetooth-Headsets zu erkennen.
+\n• Vibration - Benötigt für das Test-Feature wenn das Telefon auf Vibrationsmodus steht.
+\n• Audio-Einstellungen ändern - Benötigt um kabelgebundene Headsets besser zu erkennen.
+\n• Telefonstatus abrufen - Benötigt um TTS zu unterbrechen, wenn ein Anruf ankommt.</string>
+    <string name="tts_message_dialog">#A = App-Titel
+\n#T = Ticker
+\n#S = Subtext
+\n#C = Benachrichtigungstitel
+\n#M = Benachrichtigungsinhalt
+\n#I = Benachrichtigungsinfo
+\n#H = großer Benachrichtigungstitel
+\n#Y = große Zusammenfassung
+\n#B = großer Benachrichtigungstext
+\n#L = Textzeilen
+\nGroß-/Kleinschreibung wird ignoriert
+\n
+\nStandardeinstellung:
+\n%1$s
+\n
+\nAlte Standardeinstellung (v1.1.0 - v1.3.0):
+\n#A. #C. #M.
+\n
+\nAlte Standardeinstellung (v1.0.x):
+\n#A: #T</string>
+    <string name="reason_service_stopped">Dienst angehalten</string>
+    <string name="permission_rationale_post_notifications">Die Berechtigung für Benachrichtigungen wird benötigt, um Test-Benachrichtigungen zu senden.</string>
+    <string name="ignore_groups_summary_on">Benachrichtigungen, die mehrere Nachrichten enthalten, werden nicht vorgelesen</string>
+    <string name="support_matrix">Matrix</string>
+    <string name="close">Schließen</string>
+    <string name="remove">Entfernen</string>
+    <string name="error">Fehler</string>
+    <string name="reason_tts_failed">TTS ist gescheitert. Neustart und Wiederholung versucht.
+\nDieser Text sollte gelb sein, falls der Neustart erfolgreich war oder rot falls nicht.
+\nBitte versuchen Sie, den Voice Notify-Dienst neu zu starten, wenn Benachrichtigungen nicht vorgelesen werden.</string>
+    <string name="reason_tts_interrupted">TTS aus unbekanntem Grund unterbrochen</string>
+    <string name="tts_text_replace_summary">Ersetzt vorzulesenden Text, z.B. um die Aussprache zu verbessern</string>
+    <string name="reason_call">Aktiver Telefonanruf</string>
+    <string name="require_strings">Erforderlicher Text</string>
+    <string name="require_strings_summary">Nur Benachrichtigungen vorlesen, die einen bestimmten Text in der Nachricht enthalten</string>
+    <string name="status_summary_notification_access_disabled">Tippe, um die Android-Berechtigungseinstellungen zu öffnen und den Dienst zu aktivieren.</string>
+    <string name="notification_channel_desc">Für Test-Benachrichtigungen genutzt</string>
+    <string name="test_content_title">Benachrichtigungstitel</string>
+    <string name="test_content_text">Das ist der Benachrichtigungsinhalt.</string>
+    <string name="support_discord">Discord</string>
+    <string name="permission_rationale_read_phone_state">Die Telefonstatus-Berechtigung wird benötigt, um zu verhindern, dass Voice Notify während eines Anrufs vorliest.</string>
+    <string name="reason_string_required">Erforderlicher Text fehlt</string>
+    <string name="test_content_info">Benachrichtigungsinfo</string>
+    <string name="test_ticker">Das ist die Tickernachricht</string>
+    <string name="test_subtext">Der Subtext</string>
+    <string name="ignore_groups_summary_off">Benachrichtigungen, die mehrere Nachrichten enthalten, werden vorgelesen</string>
+    <string name="status_summary_notification_access_enabled">Tippen, um Voice Notify anzuhalten.
+\nGedrückt halten, um Android-Berechtigungseinstellungen zu öffnen.</string>
+    <string name="service_disabled">Voice Notify Service ist deaktiviert</string>
+    <string name="test_big_content_title">Großer Benachrichtigungstitel</string>
+    <string name="test_big_content_summary">Das ist die große Zusammenfassung</string>
+    <string name="test_big_content_text">Das ist der große Benachrichtigungstext.</string>
+    <string name="ticker">Ticker</string>
+    <string name="subtext">Subtext</string>
+    <string name="title">Titel</string>
+    <string name="content_text">Benachrichtigungstext</string>
+    <string name="content_info_text">Benachrichtigungsinfo</string>
+    <string name="big_content_summary">Große Zusammenfassung</string>
+    <string name="big_content_title">Großer Titel</string>
+    <string name="big_content_text">Großer Benachrichtigungstext</string>
+    <string name="text_lines">Textzeilen</string>
+    <string name="test_text_lines">Das ist eine Textzeile.
+\nDies ist eine weitere Textzeile.</string>
+    <string name="notification_details">Benachrichtigungs-Details</string>
+    <string name="enable">Aktivieren</string>
+    <string name="interrupted_reason">Unterbrechungs-Ursachen</string>
+    <string name="metadata">Metadaten</string>
+    <string name="metadata_id">ID: %d</string>
+    <string name="metadata_progress">Fortschritt: %1$d / %2$d</string>
+    <string name="metadata_progress_indeterminate">Fortschritt: Unbestimmt</string>
+    <string name="support_email_subtext">Allgemeines Feedback</string>
+    <string name="support_chat_subtext">Benutzer-Chat, schnellste Entwicklerantwort</string>
+    <string name="support_privacy">Datenschutzerklärung</string>
+    <string name="error_browser">Fehler: Installierte Browser-App kann nicht gefunden werden.</string>
+    <string name="tts_text_replace_dialog">Ersetzt vorzulesenden Text und erlaubt es dadurch anzupassen, wie Text-To-Speech Wörter ausspricht oder Text aus anderen Gründen zu ersetzen.
+\n
+\nDie Textersetzung ignoriert Groß- und Kleinschreibung und wird nach der Formatierung der TTS-Nachricht angewendet, inklusive Zeichensetzung.</string>
+    <string name="max_length_dialog_msg">Maximale Länge, die vorgelesen wird.
+\nLängere Nachrichten werden gekürzt.</string>
+    <string name="reason_tts_restarted">TTS wurde neu gestartet, während sich die Nachricht in der Warteschlangen befand oder vorgelesen wurde. Wiederholung geplant.</string>
+    <string name="reason_tts_length_limit">Maximale TTS-Länge überschritten</string>
 </resources>

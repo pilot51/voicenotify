@@ -107,4 +107,5 @@
 \n#a : #t</string>
     <string name="tts_text_replace_summary">Substituer le texte à prononcer, par exemple pour corriger la prononciation</string>
     <string name="tts_text_replace">Remplacement de texte de synthèse vocale</string>
+    <string name="back">Retour</string>
 </resources>

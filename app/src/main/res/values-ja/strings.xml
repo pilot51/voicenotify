@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="service_running">Voice Notify サービスが動作しています</string>
+    <string name="service_running">Voice Notify は動作中</string>
     <string name="max_length_dialog_msg">読み上げるメッセージの最大長
 \n最大長を超えるメッセージは切り捨てられます。</string>
     <string name="ignore_groups">グループメッセージを無視</string>
@@ -65,7 +65,7 @@
     <string name="tts_text_replace_dialog">テキストを置き換えることで、音声読み上げがどのように単語を発音するかをカスタマイズしたり、その他の目的でテキストを置き換えたりできます。
 \n
 \n置換するテキストは大文字小文字を区別せず、句読点を含め音声読み上げメッセージで設定された書式が適用されます。</string>
-    <string name="service_suspended">Voice Notify サービスは停止中です</string>
+    <string name="service_suspended">Voice Notify は停止中</string>
     <string name="max_length">最大メッセージ長</string>
     <string name="ignore_empty_summary_on">メッセージのない通知を読み上げません</string>
     <string name="tts_repeat_summary">画面がオンの間、音声読み上げによる通知を繰り返します</string>
@@ -80,7 +80,7 @@
     <string name="replacement_text">置換後の文字列</string>
     <string name="support_summary">評価＆レビュー、開発者にメール、コミュニティチャット、翻訳、ソースコード、イシュートラッカー、プライバシーポリシー</string>
     <string name="ignore_app">%sを無視しますか？</string>
-    <string name="permission_rationale_post_notifications">テスト通知送信のため、通知送信の許可が必要です。</string>
+    <string name="permission_rationale_post_notifications">テスト通知を送信するため、通知の権限が必要です。</string>
     <string name="reason_suspended">ウィジェットによってVoice Notify停止</string>
     <string name="error_market">エラー: Google Playストアが見つかりません。</string>
     <string name="filter">フィルター</string>
@@ -98,11 +98,11 @@
     <string name="status_summary_suspended">タップでVoice Notifyを有効化。
 \nサービスを無効化する場合は長押しでAndroidの通知設定を開きます。</string>
     <string name="ignore_all">すべて無視</string>
-    <string name="status_summary_notification_access_enabled">タップでVoice Notifyを停止。
-\nサービスを無効化する場合は長押しでAndroidの通知設定を開きます。</string>
+    <string name="status_summary_notification_access_enabled">タップして読み上げを停止します。
+\nVoice Notify を無効化する場合は長押しで Android の通知アクセス設定を開いてください。</string>
     <string name="service_disabled">Voice Notifyサービスは無効です</string>
     <string name="reason_headset_on">ヘッドセットオン</string>
-    <string name="permission_rationale_read_phone_state">通話中に音声を読み上げてしまう事を防ぐため、通話発信の許可が必要です。</string>
+    <string name="permission_rationale_read_phone_state">通話中の読み上げを防ぐため、電話の権限が必要です。</string>
     <string name="reason_identical">{0,choice,-1#無限秒|1#{0} 秒|1&lt;{0} 秒} 以内の同一メッセージ</string>
     <string name="ignore_none">すべて無視しない</string>
     <string name="yes">はい</string>
@@ -148,7 +148,7 @@
     <string name="test_subtext">サブテキスト</string>
     <string name="reason_screen_on">画面オン</string>
     <string name="support_translations">翻訳</string>
-    <string name="status_summary_notification_access_disabled">タップすることでサービスを有効化するためにAndroidの通知設定を開きます。</string>
+    <string name="status_summary_notification_access_disabled">タップで Voice Notify を有効化するために Android の通知アクセス設定を開きます。</string>
     <string name="error_email">エラー: メールアプリが見つかりません。</string>
     <string name="support_github">GitHub</string>
     <string name="text_replace_error_duplicate">重複してます！保存されません。</string>
