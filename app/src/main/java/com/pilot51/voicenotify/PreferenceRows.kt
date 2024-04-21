@@ -15,7 +15,6 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
@@ -36,7 +35,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.pilot51.voicenotify.PreferenceHelper.prefs
@@ -188,8 +186,7 @@ private inline operator fun PreferenceBooleanState.setValue(
 	this.value = value
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun SettingsMenuLinkPreview() {
 	AppTheme {
@@ -202,8 +199,7 @@ private fun SettingsMenuLinkPreview() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun SettingsCheckboxCheckedPreview() {
 	AppTheme {
@@ -216,8 +212,7 @@ private fun SettingsCheckboxCheckedPreview() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun SettingsCheckboxUncheckedPreview() {
 	AppTheme {

@@ -15,7 +15,6 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.res.Configuration
 import android.util.Pair
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,7 +34,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pilot51.voicenotify.TextReplaceDialogViewModel.Companion.isDuplicate
@@ -220,8 +218,7 @@ private fun TextReplaceListItem(
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun TextReplaceListPreview() {
 	val replaceList = mutableListOf(

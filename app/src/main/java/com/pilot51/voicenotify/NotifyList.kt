@@ -16,7 +16,6 @@
 package com.pilot51.voicenotify
 
 import android.app.Notification
-import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -34,7 +33,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
@@ -367,8 +365,7 @@ private fun previewNotification() = Notification().apply {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun LogDialogPreview() {
 	val previewNotification = previewNotification()
@@ -387,8 +384,7 @@ private fun LogDialogPreview() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun DetailDialogPreview() {
 	val info = NotificationInfo(
@@ -400,8 +396,7 @@ private fun DetailDialogPreview() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun IgnoreDialogPreview() {
 	val app = App(1, "package.name.one", "App Name 1", true)

@@ -15,7 +15,6 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.res.Configuration
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,14 +29,12 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
@@ -48,7 +45,6 @@ import kotlinx.coroutines.delay
 
 private lateinit var vmStoreOwner: ViewModelStoreOwner
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AppListActions() {
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
@@ -170,8 +166,7 @@ private fun AppListItem(app: App, toggleIgnore: (app: App) -> Unit) {
 	)
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun AppListPreview() {
 	val apps = listOf(

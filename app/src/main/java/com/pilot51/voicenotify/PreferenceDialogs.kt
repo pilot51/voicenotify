@@ -18,7 +18,6 @@ package com.pilot51.voicenotify
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
@@ -43,7 +42,6 @@ import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.edit
@@ -587,8 +585,7 @@ private fun LazyListScope.supportItem(
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun TextEditDialogPreview() {
 	AppTheme {
@@ -601,8 +598,7 @@ private fun TextEditDialogPreview() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun TtsStreamDialogPreview() {
 	AppTheme {
@@ -610,8 +606,7 @@ private fun TtsStreamDialogPreview() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun DeviceStatesDialogPreview() {
 	AppTheme {
@@ -619,8 +614,7 @@ private fun DeviceStatesDialogPreview() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun QuietTimeDialogPreview() {
 	AppTheme {
@@ -628,8 +622,7 @@ private fun QuietTimeDialogPreview() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun SupportDialogPreview() {
 	AppTheme {

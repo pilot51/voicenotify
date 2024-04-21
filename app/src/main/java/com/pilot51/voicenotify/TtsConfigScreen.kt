@@ -16,14 +16,12 @@
 package com.pilot51.voicenotify
 
 import android.content.Intent
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
 fun TtsConfigScreen() {
@@ -104,8 +102,7 @@ fun TtsConfigScreen() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun TtsConfigScreenPreview() {
 	AppTheme {
