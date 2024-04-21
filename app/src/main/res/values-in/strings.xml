@@ -60,11 +60,11 @@
     </string-array>
     <string name="ignore_strings">Teks Terabaikan</string>
     <string name="ignore_strings_summary">Abaikan pemberitahuan yang mengandung teks tertentu dalam pesan</string>
-    <string name="require_ignore_strings_dialog_msg">Ini cocok dengan pesan diproses yang dikirim ke TTS, termasuk penggantian teks.
+    <string name="require_ignore_strings_dialog_msg">Ini dicocokkan dengan pesan yang dikirim ke TTS, setelah pemformatan Pesan TTS dan Penggantian Teks, termasuk tanda baca.
 \n
-\nMemisahkan entri individu dengan garis baru.
-\nPesan harus sesuai dengan entri apapun, tidak semua.
-\nSensitif huruf besar dan kecil.</string>
+\nPisahkan setiap entri dengan baris baru. 
+\nPesan harus berisi entri mana saja, tidak semua, agar cocok. 
+\nTidak peka terhadap huruf besar/kecil.</string>
     <string name="ignore_empty">Abaikan Kosong</string>
     <string name="ignore_empty_summary_on">Pemberitahuan tanpa pesan tidak akan diucapkan</string>
     <string name="ignore_empty_summary_off">Pemberitahuan tanpa pesan akan diucapkan \"Pemberitahuan dari [nama aplikasi].\"</string>
@@ -110,9 +110,11 @@
     <string name="support">Bantuan &amp; Dukungan</string>
     <!-- MainActivity -->
     <string name="service_disabled">Layanan Voice Notify dinonaktifkan</string>
-    <string name="status_summary_notification_access_enabled">Buka pengaturan pemberitahuan Android untuk mematikan Voice Notify</string>
-    <string name="status_summary_notification_access_disabled">Buka pengaturan pemberitahuan Android untuk menyalakan Voice Notify</string>
-    <string name="status_summary_suspended">Pilih untuk menyalakan Voice Notify.</string>
+    <string name="status_summary_notification_access_enabled">Ketuk untuk menangguhkan Voice Notify.
+\nTekan lama untuk membuka pengaturan akses notifikasi Android untuk menonaktifkan layanan.</string>
+    <string name="status_summary_notification_access_disabled">Ketuk untuk membuka pengaturan akses notifikasi Android untuk mengaktifkan layanan.</string>
+    <string name="status_summary_suspended">Ketuk untuk mengaktifkan Voice Notify. 
+\nTekan lama untuk membuka pengaturan akses pemberitahuan Android untuk menonaktifkan layanan.</string>
     <string name="notification_channel_desc">Digunakan untuk pengujian pemberitahuan</string>
     <string name="test_ticker">Ini adalah pesan detak</string>
     <string name="test_subtext">Subteks</string>
@@ -183,4 +185,7 @@
     <string name="support_matrix">Matrix</string>
     <string name="permission_rationale_post_notifications">Izin pemberitahuan posting diperlukan untuk Voice Notify untuk memposting pemberitahuan pengujian.</string>
     <string name="reason_string_required">Teks yang diperlukan hilang</string>
+    <string name="back">Kembali</string>
+    <string name="test_big_content_title">Judul Konten Besar</string>
+    <string name="test_big_content_summary">Ini adalah ringkasan konten besar</string>
 </resources>

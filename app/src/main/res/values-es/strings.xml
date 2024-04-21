@@ -116,18 +116,26 @@
     <string name="reason_headset_on">Auriculares encendidos</string>
     <string name="reason_shake">Silenciado por sacudida</string>
     <string name="reason_suspended">Notificación de voz suspendida por el widget</string>
-    <string name="tts_message_dialog">#a = Título de la aplicación
-\n#t = Ticker
-\n#s = Subtexto
-\n#c = Título del contenido
-\n#m = Mensaje del contenido
-\n#i = Información del contenido
+    <string name="tts_message_dialog">#A = Título de la aplicación
+\n#T = Ticker
+\n#S = Subtexto
+\n#C = Título del contenido
+\n#M = Mensaje de contenido
+\n#I = Información del contenido
+\n#H = Título grande del contenido
+\n#Y = Resumen de contenido grande
+\n#B = Texto de contenido grande
+\n#L = Líneas de texto
+\nNo distingue mayúsculas de minúsculas
 \n
 \nPor defecto:
-\n#a. #c. #m.
+\n%1$s
 \n
-\nPor defecto antiguo (v1.0.x):
-\n#a: #t</string>
+\nPredeterminado antiguo (v1.1.0 - v1.3.0):
+\n#A. #C. #M.
+\n
+\nPor defecto (v1.0.x):
+\n#A: #T</string>
     <string name="tts">Texto por voz</string>
     <string name="tts_summary">Configurar el comportamiento del texto por voz</string>
     <string name="tts_text_replace">Reemplazo de texto TTS</string>
@@ -198,4 +206,28 @@
     <string name="support_email_subtext">Retroalimentación general</string>
     <string name="support_github_subtext">Informes de errores, solicitudes de funciones, código fuente</string>
     <string name="support_chat_subtext">Chat de usuario, respuesta más rápida de los desarrolladores</string>
+    <string name="test_text_lines">Esto es una línea de texto.
+\nEsta es otra línea de texto.</string>
+    <string name="big_content_text">Gran contenido en texto</string>
+    <string name="test_big_content_title">Gran título de contenidos</string>
+    <string name="test_big_content_summary">Este es el gran resumen de contenidos</string>
+    <string name="test_big_content_text">Éste es el gran texto del contenido.</string>
+    <string name="notification_details">Detalles de la notificación</string>
+    <string name="enable">Activar</string>
+    <string name="subtext">Subtexto</string>
+    <string name="title">Título</string>
+    <string name="content_text">Contenido del texto</string>
+    <string name="content_info_text">Información del contenido del texto</string>
+    <string name="big_content_summary">Resumen de los grandes contenidos</string>
+    <string name="text_lines">Líneas de texto</string>
+    <string name="ignored_reasons">Razones que se ignoran</string>
+    <string name="interrupted_reason">Motivo de la interrupción</string>
+    <string name="metadata">Metadatos</string>
+    <string name="metadata_id">Identificador: %d</string>
+    <string name="big_content_title">Gran contenido en títulos</string>
+    <string name="metadata_category">Categoría: %s</string>
+    <string name="metadata_progress">Progreso: %1$d / %2$d</string>
+    <string name="metadata_progress_indeterminate">Progreso: Indeterminado</string>
+    <string name="ticker">Ticker</string>
+    <string name="error_browser">Error: No se puede encontrar una aplicación de navegador instalada.</string>
 </resources>

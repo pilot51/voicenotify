@@ -133,4 +133,16 @@
     <string name="reason_shake">Wyciszony poprzez potrząśnięcie</string>
     <string name="reason_suspended">VN wstrzymany przez widget</string>
     <string name="reason_service_stopped">Serwis zastopowany</string>
+    <string name="back">Wstecz</string>
+    <string name="support_discord">Discord</string>
+    <string name="support_matrix">Matrix</string>
+    <string name="app_name">Voice Notify</string>
+    <string name="support_privacy">Polityka prywatności</string>
+    <string name="close">Zamknij</string>
+    <string name="error">Błąd</string>
+    <string name="notification_details">Szczegóły powiadomienia</string>
+    <string name="enable">Włącz</string>
+    <string name="title">Tytuł</string>
+    <string name="metadata">Metadane</string>
+    <string name="remove">Usuń</string>
 </resources>

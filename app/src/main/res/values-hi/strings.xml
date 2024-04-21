@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="back">पीछे</string>
+    <string name="service_disabled">Voice Notify सेवा अक्षम है</string>
+    <string name="status_summary_notification_access_disabled">सेवा को सक्षम करने के लिए Android अधिसूचना एक्सेस सेटिंग्स खोलने के लिए टैप करें।</string>
+    <string name="tts">टेक्स्ट-टू-स्पीच</string>
+    <string name="tts_summary">टेक्स्ट-टू-स्पीच व्यवहार कॉन्फ़िगर करें</string>
+    <string name="require_strings">टेक्स्ट की आवश्यकता है</string>
+    <string name="ignore_strings">टेक्स्ट को अनदेखा करें</string>
+    <string name="support_rate">मूल्यांकन एवं समीक्षा करें</string>
+    <string name="support_email_subtext">सामान्य प्रतिक्रिया</string>
+    <string name="support_privacy">गोपनीयता नीति</string>
+    <string name="error_tts_init">त्रुटि: TTS आरंभ नहीं किया जा सका! स्थिति कोड %d</string>
+    <string name="reason_app">उपेक्षित ऐप</string>
+    <string name="reason_empty_msg">खाली संदेश</string>
+    <string name="reason_quiet">शांत समय</string>
+    <string name="reason_string_ignored">उपेक्षित टेक्स्ट</string>
+    <string name="reason_string_required">आवश्यक टेक्स्ट अनुपलब्ध है</string>
+    <string name="reason_silent">शांत या कंपन मोड</string>
+    <string name="reason_headset_on">हेडसेट चालू</string>
+    <string name="reason_service_stopped">सेवा बंद हो गई</string>
+    <string name="reason_shake">शेक से चुप करा दिया गया</string>
+    <string name="app_name">Voice Notify</string>
+    <string name="service_running">Voice Notify सेवा चल रही है</string>
+    <string name="service_suspended">Voice Notify सेवा निलंबित है</string>
+    <string name="ignore_app">%s को अनदेखा करें?</string>
+    <string name="support_discord">Discord</string>
+    <string name="support_matrix">Matrix</string>
+    <string name="unignore_app">%s को अनदेखा न करें?</string>
+    <string name="yes">हाँ</string>
+    <string name="audio_focus">मीडिया को रोकें/मंद करें</string>
+    <string name="require_strings_summary">केवल वही सूचनाएँ बोलें जिनमें संदेश में कुछ निश्चित पाठ हों</string>
+    <string name="ignore_empty">ख़ाली पर ध्यान न दें</string>
+    <string name="ignore_empty_summary_on">बिना संदेश के सूचनाएं नहीं बोली जाएंगी</string>
+    <string name="ignore_groups">समूह संदेशों पर ध्यान न दें</string>
+    <string name="metadata_progress_indeterminate">प्रगति: अनिश्चित</string>
+    <string name="ignore_groups_summary_off">अनेक संदेशों वाली सूचनाएं बोली जाएंगी</string>
+    <string name="quiet_start">शांत समय का प्रारंभ</string>
+    <string name="test_ticker">यह टिकर संदेश है</string>
+    <string name="test_content_info">सामग्री जानकारी</string>
+    <string name="test_big_content_title">बड़ा सामग्री शीर्षक</string>
+    <string name="test_big_content_summary">यह बड़ा सामग्री सारांश है</string>
+    <string name="notification_details">अधिसूचना विवरण</string>
+    <string name="notify_log">अधिसूचना लॉग</string>
+    <string name="notify_log_summary">अंतिम %d अधिसूचना सूचीबद्ध करें.
+\nप्रदर्शन समय, ऐप का नाम, संदेश और कारणों को अनदेखा करें।</string>
+    <string name="enable">सक्षम</string>
+    <string name="ticker">टिकर</string>
+    <string name="metadata_category">श्रेणी: %s</string>
+    <string name="metadata_progress">प्रगति: %1$d / %2$d</string>
+    <string name="error">त्रुटि</string>
+    <string name="max_length">अधिकतम संदेश</string>
+    <string name="app_is_ignored">%s को नजरअंदाज कर दिया गया है</string>
+    <string name="app_is_not_ignored">%s को नजरअंदाज नहीं किया गया है</string>
+    <string name="notification_from">%s से अधिसूचना।</string>
+    <string name="reason_screen_off">स्क्रीन बंद</string>
+    <string name="reason_screen_on">स्क्रीन चालू</string>
+    <string name="reason_headset_off">हेडसेट बंद</string>
+    <string name="support_chat_subtext">उपयोगकर्ता चैट, सबसे तेज़ डेवलपर प्रतिक्रिया</string>
+    <string name="support_translations">अनुवाद</string>
+    <string name="support_github">GitHub</string>
+    <string name="support_github_subtext">बग रिपोर्ट, सुविधा अनुरोध, स्रोत कोड</string>
+    <string name="error_market">त्रुटि: Google Play Store स्थापित नहीं मिल सका।</string>
+    <string name="error_email">त्रुटि: इंस्टॉल किया गया ईमेल ऐप ढूंढने में असमर्थ।</string>
+    <string name="shake_to_silence">शेक-टू-साइलेंस</string>
+    <string name="big_content_summary">बड़ी सामग्री सारांश</string>
+    <string name="big_content_title">बड़ी सामग्री शीर्षक</string>
+    <string name="big_content_text">बड़ी सामग्री वाला टेक्स्ट</string>
+    <string name="text_lines">टेक्स्ट पंक्तियाँ</string>
+    <string name="ignored_reasons">उपेक्षित कारण</string>
+    <string name="interrupted_reason">बाधित कारण</string>
+    <string name="reason_identical">{0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds} के भीतर समान संदेश</string>
+    <string name="reason_suspended">Voice Notify विजेट द्वारा निलंबित कर दिया गया</string>
+    <string name="reason_tts_length_limit">संदेश TTS लंबाई सीमा से अधिक हो गया</string>
+    <string name="metadata_id">ID: %d</string>
+    <string name="ignore_groups_summary_on">एकाधिक संदेशों वाली सूचनाएं नहीं बोली जाएंगी</string>
+    <string name="ignore_repeat">दोहराव पर ध्यान न दें</string>
+    <string name="ignore_repeat_summary">एक निर्धारित समय के भीतर बाद की समान सूचनाओं पर ध्यान न दें</string>
+    <string name="device_state">डिवाइस स्थिति</string>
+    <string name="device_state_dialog_title">इन डिवाइस स्थितियों के दौरान बोलें</string>
+    <string name="quiet_start_summary">इस समय के बाद मत बोलना.
+\nअक्षम करने के लिए अंत को वैसे ही छोड़ दें।</string>
+    <string name="quiet_end">शांत समय का अंत</string>
+    <string name="quiet_end_summary">इस समय से पहले मत बोलना.
+\nअक्षम करने के लिए प्रारंभ को वैसे ही छोड़ दें।</string>
+    <string name="test">परीक्षण</string>
+    <string name="notification_channel_desc">परीक्षण अधिसूचना के लिए प्रयुक्त</string>
+    <string name="test_subtext">सबटेक्स्ट</string>
+    <string name="test_content_title">सामग्री का शीर्षक</string>
+    <string name="test_content_text">यह संदेश की सामग्री है।</string>
+    <string name="test_big_content_text">यह बड़ा कंटेंट टेक्स्ट है।</string>
+    <string name="subtext">सबटेक्स्ट</string>
+    <string name="title">शीर्षक</string>
+    <string name="metadata">मेटाडाटा</string>
+    <string name="require_ignore_strings_dialog_msg">TTS संदेश स्वरूपण और विराम चिह्न सहित पाठ प्रतिस्थापन के बाद इसका मिलान TTS को भेजे गए संदेश से किया जाता है।
+\n
+\nअलग-अलग प्रविष्टियों को एक नई पंक्ति से अलग करें।
+\nमेल खाने के लिए संदेश में सभी नहीं, बल्कि कोई भी प्रविष्टि शामिल होनी चाहिए।
+\nअसंवेदनशील मामला।</string>
+    <string name="ignore_empty_summary_off">संदेश के बिना अधिसूचनाएं \"[ऐप नाम] से अधिसूचना\" के रूप में बोली जाएंगी</string>
+    <string name="test_ignored">ऐप सूची में Voice Notify को नजरअंदाज कर दिया गया है।
+\nटेस्ट चलेगा, लेकिन नोटिफिकेशन नहीं बोला जाएगा।</string>
+    <string name="test_text_lines">यह टेक्स्ट की एक पंक्ति है.
+\nयह टेक्स्ट की एक और पंक्ति है।</string>
+    <string name="content_text">टेक्स्ट सामग्री</string>
+    <string name="content_info_text">जानकारी टेक्स्ट सामग्री</string>
+    <string name="close">बंद करे</string>
+    <string name="ignore_all">सभी की अनदेखी करें</string>
+    <string name="ignore_none">किसी को अनदेखा न करें</string>
+    <string name="filter">फ़िल्टर</string>
+    <string name="tts_settings">TTS सेटिंग्स</string>
+    <string name="tts_message_summary">अनुकूलित करें कि सूचनाओं के कौन से भाग बोले गए हैं</string>
+    <string name="remove">हटाएँ</string>
+    <string name="tts_settings_summary">Android टेक्स्ट-टू-स्पीच सेटिंग खोलें</string>
+    <string name="tts_settings_summary_fail">TTS सेटिंग ढूंढने में असमर्थ! यदि यह आपके डिवाइस पर मौजूद है (होना चाहिए), तो कृपया डेवलपर से संपर्क करें।</string>
+    <string name="tts_message">TTS संदेश</string>
+    <string name="tts_text_replace">TTS टेक्स्ट रिप्लेसमेंट</string>
+    <string name="tts_text_replace_summary">बोले जाने वाले टेक्स्ट को प्रतिस्थापित करें, जैसे उच्चारण को ठीक करना</string>
+    <string name="text_replace_error_duplicate">डुप्लिकेट! सहेजा नहीं जाएगा।</string>
+    <string name="text_to_replace">प्रतिस्थापित करने के लिए टेक्स्ट</string>
+    <string name="replacement_text">प्रतिस्थापन टेक्स्ट</string>
+    <string name="tts_stream">TTS ऑडियो स्ट्रीम</string>
+    <string name="tts_stream_summary">वह ऑडियो स्ट्रीम चुनें जिसके माध्यम से टेक्स्ट-टू-स्पीच चलता है</string>
+    <string name="tts_delay">TTS विलंब</string>
+    <string name="tts_delay_summary">अधिसूचना के बाद TTS को निर्धारित संख्या में सेकंड विलंबित करें</string>
+    <string name="tts_repeat">TTS रिपीट</string>
+    <string name="tts_repeat_summary">स्क्रीन चालू होने तक TTS पर लगातार सूचनाएं दोहराते रहें</string>
+    <string name="permission_rationale_read_phone_state">कॉल के दौरान Voice Notify को बोलने से रोकने के लिए फ़ोन कॉल की अनुमति आवश्यक है।</string>
+    <string name="permission_rationale_post_notifications">Voice Notify के लिए परीक्षण अधिसूचना पोस्ट करने के लिए पोस्ट अधिसूचना अनुमति की आवश्यकता होती है।</string>
+    <string name="status_summary_notification_access_enabled">Voice Notify को निलंबित करने के लिए टैप करें।
+\nसेवा को अक्षम करने के लिए Android अधिसूचना एक्सेस सेटिंग्स खोलने के लिए देर तक दबाएं।</string>
+    <string name="status_summary_suspended">Voice Notify को सक्रिय करने के लिए टैप करें।
+\nसेवा को अक्षम करने के लिए Android अधिसूचना एक्सेस सेटिंग्स खोलने के लिए देर तक दबाएं।</string>
+    <string name="app_list">ऐप सूची</string>
+    <string name="app_list_summary">इंस्टॉल किए गए ऐप्स की सूची बनाएं जिन्हें अनदेखा किया जा सकता है</string>
+    <string name="audio_focus_summary">बोलते समय अन्य मीडिया से रुकने/धीमे होने का अनुरोध करें</string>
+    <string name="shake_to_silence_dialog_msg">निम्न मान अधिक संवेदनशील होते हैं.
+\n
+\nडिफ़ॉल्ट: %d
+\nअक्षम करने के लिए रिक्त।</string>
+    <string name="device_state_summary">चुनें कि डिवाइस की कुछ स्थितियों के दौरान बोलना है या नहीं</string>
+    <string name="test_summary">वर्तमान सेटिंग्स का परीक्षण करने के लिए एक अधिसूचना पोस्ट करें (5 सेकंड विलंबित)</string>
+    <string name="support">सहायता एवं समर्थन</string>
+    <string name="support_email">ईमेल डेवलपर</string>
+    <string name="error_browser">त्रुटि: इंस्टॉल किया गया ब्राउज़र ऐप ढूंढने में असमर्थ।</string>
+    <string name="max_length_summary">बोलने के लिए संदेश की अधिकतम लंबाई. बड़े संदेशों को छोटा कर दिया जाएगा।</string>
+    <string name="max_length_dialog_msg">बोलने के लिए संदेश की अधिकतम लंबाई
+\nबड़े संदेशों को छोटा कर दिया जाएगा।</string>
+    <string name="tts_delay_dialog_msg">बोलने से पहले अधिसूचना के बाद प्रतीक्षा करने के लिए सेकंड की संख्या।</string>
+    <string name="reason_call">सक्रिय फ़ोन कॉल</string>
+    <string name="shake_to_silence_summary">शेक-टू-साइलेंस की संवेदनशीलता सीमा को समायोजित करें</string>
+    <string name="ignore_strings_summary">उन सूचनाओं पर ध्यान न दें जिनमें संदेश में कुछ टेक्स्ट शामिल हैं</string>
+    <string name="ignore_repeat_dialog_msg">दोहराए जाने से पहले अंतिम अधिसूचना के बाद से गुजरने वाले सेकंड की संख्या निर्धारित करें।
+\nउपेक्षित दोहराव से गिनती रीसेट हो जाती है और विभिन्न सूचनाएं इसे साफ़ कर देती हैं।
+\nरिक्त = अनंत।</string>
+    <string name="support_summary">मूल्यांकन और समीक्षा करें, डेवलपर को ईमेल करें, सामुदायिक चैट, अनुवाद, स्रोत कोड, समस्या ट्रैकर, गोपनीयता नीति</string>
+    <string name="tts_message_dialog">#A = ऐप शीर्षक
+\n#T = टिकर
+\n#S = सबटेक्स्ट
+\n#C = सामग्री शीर्षक
+\n#M = सामग्री संदेश
+\n#I = सामग्री जानकारी
+\n#H = बड़ा सामग्री शीर्षक
+\n#Y = बड़ी सामग्री सारांश
+\n#B = बड़ा सामग्री टेक्स्ट
+\n#L = टेक्स्ट पंक्तियाँ
+\nकेस असंवेदनशील
+\n
+\nडिफ़ॉल्ट:
+\n%1$s
+\n
+\nपुराना डिफ़ॉल्ट (v1.1.0 - v1.3.0):
+\n#A. #C. #M.
+\n
+\nपुराना डिफ़ॉल्ट (v1.0.x):
+\n#A: #T</string>
+    <string name="tts_text_replace_dialog">बोले जाने वाले टेक्स्ट को प्रतिस्थापित करें, जिससे आप टेक्स्ट-टू-स्पीच में शब्दों के उच्चारण को अनुकूलित कर सकते हैं या किसी अन्य कारण से टेक्स्ट को बदल सकते हैं।
+\n
+\nप्रतिस्थापित किया जाने वाला टेक्स्ट केस असंवेदनशील है और विराम चिह्न सहित TTS संदेश में फ़ॉर्मेटिंग सेट के बाद लागू होता है।</string>
+    <string name="tts_repeat_dialog_msg">स्क्रीन चालू होने तक सूचनाएं निर्धारित अंतराल पर दोहराई जाती हैं। स्क्रीन चालू होने पर बनाई गई सूचनाएं दोहराई नहीं जातीं।
+\n
+\nमूल्य मिनटों में है. अक्षम करने के लिए रिक्त या 0।</string>
+    <string name="reason_tts_failed">TTS विफल रहा. पुनरारंभ करें और पुनः प्रयास करने का प्रयास किया गया।
+\nयदि पुनः प्रयास सफल हो तो यह टेक्स्ट पीला होना चाहिए या यदि नहीं तो लाल होना चाहिए।
+\nयदि सूचनाएं बोलने में विफल रहती हैं तो कृपया Voice Notify सेवा को पुनः आरंभ करने का प्रयास करें।</string>
+    <string name="reason_tts_restarted">संदेश कतार में या बोलने के दौरान TTS पुनः प्रारंभ हो गया। पुनः कतारबद्ध।</string>
+    <string name="reason_tts_interrupted">अज्ञात कारण से TTS बाधित हुआ</string>
+    <string name="support_privacy_message">Voice Notify डिवाइस से डेटा एकत्र या प्रसारित नहीं करता है। हालाँकि, यह तीसरे पक्ष के ऐप्स या सेवाओं का उपयोग करता है जो डेटा संचारित कर सकते हैं, जैसा कि नीचे \"तृतीय पक्ष ऐप्स और सेवाओं\" के अंतर्गत बताया गया है।
+\n
+\nऐसी अप्रत्याशित स्थिति में कि संवेदनशील या व्यक्तिगत जानकारी डेवलपर द्वारा प्राप्त की जाती है, जानकारी किसकी है, इसकी स्पष्ट सहमति के बिना इसे बेचा, साझा, कॉपी या उपयोग नहीं किया जाएगा। सहमति के अभाव में, यदि संभव हो तो जानकारी हटा दी जाएगी।
+\n
+\nVoice Notify का उद्देश्य बोलकर सूचनाएं देना है, और इस प्रकार यह संभावना है कि बोली जाने वाली सूचनाएं आस-पास के लोगों या माइक्रोफ़ोन द्वारा सुनी जा सकती हैं। अवांछित मौखिक सूचनाओं को रोकने के लिए Voice Notify और डिवाइस को कॉन्फ़िगर करने की अनुशंसा की जाती है। अपने जोखिम पर उपयोग करें।
+\n
+\nVoice Notify द्वारा प्राप्त सूचनाएं केवल अधिसूचना लॉग (सबसे हाल के 20 तक) में प्रदर्शित होने के लिए मेमोरी में रखी जाती हैं और स्टोरेज में नहीं लिखी जाती हैं। यह अन्य ऐप्स को डेटा तक पहुंचने से रोकता है, खासकर यदि डिवाइस रूट किया गया हो। परिणामस्वरूप, यदि Voice Notify प्रक्रिया समाप्त हो जाती है, तो अधिसूचना लॉग साफ़ हो जाता है।
+\n
+\nइंस्टॉल किए गए ऐप्स को पढ़ा और सूचीबद्ध किया जाता है ताकि उपयोगकर्ता यह चुन सकें कि किन ऐप्स में उनकी सूचनाएं बोली जाती हैं। चयनों को सहेजने और ऐप सूची को लोड करने के प्रदर्शन को बेहतर बनाने के लिए कैश के रूप में कार्य करने के लिए ऐप शीर्षक और पैकेज नाम डिवाइस पर Voice Notify के आंतरिक निजी डेटा स्टोरेज में एक डेटाबेस में संग्रहीत किए जाते हैं।
+\n
+\nतृतीय पक्ष ऐप्स और सेवाएँ:
+\n• टेक्स्ट-टू-स्पीच इंजन - Voice Notify बोले जाने वाले नोटिफिकेशन टेक्स्ट को डिफॉल्ट टेक्स्ट-टू-स्पीच इंजन में भेजता है, जो Voice Notify के सीधे नियंत्रण से बाहर है। कृपया TTS इंजन की गोपनीयता नीति पढ़ें कि यह डेटा का उपयोग कैसे करता है।
+\n• ऐप को बेहतर बनाने में सहायता के लिए Google Play Services अज्ञात क्रैश और बुनियादी विश्लेषणात्मक डेटा डेवलपर को वापस भेज सकती हैं।
+\n• मैसेजिंग ऐप - \"डेवलपर से संपर्क करें\" विकल्प उपयोगकर्ता के चुने हुए या डिफ़ॉल्ट मैसेजिंग ऐप, जैसे ईमेल ऐप को खोलता है, और Voice Notify संस्करण, Android संस्करण, Android बिल्ड नंबर और डिवाइस नाम के साथ संदेश को पूर्व-पॉप्युलेट करता है। एक ईमेल ऐप के लिए, \"टू\" फ़ील्ड डेवलपर के पते (pilota51@gmail.com) पर सेट है। संदेश भेजकर, उपयोगकर्ता अपने नाम और संपर्क जानकारी को प्राप्तकर्ता के साथ साझा किए जाने को समझता है और सहमति देता है, जैसा कि मैसेजिंग ऐप द्वारा निर्धारित किया गया है।
+\n• \"सहायता और सहायता\" के अंतर्गत अन्य विकल्प प्रासंगिक बाहरी ऐप्स या वेबसाइट (Play Store, Weblate.org, GitHub.com) खोलें, केवल Voice Notify पेज पर एक हार्ड कोडित URL भेजें।
+\n
+\nनीचे Voice Notify द्वारा उपयोग की जाने वाली अनुमतियाँ दी गई हैं और उनकी आवश्यकता क्यों है:
+\n• ब्लूटूथ - यह पता लगाने के लिए आवश्यक है कि ब्लूटूथ हेडसेट कनेक्ट है या नहीं।
+\n• कंपन - जब फ़ोन कंपन मोड में हो तो परीक्षण सुविधा के लिए आवश्यक।
+\n• ऑडियो सेटिंग्स संशोधित करें - बेहतर वायर्ड हेडसेट पहचान के लिए आवश्यक।
+\n• फ़ोन स्थिति पढ़ें - यदि कोई फ़ोन कॉल सक्रिय हो जाता है तो TTS को बाधित करना आवश्यक है।</string>
+</resources>
