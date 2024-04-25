@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.pilot51.voicenotify.PreferenceHelper.prefs
@@ -44,15 +45,15 @@ import kotlin.reflect.KProperty
 
 /**
  * A preference row with click callbacks.
- * [title] and [subtitle] are required if their respective [titleRes] or [subtitleRes] isn't set.
+ * [title] and [summary] are required if their respective [titleRes] or [summaryRes] isn't set.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PreferenceRowLink(
 	@StringRes titleRes: Int = 0,
-	@StringRes subtitleRes: Int = 0,
+	@StringRes summaryRes: Int = 0,
 	title: String = titleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
-	subtitle: String = subtitleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
+	summary: String = summaryRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
 	enabled: Boolean = true,
 	onClick: () -> Unit,
 	onLongClick: (() -> Unit)? = null
@@ -71,15 +72,20 @@ fun PreferenceRowLink(
 		PreferenceRowScaffold(
 			title = title,
 			enabled = enabled,
-			subtitle = subtitle
+			summary = summary
 		)
 	}
 }
 
+/**
+ * A preference row with a checkbox, updating a boolean preference.
+ * If [summaryResOff] is not provided, [summaryResOn] is used for both states.
+ */
 @Composable
 fun PreferenceRowCheckbox(
 	@StringRes titleRes: Int,
-	@StringRes subtitleRes: Int,
+	@StringRes summaryResOn: Int,
+	@StringRes summaryResOff: Int = summaryResOn,
 	key: String,
 	default: Boolean
 ) {
@@ -87,6 +93,7 @@ fun PreferenceRowCheckbox(
 	var prefValue by remember {
 		PreferenceBooleanState(key = if (isPreview) "isPreview" else key, defaultValue = default)
 	}
+	val summaryRes = if (prefValue) summaryResOn else summaryResOff
 	Row(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -100,7 +107,7 @@ fun PreferenceRowCheckbox(
 	) {
 		PreferenceRowScaffold(
 			title = stringResource(titleRes),
-			subtitle = stringResource(subtitleRes),
+			summary = stringResource(summaryRes),
 			action = {
 				Checkbox(
 					checked = prefValue,
@@ -115,7 +122,7 @@ fun PreferenceRowCheckbox(
 private fun PreferenceRowScaffold(
 	enabled: Boolean = true,
 	title: String,
-	subtitle: String,
+	summary: String,
 	action: (@Composable (Boolean) -> Unit)? = null
 ) {
 	ListItem(
@@ -127,7 +134,7 @@ private fun PreferenceRowScaffold(
 		},
 		supportingContent = {
 			ColorWrap(enabled) {
-				Text(subtitle)
+				Text(summary)
 			}
 		},
 		trailingContent = action?.run {
@@ -188,11 +195,11 @@ private inline operator fun PreferenceBooleanState.setValue(
 
 @VNPreview
 @Composable
-private fun SettingsMenuLinkPreview() {
+private fun PreferenceRowLinkPreview() {
 	AppTheme {
 		PreferenceRowLink(
 			titleRes = R.string.tts_settings,
-			subtitleRes = R.string.tts_settings_summary_fail,
+			summaryRes = R.string.tts_settings_summary_fail,
 			enabled = false,
 			onClick = {}
 		)
@@ -201,26 +208,16 @@ private fun SettingsMenuLinkPreview() {
 
 @VNPreview
 @Composable
-private fun SettingsCheckboxCheckedPreview() {
+private fun PreferenceRowCheckboxPreview(
+	@PreviewParameter(BooleanProvider::class) value: Boolean
+) {
 	AppTheme {
 		PreferenceRowCheckbox(
 			titleRes = R.string.ignore_groups,
-			subtitleRes = R.string.ignore_groups_summary_on,
+			summaryResOn = R.string.ignore_groups_summary_on,
+			summaryResOff = R.string.ignore_groups_summary_off,
 			key = "isPreview",
-			default = true
-		)
-	}
-}
-
-@VNPreview
-@Composable
-private fun SettingsCheckboxUncheckedPreview() {
-	AppTheme {
-		PreferenceRowCheckbox(
-			titleRes = R.string.ignore_groups,
-			subtitleRes = R.string.ignore_groups_summary_off,
-			key = "isPreview",
-			default = false
+			default = value
 		)
 	}
 }

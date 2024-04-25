@@ -241,7 +241,7 @@ private fun MainScreen(
 	) {
 		PreferenceRowLink(
 			title = statusTitle,
-			subtitle = statusSummary,
+			summary = statusSummary,
 			onClick = {
 				if (isRunning) Service.toggleSuspend()
 				else context.startActivity(statusIntent)
@@ -250,70 +250,72 @@ private fun MainScreen(
 		)
 		PreferenceRowLink(
 			titleRes = R.string.app_list,
-			subtitleRes = R.string.app_list_summary,
+			summaryRes = R.string.app_list_summary,
 			onClick = onClickAppList
 		)
 		PreferenceRowLink(
 			titleRes = R.string.tts,
-			subtitleRes = R.string.tts_summary,
+			summaryRes = R.string.tts_summary,
 			onClick = onClickTtsConfig
 		)
 		PreferenceRowCheckbox(
 			titleRes = R.string.audio_focus,
-			subtitleRes = R.string.audio_focus_summary,
+			summaryResOn = R.string.audio_focus_summary,
 			key = KEY_AUDIO_FOCUS,
 			default = DEFAULT_AUDIO_FOCUS
 		)
 		PreferenceRowLink(
 			titleRes = R.string.shake_to_silence,
-			subtitleRes = R.string.shake_to_silence_summary,
+			summaryRes = R.string.shake_to_silence_summary,
 			onClick = { showShakeToSilence = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.require_strings,
-			subtitleRes = R.string.require_strings_summary,
+			summaryRes = R.string.require_strings_summary,
 			onClick = { showRequireText = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.ignore_strings,
-			subtitleRes = R.string.ignore_strings_summary,
+			summaryRes = R.string.ignore_strings_summary,
 			onClick = { showIgnoreText = true }
 		)
 		PreferenceRowCheckbox(
 			titleRes = R.string.ignore_empty,
-			subtitleRes = R.string.ignore_empty_summary_on,
+			summaryResOn = R.string.ignore_empty_summary_on,
+			summaryResOff = R.string.ignore_empty_summary_off,
 			key = KEY_IGNORE_EMPTY,
 			default = DEFAULT_IGNORE_EMPTY
 		)
 		PreferenceRowCheckbox(
 			titleRes = R.string.ignore_groups,
-			subtitleRes = R.string.ignore_groups_summary_on,
+			summaryResOn = R.string.ignore_groups_summary_on,
+			summaryResOff = R.string.ignore_groups_summary_off,
 			key = KEY_IGNORE_GROUPS,
 			default = DEFAULT_IGNORE_GROUPS
 		)
 		PreferenceRowLink(
 			titleRes = R.string.ignore_repeat,
-			subtitleRes = R.string.ignore_repeat_summary,
+			summaryRes = R.string.ignore_repeat_summary,
 			onClick = { showIgnoreRepeats = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.device_state,
-			subtitleRes = R.string.device_state_summary,
+			summaryRes = R.string.device_state_summary,
 			onClick = { showDeviceStates = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.quiet_start,
-			subtitleRes = R.string.quiet_start_summary,
+			summaryRes = R.string.quiet_start_summary,
 			onClick = { showQuietTimeStart = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.quiet_end,
-			subtitleRes = R.string.quiet_end_summary,
+			summaryRes = R.string.quiet_end_summary,
 			onClick = { showQuietTimeEnd = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.test,
-			subtitleRes = R.string.test_summary,
+			summaryRes = R.string.test_summary,
 			onClick = {
 				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
 					postNotificationPermissionState!!.requestPermission {
@@ -326,12 +328,12 @@ private fun MainScreen(
 		)
 		PreferenceRowLink(
 			titleRes = R.string.notify_log,
-			subtitle = stringResource(R.string.notify_log_summary, NotifyList.HISTORY_LIMIT),
+			summary = stringResource(R.string.notify_log_summary, NotifyList.HISTORY_LIMIT),
 			onClick = { showLog = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.support,
-			subtitleRes = R.string.support_summary,
+			summaryRes = R.string.support_summary,
 			onClick = { showSupport = true }
 		)
 	}
