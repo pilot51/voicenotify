@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="shake_to_silence_summary">Điều chỉnh độ nhạy của Lắc để Im lặng</string>
+    <string name="require_strings_summary">Chỉ đọc những thông báo có chứa văn bản nhất định trong tin nhắn</string>
+    <string name="require_ignore_strings_dialog_msg">Điều này khớp với những tin nhắn được gửi tới TTS, bao gồm cả dấu câu, sau khi tin nhắn TTS được định dạng và thay thế.
+\n
+\nTách các mục riêng lẻ bằng một dòng mới.
+\nTin nhắn cần chứa một mục nào đó, không phải tất cả, để cho phù hợp.
+\nCó phân biệt chữ hoa và chữ thường.</string>
+    <string name="tts_settings_summary">Mở phần cài đặt Chuyển văn bản thành giọng nói trong thiết bị</string>
+    <string name="tts_settings_summary_fail">Không thể tìm thấy phần cài đặt TTS. Nếu nó có trong thiết bị của bạn, hãy liên lạc với nhà phát triển ứng dụng.</string>
+    <string name="tts_message_dialog">#A = Tiêu đề ứng dụng
+\n#T = Đánh dấu
+\n#S = Văn bản phụ
+\n#C = Nội dung tiêu đề
+\n#M = Nội dung thông điệp
+\n#I = Thông tin nội dung
+\n#H = Tiêu đề nội dung lớn
+\n#Y = Tóm tắt nội dung lớn
+\n#B = Nội dung lớn
+\n#L = Dòng văn bản
+\nPhân biệt chữ hoa chữ thường
+\n
+\nMặc định:
+\n%1$s
+\n
+\nMặc định cũ (v1.1.0 - v1.3.0):
+\n#A. #C. #M.
+\n
+\nMặc định cũ (v1.0.x):
+\n#A: #T</string>
+    <string name="permission_rationale_read_phone_state">Đọc thông báo yêu cầu quyền kiểm soát cuộc gọi để không hoạt động trong khi gọi điện.</string>
+    <string name="support_privacy_message">Voice Notify không thu thập hoặc truyền dữ liệu ra khỏi thiết bị. Tuy nhiên, nó sử dụng các ứng dụng hoặc dịch vụ của bên thứ ba có thể truyền dữ liệu, như được nêu chi tiết bên dưới trong \"Ứng dụng và dịch vụ của bên thứ ba\".
+\n
+\nTrong trường hợp hiếm hoi nhận được thông tin nhạy cảm hoặc cá nhân bởi nhà phát triển, thông tin đó sẽ không được bán, chia sẻ, sao chép hoặc sử dụng mà không có sự đồng ý rõ ràng của chủ sở hữu thông tin. Nếu không có sự đồng ý, thông tin sẽ bị xóa nếu có thể.
+\n
+\nMục đích của Voice Notify là đọc thông báo bằng giọng nói, do đó, thông báo bằng giọng nói có thể bị người khác hoặc micrô ở gần nghe thấy. Bạn nên cấu hình Voice Notify và thiết bị để tránh thông báo bằng giọng nói không mong muốn. Sử dụng dưới trách nhiệm của bạn.
+\n
+\nCác thông báo nhận được bởi Voice Notify chỉ được lưu trong bộ nhớ để hiển thị trong Nhật ký thông báo (tối đa 20 thông báo gần nhất) và không được ghi vào bộ nhớ lưu trữ. Điều này ngăn các ứng dụng khác truy cập dữ liệu, đặc biệt là nếu thiết bị được root. Do đó, nếu tiến trình Voice Notify bị terminated (kết thúc), nhật ký thông báo sẽ bị xóa.
+\n
+\nỨng dụng được cài đặt sẽ được đọc và liệt kê để cho phép người dùng chọn ứng dụng nào có thông báo được đọc bằng giọng nói. Tiêu đề và tên gói của ứng dụng được lưu trữ trong cơ sở dữ liệu trong bộ lưu trữ dữ liệu riêng tư nội bộ của Voice Notify trên thiết bị để lưu các lựa chọn và hoạt động như một bộ nhớ cache để cải thiện hiệu suất tải danh sách ứng dụng.
+\n
+\nỨng dụng và dịch vụ của bên thứ ba:
+\n
+\nCông cụ Text-To-Speech (chuyển văn bản thành giọng nói) - Voice Notify chuyển văn bản thông báo để đọc thành giọng nói cho công cụ Text-To-Speech mặc định, nằm ngoài quyền kiểm soát trực tiếp của Voice Notify. Vui lòng đọc chính sách bảo mật của công cụ TTS để biết cách nó sử dụng dữ liệu.
+\nGoogle Play Services có thể gửi dữ liệu phân tích cơ bản và sự cố ứng dụng ẩn danh trở lại cho nhà phát triển để hỗ trợ cải thiện ứng dụng.
+\nỨng dụng nhắn tin - Tùy chọn \"Liên hệ với nhà phát triển\" sẽ mở ứng dụng nhắn tin hoặc ứng dụng email mặc định của người dùng, chẳng hạn như ứng dụng email, và điền sẵn nội dung tin nhắn với phiên bản Voice Notify, phiên bản Android, số bản dựng Android và tên thiết bị. Đối với ứng dụng email, trường \"Đến\" được đặt thành địa chỉ của nhà phát triển (pilota51@gmail.com). Bằng cách gửi tin nhắn, người dùng hiểu và đồng ý rằng tên và thông tin liên lạc của họ được chia sẻ với người nhận, theo quy định của ứng dụng nhắn tin.
+\nCác tùy chọn khác trong \"Trợ giúp &amp; Hỗ trợ\" sẽ mở các ứng dụng hoặc trang web bên ngoài liên quan (Play Store, Weblate.org, GitHub.com), chỉ gửi một URL được mã hóa cứng đến trang Voice Notify.
+\n
+\nDưới đây là các quyền được sử dụng bởi Voice Notify và lý do tại sao chúng cần thiết:
+\nBluetooth - Cần thiết để phát hiện tai nghe Bluetooth có được kết nối hay không.
+\nRung - Cần thiết cho tính năng Kiểm tra khi điện thoại ở chế độ rung.
+\nThay đổi Cài đặt Âm thanh - Cần thiết để cải thiện khả năng phát hiện tai nghe có dây.
+\nĐọc Trạng thái Điện thoại - Cần thiết để ngắt TTS nếu có cuộc gọi đến.</string>
+    <string name="reason_tts_restarted">Chuyển văn bản thành giọng nói đang khởi động lại trong khi đợi thông điệp mới hoặc đang đọc.</string>
+    <string name="reason_tts_length_limit">Thông điệp đã vượt quá giới hạn độ dài của Chuyển văn bản thành Giọng nói</string>
+    <string name="tts_delay_dialog_msg">Số giây đợi sau khi thông báo trước được đọc.</string>
+    <string name="reason_screen_off">Tắt màn hình</string>
+    <string name="reason_screen_on">Mở màn hình</string>
+    <string name="tts_text_replace_dialog">Thay thế văn bản đọc thành giọng nói, cho phép bạn tùy chỉnh cách công cụ Text-To-Speech phát âm các từ hoặc thay thế văn bản vì những lý do khác.
+\n
+\nVăn bản cần thay thế không phân biệt chữ hoa chữ thường và được áp dụng sau định dạng được đặt trong Mensage TTS, bao gồm cả dấu câu.</string>
+    <string name="tts_repeat_dialog_msg">Thông báo được lặp lại trong khoảng thời gian nhất định cho đến khi màn hình được bật lên. Thông báo được tạo trong khi màn hình bật lên không được lặp lại.
+\n
+\nGiá trị được tính bằng phút. Để trống hoặc đặt giá trị bằng 0 để tắt đi.</string>
+    <string name="reason_tts_failed">Chuyển văn bản thành giọng nói bị lỗi. Khởi động lại và thử lại sau.
+\nVăn bản sẽ được chuyển thành màu vàng nếu được thử lại thành công hoặc màu đỏ nếu thử lại không thành công.
+\nVui lòng khởi động lại ứng dụng nếu không đọc được thông báo.</string>
+    <string name="big_content_title">Tiêu đề thông báo lớn</string>
+    <string name="big_content_text">Nội dung thông báo lớn</string>
+    <string name="metadata_progress_indeterminate">Tiến trình: Không xác định</string>
+    <string name="support_summary">Đánh giá và phản hồi, gửi thư cho nhà phát triển, cộng đồng thảo luận, dịch, mã nguồn, trình theo dõi vấn đê và chính sách bảo mật</string>
+    <string name="shake_to_silence_dialog_msg">Giá trị càng thấp thì độ nhạy càng cao.
+\n
+\nMặc định: %d
+\nĐể trống để tắt.</string>
+    <string name="require_strings">Yêu cầu văn bản</string>
+    <string name="ignore_strings">Những ký tự bỏ qua</string>
+    <string name="ignore_strings_summary">Bỏ qua những thông báo có chứa những từ nhất định</string>
+    <string name="ignore_empty">Bỏ qua khoảng trống</string>
+    <string name="ignore_empty_summary_on">Những thông báo không chứa thông điệp sẽ không được đọc</string>
+    <string name="ignore_empty_summary_off">Thông báo không chứa thông điệp sẽ được đọc là \" Thông báo từ [tên ứng dụng].\"</string>
+    <string name="ignore_groups">Bỏ qua những thông điệp theo nhóm</string>
+    <string name="ignore_groups_summary_on">Những thông báo chứa nhiều thông điệp sẽ không được đọc</string>
+    <string name="ignore_groups_summary_off">Những thông báo chứa nhiều thông điệp sẽ được đọc</string>
+    <string name="ignore_repeat">Không lặp lại</string>
+    <string name="ignore_repeat_summary">Bỏ qua những thông báo giống nhau trong một khoảng thời gian nhất định</string>
+    <string name="permission_rationale_post_notifications">Đọc thông báo yêu cầu quyền tạo thông báo để tạo một thử nghiệm ứng dụng.</string>
+    <string name="service_disabled">Đọc thông báo đã tắt</string>
+    <string name="status_summary_notification_access_enabled">Nhấn vào để tạm ngừng Đọc thông báo.
+\nNhấn và giữ để truy cập cài đặt thông báo trên Android để tắt dịch vụ.</string>
+    <string name="status_summary_notification_access_disabled">Nhần vào để mở cài đặt truy cập thông báo trên Android để mở dịch vụ.</string>
+    <string name="status_summary_suspended">Nhấn vào để kích hoạt Đọc thông báo.
+\nNhấn và giữ để mở cài đặt truy cập thông báo trên Android để tắt dịch vụ.</string>
+    <string name="app_list_summary">Danh sách ứng dụng đã cài đặt có thể bỏ qua</string>
+    <string name="tts">Chuyển văn bản thành giọng nói</string>
+    <string name="tts_summary">Cấu hình hành vi Chuyển văn bản thành giọng nói</string>
+    <string name="audio_focus">Tạm dừng/ làm mờ Media</string>
+    <string name="audio_focus_summary">Yêu cẩu các phương tiện khác tạm dừng hoặc mờ đi khi đang đọc thông báo</string>
+    <string name="shake_to_silence">Lắc để im lặng</string>
+    <string name="ignore_repeat_dialog_msg">Thiết lập số giây để bỏ qua kể từ thông báo cuối cùng trước khi đọc lại.
+\nViệc lặp lại sẽ bị đặt lại khi bỏ qua và xuất hiện thông báo khác.
+\nĐể trống = Vô hạn.</string>
+    <string name="device_state">Trạng thái thiết bị</string>
+    <string name="device_state_summary">Chọn có đọc thông báo trong các trạng thái của thiết bị hay không</string>
+    <string name="device_state_dialog_title">Đọc thông báo trong các trạng thái này của thiết bị</string>
+    <string name="quiet_start">Khoảng thời gian Yên lặng</string>
+    <string name="quiet_start_summary">Không đọc thông báo sau khoảng thời gian này.
+\nĐể lại giống như kết thúc để tắt đi.</string>
+    <string name="quiet_end">Khoảng Yên lặng kết thúc</string>
+    <string name="quiet_end_summary">Không đọc thông báo trước khoảng thời gian này.
+\nĐể thông số như ban đầu để tắt.</string>
+    <string name="test">Thử nghiệm</string>
+    <string name="test_summary">Gửi thông báo (trễ 5 giây) để kiểm tra trạng thái cài đặt hiện tại</string>
+    <string name="test_ignored">Đọc thông báo bỏ qua các ứng dụng.
+\nĐang thử nghiệm, nhưng thông báo không được đọc.</string>
+    <string name="notification_channel_desc">Dùng cho các kiểm tra thông báo</string>
+    <string name="test_ticker">Đây là các thông điệp được đánh dấu</string>
+    <string name="test_subtext">Văn bản phụ</string>
+    <string name="test_content_title">Tiêu đề nội dung</string>
+    <string name="test_content_text">Đây là nội dung thông điệp.</string>
+    <string name="test_content_info">Thông tin thông báo</string>
+    <string name="test_big_content_title">Tiêu đề nội dung lớn</string>
+    <string name="test_big_content_summary">Đây là tóm tắt nội dung lớn</string>
+    <string name="test_big_content_text">Đây là nội dung văn bản lớn.</string>
+    <string name="test_text_lines">Đây là một dòng văn bản.
+\nĐây là dòng văn bản khác.</string>
+    <string name="notify_log">Nhật ký các thông báo</string>
+    <string name="notify_log_summary">Danh sách thông báo cuối cùng %d.
+\nHiện thị thời gian, tên ứng dụng, thông điệp, và lý do bỏ qua.</string>
+    <string name="notification_details">Chi tiết thông báo</string>
+    <string name="enable">Bật lên</string>
+    <string name="ticker">Đánh dấu</string>
+    <string name="subtext">Văn bản phụ</string>
+    <string name="title">Tiêu đề</string>
+    <string name="content_text">Nội dung thông báo</string>
+    <string name="content_info_text">Thông tin nội dung thông báo</string>
+    <string name="big_content_summary">Tóm tắt nội dung lớn</string>
+    <string name="text_lines">Dòng văn bản</string>
+    <string name="ignored_reasons">Lý do bỏ qua</string>
+    <string name="interrupted_reason">Lý do gián đoạn</string>
+    <string name="metadata">Siêu dữ liệu</string>
+    <string name="metadata_id">ID: %d</string>
+    <string name="metadata_category">Danh mục: %s</string>
+    <string name="metadata_progress">Tiến trình: %1$d / %2$d</string>
+    <string name="ignore_app">Bỏ qua %s?</string>
+    <string name="unignore_app">Bỏ qua nữa %s?</string>
+    <string name="yes">Đồng ý</string>
+    <string name="support">Giúp đỡ &amp; Hỗ trợ</string>
+    <string name="support_rate">Xếp hạng và Đánh giá</string>
+    <string name="support_email">Gửi thư cho nhà phát triển</string>
+    <string name="support_email_subtext">Phản hồi</string>
+    <string name="support_discord">Chat Discord</string>
+    <string name="support_matrix">Ma trận</string>
+    <string name="support_chat_subtext">Nhắn tin người dùng, phản hồi với nhà phát triển</string>
+    <string name="support_translations">Hỗ trợ dịch sang ngôn ngữ khác</string>
+    <string name="support_github">Trang GitHub</string>
+    <string name="support_github_subtext">Báo cáo lỗi, mã nguồn</string>
+    <string name="support_privacy">Chính sách bảo mật</string>
+    <string name="error_market">Lỗi: Không tìm thấy ứng dụng đã được cài đặt từ CH Play.</string>
+    <string name="error_email">Lỗi: Không tìm thấy ứng dúng email đã cài đặt.</string>
+    <string name="error_browser">Lỗi: Không tìm thấy ứng dụng trình duyệt đã cài đặt.</string>
+    <string name="close">Đóng lại</string>
+    <string name="ignore_all">Bỏ qua tất cả</string>
+    <string name="ignore_none">Không bỏ qua</string>
+    <string name="filter">Lọc</string>
+    <string name="tts_settings">Cài đặt TTS</string>
+    <string name="tts_message">Thông điệp TTS</string>
+    <string name="tts_message_summary">Tùy chỉnh phần nào của thông báo được đọc</string>
+    <string name="tts_text_replace">TTS Văn bản thay thế</string>
+    <string name="tts_text_replace_summary">Thay thế ký tự cần đọc ví dụ như sửa lỗi</string>
+    <string name="text_replace_error_duplicate">Có trùng lặp! Sẽ không được lưu lại.</string>
+    <string name="text_to_replace">Ký tự dùng để thay thế</string>
+    <string name="replacement_text">Ký tự thay thế</string>
+    <string name="remove">Bỏ đi</string>
+    <string name="error">Lỗi</string>
+    <string name="max_length">Số ký tự tối đa</string>
+    <string name="max_length_summary">Số ký tự tối đa được đọc. Thông điệp lớn hơn sẽ bị cắt bớt.</string>
+    <string name="max_length_dialog_msg">Số ký tự tối đa được đọc
+\nLớn hơn sẽ bị cắt bớt.</string>
+    <string name="tts_stream">Luồng âm thanh Chuyển văn bản thành Giọng nói</string>
+    <string name="tts_stream_summary">Chọn luồng âm thanh mà Chuyển văn bản thành giọng nói phát</string>
+    <string name="tts_delay">Độ trễ của Chuyển văn bản thành Giọng nói</string>
+    <string name="tts_delay_summary">Số giây bị trễ để đọc sau khi có thông báo</string>
+    <string name="tts_repeat">Chuyển văn bản thành giọng nói lặp lại</string>
+    <string name="tts_repeat_summary">Liên tục lặp lại đọc thông báo cho đến khi màn hình được bật lên</string>
+    <string name="app_is_ignored">%s bị bỏ qua</string>
+    <string name="app_is_not_ignored">%s không bị bỏ qua</string>
+    <string name="notification_from">Thông báo từ %s .</string>
+    <string name="error_tts_init">Lỗi: Không thể khởi tạo Chuyển văn bản thành Giọng nói. Mã lỗi %d</string>
+    <string name="reason_app">Những ứng dụng bị bỏ qua</string>
+    <string name="reason_string_ignored">Những ký tự bị bỏ qua</string>
+    <string name="reason_string_required">Thiếu những ký tự bắt buộc</string>
+    <string name="reason_empty_msg">Thông điệp trống</string>
+    <string name="reason_quiet">Thời gian Yên lặng</string>
+    <string name="reason_silent">Chế độ Rung và Yên lặng</string>
+    <string name="reason_call">Cuộc gọi đang diễn ra</string>
+    <string name="reason_headset_off">Tắt tai nghe</string>
+    <string name="reason_headset_on">Mở tai nghe</string>
+    <string name="reason_shake">Yên lặng bởi lắc điện thoại</string>
+    <string name="reason_suspended">Tắt Đọc thông báo bằng tiện ích nhỏ</string>
+    <string name="reason_service_stopped">Dịch vụ bị ngừng</string>
+    <string name="reason_identical">Tin nhắn giống hệt nhau {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+    <string name="reason_tts_interrupted">Chuyển văn bản thành Giọng nói bị gián đoạn không rõ lý do</string>
+    <string name="app_list">Danh sách ứng dụng</string>
+    <string name="app_name">Đọc thông báo</string>
+    <string name="service_running">Đọc thông báo đang hoạt động</string>
+    <string name="back">Quay lại</string>
+    <string name="service_suspended">Đọc thông báo đang tạm dừng</string>
+</resources>
