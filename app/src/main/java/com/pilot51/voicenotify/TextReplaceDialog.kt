@@ -46,11 +46,11 @@ import com.pilot51.voicenotify.TextReplaceDialogViewModel.Companion.updateListIt
 @Composable
 fun TextReplaceDialog(onDismiss: () -> Unit) {
 	val vm: TextReplaceDialogViewModel = viewModel()
-	val replaceList = remember { mutableStateListOf<Pair<String, String>?>() }
-	LaunchedEffect(Unit) {
-		replaceList.apply {
-			addAll(vm.load())
-			if (!contains(null)) add(null)
+	val savedList by vm.ttsTextReplace
+	val replaceList = remember(savedList) {
+		mutableStateListOf<Pair<String, String>?>().apply {
+			addAll(savedList)
+			add(null)
 		}
 	}
 	TextReplaceDialog(
@@ -59,6 +59,7 @@ fun TextReplaceDialog(onDismiss: () -> Unit) {
 		onDismiss = onDismiss
 	)
 }
+
 @Composable
 private fun TextReplaceDialog(
 	replaceList: MutableList<Pair<String, String>?>,
@@ -146,9 +147,9 @@ private fun TextReplaceListItem(
 	replaceList: MutableList<Pair<String, String>?>
 ) {
 	val focusManager = LocalFocusManager.current
-	var editFrom by remember { mutableStateOf(pair?.first ?: "") }
-	var editTo by remember { mutableStateOf(pair?.second ?: "") }
-	var isError by remember { mutableStateOf(isDuplicate(index, editFrom, replaceList)) }
+	var editFrom by remember(pair) { mutableStateOf(pair?.first ?: "") }
+	var editTo by remember(pair) { mutableStateOf(pair?.second ?: "") }
+	var isError by remember(replaceList) { mutableStateOf(isDuplicate(index, editFrom, replaceList)) }
 	/**
 	 * Used to prevent onFocusChange of the EditTexts from erroneously updating
 	 * data with old row information after data has changed from onClick of the remove button.

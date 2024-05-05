@@ -23,7 +23,11 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
-import com.pilot51.voicenotify.PreferenceHelper.prefs
+import com.pilot51.voicenotify.PreferenceHelper.getPrefFlow
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.sqrt
 
@@ -31,19 +35,25 @@ class Shake(context: Context) : SensorEventListener {
 	private val manager = context.getSystemService(SENSOR_SERVICE) as SensorManager
 	private val sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 	var onShake: (() -> Unit)? = null
-	private var threshold = 0.0
+	private var thresholdJob: Job? = null
+	private var threshold = 0
 	private var overThresholdCount = 0
 	private var accelCurrent = 0f
 	private var accelLast = 0f
 
 	fun enable() {
 		if (onShake == null) return
-		threshold = prefs.getString(KEY_SHAKE_THRESHOLD, DEFAULT_SHAKE_THRESHOLD.toString())
-				?.toDoubleOrNull() ?: return
+		thresholdJob = CoroutineScope(Dispatchers.IO).launch {
+			getPrefFlow(KEY_SHAKE_THRESHOLD, DEFAULT_SHAKE_THRESHOLD).collect {
+				threshold = it
+			}
+		}
 		manager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
 	}
 
 	fun disable() {
+		thresholdJob?.cancel()
+		thresholdJob = null
 		manager.unregisterListener(this)
 		accelCurrent = 0f
 		accelLast = 0f

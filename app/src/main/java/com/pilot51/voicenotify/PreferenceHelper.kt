@@ -15,88 +15,163 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.SharedPreferences
+import android.content.Context
 import android.media.AudioManager
-import androidx.core.text.isDigitsOnly
+import android.os.Build
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import androidx.preference.PreferenceManager
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
+import com.pilot51.voicenotify.db.AppDatabase
+import com.pilot51.voicenotify.db.Settings
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_REPEAT
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_MAX_LENGTH
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_QUIET_TIME
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_HEADSET_OFF
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_HEADSET_ON
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_OFF
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_ON
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SILENT_ON
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STREAM
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import java.io.File
+import kotlin.math.roundToInt
 
 object PreferenceHelper {
 	// Main
-	const val KEY_AUDIO_FOCUS = "audio_focus"
-	const val KEY_SHAKE_THRESHOLD = "shake_threshold"
-	const val KEY_REQUIRE_STRINGS = "require_strings"
-	const val KEY_IGNORE_STRINGS = "ignore_strings"
-	const val KEY_IGNORE_EMPTY = "ignore_empty"
-	const val KEY_IGNORE_GROUPS = "ignore_groups"
-	const val KEY_IGNORE_REPEAT = "ignore_repeat"
-	const val KEY_QUIET_START = "quietStart"
-	const val KEY_QUIET_END = "quietEnd"
-
-	// Device states
-	const val KEY_SPEAK_SCREEN_OFF = "speakScreenOff"
-	const val KEY_SPEAK_SCREEN_ON = "speakScreenOn"
-	const val KEY_SPEAK_HEADSET_OFF = "speakHeadsetOff"
-	const val KEY_SPEAK_HEADSET_ON = "speakHeadsetOn"
-	const val KEY_SPEAK_SILENT_ON = "speakSilentOn"
-
-	// TTS
-	const val KEY_TTS_STRING = "ttsString"
-	const val KEY_TTS_TEXT_REPLACE = "ttsTextReplace"
-	const val KEY_MAX_LENGTH = "key_max_length"
-	const val KEY_TTS_STREAM = "ttsStream"
-	const val KEY_TTS_DELAY = "ttsDelay"
-	const val KEY_TTS_REPEAT = "tts_repeat"
+	val KEY_SHAKE_THRESHOLD = intPreferencesKey("shake_threshold")
 
 	// App List
-	const val KEY_APP_DEFAULT_ENABLE = "defEnable"
+	val KEY_APP_DEFAULT_ENABLE = booleanPreferencesKey("defEnable")
 
 	// Service
-	const val KEY_IS_SUSPENDED = "isSuspended"
+	val KEY_IS_SUSPENDED = booleanPreferencesKey("isSuspended")
 
 	// Defaults
-	const val DEFAULT_AUDIO_FOCUS = true
 	const val DEFAULT_SHAKE_THRESHOLD = 100
-	const val DEFAULT_IGNORE_EMPTY = true
-	const val DEFAULT_IGNORE_GROUPS = true
-	const val DEFAULT_IGNORE_REPEAT = 10
-	const val DEFAULT_QUIET_TIME = 0
-	const val DEFAULT_SPEAK_SCREEN_OFF = true
-	const val DEFAULT_SPEAK_SCREEN_ON = true
-	const val DEFAULT_SPEAK_HEADSET_OFF = true
-	const val DEFAULT_SPEAK_HEADSET_ON = true
-	const val DEFAULT_SPEAK_SILENT_ON = false
-	const val DEFAULT_TTS_STRING = "#A\n#C\n#M"
-	const val DEFAULT_MAX_LENGTH = 500
-	const val DEFAULT_TTS_STREAM = AudioManager.STREAM_MUSIC
 	const val DEFAULT_APP_DEFAULT_ENABLE = true
 	const val DEFAULT_IS_SUSPENDED = false
 
-	val prefs: SharedPreferences by lazy {
-		PreferenceManager.getDefaultSharedPreferences(appContext).apply {
-			convertOldStreamPref()
+	private val settingsDao = AppDatabase.db.settingsDao
+	private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("prefs")
+	private val dataStore = appContext.dataStore
+
+	lateinit var globalSettings: Settings
+	val globalSettingsFlow = settingsDao.getGlobalSettings().filterNotNull().also { flow ->
+		CoroutineScope(Dispatchers.IO).launch {
+			flow.collect { globalSettings = it }
+		}
+	}
+	val globalSettingsState @Composable get() =
+		if (isPreview) {
+			remember { mutableStateOf(Settings.defaults) }
+		} else {
+			globalSettingsFlow.collectAsState(initial = Settings.defaults)
+		}
+	/** @return The selected audio stream matching the `STREAM_` constant from [AudioManager]. */
+	val selectedAudioStreamFlow = globalSettingsFlow.map { it.ttsStream ?: DEFAULT_TTS_STREAM }
+
+	init {
+		CoroutineScope(Dispatchers.IO).launch {
+			initSettings()
 		}
 	}
 
-	/** @return The selected audio stream matching the `STREAM_` constant from [AudioManager]. */
-	fun getSelectedAudioStream() = prefs.getString(KEY_TTS_STREAM, null)
-		?.toIntOrNull() ?: DEFAULT_TTS_STREAM
+	fun Settings.save() {
+		CoroutineScope(Dispatchers.IO).launch {
+			settingsDao.update(this@save)
+		}
+	}
+
+	fun <T> getPrefFlow(key: Preferences.Key<T>, default: T) =
+		dataStore.data.map { it[key] ?: default }
+
+	@Composable
+	fun <T> getPrefState(key: Preferences.Key<T>, default: T) =
+		if (isPreview) {
+			remember { mutableStateOf(default) }
+		} else {
+			getPrefFlow(key, default).collectAsState(initial = default)
+		}
+
+	fun <T> getPref(key: Preferences.Key<T>, default: T) =
+		runBlocking(Dispatchers.IO) { getPrefFlow(key, default).first() }
+
+	/** Sets the value of the preference for [key], or removes it if [newValue] is `null`. */
+	fun <T> setPref(key: Preferences.Key<T>, newValue: T?) {
+		CoroutineScope(Dispatchers.IO).launch {
+			dataStore.edit { pref ->
+				newValue?.let { pref[key] = it } ?: pref.remove(key)
+			}
+		}
+	}
 
 	/**
-	 * If necessary, converts audio stream preference from obsolete word string to integer string.
-	 * @since v1.0.11
+	 * Creates global settings in the database and DataStore
+	 * with default values or migrated from shared preferences.
 	 */
-	private fun SharedPreferences.convertOldStreamPref() {
-		getString(KEY_TTS_STREAM, null)?.takeUnless { it.isDigitsOnly() }?.let {
-			val newStream = when (it) {
-				"media" -> AudioManager.STREAM_MUSIC
-				"notification" -> AudioManager.STREAM_NOTIFICATION
-				else -> {
-					edit().remove(KEY_TTS_STREAM).apply()
-					return
-				}
+	private suspend fun initSettings() {
+		if (settingsDao.hasGlobalSettings()) return
+		val spDir = File(appContext.applicationInfo.dataDir, "shared_prefs")
+		val spName = "com.pilot51.voicenotify_preferences"
+		val spFile = File(spDir, "$spName.xml")
+		if (spFile.exists()) {
+			val sp = PreferenceManager.getDefaultSharedPreferences(appContext)
+			settingsDao.insert(Settings(
+				audioFocus = sp.getBoolean("audio_focus", DEFAULT_AUDIO_FOCUS),
+				requireStrings = sp.getString("require_strings", null),
+				ignoreStrings = sp.getString("ignore_strings", null),
+				ignoreEmpty = sp.getBoolean("ignore_empty", DEFAULT_IGNORE_EMPTY),
+				ignoreGroups = sp.getBoolean("ignore_groups", DEFAULT_IGNORE_GROUPS),
+				ignoreRepeat = sp.getString("ignore_repeat", DEFAULT_IGNORE_REPEAT.toString())
+					?.toIntOrNull() ?: -1,
+				speakScreenOff = sp.getBoolean("speakScreenOff", DEFAULT_SPEAK_SCREEN_OFF),
+				speakScreenOn = sp.getBoolean("speakScreenOn", DEFAULT_SPEAK_SCREEN_ON),
+				speakHeadsetOff = sp.getBoolean("speakHeadsetOff", DEFAULT_SPEAK_HEADSET_OFF),
+				speakHeadsetOn = sp.getBoolean("speakHeadsetOn", DEFAULT_SPEAK_HEADSET_ON),
+				speakSilentOn = sp.getBoolean("speakSilentOn", DEFAULT_SPEAK_SILENT_ON),
+				quietStart = sp.getInt("quietStart", DEFAULT_QUIET_TIME),
+				quietEnd = sp.getInt("quietEnd", DEFAULT_QUIET_TIME),
+				ttsString = sp.getString("ttsString", DEFAULT_TTS_STRING),
+				ttsTextReplace = sp.getString("ttsTextReplace", null),
+				ttsMaxLength = sp.getString("key_max_length", null)
+					?.toIntOrNull() ?: DEFAULT_MAX_LENGTH,
+				ttsStream = sp.getString("ttsStream", null)
+					?.toIntOrNull() ?: DEFAULT_TTS_STREAM,
+				ttsDelay = sp.getString("ttsDelay", null)
+					?.toDoubleOrNull()?.roundToInt(),
+				ttsRepeat = sp.getString("tts_repeat", null)
+					?.toDoubleOrNull() ?: 0.0
+			))
+			dataStore.edit { prefs ->
+				prefs[KEY_SHAKE_THRESHOLD] = sp.getString("shake_threshold", null)
+					?.toDoubleOrNull()?.roundToInt() ?: DEFAULT_SHAKE_THRESHOLD
+				prefs[KEY_APP_DEFAULT_ENABLE] = sp.getBoolean("defEnable", DEFAULT_APP_DEFAULT_ENABLE)
+				prefs[KEY_IS_SUSPENDED] = sp.getBoolean("isSuspended", DEFAULT_IS_SUSPENDED)
 			}
-			edit().putString(KEY_TTS_STREAM, newStream.toString()).apply()
-		}
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+				appContext.deleteSharedPreferences(spName)
+			} else {
+				spFile.delete()
+			}
+		} else settingsDao.insert(Settings.defaults)
 	}
 }

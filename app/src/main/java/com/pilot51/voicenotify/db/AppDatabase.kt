@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,14 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pilot51.voicenotify
+package com.pilot51.voicenotify.db
 
 import androidx.room.*
+import androidx.room.migration.AutoMigrationSpec
+import com.pilot51.voicenotify.VNApplication
+import kotlinx.coroutines.flow.Flow
 
-@Database(version = 1, entities = [App::class])
+@Database(
+	version = 2,
+	entities = [
+		App::class,
+		Settings::class
+	],
+	autoMigrations = [
+		AutoMigration (from = 1, to = 2, spec = AppDatabase.Migration1To2::class)
+	]
+)
 @RewriteQueriesToDropUnusedColumns
 abstract class AppDatabase : RoomDatabase() {
 	abstract val appDao: AppDao
+	abstract val settingsDao: SettingsDao
 
 	@Dao
 	interface AppDao {
@@ -28,10 +41,7 @@ abstract class AppDatabase : RoomDatabase() {
 		suspend fun getAll(): List<App>
 
 		@Insert
-		suspend fun insert(app: App): Long
-
-		@Update
-		suspend fun update(apps: List<App>)
+		suspend fun insert(app: App)
 
 		@Query("SELECT EXISTS (SELECT * FROM apps WHERE package = :pkg)")
 		suspend fun existsByPackage(pkg: String): Boolean
@@ -87,6 +97,27 @@ abstract class AppDatabase : RoomDatabase() {
 		@Query("DELETE FROM apps WHERE package = :pkg")
 		suspend fun removeApp(pkg: String)
 	}
+
+	@Dao
+	interface SettingsDao {
+		@Insert
+		suspend fun insert(settings: Settings)
+
+		@Update
+		suspend fun update(settings: Settings)
+
+		@Query("SELECT * FROM settings WHERE app_package IS NULL")
+		fun getGlobalSettings(): Flow<Settings?>
+
+		@Query("SELECT EXISTS (SELECT * FROM settings WHERE app_package IS NULL)")
+		suspend fun hasGlobalSettings(): Boolean
+
+		@Query("SELECT EXISTS (SELECT * FROM settings WHERE app_package = :pkg)")
+		suspend fun existsByPackage(pkg: String): Boolean
+	}
+
+	@DeleteColumn(tableName = "apps", columnName = "_id")
+	class Migration1To2 : AutoMigrationSpec
 
 	companion object {
 		val db by lazy {

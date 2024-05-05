@@ -41,6 +41,7 @@ import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pilot51.voicenotify.AppListViewModel.IgnoreType
+import com.pilot51.voicenotify.db.App
 import kotlinx.coroutines.delay
 
 private lateinit var vmStoreOwner: ViewModelStoreOwner
@@ -170,8 +171,8 @@ private fun AppListItem(app: App, toggleIgnore: (app: App) -> Unit) {
 @Composable
 private fun AppListPreview() {
 	val apps = listOf(
-		App(1, "package.name.one", "App Name 1", true),
-		App(2, "package.name.two", "App Name 2", false)
+		App("package.name.one", "App Name 1", true),
+		App("package.name.two", "App Name 2", false)
 	)
 	AppTheme {
 		AppList(apps, true) {}

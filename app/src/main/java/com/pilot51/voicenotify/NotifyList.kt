@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.pilot51.voicenotify.db.App
 
 object NotifyList {
 	const val HISTORY_LIMIT = 100
@@ -371,11 +372,11 @@ private fun LogDialogPreview() {
 	val previewNotification = previewNotification()
 	val list = listOf(
 		NotificationInfo(
-			app = App(1, "package.name.one", "App Name 1", true),
+			app = App("package.name.one", "App Name 1", true),
 			notification = previewNotification
 		),
 		NotificationInfo(
-			app = App(2, "package.name.two", "App Name 2", false),
+			app = App("package.name.two", "App Name 2", false),
 			notification = previewNotification
 		)
 	)
@@ -388,7 +389,7 @@ private fun LogDialogPreview() {
 @Composable
 private fun DetailDialogPreview() {
 	val info = NotificationInfo(
-		app = App(1, "package.name.one", "App Name 1", true),
+		app = App("package.name.one", "App Name 1", true),
 		notification = previewNotification()
 	)
 	AppTheme {
@@ -399,7 +400,7 @@ private fun DetailDialogPreview() {
 @VNPreview
 @Composable
 private fun IgnoreDialogPreview() {
-	val app = App(1, "package.name.one", "App Name 1", true)
+	val app = App("package.name.one", "App Name 1", true)
 	AppTheme {
 		IgnoreDialog(app) {}
 	}

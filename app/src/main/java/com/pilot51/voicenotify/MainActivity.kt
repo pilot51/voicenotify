@@ -15,37 +15,25 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STREAM
-import com.pilot51.voicenotify.PreferenceHelper.prefs
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
-class MainActivity : ComponentActivity(), SharedPreferences.OnSharedPreferenceChangeListener {
+class MainActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		Common.setVolumeStream(this)
+		lifecycleScope.launch(Dispatchers.IO) {
+			PreferenceHelper.selectedAudioStreamFlow.collect {
+				volumeControlStream = it
+			}
+		}
 		setContent {
 			AppTheme {
 				AppMain()
 			}
-		}
-	}
-
-	override fun onResume() {
-		super.onResume()
-		prefs.registerOnSharedPreferenceChangeListener(this)
-	}
-
-	override fun onPause() {
-		prefs.unregisterOnSharedPreferenceChangeListener(this)
-		super.onPause()
-	}
-
-	override fun onSharedPreferenceChanged(sp: SharedPreferences?, key: String?) {
-		if (key == KEY_TTS_STREAM) {
-			Common.setVolumeStream(this)
 		}
 	}
 }

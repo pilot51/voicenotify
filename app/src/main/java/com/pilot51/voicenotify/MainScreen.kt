@@ -37,7 +37,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -57,14 +56,10 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.pilot51.voicenotify.NotifyList.NotificationLogDialog
 import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
 import com.pilot51.voicenotify.PermissionHelper.requestPermission
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_AUDIO_FOCUS
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IGNORE_EMPTY
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IGNORE_GROUPS
-import com.pilot51.voicenotify.PreferenceHelper.KEY_AUDIO_FOCUS
-import com.pilot51.voicenotify.PreferenceHelper.KEY_IGNORE_EMPTY
-import com.pilot51.voicenotify.PreferenceHelper.KEY_IGNORE_GROUPS
-import com.pilot51.voicenotify.PreferenceHelper.KEY_QUIET_END
-import com.pilot51.voicenotify.PreferenceHelper.KEY_QUIET_START
+import com.pilot51.voicenotify.PreferenceHelper.save
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 
@@ -172,7 +167,7 @@ private fun MainScreen(
 	onClickTtsConfig: () -> Unit
 ) {
 	val context = LocalContext.current
-	val isPreview = LocalInspectionMode.current
+	val settings by PreferenceHelper.globalSettingsState
 	val phoneStatePermissionState = if (isPreview) null
 		else rememberPermissionState(Manifest.permission.READ_PHONE_STATE)
 	val postNotificationPermissionState =
@@ -261,9 +256,13 @@ private fun MainScreen(
 		PreferenceRowCheckbox(
 			titleRes = R.string.audio_focus,
 			summaryResOn = R.string.audio_focus_summary,
-			key = KEY_AUDIO_FOCUS,
-			default = DEFAULT_AUDIO_FOCUS
-		)
+			initialValue = settings.audioFocus ?: DEFAULT_AUDIO_FOCUS
+		) {
+			settings.run {
+				audioFocus = it
+				save()
+			}
+		}
 		PreferenceRowLink(
 			titleRes = R.string.shake_to_silence,
 			summaryRes = R.string.shake_to_silence_summary,
@@ -283,16 +282,24 @@ private fun MainScreen(
 			titleRes = R.string.ignore_empty,
 			summaryResOn = R.string.ignore_empty_summary_on,
 			summaryResOff = R.string.ignore_empty_summary_off,
-			key = KEY_IGNORE_EMPTY,
-			default = DEFAULT_IGNORE_EMPTY
-		)
+			initialValue = settings.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY
+		) {
+			settings.run {
+				ignoreEmpty = it
+				save()
+			}
+		}
 		PreferenceRowCheckbox(
 			titleRes = R.string.ignore_groups,
 			summaryResOn = R.string.ignore_groups_summary_on,
 			summaryResOff = R.string.ignore_groups_summary_off,
-			key = KEY_IGNORE_GROUPS,
-			default = DEFAULT_IGNORE_GROUPS
-		)
+			initialValue = settings.ignoreGroups ?: DEFAULT_IGNORE_GROUPS
+		) {
+			settings.run {
+				ignoreGroups = it
+				save()
+			}
+		}
 		PreferenceRowLink(
 			titleRes = R.string.ignore_repeat,
 			summaryRes = R.string.ignore_repeat_summary,
@@ -353,10 +360,10 @@ private fun MainScreen(
 		DeviceStatesDialog { showDeviceStates = false }
 	}
 	if (showQuietTimeStart) {
-		QuietTimeDialog(KEY_QUIET_START) { showQuietTimeStart = false }
+		QuietTimeDialog(QuietTimeMode.START) { showQuietTimeStart = false }
 	}
 	if (showQuietTimeEnd) {
-		QuietTimeDialog(KEY_QUIET_END) { showQuietTimeEnd = false }
+		QuietTimeDialog(QuietTimeMode.END) { showQuietTimeEnd = false }
 	}
 	if (showLog) {
 		NotificationLogDialog { showLog = false }

@@ -24,22 +24,13 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.core.content.edit
-import com.pilot51.voicenotify.PreferenceHelper.prefs
-import kotlin.reflect.KProperty
 
 // Simplified and heavily modified from https://github.com/alorma/Compose-Settings
 
@@ -78,7 +69,7 @@ fun PreferenceRowLink(
 }
 
 /**
- * A preference row with a checkbox, updating a boolean preference.
+ * A preference row with a checkbox.
  * If [summaryResOff] is not provided, [summaryResOn] is used for both states.
  */
 @Composable
@@ -86,13 +77,10 @@ fun PreferenceRowCheckbox(
 	@StringRes titleRes: Int,
 	@StringRes summaryResOn: Int,
 	@StringRes summaryResOff: Int = summaryResOn,
-	key: String,
-	default: Boolean
+	initialValue: Boolean,
+	onChange: (Boolean) -> Unit
 ) {
-	val isPreview = LocalInspectionMode.current
-	var prefValue by remember {
-		PreferenceBooleanState(key = if (isPreview) "isPreview" else key, defaultValue = default)
-	}
+	var prefValue by remember(initialValue) { mutableStateOf(initialValue) }
 	val summaryRes = if (prefValue) summaryResOn else summaryResOff
 	Row(
 		modifier = Modifier
@@ -101,7 +89,10 @@ fun PreferenceRowCheckbox(
 			.toggleable(
 				value = prefValue,
 				role = Role.Checkbox,
-				onValueChange = { prefValue = !prefValue }
+				onValueChange = {
+					prefValue = !prefValue
+					onChange(prefValue)
+				}
 			),
 		verticalAlignment = Alignment.CenterVertically
 	) {
@@ -111,7 +102,10 @@ fun PreferenceRowCheckbox(
 			action = {
 				Checkbox(
 					checked = prefValue,
-					onCheckedChange = { prefValue = it }
+					onCheckedChange = {
+						prefValue = it
+						onChange(it)
+					}
 				)
 			}
 		)
@@ -163,36 +157,6 @@ private fun ColorWrap(
 	}
 }
 
-private class PreferenceBooleanState(
-	val key: String,
-	val defaultValue: Boolean
-) {
-	private var _value by mutableStateOf(
-		if (key == "isPreview") defaultValue else prefs.getBoolean(key, defaultValue)
-	)
-	var value: Boolean
-		set(value) {
-			_value = value
-			prefs.edit { putBoolean(key, value) }
-		}
-		get() = _value
-}
-
-@Suppress("NOTHING_TO_INLINE")
-private inline operator fun PreferenceBooleanState.getValue(
-	thisObj: Any?,
-	property: KProperty<*>
-): Boolean = value
-
-@Suppress("NOTHING_TO_INLINE")
-private inline operator fun PreferenceBooleanState.setValue(
-	thisObj: Any?,
-	property: KProperty<*>,
-	value: Boolean
-) {
-	this.value = value
-}
-
 @VNPreview
 @Composable
 private fun PreferenceRowLinkPreview() {
@@ -216,8 +180,8 @@ private fun PreferenceRowCheckboxPreview(
 			titleRes = R.string.ignore_groups,
 			summaryResOn = R.string.ignore_groups_summary_on,
 			summaryResOff = R.string.ignore_groups_summary_off,
-			key = "isPreview",
-			default = value
+			initialValue = value,
+			onChange = {}
 		)
 	}
 }
