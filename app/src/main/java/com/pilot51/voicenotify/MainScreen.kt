@@ -25,9 +25,12 @@ import android.content.res.Configuration
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -37,6 +40,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
@@ -45,6 +49,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -69,6 +74,7 @@ import com.pilot51.voicenotify.PreferenceHelper.KEY_QUIET_END
 import com.pilot51.voicenotify.PreferenceHelper.KEY_QUIET_START
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
+import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 
 private enum class Screen(@StringRes val title: Int) {
 	MAIN(R.string.app_name),
@@ -78,26 +84,14 @@ private enum class Screen(@StringRes val title: Int) {
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-	MaterialTheme(
-		colorScheme = if (isSystemInDarkTheme()) {
-			darkColorScheme(primary = Color(0xFF1CB7D5), primaryContainer = Color(0xFF1E4696))
-		} else {
-			lightColorScheme(primary = Color(0xFF2A54A5), primaryContainer = Color(0xFF64F0FF))
-		},
-		typography = MaterialTheme.typography.copy(
-			// Increased font size for dialog buttons
-			labelLarge = TextStyle(
-				fontFamily = FontFamily.SansSerif,
-				fontWeight = FontWeight.Medium,
-				fontSize = 20.sp,
-				lineHeight = 20.sp,
-				letterSpacing = 0.1.sp,
-			)
-		),
+	VoicenotifyTheme(
+		darkTheme = isSystemInDarkTheme(),
+		dynamicColor = true,
 		content = content
 	)
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppMain() {
 	val navController = rememberNavController()
@@ -105,12 +99,20 @@ fun AppMain() {
 	val currentScreen = Screen.valueOf(
 		backStackEntry?.destination?.route ?: Screen.MAIN.name
 	)
+	val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
+		rememberTopAppBarState(),
+		canScroll = { true })
 	Scaffold(
+		modifier = Modifier
+			.fillMaxSize()
+			.background(MaterialTheme.colorScheme.background)
+			.nestedScroll(scrollBehavior.nestedScrollConnection),
 		topBar = {
 			AppBar(
 				currentScreen = currentScreen,
 				canNavigateBack = navController.previousBackStackEntry != null,
-				navigateUp = { navController.navigateUp() }
+				navigateUp = { navController.navigateUp() },
+				scrollBehavior = scrollBehavior
 			)
 		}
 	) { innerPadding ->
@@ -118,6 +120,7 @@ fun AppMain() {
 			navController = navController,
 			startDestination = Screen.MAIN.name,
 			modifier = Modifier.padding(innerPadding)
+				.background(MaterialTheme.colorScheme.background)
 		) {
 			composable(route = Screen.MAIN.name) {
 				MainScreen(
@@ -141,30 +144,48 @@ private fun AppBar(
 	currentScreen: Screen,
 	canNavigateBack: Boolean,
 	navigateUp: () -> Unit,
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 ) {
-	TopAppBar(
-		title = { Text(stringResource(currentScreen.title)) },
-		modifier = modifier,
-		navigationIcon = {
-			if (canNavigateBack) {
-				IconButton(onClick = navigateUp) {
-					Icon(
-						imageVector = Icons.Filled.ArrowBack,
-						contentDescription = stringResource(R.string.back)
-					)
+	if (currentScreen !== Screen.valueOf(Screen.MAIN.name)) {
+		SmallTopAppBar(
+			title = { Text(stringResource(currentScreen.title)) },
+			modifier = modifier,
+			navigationIcon = {
+				if (canNavigateBack) {
+					IconButton(onClick = navigateUp) {
+						Icon(
+							imageVector = Icons.Filled.ArrowBack,
+							contentDescription = stringResource(R.string.back)
+						)
+					}
 				}
+			},
+			actions = {
+
 			}
-		},
-		actions = {
-			if (currentScreen == Screen.APP_LIST) {
-				AppListActions()
-			}
-		},
-		colors = TopAppBarDefaults.mediumTopAppBarColors(
-			containerColor = MaterialTheme.colorScheme.primaryContainer
 		)
-	)
+	} else {
+		LargeTopAppBar(
+			title = { Text(stringResource(currentScreen.title)) },
+			modifier = modifier
+				.background(MaterialTheme.colorScheme.background),
+			navigationIcon = {
+				if (canNavigateBack) {
+					IconButton(onClick = navigateUp) {
+						Icon(
+							imageVector = Icons.Filled.ArrowBack,
+							contentDescription = stringResource(R.string.back)
+						)
+					}
+				}
+			},
+			scrollBehavior = scrollBehavior,
+			actions = {
+
+			}
+		)
+	}
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -238,7 +259,9 @@ private fun MainScreen(
 	}
 	Column(
 		modifier = Modifier
-			.fillMaxSize()
+			.fillMaxWidth()
+//			.background(MaterialTheme.colorScheme.background)
+			.background(Color(0xfff2f3f9))
 			.verticalScroll(rememberScrollState())
 	) {
 		PreferenceRowLink(

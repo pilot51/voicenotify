@@ -45,7 +45,7 @@ android {
 	compileSdk = 34
 	defaultConfig {
 		applicationId = "com.pilot51.voicenotify"
-		minSdk = 21
+		minSdk = 24
 		targetSdk = 34
 		versionName = "1.3.1"
 		versionCode = 29
@@ -105,7 +105,7 @@ android {
 		generateLocaleConfig = true
 	}
 
-	applicationVariants.all {
+    applicationVariants.all {
 		outputs.all {
 			this as BaseVariantOutputImpl
 			outputFileName = "VoiceNotify_v${defaultConfig.versionName}-${name}_$gitCommitHash.apk"
@@ -119,7 +119,7 @@ dependencies {
 	implementation("androidx.compose.material3:material3:1.1.2")
 	implementation("androidx.compose.material:material-icons-extended-android:1.5.4")
 	implementation("androidx.compose.ui:ui-tooling-preview:1.5.4")
-	debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.5.4")
 	implementation("androidx.navigation:navigation-compose:2.7.6")
 	implementation("androidx.glance:glance-appwidget:1.0.0")
 	implementation("androidx.preference:preference-ktx:1.2.1")

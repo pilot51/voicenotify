@@ -16,13 +16,17 @@
 package com.pilot51.voicenotify
 
 import android.app.Application
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.AndroidViewModel
 import com.pilot51.voicenotify.AppListViewModel.IgnoreType.*
 import com.pilot51.voicenotify.PreferenceHelper.KEY_APP_DEFAULT_ENABLE
@@ -32,6 +36,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.withLock
 
+
 class AppListViewModel(application: Application) : AndroidViewModel(application) {
 	private val appContext = application.applicationContext
 	private val apps by Common::apps
@@ -40,6 +45,7 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	private val syncAppsMutex by Common::syncAppsMutex
 	var searchQuery by mutableStateOf<String?>(null)
 	var showList by mutableStateOf(false)
+	var appEnable by mutableStateOf(false)
 
 	init {
 		updateAppsList()
@@ -72,11 +78,13 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 				}
 
 				// Add new
-				val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-					packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
-				} else {
-					packMan.getInstalledApplications(0)
-				}
+				// val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+				// 	packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
+				// } else {
+				// 	packMan.getInstalledApplications(0)
+				// }
+				var installedApps = Common.getAppsInfo(appContext)
+
 				inst@ for (appInfo in installedApps) {
 					for (app in apps) {
 						if (app.packageName == appInfo.packageName) {
@@ -120,6 +128,7 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	fun massIgnore(ignoreType: IgnoreType) {
 		if (ignoreType == IGNORE_ALL) appDefaultEnable = false
 		else if (ignoreType == IGNORE_NONE) appDefaultEnable = true
+		appEnable = appDefaultEnable
 		CoroutineScope(Dispatchers.IO).launch {
 			syncAppsMutex.withLock {
 				if (apps.isEmpty()) return@launch

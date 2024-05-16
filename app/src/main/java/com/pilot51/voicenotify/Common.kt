@@ -16,19 +16,24 @@
 package com.pilot51.voicenotify
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
 import android.util.Pair
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.mutableStateListOf
 import com.pilot51.voicenotify.AppListViewModel.Companion.appDefaultEnable
 import com.pilot51.voicenotify.PreferenceHelper.getSelectedAudioStream
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+
 
 object Common {
 	/** Sets the volume control stream defined in preferences. */
@@ -116,4 +121,28 @@ object Common {
 		}
 		return list
 	}
+
+	fun isSystemApp(applicationInfo: ApplicationInfo): Boolean {
+		return applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
+	}
+
+	/**
+	 * get application info use queryIntentActivities method
+	 * @param activity
+	 * @return
+	 */
+	fun getAppsInfo(context: Context): List<ApplicationInfo> {
+		val pm = context.packageManager
+		val intent = Intent(Intent.ACTION_MAIN, null)
+		intent.addCategory(Intent.CATEGORY_LAUNCHER)
+		val resolveInfos = pm.queryIntentActivities(intent, PackageManager.GET_META_DATA)
+		val apps: MutableList<ApplicationInfo> = ArrayList(0)
+		for (resolveInfo in resolveInfos) {
+			// filer system apps
+			if (isSystemApp(resolveInfo.activityInfo.applicationInfo)) continue
+			apps.add(resolveInfo.activityInfo.applicationInfo)
+		}
+		return apps
+	}
+
 }
