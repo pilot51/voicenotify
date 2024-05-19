@@ -36,14 +36,19 @@ jobs:
 
       - name: Build
         id: build
-        run: ./gradlew assembleRelease
+        run: ./gradlew assemble
 
-      - name: Automatic Releases
-        uses: marvinpinto/action-automatic-releases@latest
+      - name: GH Release
+        uses: softprops/action-gh-release@v2
         if: ${{ steps.build.outcome == 'success' }}
         with:
-          repo_token: "${{ secrets.GITHUB_TOKEN }}"
-          automatic_release_tag: "latest"
+          name: "Auto build"
+          token: "${{ secrets.GITHUB_TOKEN }}"
+          tag_name: "latest"
           prerelease: true
-          title: "Auto build"
+          body: |
+            Use at your own risk!
+            These builds may be broken and some changes may lose settings or require clearing app data.
+            If you have a final release installed and want to preserve its settings while testing this, you can install the debug build alongside it.
+          generate_release_notes: true
           files: 'app/build/outputs/apk/**/*.apk'

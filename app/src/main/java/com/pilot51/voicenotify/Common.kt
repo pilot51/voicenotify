@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,9 +26,10 @@ import android.util.Pair
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.mutableStateListOf
 import com.pilot51.voicenotify.AppListViewModel.Companion.appDefaultEnable
-import com.pilot51.voicenotify.PreferenceHelper.getSelectedAudioStream
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import kotlinx.coroutines.CoroutineScope
+import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
@@ -36,11 +37,6 @@ import kotlinx.coroutines.sync.withLock
 
 
 object Common {
-	/** Sets the volume control stream defined in preferences. */
-	fun setVolumeStream(activity: Activity) {
-		activity.volumeControlStream = getSelectedAudioStream()
-	}
-
 	val notificationListenerSettingsIntent: Intent by lazy {
 		Intent(
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {

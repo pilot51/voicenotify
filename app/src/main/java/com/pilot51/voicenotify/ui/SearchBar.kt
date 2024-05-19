@@ -1,21 +1,15 @@
-package com.pilot51.voicenotify
+package com.pilot51.voicenotify.ui
 
 
-import android.view.HapticFeedbackConstants
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.requiredHeight
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -30,6 +24,9 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pilot51.voicenotify.AppTheme
+import com.pilot51.voicenotify.R
+import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 
 @Composable
 fun SealSearchBar(
@@ -43,14 +40,18 @@ fun SealSearchBar(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(50.dp),
-        color = MaterialTheme.colorScheme.surfaceVariant,
+        color = VoicenotifyTheme.colorScheme.surfaceVariant
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.background(
+                color = VoicenotifyTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(50.dp)),
+            verticalAlignment = Alignment.CenterVertically) {
             Spacer(modifier = Modifier.width(16.dp))
             Icon(
                 imageVector = Icons.Outlined.Search,
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
+                tint = VoicenotifyTheme.colorScheme.onSurfaceVariant
             )
             SealTextField(
                 value = text,

@@ -18,6 +18,7 @@ package com.pilot51.voicenotify
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,23 +28,20 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.*
-import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.runtime.Composable
@@ -51,16 +49,19 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pilot51.voicenotify.AppListViewModel.IgnoreType
+import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.ui.SealSearchBar
+import com.pilot51.voicenotify.ui.SwitchCustom
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 private lateinit var vmStoreOwner: ViewModelStoreOwner
 
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AppListActions(modifier: Modifier = Modifier) {
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
@@ -78,10 +79,12 @@ fun AppListActions(modifier: Modifier = Modifier) {
 
 @Composable
 fun AppListScreen(
-	list:  List<App> = emptyList()
+	list:  List<App> = emptyList(),
+	onConfigureApp: (app: App) -> Unit
 ) {
 	vmStoreOwner = LocalViewModelStoreOwner.current!!
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
+	val packagesWithOverride by vm.packagesWithOverride
 
 	Column(
 		modifier = Modifier.fillMaxSize()
@@ -106,7 +109,6 @@ fun AppListScreen(
 				stickyHeader = {
 					val modifier = Modifier
 						.fillMaxWidth()
-						.background(MaterialTheme.colorScheme.surface)
 					Row(
 						modifier = modifier,
 						horizontalArrangement = Arrangement.SpaceBetween,
@@ -124,10 +126,14 @@ fun AppListScreen(
 							modifier = Modifier.padding(8.dp)
 						)
 					}
-				}
-			) { app ->
-				vm.setIgnore(app, IgnoreType.IGNORE_TOGGLE)
-			}
+				},
+				packagesWithOverride = packagesWithOverride,
+				toggleIgnore = { app ->
+					vm.setIgnore(app, IgnoreType.IGNORE_TOGGLE)
+				},
+				onConfigureApp = onConfigureApp,
+				onRemoveOverrides = vm::removeOverrides
+			)
 		}
 	}
 
@@ -139,8 +145,11 @@ fun AppListScreen(
 private fun AppList(
 	filteredApps: List<App>,
 	showList: Boolean,
-	stickyHeader: @Composable () -> Unit = {},
+	packagesWithOverride: List<String>,
 	toggleIgnore: (app: App) -> Unit,
+	onConfigureApp: (app: App) -> Unit,
+	onRemoveOverrides: (app: App) -> Unit,
+	stickyHeader: @Composable () -> Unit = {}
 ) {
 	if (!showList) return
 	Column(
@@ -155,7 +164,8 @@ private fun AppList(
 				stickyHeader()
 			}
 			items(filteredApps) {
-				AppListItem(it, toggleIgnore)
+				val hasOverride = packagesWithOverride.contains(it.packageName)
+				AppListItem(it, hasOverride, toggleIgnore, onConfigureApp, onRemoveOverrides)
 			}
 		}
 	}
@@ -212,13 +222,23 @@ fun PackageImage(context: Context, packageName: String, modifier: Modifier = Mod
  }
 
 @Composable
-private fun AppListItem(app: App, toggleIgnore: (app: App) -> Unit) {
+private fun AppListItem(
+	app: App,
+	hasOverride: Boolean,
+	toggleIgnore: (app: App) -> Unit,
+	onConfigureApp: (app: App) -> Unit,
+	onRemoveOverrides: (app: App) -> Unit
+) {
+	var showRemoveOverridesDialog by remember { mutableStateOf(false) }
 	ListItem(
-		modifier = Modifier.toggleable(
-			value = app.enabled,
-			role = Role.Checkbox,
-			onValueChange = { toggleIgnore(app) }
-		).fillMaxWidth(),
+		modifier = Modifier.clickable {
+			onConfigureApp(app)
+		}.fillMaxWidth(),
+		// modifier = Modifier.toggleable(
+		// 	value = app.enabled,
+		// 	role = Role.Checkbox,
+		// 	onValueChange = { toggleIgnore(app) }
+		// 	).fillMaxWidth(),
 		leadingContent = {
 			PackageImage(
 				context = LocalContext.current,
@@ -239,37 +259,46 @@ private fun AppListItem(app: App, toggleIgnore: (app: App) -> Unit) {
 			)
 		},
 		trailingContent = {
-			SwitchCustom(
-				checked = app.enabled,
-				onCheckedChange = { toggleIgnore(app) },
-				modifier = Modifier.focusable(false)
-			)
+			Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+				if (hasOverride) {
+					IconButton(onClick = { showRemoveOverridesDialog = true }) {
+						Icon(
+							imageVector = Icons.Outlined.Cancel,
+							contentDescription = stringResource(R.string.remove_app_overrides)
+						)
+					}
+				}
+				SwitchCustom(
+					checked = app.enabled,
+					onCheckedChange = { toggleIgnore(app) },
+					modifier = Modifier.focusable(false)
+				)
+			}
 		}
 	)
+	if (showRemoveOverridesDialog) {
+		ConfirmDialog(
+			text = stringResource(R.string.remove_app_overrides_confirm, app.label),
+			onConfirm = { onRemoveOverrides(app) },
+			onDismiss = { showRemoveOverridesDialog = false }
+		)
+	}
 }
-
-
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun AppListPreview() {
 	val apps = listOf(
-		App(1, "package.name.one", "App Name 1", true),
-		App(2, "package.name.two", "App Name 2", false)
+		App("package.name.one", "App Name 1", true),
+		App("package.name.two", "App Name 2", false)
 	)
 	AppTheme {
-		AppListScreen(apps)
+		AppList(apps, true, listOf("package.name.one"), {}, {}, {})
 	}
 }
 
 
-// preview AppListActions
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Composable
-private fun AppListActionsPreview() {
-	AppTheme {
-		AppListActions()
-	}
-}
+
+
+

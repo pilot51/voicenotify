@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,6 +15,20 @@
  */
 package com.pilot51.voicenotify
 
-object Utils {
-	fun <T> T.isAny(vararg list: T) = list.any { this == it }
+import android.content.res.Configuration
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+
+fun <T> T.isAny(vararg list: T) = list.any { this == it }
+
+val isPreview @Composable get() = LocalInspectionMode.current
+
+@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO)
+annotation class VNPreview
+
+class BooleanProvider: PreviewParameterProvider<Boolean> {
+	override val values: Sequence<Boolean> = sequenceOf(false, true)
 }

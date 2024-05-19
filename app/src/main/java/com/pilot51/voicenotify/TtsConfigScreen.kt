@@ -36,8 +36,10 @@ import androidx.compose.ui.unit.dp
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 
 @Composable
-fun TtsConfigScreen() {
+fun TtsConfigScreen(vm: IPreferencesViewModel) {
 	val context = LocalContext.current
+	val configApp by vm.configuringAppState.collectAsState()
+	val settings by vm.configuringSettingsState.collectAsState()
 	var ttsEnabled by remember { mutableStateOf(true) }
 	var ttsSummary by remember { mutableStateOf("") }
 	var ttsIntent by remember { mutableStateOf<Intent?>(null) }
@@ -67,69 +69,101 @@ fun TtsConfigScreen() {
 			.clip(RoundedCornerShape(12.dp))
 			.background(VoicenotifyTheme.colors.boxItem)
 		) {
-		PreferenceRowLink(
-			titleRes = R.string.tts_settings,
-			subtitle = ttsSummary,
-			enabled = ttsEnabled,
-			onClick = { ttsIntent?.let { context.startActivity(it) } }
-		)
+
+		if (settings.isGlobal) {
+			PreferenceRowLink(
+				titleRes = R.string.tts_settings,
+				summary = ttsSummary,
+				enabled = ttsEnabled,
+				onClick = { ttsIntent?.let { context.startActivity(it) } }
+			)
+		}
 		PreferenceRowLink(
 			titleRes = R.string.tts_message,
-			subtitleRes = R.string.tts_message_summary,
+			summaryRes = R.string.tts_message_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ttsString != null,
+			onRemove = {
+				vm.save(settings.copy(ttsString = null))
+			},
 			onClick = { showTtsMessage = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.tts_text_replace,
-			subtitleRes = R.string.tts_text_replace_summary,
+			summaryRes = R.string.tts_text_replace_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ttsTextReplace != null,
+			onRemove = {
+				vm.save(settings.copy(ttsTextReplace = null))
+			},
 			onClick = { showTextReplaceDialog = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.max_length,
-			subtitleRes = R.string.max_length_summary,
+			summaryRes = R.string.max_length_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ttsMaxLength != null,
+			onRemove = {
+				vm.save(settings.copy(ttsMaxLength = null))
+			},
 			onClick = { showMaxMessage = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.tts_stream,
-			subtitleRes = R.string.tts_stream_summary,
+			summaryRes = R.string.tts_stream_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ttsStream != null,
+			onRemove = {
+				vm.save(settings.copy(ttsStream = null))
+			},
 			onClick = { showTtsStream = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.tts_delay,
-			subtitleRes = R.string.tts_delay_summary,
+			summaryRes = R.string.tts_delay_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ttsDelay != null,
+			onRemove = {
+				vm.save(settings.copy(ttsDelay = null))
+			},
 			onClick = { showTtsDelay = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.tts_repeat,
-			subtitleRes = R.string.tts_repeat_summary,
+			summaryRes = R.string.tts_repeat_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ttsRepeat != null,
+			onRemove = {
+				vm.save(settings.copy(ttsRepeat = null))
+			},
 			onClick = { showTtsRepeat = true }
 		)
 	}
 	}
 	if (showTtsMessage) {
-		TtsMessageDialog { showTtsMessage = false }
+		TtsMessageDialog(vm) { showTtsMessage = false }
 	}
 	if (showTextReplaceDialog) {
-		TextReplaceDialog { showTextReplaceDialog = false }
+		TextReplaceDialog(vm) { showTextReplaceDialog = false }
 	}
 	if (showMaxMessage) {
-		TtsMaxLengthDialog { showMaxMessage = false }
+		TtsMaxLengthDialog(vm) { showMaxMessage = false }
 	}
 	if (showTtsStream) {
-		TtsStreamDialog { showTtsStream = false }
+		TtsStreamDialog(vm) { showTtsStream = false }
 	}
 	if (showTtsDelay) {
-		TtsDelayDialog { showTtsDelay = false }
+		TtsDelayDialog(vm) { showTtsDelay = false }
 	}
 	if (showTtsRepeat) {
-		TtsRepeatDialog { showTtsRepeat = false }
+		TtsRepeatDialog(vm) { showTtsRepeat = false }
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun TtsConfigScreenPreview() {
 	AppTheme {
-		TtsConfigScreen()
+		TtsConfigScreen(PreferencesPreviewVM)
 	}
 }

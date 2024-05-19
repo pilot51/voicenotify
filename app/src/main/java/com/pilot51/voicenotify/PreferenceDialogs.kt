@@ -18,10 +18,10 @@ package com.pilot51.voicenotify
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
+import android.text.format.DateFormat
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
@@ -35,46 +35,29 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.content.edit
 import androidx.core.text.isDigitsOnly
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IGNORE_REPEAT
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_MAX_LENGTH
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_QUIET_TIME
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SPEAK_HEADSET_OFF
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SPEAK_HEADSET_ON
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SPEAK_SCREEN_OFF
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SPEAK_SCREEN_ON
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SPEAK_SILENT_ON
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_TTS_STREAM
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_TTS_STRING
-import com.pilot51.voicenotify.PreferenceHelper.KEY_IGNORE_REPEAT
-import com.pilot51.voicenotify.PreferenceHelper.KEY_IGNORE_STRINGS
-import com.pilot51.voicenotify.PreferenceHelper.KEY_MAX_LENGTH
-import com.pilot51.voicenotify.PreferenceHelper.KEY_QUIET_START
-import com.pilot51.voicenotify.PreferenceHelper.KEY_REQUIRE_STRINGS
-import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
-import com.pilot51.voicenotify.PreferenceHelper.KEY_SPEAK_HEADSET_OFF
-import com.pilot51.voicenotify.PreferenceHelper.KEY_SPEAK_HEADSET_ON
-import com.pilot51.voicenotify.PreferenceHelper.KEY_SPEAK_SCREEN_OFF
-import com.pilot51.voicenotify.PreferenceHelper.KEY_SPEAK_SCREEN_ON
-import com.pilot51.voicenotify.PreferenceHelper.KEY_SPEAK_SILENT_ON
-import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_DELAY
-import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_REPEAT
-import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STREAM
-import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STRING
-import com.pilot51.voicenotify.PreferenceHelper.prefs
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_REPEAT
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_MAX_LENGTH
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_QUIET_TIME
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_HEADSET_OFF
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_HEADSET_ON
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_OFF
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_ON
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SILENT_ON
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STREAM
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
 
 private fun openBrowser(context: Context, url: String) {
 	try {
@@ -86,104 +69,143 @@ private fun openBrowser(context: Context, url: String) {
 }
 
 @Composable
-fun ShakeThresholdDialog(onDismiss: () -> Unit) {
+fun ShakeThresholdDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val value by vm.getShakeThreshold()
 	TextEditDialog(
 		titleRes = R.string.shake_to_silence,
 		message = stringResource(R.string.shake_to_silence_dialog_msg, DEFAULT_SHAKE_THRESHOLD),
-		initialText = prefs.getString(KEY_SHAKE_THRESHOLD, null) ?: DEFAULT_SHAKE_THRESHOLD.toString(),
-		keyboardType = KeyboardType.Decimal,
+		initialText = value.toString(),
+		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss
 	) {
-		prefs.edit().putString(KEY_SHAKE_THRESHOLD, it).apply()
+		vm.setShakeThreshold(it.toIntOrNull())
 	}
 }
 
 @Composable
-fun RequireTextDialog(onDismiss: () -> Unit) {
+fun RequireTextDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.require_strings,
 		messageRes = R.string.require_ignore_strings_dialog_msg,
-		initialText = prefs.getString(KEY_REQUIRE_STRINGS, null) ?: "",
+		initialText = settingsCombo.requireStrings ?: "",
 		onDismiss = onDismiss
 	) {
-		prefs.edit().putString(KEY_REQUIRE_STRINGS, it).apply()
+		vm.save(settings.copy(requireStrings = it.takeUnless { it.isEmpty() && settings.isGlobal }))
 	}
 }
 
 @Composable
-fun IgnoreTextDialog(onDismiss: () -> Unit) {
+fun IgnoreTextDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.ignore_strings,
 		messageRes = R.string.require_ignore_strings_dialog_msg,
-		initialText = prefs.getString(KEY_IGNORE_STRINGS, null) ?: "",
+		initialText = settingsCombo.ignoreStrings ?: "",
 		onDismiss = onDismiss
 	) {
-		prefs.edit().putString(KEY_IGNORE_STRINGS, it).apply()
+		vm.save(settings.copy(ignoreStrings = it.takeUnless { it.isEmpty() && settings.isGlobal }))
 	}
 }
 
 @Composable
-fun IgnoreRepeatsDialog(onDismiss: () -> Unit) {
+fun IgnoreRepeatsDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.ignore_repeat,
 		messageRes = R.string.ignore_repeat_dialog_msg,
-		initialText = prefs.getString(KEY_IGNORE_REPEAT, null) ?: DEFAULT_IGNORE_REPEAT.toString(),
+		initialText = (settingsCombo.ignoreRepeat ?: DEFAULT_IGNORE_REPEAT)
+			.takeIf { it != -1 }?.toString() ?: "",
 		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss
 	) {
-		prefs.edit().putString(KEY_IGNORE_REPEAT, it).apply()
+		vm.save(settings.copy(ignoreRepeat = it.toIntOrNull() ?: (-1).takeIf { !settings.isGlobal }))
 	}
 }
 
 @Composable
-fun TtsMessageDialog(onDismiss: () -> Unit) {
-	val text = prefs.getString(KEY_TTS_STRING, null) ?: DEFAULT_TTS_STRING
+fun TtsMessageDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.tts_message,
 		message = stringResource(R.string.tts_message_dialog, DEFAULT_TTS_STRING),
-		initialText = text,
+		initialText = settingsCombo.ttsString ?: DEFAULT_TTS_STRING,
 		onDismiss = onDismiss
 	) {
-		prefs.edit().putString(KEY_TTS_STRING, it).apply()
+		vm.save(settings.copy(ttsString = it.ifEmpty { null }))
 	}
 }
 
 @Composable
-fun TtsMaxLengthDialog(onDismiss: () -> Unit) {
+fun TtsMaxLengthDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.max_length,
 		messageRes = R.string.max_length_dialog_msg,
-		initialText = prefs.getString(KEY_MAX_LENGTH, null) ?: DEFAULT_MAX_LENGTH.toString(),
+		initialText = (settingsCombo.ttsMaxLength ?: DEFAULT_MAX_LENGTH).toString(),
 		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss
 	) {
-		prefs.edit().putString(KEY_MAX_LENGTH, it).apply()
+		vm.save(settings.copy(ttsMaxLength = it.toIntOrNull()))
 	}
 }
 
 @Composable
-fun TtsDelayDialog(onDismiss: () -> Unit) {
+fun TtsDelayDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.tts_delay,
 		messageRes = R.string.tts_delay_dialog_msg,
-		initialText = prefs.getString(KEY_TTS_DELAY, null) ?: "",
-		keyboardType = KeyboardType.Decimal,
+		initialText = settingsCombo.ttsDelay.takeIf { it != 0 }?.toString() ?: "",
+		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss
 	) {
-		prefs.edit().putString(KEY_TTS_DELAY, it).apply()
+		vm.save(settings.copy(ttsDelay = it.toIntOrNull() ?: 0.takeIf { !settings.isGlobal }))
 	}
 }
 
 @Composable
-fun TtsRepeatDialog(onDismiss: () -> Unit) {
+fun TtsRepeatDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.tts_repeat,
 		messageRes = R.string.tts_repeat_dialog_msg,
-		initialText = prefs.getString(KEY_TTS_REPEAT, null) ?: "",
+		initialText = settingsCombo.ttsRepeat.takeIf { it != 0.0 }?.toString() ?: "",
 		keyboardType = KeyboardType.Decimal,
 		onDismiss = onDismiss
 	) {
-		prefs.edit().putString(KEY_TTS_REPEAT, it).apply()
+		vm.save(settings.copy(ttsRepeat = it.toDoubleOrNull() ?: 0.0.takeIf { !settings.isGlobal }))
 	}
 }
 
@@ -202,7 +224,7 @@ private fun TextEditDialog(
 	onDismiss: () -> Unit,
 	onSave: (text: String) -> Unit
 ) {
-	var textValue by remember { mutableStateOf(initialText) }
+	var textValue by remember(initialText) { mutableStateOf(initialText) }
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
@@ -250,7 +272,12 @@ private fun TextEditDialog(
 }
 
 @Composable
-fun TtsStreamDialog(onDismiss: () -> Unit) {
+fun TtsStreamDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	val streamNames = stringArrayResource(R.array.stream_name)
 	val streamValues = arrayOf(
 		AudioManager.STREAM_MUSIC,
@@ -259,19 +286,17 @@ fun TtsStreamDialog(onDismiss: () -> Unit) {
 		AudioManager.STREAM_RING,
 		AudioManager.STREAM_ALARM
 	)
-	val isPreview = LocalInspectionMode.current
-	val savedValue = remember {
-		if (isPreview) DEFAULT_TTS_STREAM
-		else prefs.getString(KEY_TTS_STREAM, null)?.toIntOrNull() ?: DEFAULT_TTS_STREAM
+	val savedValue = remember(settings) { settings.ttsStream }
+	var value by remember(settings) {
+		mutableIntStateOf(settingsCombo.ttsStream ?: DEFAULT_TTS_STREAM)
 	}
-	var value by remember { mutableIntStateOf(savedValue) }
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
 			TextButton(
 				onClick = {
 					if (value != savedValue) {
-						prefs.edit().putString(KEY_TTS_STREAM, value.toString()).apply()
+						vm.save(settings.copy(ttsStream = value))
 					}
 					onDismiss()
 				}
@@ -322,45 +347,34 @@ fun TtsStreamDialog(onDismiss: () -> Unit) {
 }
 
 @Composable
-fun DeviceStatesDialog(onDismiss: () -> Unit) {
-	val isPreview = LocalInspectionMode.current
+fun DeviceStatesDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	val items = stringArrayResource(R.array.device_states)
-	val keys = remember { arrayOf(
-		KEY_SPEAK_SCREEN_OFF,
-		KEY_SPEAK_SCREEN_ON,
-		KEY_SPEAK_HEADSET_OFF,
-		KEY_SPEAK_HEADSET_ON,
-		KEY_SPEAK_SILENT_ON
-	) }
-	val savedValues = remember { if (isPreview) {
-		booleanArrayOf(true, true, true, true, false)
-	} else {
-		prefs.run {
-			booleanArrayOf(
-				getBoolean(KEY_SPEAK_SCREEN_OFF, DEFAULT_SPEAK_SCREEN_OFF),
-				getBoolean(KEY_SPEAK_SCREEN_ON, DEFAULT_SPEAK_SCREEN_ON),
-				getBoolean(KEY_SPEAK_HEADSET_OFF, DEFAULT_SPEAK_HEADSET_OFF),
-				getBoolean(KEY_SPEAK_HEADSET_ON, DEFAULT_SPEAK_HEADSET_ON),
-				getBoolean(KEY_SPEAK_SILENT_ON, DEFAULT_SPEAK_SILENT_ON)
-			)
-		}
-	}.toTypedArray() }
-	val values = remember { mutableStateListOf(*savedValues) }
+	val values = remember(settings) {
+		mutableStateListOf(
+			settingsCombo.speakScreenOff ?: DEFAULT_SPEAK_SCREEN_OFF,
+			settingsCombo.speakScreenOn ?: DEFAULT_SPEAK_SCREEN_ON,
+			settingsCombo.speakHeadsetOff ?: DEFAULT_SPEAK_HEADSET_OFF,
+			settingsCombo.speakHeadsetOn ?: DEFAULT_SPEAK_HEADSET_ON,
+			settingsCombo.speakSilentOn ?: DEFAULT_SPEAK_SILENT_ON
+		)
+	}
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
 			TextButton(
 				onClick = {
-					prefs.edit {
-						var changed = false
-						values.forEachIndexed { index, value ->
-							if (savedValues[index] != value) {
-								putBoolean(keys[index], value)
-								changed = true
-							}
-						}
-						if (changed) apply()
-					}
+					vm.save(settings.copy(
+						speakScreenOff = values[0],
+						speakScreenOn = values[1],
+						speakHeadsetOff = values[2],
+						speakHeadsetOn = values[3],
+						speakSilentOn = values[4]
+					))
 					onDismiss()
 				}
 			) {
@@ -406,27 +420,38 @@ fun DeviceStatesDialog(onDismiss: () -> Unit) {
 	)
 }
 
+enum class QuietTimeMode {
+	START, END
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun QuietTimeDialog(
-	prefKey: String,
+	vm: IPreferencesViewModel,
+	mode: QuietTimeMode,
 	onDismiss: () -> Unit
 ) {
-	val isPreview = LocalInspectionMode.current
-	val quietTime = if (isPreview) DEFAULT_QUIET_TIME else prefs.getInt(prefKey, DEFAULT_QUIET_TIME)
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
+	val quietTime = when (mode) {
+		QuietTimeMode.START -> settingsCombo.quietStart
+		QuietTimeMode.END -> settingsCombo.quietEnd
+	} ?: DEFAULT_QUIET_TIME
 	val timePickerState = rememberTimePickerState(
 		initialHour = quietTime / 60,
 		initialMinute = quietTime % 60,
-		is24Hour = false
+		key = settings
 	)
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
 			TextButton(
 				onClick = {
-					prefs.edit().putInt(prefKey,
-						timePickerState.hour * 60 + timePickerState.minute
-					).apply()
+					val time = timePickerState.hour * 60 + timePickerState.minute
+					vm.save(when (mode) {
+						QuietTimeMode.START -> settings.copy(quietStart = time)
+						QuietTimeMode.END -> settings.copy(quietEnd = time)
+					})
 					onDismiss()
 				}
 			) {
@@ -440,12 +465,30 @@ fun QuietTimeDialog(
 		},
 		title = {
 			Text(stringResource(
-				if (prefKey == KEY_QUIET_START) R.string.quiet_start else R.string.quiet_end
+				if (mode == QuietTimeMode.START) R.string.quiet_start else R.string.quiet_end
 			))
 		},
 		text = {
 			TimePicker(timePickerState)
 		}
+	)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun rememberTimePickerState(
+	initialHour: Int = 0,
+	initialMinute: Int = 0,
+	is24Hour: Boolean = DateFormat.is24HourFormat(LocalContext.current),
+	key: Any
+): TimePickerState = rememberSaveable(
+	saver = TimePickerState.Saver(),
+	inputs = arrayOf(key)
+) {
+	TimePickerState(
+		initialHour = initialHour,
+		initialMinute = initialMinute,
+		is24Hour = is24Hour,
 	)
 }
 
@@ -560,6 +603,38 @@ fun SupportDialog(onDismiss: () -> Unit) {
 	}
 }
 
+@Composable
+fun ConfirmDialog(
+	text: String,
+	onConfirm: () -> Unit,
+	onDismiss: () -> Unit
+) {
+	AlertDialog(
+		onDismissRequest = onDismiss,
+		confirmButton = {
+			TextButton(onClick = {
+				onConfirm()
+				onDismiss()
+			}) {
+				Text(stringResource(R.string.yes))
+			}
+		},
+		dismissButton = {
+			TextButton(onClick = onDismiss) {
+				Text(stringResource(android.R.string.cancel))
+			}
+		},
+		text = {
+			Text(
+				text = text,
+				modifier = Modifier.fillMaxWidth(),
+				fontSize = 20.sp,
+				textAlign = TextAlign.Center
+			)
+		}
+	)
+}
+
 private fun LazyListScope.supportItem(
 	@StringRes title: Int,
 	@StringRes subtext: Int? = null,
@@ -587,8 +662,7 @@ private fun LazyListScope.supportItem(
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun TextEditDialogPreview() {
 	AppTheme {
@@ -601,35 +675,31 @@ private fun TextEditDialogPreview() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun TtsStreamDialogPreview() {
 	AppTheme {
-		TtsStreamDialog {}
+		TtsStreamDialog(PreferencesPreviewVM) {}
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun DeviceStatesDialogPreview() {
 	AppTheme {
-		DeviceStatesDialog {}
+		DeviceStatesDialog(PreferencesPreviewVM) {}
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun QuietTimeDialogPreview() {
 	AppTheme {
-		QuietTimeDialog(KEY_QUIET_START) {}
+		QuietTimeDialog(PreferencesPreviewVM, QuietTimeMode.START) {}
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun SupportDialogPreview() {
 	AppTheme {

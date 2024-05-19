@@ -1,17 +1,18 @@
-package com.pilot51.voicenotify
+package com.pilot51.voicenotify.ui
 
 import android.graphics.Path
 import android.view.animation.PathInterpolator
-import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -21,6 +22,7 @@ fun LargeTopAppBar(
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior? = null,
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors()
 ) {
     androidx.compose.material3.LargeTopAppBar(
         modifier = modifier,
@@ -28,6 +30,7 @@ fun LargeTopAppBar(
         navigationIcon = navigationIcon,
         actions = actions,
         scrollBehavior = scrollBehavior,
+        colors = colors
     )
 
 }
@@ -50,18 +53,20 @@ fun SmallTopAppBar(
     title: @Composable () -> Unit = {
         Text(
             text = titleText,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = fraction(scrollBehavior.state.overlappedFraction)),
+            color = VoicenotifyTheme.colorScheme.onSurface.copy(alpha = fraction(scrollBehavior.state.overlappedFraction)),
             maxLines = 1
         )
     },
     navigationIcon: @Composable () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors()
 ) {
     TopAppBar(
         modifier = modifier,
         title = title,
         navigationIcon = navigationIcon,
         actions = actions,
-        scrollBehavior = scrollBehavior
+        scrollBehavior = scrollBehavior,
+        colors = colors
     )
 }

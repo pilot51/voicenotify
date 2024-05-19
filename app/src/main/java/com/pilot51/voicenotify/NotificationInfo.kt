@@ -18,13 +18,11 @@ package com.pilot51.voicenotify
 import android.app.Notification
 import android.util.Log
 import androidx.core.app.NotificationCompat
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_MAX_LENGTH
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_TTS_STRING
-import com.pilot51.voicenotify.PreferenceHelper.KEY_MAX_LENGTH
-import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_STRING
-import com.pilot51.voicenotify.PreferenceHelper.KEY_TTS_TEXT_REPLACE
-import com.pilot51.voicenotify.PreferenceHelper.prefs
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
+import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.db.Settings
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_MAX_LENGTH
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -38,7 +36,8 @@ import kotlin.math.min
  */
 data class NotificationInfo(
 	val app: App?,
-	private val notification: Notification
+	private val notification: Notification,
+	val settings: Settings
 ) {
 	private val extras by notification::extras
 	val id = extras.getInt(NotificationCompat.EXTRA_NOTIFICATION_ID)
@@ -91,7 +90,7 @@ data class NotificationInfo(
 	private fun buildTtsMessage() {
 		val isComposePreview = notification.`when` == Long.MIN_VALUE
 		val ttsStringPref = if (isComposePreview) DEFAULT_TTS_STRING else {
-			prefs.getString(KEY_TTS_STRING, null) ?: DEFAULT_TTS_STRING
+			settings.ttsString ?: DEFAULT_TTS_STRING
 		}
 		val ttsUnformattedMsg = ttsStringPref
 			.replace("#A", "%1\$s", true) // App Label
@@ -126,16 +125,14 @@ data class NotificationInfo(
 			ttsMessage = appContext.getString(R.string.notification_from, app.label)
 		}
 		ttsMessage?.takeIf { it.isNotEmpty() }?.let {
-			val ttsTextReplace = if (isComposePreview) null else {
-				prefs.getString(KEY_TTS_TEXT_REPLACE, null)
-			}
-			val textReplaceList = Common.convertTextReplaceStringToList(ttsTextReplace)
+			val ttsTextReplace = if (isComposePreview) null else settings.ttsTextReplace
+			val textReplaceList = PreferencesViewModel.convertTextReplaceStringToList(ttsTextReplace)
 			for (pair in textReplaceList) {
 				ttsMessage = it.replace(
 					"(?i)${Pattern.quote(pair.first)}".toRegex(), pair.second)
 			}
 			val maxLength = if (isComposePreview) 0 else {
-				prefs.getString(KEY_MAX_LENGTH, null)?.toIntOrNull() ?: DEFAULT_MAX_LENGTH
+				settings.ttsMaxLength ?: DEFAULT_MAX_LENGTH
 			}
 			if (maxLength > 0 && maxLength < it.length) {
 				ttsMessage = it.substring(0, min(maxLength, it.length))

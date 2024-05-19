@@ -15,19 +15,18 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material3.Checkbox
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material3.*
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -37,31 +36,31 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.core.content.edit
-import com.pilot51.voicenotify.PreferenceHelper.prefs
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
-import kotlin.reflect.KProperty
+import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.ui.SwitchCustom
 
 // Simplified and heavily modified from https://github.com/alorma/Compose-Settings
 
 /**
  * A preference row with click callbacks.
- * [title] and [subtitle] are required if their respective [titleRes] or [subtitleRes] isn't set.
+ * [title] and [summary] are required if their respective [titleRes] or [summaryRes] isn't set.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PreferenceRowLink(
 	@StringRes titleRes: Int = 0,
-	@StringRes subtitleRes: Int = 0,
+	@StringRes summaryRes: Int = 0,
 	title: String = titleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
-	subtitle: String = subtitleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
+	summary: String = summaryRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
 	enabled: Boolean = true,
+	app: App? = null,
+	showRemove: Boolean = false,
+	onRemove: (() -> Unit)? = null,
 	onClick: () -> Unit,
 	onLongClick: (() -> Unit)? = null,
 	isEnd: Boolean = false
@@ -80,24 +79,33 @@ fun PreferenceRowLink(
 		PreferenceRowScaffold(
 			title = title,
 			enabled = enabled,
-			subtitle = subtitle,
+			summary = summary,
+			app = app,
+			showRemove = showRemove,
+			onRemove = onRemove,
 			isEnd = isEnd
 		)
 	}
 }
 
+/**
+ * A preference row with a checkbox.
+ * If [summaryResOff] is not provided, [summaryResOn] is used for both states.
+ */
 @Composable
 fun PreferenceRowCheckbox(
 	@StringRes titleRes: Int,
-	@StringRes subtitleRes: Int,
-	key: String,
-	default: Boolean,
-	isEnd: Boolean = false
+	@StringRes summaryResOn: Int,
+	@StringRes summaryResOff: Int = summaryResOn,
+	initialValue: Boolean,
+	app: App? = null,
+	showRemove: Boolean = false,
+	isEnd: Boolean = false,
+	onRemove: (() -> Unit)? = null,
+	onChange: (Boolean) -> Unit
 ) {
-	val isPreview = LocalInspectionMode.current
-	var prefValue by remember {
-		PreferenceBooleanState(key = if (isPreview) "isPreview" else key, defaultValue = default)
-	}
+	var prefValue by remember(initialValue) { mutableStateOf(initialValue) }
+	val summaryRes = if (prefValue) summaryResOn else summaryResOff
 	Row(
 		modifier = Modifier
 			.fillMaxWidth()
@@ -105,17 +113,26 @@ fun PreferenceRowCheckbox(
 			.toggleable(
 				value = prefValue,
 				role = Role.Checkbox,
-				onValueChange = { prefValue = !prefValue }
+				onValueChange = {
+					prefValue = !prefValue
+					onChange(prefValue)
+				}
 			),
 		verticalAlignment = Alignment.CenterVertically
 	) {
 		PreferenceRowScaffold(
 			title = stringResource(titleRes),
-			subtitle = stringResource(subtitleRes),
+			summary = stringResource(summaryRes),
+			app = app,
+			showRemove = showRemove,
+			onRemove = onRemove,
 			action = {
 				SwitchCustom(
 					checked = prefValue,
-					onCheckedChange = { prefValue = it }
+					onCheckedChange = {
+						prefValue = it
+						onChange(it)
+					}
 				)
 			},
 			isEnd = isEnd
@@ -127,44 +144,60 @@ fun PreferenceRowCheckbox(
 private fun PreferenceRowScaffold(
 	enabled: Boolean = true,
 	title: String,
-	subtitle: String,
+	summary: String,
+	app: App? = null,
+	showRemove: Boolean = false,
+	onRemove: (() -> Unit)? = null,
 	action: (@Composable (Boolean) -> Unit)? = null,
 	isEnd: Boolean
 ) {
+	var showRemoveDialog by remember { mutableStateOf(false) }
 	Column(
-	) {
-		ListItem(
-			modifier = Modifier.defaultMinSize(minHeight = 88.dp)
-				.background(VoicenotifyTheme.colors.boxItem),
-			headlineContent = {
-				ColorWrap(enabled) {
-					Text(title)
-				}
-			},
-			supportingContent = {
-				ColorWrap(enabled) {
-					Text(subtitle)
-				}
-			},
-			trailingContent = action?.run {
-				{
-					Row(
-						modifier = Modifier.fillMaxHeight(),
-						verticalAlignment = Alignment.CenterVertically
-					) {
-						action(enabled)
+		) {
+	ListItem(
+		modifier = Modifier.defaultMinSize(minHeight = 88.dp)
+		.background(VoicenotifyTheme.colors.boxItem),
+		headlineContent = {
+			ColorWrap(enabled) {
+				Text(title)
+			}
+		},
+		supportingContent = {
+			ColorWrap(enabled) {
+				Text(summary)
+			}
+		},
+		trailingContent = {
+			Row(
+				modifier = Modifier.fillMaxHeight(),
+				verticalAlignment = Alignment.CenterVertically
+			) {
+				if (showRemove) {
+					IconButton(onClick = { showRemoveDialog = true }) {
+						Icon(
+							imageVector = Icons.Outlined.Cancel,
+							contentDescription = stringResource(R.string.remove_override)
+						)
 					}
 				}
+				action?.invoke(enabled)
 			}
-		)
-		if (!isEnd) {
-			Divider(
-				color = VoicenotifyTheme.colors.divider,
-				thickness = 1.dp,
-				modifier = Modifier.padding(horizontal = 16.dp)
-			)
 		}
-
+	)
+	if (!isEnd) {
+		Divider(
+			color = VoicenotifyTheme.colors.divider,
+			thickness = 1.dp,
+			modifier = Modifier.padding(horizontal = 16.dp)
+		)
+	}
+}
+	if (showRemoveDialog && app != null) {
+		ConfirmDialog(
+			text = stringResource(R.string.remove_override_confirm, title, app.label),
+			onConfirm = onRemove!!,
+			onDismiss = { showRemoveDialog = false }
+		)
 	}
 }
 
@@ -181,74 +214,35 @@ private fun ColorWrap(
 	}
 }
 
-private class PreferenceBooleanState(
-	val key: String,
-	val defaultValue: Boolean
-) {
-	private var _value by mutableStateOf(
-		if (key == "isPreview") defaultValue else prefs.getBoolean(key, defaultValue)
-	)
-	var value: Boolean
-		set(value) {
-			_value = value
-			prefs.edit { putBoolean(key, value) }
-		}
-		get() = _value
-}
-
-@Suppress("NOTHING_TO_INLINE")
-private inline operator fun PreferenceBooleanState.getValue(
-	thisObj: Any?,
-	property: KProperty<*>
-): Boolean = value
-
-@Suppress("NOTHING_TO_INLINE")
-private inline operator fun PreferenceBooleanState.setValue(
-	thisObj: Any?,
-	property: KProperty<*>,
-	value: Boolean
-) {
-	this.value = value
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
-private fun SettingsMenuLinkPreview() {
+private fun PreferenceRowLinkPreview(
+	@PreviewParameter(BooleanProvider::class) showRemove: Boolean
+) {
 	AppTheme {
 		PreferenceRowLink(
 			titleRes = R.string.tts_settings,
-			subtitleRes = R.string.tts_settings_summary_fail,
+			summaryRes = R.string.tts_settings_summary_fail,
 			enabled = false,
+			showRemove = showRemove,
 			onClick = {}
 		)
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
-private fun SettingsCheckboxCheckedPreview() {
+private fun PreferenceRowCheckboxPreview(
+	@PreviewParameter(BooleanProvider::class) value: Boolean
+) {
 	AppTheme {
 		PreferenceRowCheckbox(
 			titleRes = R.string.ignore_groups,
-			subtitleRes = R.string.ignore_groups_summary_on,
-			key = "isPreview",
-			default = true
-		)
-	}
-}
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
-@Composable
-private fun SettingsCheckboxUncheckedPreview() {
-	AppTheme {
-		PreferenceRowCheckbox(
-			titleRes = R.string.ignore_groups,
-			subtitleRes = R.string.ignore_groups_summary_off,
-			key = "isPreview",
-			default = false
+			summaryResOn = R.string.ignore_groups_summary_on,
+			summaryResOff = R.string.ignore_groups_summary_off,
+			initialValue = value,
+			showRemove = value,
+			onChange = {}
 		)
 	}
 }

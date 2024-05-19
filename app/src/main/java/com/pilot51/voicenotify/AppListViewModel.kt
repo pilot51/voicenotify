@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2024 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,18 +22,22 @@ import android.os.Build
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.pilot51.voicenotify.AppListViewModel.IgnoreType.*
+import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_APP_DEFAULT_ENABLE
 import com.pilot51.voicenotify.PreferenceHelper.KEY_APP_DEFAULT_ENABLE
-import com.pilot51.voicenotify.PreferenceHelper.prefs
+import com.pilot51.voicenotify.PreferenceHelper.getPrefFlow
+import com.pilot51.voicenotify.PreferenceHelper.setPref
+import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.db.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 
 
@@ -45,6 +49,9 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	private val syncAppsMutex by Common::syncAppsMutex
 	var searchQuery by mutableStateOf<String?>(null)
 	var showList by mutableStateOf(false)
+	private val settingsDao = AppDatabase.db.settingsDao
+	val packagesWithOverride @Composable get() =
+		settingsDao.packagesWithOverride().collectAsState(listOf())
 
 	var appEnable by mutableStateOf(false)
 
@@ -53,6 +60,12 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 
 	init {
 		updateAppsList()
+	}
+
+	fun removeOverrides(app: App) {
+		viewModelScope.launch(Dispatchers.IO) {
+			settingsDao.deleteByPackage(app.packageName)
+		}
 	}
 
 	private fun updateAppsList() {
@@ -181,10 +194,13 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 
 	companion object {
 		/** The default enabled value for new apps. */
-		var appDefaultEnable = prefs.getBoolean(KEY_APP_DEFAULT_ENABLE, PreferenceHelper.DEFAULT_APP_DEFAULT_ENABLE)
+		var appDefaultEnable =
+			runBlocking(Dispatchers.IO) {
+				getPrefFlow(KEY_APP_DEFAULT_ENABLE, DEFAULT_APP_DEFAULT_ENABLE).first()
+			}
 			set(value) {
 				field = value
-				prefs.edit().putBoolean(KEY_APP_DEFAULT_ENABLE, value).apply()
+				setPref(KEY_APP_DEFAULT_ENABLE, value)
 			}
 	}
 }

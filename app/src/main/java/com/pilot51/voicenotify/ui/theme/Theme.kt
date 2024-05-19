@@ -18,20 +18,25 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
-private val DarkColorScheme = darkColorScheme(
-    primary = ClearBlue,
-    secondary = PurpleGrey80,
-    tertiary = Pink80,
-    // background color
-    background = Color(0xFF010101),
-)
+
+
+val ClearBlue = Color(0xFF286EFF)
+
+val md_theme_light_primary = Color(0xFF476810)
+val md_theme_light_onPrimary = Color(0xFFFFFFFF)
+val md_theme_light_primaryContainer = Color(0xFFC7F089)
+
+val md_theme_dark_primary = Color(0xFFACD370)
+val md_theme_dark_onPrimary = Color(0xFF213600)
+val md_theme_dark_primaryContainer = Color(0xFF324F00)
 
 private val LightColorScheme = lightColorScheme(
     primary = ClearBlue,
-    secondary = PurpleGrey40,
-    tertiary = Pink40,
+    secondary = Color(0xFF2A54A5),
+    tertiary = Color(0xFF2A54A5),
     surface = Color(0xFFf2f3f8),
-
+    primaryContainer = Color(0xFF1E4696),
+    surfaceVariant = Color(0xFFf2f3f8),
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -43,6 +48,20 @@ private val LightColorScheme = lightColorScheme(
     onSurface = Color(0xFF1C1B1F),
     */
 )
+
+
+private val DarkColorScheme = darkColorScheme(
+    primary = ClearBlue,
+    secondary = Color(0xFF2A54A5),
+    tertiary = Color(0xFF2A54A5),
+    // background color
+    background = Color(0xFF010101),
+
+    primaryContainer = Color(0xFF1E4696),
+
+    surfaceVariant = Color(0xFF121212),
+)
+
 
 private val lightExtendedColors = ExtendedColors(
     colorPrimary = ClearBlue,

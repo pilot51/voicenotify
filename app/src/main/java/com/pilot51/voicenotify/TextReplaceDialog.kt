@@ -15,7 +15,6 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.res.Configuration
 import android.util.Pair
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,38 +34,29 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.pilot51.voicenotify.TextReplaceDialogViewModel.Companion.isDuplicate
-import com.pilot51.voicenotify.TextReplaceDialogViewModel.Companion.updateListItem
+import com.pilot51.voicenotify.PreferencesViewModel.Companion.isDuplicate
+import com.pilot51.voicenotify.PreferencesViewModel.Companion.updateListItem
 
 /**
  * Dialog that provides a dynamic list with two
  * text fields in each row for defining text replacement.
  */
 @Composable
-fun TextReplaceDialog(onDismiss: () -> Unit) {
-	val vm: TextReplaceDialogViewModel = viewModel()
-	val replaceList = remember { mutableStateListOf<Pair<String, String>?>() }
-	LaunchedEffect(Unit) {
-		replaceList.apply {
-			addAll(vm.load())
-			if (!contains(null)) add(null)
-		}
-	}
-	TextReplaceDialog(
-		replaceList = replaceList,
-		onSave = { vm.save(replaceList) },
-		onDismiss = onDismiss
-	)
-}
-@Composable
-private fun TextReplaceDialog(
-	replaceList: MutableList<Pair<String, String>?>,
-	onSave: () -> Unit,
+fun TextReplaceDialog(
+	vm: IPreferencesViewModel,
 	onDismiss: () -> Unit
 ) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
+	val savedList = vm.getTtsTextReplace(settingsCombo)
+	val replaceList = remember(savedList) {
+		mutableStateListOf<Pair<String, String>?>().apply {
+			addAll(savedList)
+			add(null)
+		}
+	}
+	val onSave = { vm.saveTtsTextReplace(settings, replaceList) }
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
@@ -148,9 +138,9 @@ private fun TextReplaceListItem(
 	replaceList: MutableList<Pair<String, String>?>
 ) {
 	val focusManager = LocalFocusManager.current
-	var editFrom by remember { mutableStateOf(pair?.first ?: "") }
-	var editTo by remember { mutableStateOf(pair?.second ?: "") }
-	var isError by remember { mutableStateOf(isDuplicate(index, editFrom, replaceList)) }
+	var editFrom by remember(pair) { mutableStateOf(pair?.first ?: "") }
+	var editTo by remember(pair) { mutableStateOf(pair?.second ?: "") }
+	var isError by remember(replaceList) { mutableStateOf(isDuplicate(index, editFrom, replaceList)) }
 	/**
 	 * Used to prevent onFocusChange of the EditTexts from erroneously updating
 	 * data with old row information after data has changed from onClick of the remove button.
@@ -220,20 +210,10 @@ private fun TextReplaceListItem(
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun TextReplaceListPreview() {
-	val replaceList = mutableListOf(
-		Pair("first", "second"),
-		Pair("this", "that"),
-		null
-	)
 	AppTheme {
-		TextReplaceDialog(
-			replaceList = replaceList,
-			onSave = {},
-			onDismiss = {}
-		)
+		TextReplaceDialog(PreferencesPreviewVM) {}
 	}
 }

@@ -18,14 +18,12 @@ package com.pilot51.voicenotify
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.app.ActivityCompat
 import com.google.accompanist.permissions.*
 import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
@@ -92,8 +90,7 @@ object PermissionHelper {
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun RationaleDialogPreview() {
 	val permissionState = object : PermissionState {

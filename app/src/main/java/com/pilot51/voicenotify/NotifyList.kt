@@ -16,7 +16,6 @@
 package com.pilot51.voicenotify
 
 import android.app.Notification
-import android.content.res.Configuration
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -34,9 +33,10 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.db.Settings
 
 object NotifyList {
 	const val HISTORY_LIMIT = 100
@@ -367,19 +367,20 @@ private fun previewNotification() = Notification().apply {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun LogDialogPreview() {
 	val previewNotification = previewNotification()
 	val list = listOf(
 		NotificationInfo(
-			app = App(1, "package.name.one", "App Name 1", true),
-			notification = previewNotification
+			app = App("package.name.one", "App Name 1", true),
+			notification = previewNotification,
+			Settings()
 		),
 		NotificationInfo(
-			app = App(2, "package.name.two", "App Name 2", false),
-			notification = previewNotification
+			app = App("package.name.two", "App Name 2", false),
+			notification = previewNotification,
+			Settings()
 		)
 	)
 	AppTheme {
@@ -387,24 +388,23 @@ private fun LogDialogPreview() {
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun DetailDialogPreview() {
 	val info = NotificationInfo(
-		app = App(1, "package.name.one", "App Name 1", true),
-		notification = previewNotification()
+		app = App("package.name.one", "App Name 1", true),
+		notification = previewNotification(),
+		Settings()
 	)
 	AppTheme {
 		DetailDialog(info) {}
 	}
 }
 
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@VNPreview
 @Composable
 private fun IgnoreDialogPreview() {
-	val app = App(1, "package.name.one", "App Name 1", true)
+	val app = App("package.name.one", "App Name 1", true)
 	AppTheme {
 		IgnoreDialog(app) {}
 	}

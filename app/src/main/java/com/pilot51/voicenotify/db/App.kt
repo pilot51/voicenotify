@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pilot51.voicenotify
+package com.pilot51.voicenotify.db
 
 import android.content.Context
 import android.os.Build
@@ -26,16 +26,16 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.MapColumn
 import androidx.room.PrimaryKey
-import com.pilot51.voicenotify.AppDatabase.Companion.db
+import com.pilot51.voicenotify.AlphabeticIndexHelper
+import com.pilot51.voicenotify.R
+import com.pilot51.voicenotify.db.AppDatabase.Companion.db
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @Entity(tableName = "apps")
 data class App(
-	@PrimaryKey(autoGenerate = true)
-	@ColumnInfo(name = BaseColumns._ID)
-	val id: Int? = null,
+	@PrimaryKey
 	@ColumnInfo(name = "package")
 	val packageName: String,
 	@ColumnInfo(name = "name", collate = ColumnInfo.NOCASE)

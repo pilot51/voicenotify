@@ -1,4 +1,4 @@
-package com.pilot51.voicenotify
+package com.pilot51.voicenotify.ui
 
 
 import androidx.compose.foundation.background
@@ -15,19 +15,14 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
-import androidx.compose.material3.TextFieldDefaults.ContainerBox
-import androidx.compose.material3.TextFieldDefaults.contentPaddingWithLabel
-import androidx.compose.material3.TextFieldDefaults.contentPaddingWithoutLabel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
@@ -45,7 +40,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 import kotlinx.coroutines.delay
 
 /**
@@ -96,54 +90,14 @@ fun SealTextField(
         unfocusedIndicatorColor = Color.Transparent,
     )
 ) {
-//    BasicTextField(
-//        value = value,
-//        onValueChange = onValueChange,
-//        modifier = modifier.semantics {
-//            if (contentDescription != null) {
-//                this.contentDescription = contentDescription
-//            }
-//        },
-//        enabled = enabled,
-//        readOnly = readOnly,
-//        textStyle = textStyle,
-//        keyboardOptions = keyboardOptions,
-//        keyboardActions = keyboardActions,
-//        visualTransformation = visualTransformation,
-//        interactionSource = interactionSource,
-//        singleLine = singleLine,
-//        decorationBox = @Composable { innerTextField ->
-//            TextFieldDefaults.DecorationBox(
-//                value = value,
-//                visualTransformation = visualTransformation,
-//                innerTextField = innerTextField,
-//                placeholder = placeholder,
-//                label = label,
-//                leadingIcon = leadingIcon,
-//                trailingIcon = {
-//                    if (value.isNotEmpty()) {
-//                        if (clearIcon != null) {
-//                            clearIcon()
-//                        }
-//                    }
-//                    trailingIcon?.invoke()
-//                },
-//                prefix = prefix,
-//                suffix = suffix,
-//                supportingText = supportingText,
-//                singleLine = singleLine,
-//                enabled = enabled,
-//                isError = isError,
-//                interactionSource = interactionSource,
-//                colors = colors,
-//                contentPadding = PaddingValues(0.dp, 0.dp, 0.dp, 0.dp),
-//            )
-//        }
-//    )
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = modifier.semantics {
+            if (contentDescription != null) {
+                this.contentDescription = contentDescription
+            }
+        },
         enabled = enabled,
         readOnly = readOnly,
         textStyle = textStyle,
@@ -151,35 +105,81 @@ fun SealTextField(
         keyboardActions = keyboardActions,
         visualTransformation = visualTransformation,
         interactionSource = interactionSource,
-        singleLine = true,
-        decorationBox = { innerTextField ->
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier
-                    .padding(horizontal = 8.dp, vertical = 8.dp)
-            ) {
-                if (leadingIcon != null) {
-                    leadingIcon()
-                    Spacer(modifier = Modifier.width(8.dp))
-                }
-                Box(Modifier.weight(1f)) {
-                    if (value.isEmpty() && placeholder != null) {
-                        placeholder()
+        singleLine = singleLine,
+        decorationBox = @Composable { innerTextField ->
+            TextFieldDefaults.DecorationBox(
+                value = value,
+                visualTransformation = visualTransformation,
+                innerTextField = innerTextField,
+                placeholder = placeholder,
+                label = label,
+                leadingIcon = leadingIcon,
+                trailingIcon = {
+                    if (value.isNotEmpty()) {
+                        if (clearIcon != null) {
+                            clearIcon()
+                        }
                     }
-                    innerTextField()
-                }
-                if (value.isNotEmpty()) {
-                    if (clearIcon != null) {
-                        clearIcon()
-                    }
-                }
-                if (trailingIcon != null) {
-                    Spacer(modifier = Modifier.width(8.dp))
-                    trailingIcon()
-                }
-            }
+                    trailingIcon?.invoke()
+                },
+                prefix = prefix,
+                suffix = suffix,
+                supportingText = supportingText,
+                singleLine = singleLine,
+                enabled = enabled,
+                isError = isError,
+                interactionSource = interactionSource,
+                colors = colors,
+                contentPadding = PaddingValues(0.dp, 0.dp, 0.dp, 0.dp),
+            )
         }
     )
+//    BasicTextField(
+//        value = value,
+//        onValueChange = onValueChange,
+//        modifier = modifier,
+//        enabled = enabled,
+//        readOnly = readOnly,
+//        textStyle = textStyle,
+//        keyboardOptions = keyboardOptions,
+//        keyboardActions = keyboardActions,
+//        visualTransformation = visualTransformation,
+//        interactionSource = interactionSource,
+//        singleLine = true,
+//        decorationBox = { innerTextField ->
+//            Row(
+//                verticalAlignment = Alignment.CenterVertically,
+//                modifier = Modifier
+//                    .padding(horizontal = 8.dp, vertical = 8.dp)
+//                    .then(
+//                        Modifier.background(
+//                            color = colors.focusedContainerColor,
+//                            shape = shape
+//                        )
+//                    )
+//            ) {
+//                if (leadingIcon != null) {
+//                    leadingIcon()
+//                    Spacer(modifier = Modifier.width(8.dp))
+//                }
+//                Box(Modifier.weight(1f)) {
+//                    if (value.isEmpty() && placeholder != null) {
+//                        placeholder()
+//                    }
+//                    innerTextField()
+//                }
+//                if (value.isNotEmpty()) {
+//                    if (clearIcon != null) {
+//                        clearIcon()
+//                    }
+//                }
+//                if (trailingIcon != null) {
+//                    Spacer(modifier = Modifier.width(8.dp))
+//                    trailingIcon()
+//                }
+//            }
+//        }
+//    )
 //    TextField(
 //        value = value,
 //        onValueChange = onValueChange,
