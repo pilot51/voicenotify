@@ -65,7 +65,7 @@ android {
 	}
 
 	composeOptions {
-		kotlinCompilerExtensionVersion = "1.5.7"
+		kotlinCompilerExtensionVersion = "1.5.14"
 	}
 
 	compileOptions {
@@ -127,5 +127,5 @@ dependencies {
 	implementation("androidx.room:room-ktx:2.6.1")
 	ksp("androidx.room:room-compiler:2.6.1")
 	implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.24")
-	implementation("com.google.accompanist:accompanist-permissions:0.32.0")
+	implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 }
