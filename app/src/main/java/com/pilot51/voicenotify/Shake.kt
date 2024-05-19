@@ -21,12 +21,14 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
+import android.util.Log
 import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.PreferenceHelper.getPrefFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.sqrt
@@ -37,14 +39,16 @@ class Shake(context: Context) : SensorEventListener {
 	var onShake: (() -> Unit)? = null
 	private var thresholdJob: Job? = null
 	private var threshold = 0
-	private var overThresholdCount = 0
 	private var accelCurrent = 0f
 	private var accelLast = 0f
+	private val _jerk = MutableStateFlow(0f)
+	val jerk: StateFlow<Float> = _jerk
 
 	fun enable() {
-		if (onShake == null) return
+		Log.i(TAG, "Shake listener enabled")
+		thresholdJob?.cancel()
 		thresholdJob = CoroutineScope(Dispatchers.IO).launch {
-			getPrefFlow(KEY_SHAKE_THRESHOLD, DEFAULT_SHAKE_THRESHOLD).collect {
+			getPrefFlow(KEY_SHAKE_THRESHOLD, 0).collect {
 				threshold = it
 			}
 		}
@@ -52,12 +56,12 @@ class Shake(context: Context) : SensorEventListener {
 	}
 
 	fun disable() {
+		Log.i(TAG, "Shake listener disabled")
 		thresholdJob?.cancel()
 		thresholdJob = null
 		manager.unregisterListener(this)
 		accelCurrent = 0f
 		accelLast = 0f
-		overThresholdCount = 0
 	}
 
 	override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
@@ -67,14 +71,9 @@ class Shake(context: Context) : SensorEventListener {
 		val y = event.values[1]
 		val z = event.values[2]
 		accelCurrent = sqrt((x * x + y * y + z * z).toDouble()).toFloat()
-		val accel = accelCurrent - accelLast
-		if (accelLast != 0f && abs(accel) > threshold / 10) {
-			overThresholdCount++
-			if (overThresholdCount >= 2) {
-				onShake!!.invoke()
-			}
-		} else {
-			overThresholdCount = 0
+		_jerk.value = if (accelLast != 0f) abs(accelCurrent - accelLast) * 10 else 0f
+		if (threshold > 0 && jerk.value >= threshold) {
+			onShake?.invoke()
 		}
 		accelLast = accelCurrent
 	}

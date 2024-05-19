@@ -39,7 +39,7 @@
 	<string name="audio_focus_summary">Request other media to pause/dim when speaking</string>
 	<string name="shake_to_silence">Shake-To-Silence</string>
 	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence</string>
-	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: %d\nBlank to disable.</string>
+	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: %1$d\nBlank or 0 to disable.\n\nRealtime shake value: %2$d\nPeak (5 seconds): %3$d</string>
 	<string-array name="stream_name">
 		<item>Media</item>
 		<item>Notification</item>
