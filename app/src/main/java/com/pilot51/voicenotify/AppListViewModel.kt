@@ -45,7 +45,11 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	private val syncAppsMutex by Common::syncAppsMutex
 	var searchQuery by mutableStateOf<String?>(null)
 	var showList by mutableStateOf(false)
+
 	var appEnable by mutableStateOf(false)
+
+
+
 
 	init {
 		updateAppsList()
@@ -85,6 +89,8 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 				// }
 				var installedApps = Common.getAppsInfo(appContext)
 
+
+
 				inst@ for (appInfo in installedApps) {
 					for (app in apps) {
 						if (app.packageName == appInfo.packageName) {
@@ -98,14 +104,20 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 					)
 					apps.add(app)
 					if (!isFirstLoad) app.updateDb()
+
 				}
 				apps.sortWith { app1, app2 -> app1.label.compareTo(app2.label, ignoreCase = true) }
 				if (isFirstLoad) AppDatabase.db.appDao.upsert(apps)
 			}
 			isUpdating = false
 			filterApps()
+			updateAppEnableState()
 			showList = true
 		}
+	}
+
+	private fun updateAppEnableState() {
+		appEnable = apps.all { it.enabled }
 	}
 
 	fun filterApps(search: String? = searchQuery) {
@@ -135,6 +147,7 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 				for (app in apps) {
 					setIgnore(app, ignoreType)
 				}
+				updateAppEnableState()
 				filterApps()
 			}
 			AppDatabase.db.appDao.upsert(apps)
@@ -156,6 +169,8 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 		if (ignoreType == IGNORE_TOGGLE) {
 			filterApps()
 		}
+
+		updateAppEnableState()
 	}
 
 	enum class IgnoreType {

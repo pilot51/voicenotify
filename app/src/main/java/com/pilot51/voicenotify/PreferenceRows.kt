@@ -23,6 +23,7 @@ import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
@@ -44,6 +45,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.edit
 import com.pilot51.voicenotify.PreferenceHelper.prefs
+import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 import kotlin.reflect.KProperty
 
 // Simplified and heavily modified from https://github.com/alorma/Compose-Settings
@@ -61,12 +63,12 @@ fun PreferenceRowLink(
 	subtitle: String = subtitleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
 	enabled: Boolean = true,
 	onClick: () -> Unit,
-	onLongClick: (() -> Unit)? = null
+	onLongClick: (() -> Unit)? = null,
+	isEnd: Boolean = false
 ) {
 	Row(
 		modifier = Modifier
 			.fillMaxWidth()
-			.padding(8.dp)
 			.height(IntrinsicSize.Min)
 			.combinedClickable(
 				enabled = enabled,
@@ -78,7 +80,8 @@ fun PreferenceRowLink(
 		PreferenceRowScaffold(
 			title = title,
 			enabled = enabled,
-			subtitle = subtitle
+			subtitle = subtitle,
+			isEnd = isEnd
 		)
 	}
 }
@@ -88,7 +91,8 @@ fun PreferenceRowCheckbox(
 	@StringRes titleRes: Int,
 	@StringRes subtitleRes: Int,
 	key: String,
-	default: Boolean
+	default: Boolean,
+	isEnd: Boolean = false
 ) {
 	val isPreview = LocalInspectionMode.current
 	var prefValue by remember {
@@ -97,7 +101,6 @@ fun PreferenceRowCheckbox(
 	Row(
 		modifier = Modifier
 			.fillMaxWidth()
-			.padding(8.dp)
 			.height(IntrinsicSize.Min)
 			.toggleable(
 				value = prefValue,
@@ -110,15 +113,12 @@ fun PreferenceRowCheckbox(
 			title = stringResource(titleRes),
 			subtitle = stringResource(subtitleRes),
 			action = {
-				Switch(
+				SwitchCustom(
 					checked = prefValue,
 					onCheckedChange = { prefValue = it }
 				)
-//				Checkbox(
-//					checked = prefValue,
-//					onCheckedChange = { prefValue = it }
-//				)
-			}
+			},
+			isEnd = isEnd
 		)
 	}
 }
@@ -128,32 +128,44 @@ private fun PreferenceRowScaffold(
 	enabled: Boolean = true,
 	title: String,
 	subtitle: String,
-	action: (@Composable (Boolean) -> Unit)? = null
+	action: (@Composable (Boolean) -> Unit)? = null,
+	isEnd: Boolean
 ) {
-	ListItem(
-		modifier = Modifier.defaultMinSize(minHeight = 88.dp)
-			.background(MaterialTheme.colorScheme.background),
-		headlineContent = {
-			ColorWrap(enabled) {
-				Text(title)
-			}
-		},
-		supportingContent = {
-			ColorWrap(enabled) {
-				Text(subtitle)
-			}
-		},
-		trailingContent = action?.run {
-			{
-				Row(
-					modifier = Modifier.fillMaxHeight(),
-					verticalAlignment = Alignment.CenterVertically
-				) {
-					action(enabled)
+	Column(
+	) {
+		ListItem(
+			modifier = Modifier.defaultMinSize(minHeight = 88.dp)
+				.background(VoicenotifyTheme.colors.boxItem),
+			headlineContent = {
+				ColorWrap(enabled) {
+					Text(title)
+				}
+			},
+			supportingContent = {
+				ColorWrap(enabled) {
+					Text(subtitle)
+				}
+			},
+			trailingContent = action?.run {
+				{
+					Row(
+						modifier = Modifier.fillMaxHeight(),
+						verticalAlignment = Alignment.CenterVertically
+					) {
+						action(enabled)
+					}
 				}
 			}
+		)
+		if (!isEnd) {
+			Divider(
+				color = VoicenotifyTheme.colors.divider,
+				thickness = 1.dp,
+				modifier = Modifier.padding(horizontal = 16.dp)
+			)
 		}
-	)
+
+	}
 }
 
 @Composable

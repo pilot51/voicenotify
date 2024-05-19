@@ -2,6 +2,7 @@ package com.pilot51.voicenotify
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Switch
@@ -15,27 +16,29 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 
 
 @Composable
 fun SwitchCustom(
-    isChecked: Boolean,
+    checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
-    switchColor: Color = MaterialTheme.colorScheme.primary,
-    backgroundColor: Color = MaterialTheme.colorScheme.surface,
     shape: Shape = CircleShape
 ) {
     Switch(
-        checked = isChecked,
+        checked = checked,
         onCheckedChange = onCheckedChange,
         colors = SwitchDefaults.colors(
-            checkedThumbColor = switchColor,
-            uncheckedThumbColor = backgroundColor,
-            checkedTrackColor = switchColor.copy(alpha = 0.5f),
-            uncheckedTrackColor = backgroundColor.copy(alpha = 0.5f)
+            checkedThumbColor = VoicenotifyTheme.colors.colorOnCustom,
+            uncheckedThumbColor = VoicenotifyTheme.colors.colorThumbOffCustom,
+            checkedTrackColor = VoicenotifyTheme.colors.colorPrimary,
+            uncheckedTrackColor = VoicenotifyTheme.colors.colorOffCustom,
+            checkedBorderColor = Color.Transparent,
+            uncheckedBorderColor = Color.Transparent
         ),
-        modifier = modifier ?: Modifier
+        modifier = (modifier?: Modifier).focusable(false),
+
     )
 }
 
@@ -45,7 +48,7 @@ fun SwitchCustom(
 private fun SwitchCustomPreview() {
     AppTheme {
         var isChecked by remember { mutableStateOf(false) }
-        Switch(
+        SwitchCustom(
             checked = isChecked,
             onCheckedChange = { isChecked = it },
             modifier = Modifier.padding(16.dp)
@@ -59,7 +62,7 @@ private fun SwitchCustomPreview() {
 private fun PreviewSwitchCustomChecked() {
     AppTheme {
         var isChecked by remember { mutableStateOf(true) }
-        Switch(
+        SwitchCustom(
             checked = isChecked,
             onCheckedChange = { isChecked = it },
             modifier = Modifier.padding(16.dp)

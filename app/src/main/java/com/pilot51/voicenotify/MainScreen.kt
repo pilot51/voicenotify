@@ -25,32 +25,39 @@ import android.content.res.Configuration
 import android.os.Build
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.gestures.ScrollableDefaults
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.overscroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
@@ -105,15 +112,18 @@ fun AppMain() {
 	Scaffold(
 		modifier = Modifier
 			.fillMaxSize()
-			.background(MaterialTheme.colorScheme.background)
+			.background(VoicenotifyTheme.colors.background)
 			.nestedScroll(scrollBehavior.nestedScrollConnection),
 		topBar = {
 			AppBar(
 				currentScreen = currentScreen,
 				canNavigateBack = navController.previousBackStackEntry != null,
 				navigateUp = { navController.navigateUp() },
+				modifier = Modifier
+					.fillMaxWidth(),
 				scrollBehavior = scrollBehavior
 			)
+
 		}
 	) { innerPadding ->
 		NavHost(
@@ -121,6 +131,7 @@ fun AppMain() {
 			startDestination = Screen.MAIN.name,
 			modifier = Modifier.padding(innerPadding)
 				.background(MaterialTheme.colorScheme.background)
+
 		) {
 			composable(route = Screen.MAIN.name) {
 				MainScreen(
@@ -163,13 +174,15 @@ private fun AppBar(
 			},
 			actions = {
 
-			}
+			},
+			colors = TopAppBarDefaults.largeTopAppBarColors(
+				containerColor = VoicenotifyTheme.colors.background,
+			)
 		)
 	} else {
 		LargeTopAppBar(
 			title = { Text(stringResource(currentScreen.title)) },
-			modifier = modifier
-				.background(MaterialTheme.colorScheme.background),
+			modifier = modifier,
 			navigationIcon = {
 				if (canNavigateBack) {
 					IconButton(onClick = navigateUp) {
@@ -183,12 +196,34 @@ private fun AppBar(
 			scrollBehavior = scrollBehavior,
 			actions = {
 
-			}
+			},
+			colors = TopAppBarDefaults.largeTopAppBarColors(
+				containerColor = VoicenotifyTheme.colors.background,
+			)
 		)
 	}
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
+sealed class PreferenceItem {
+	data class Link(
+		val title: String? = null,
+		val subtitle: String? = null,
+		val titleRes: Int? = null,
+		val subtitleRes: Int? = null,
+		val onClick: () -> Unit,
+		val onLongClick: (() -> Unit)? = null
+	) : PreferenceItem()
+
+	data class Checkbox(
+		val titleRes: Int,
+		val subtitleRes: Int,
+		val key: String,
+		val default: Boolean
+	) : PreferenceItem()
+}
+
+
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalFoundationApi::class)
 @Composable
 private fun MainScreen(
 	onClickAppList: () -> Unit,
@@ -242,6 +277,7 @@ private fun MainScreen(
 	var showReadPhoneStateRationale by remember { mutableStateOf(false) }
 	var showPostNotificationRationale by remember { mutableStateOf(false) }
 	val lifeCycleOwner = LocalLifecycleOwner.current
+
 	DisposableEffect(lifeCycleOwner) {
 		val observer = LifecycleEventObserver { _, event ->
 			if (event == Lifecycle.Event.ON_CREATE) {
@@ -257,108 +293,120 @@ private fun MainScreen(
 			}
 		}
 	}
+	val overscrollEffect = ScrollableDefaults.overscrollEffect()
+
 	Column(
 		modifier = Modifier
 			.fillMaxWidth()
-//			.background(MaterialTheme.colorScheme.background)
-			.background(Color(0xfff2f3f9))
+			.background(VoicenotifyTheme.colors.background)
+			.padding(12.dp , 0.dp)
 			.verticalScroll(rememberScrollState())
+			.overscroll(overscrollEffect)
 	) {
-		PreferenceRowLink(
-			title = statusTitle,
-			subtitle = statusSummary,
-			onClick = {
-				if (isRunning) Service.toggleSuspend()
-				else context.startActivity(statusIntent)
-			},
-			onLongClick = { context.startActivity(statusIntent) }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.app_list,
-			subtitleRes = R.string.app_list_summary,
-			onClick = onClickAppList
-		)
-		PreferenceRowLink(
-			titleRes = R.string.tts,
-			subtitleRes = R.string.tts_summary,
-			onClick = onClickTtsConfig
-		)
-		PreferenceRowCheckbox(
-			titleRes = R.string.audio_focus,
-			subtitleRes = R.string.audio_focus_summary,
-			key = KEY_AUDIO_FOCUS,
-			default = DEFAULT_AUDIO_FOCUS
-		)
-		PreferenceRowLink(
-			titleRes = R.string.shake_to_silence,
-			subtitleRes = R.string.shake_to_silence_summary,
-			onClick = { showShakeToSilence = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.require_strings,
-			subtitleRes = R.string.require_strings_summary,
-			onClick = { showRequireText = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.ignore_strings,
-			subtitleRes = R.string.ignore_strings_summary,
-			onClick = { showIgnoreText = true }
-		)
-		PreferenceRowCheckbox(
-			titleRes = R.string.ignore_empty,
-			subtitleRes = R.string.ignore_empty_summary_on,
-			key = KEY_IGNORE_EMPTY,
-			default = DEFAULT_IGNORE_EMPTY
-		)
-		PreferenceRowCheckbox(
-			titleRes = R.string.ignore_groups,
-			subtitleRes = R.string.ignore_groups_summary_on,
-			key = KEY_IGNORE_GROUPS,
-			default = DEFAULT_IGNORE_GROUPS
-		)
-		PreferenceRowLink(
-			titleRes = R.string.ignore_repeat,
-			subtitleRes = R.string.ignore_repeat_summary,
-			onClick = { showIgnoreRepeats = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.device_state,
-			subtitleRes = R.string.device_state_summary,
-			onClick = { showDeviceStates = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.quiet_start,
-			subtitleRes = R.string.quiet_start_summary,
-			onClick = { showQuietTimeStart = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.quiet_end,
-			subtitleRes = R.string.quiet_end_summary,
-			onClick = { showQuietTimeEnd = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.test,
-			subtitleRes = R.string.test_summary,
-			onClick = {
-				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-					postNotificationPermissionState!!.requestPermission {
-						showPostNotificationRationale = true
+		Column(
+			modifier = Modifier
+				.fillMaxWidth()
+				.clip(RoundedCornerShape(12.dp))
+				.background(VoicenotifyTheme.colors.boxItem)
+
+		) {
+			PreferenceRowLink(
+				title = statusTitle,
+				subtitle = statusSummary,
+				onClick = {
+					if (isRunning) Service.toggleSuspend()
+					else context.startActivity(statusIntent)
+				},
+				onLongClick = { context.startActivity(statusIntent) }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.app_list,
+				subtitleRes = R.string.app_list_summary,
+				onClick = onClickAppList
+			)
+			PreferenceRowLink(
+				titleRes = R.string.tts,
+				subtitleRes = R.string.tts_summary,
+				onClick = onClickTtsConfig
+			)
+			PreferenceRowCheckbox(
+				titleRes = R.string.audio_focus,
+				subtitleRes = R.string.audio_focus_summary,
+				key = KEY_AUDIO_FOCUS,
+				default = DEFAULT_AUDIO_FOCUS
+			)
+			PreferenceRowLink(
+				titleRes = R.string.shake_to_silence,
+				subtitleRes = R.string.shake_to_silence_summary,
+				onClick = { showShakeToSilence = true }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.require_strings,
+				subtitleRes = R.string.require_strings_summary,
+				onClick = { showRequireText = true }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.ignore_strings,
+				subtitleRes = R.string.ignore_strings_summary,
+				onClick = { showIgnoreText = true }
+			)
+			PreferenceRowCheckbox(
+				titleRes = R.string.ignore_empty,
+				subtitleRes = R.string.ignore_empty_summary_on,
+				key = KEY_IGNORE_EMPTY,
+				default = DEFAULT_IGNORE_EMPTY
+			)
+			PreferenceRowCheckbox(
+				titleRes = R.string.ignore_groups,
+				subtitleRes = R.string.ignore_groups_summary_on,
+				key = KEY_IGNORE_GROUPS,
+				default = DEFAULT_IGNORE_GROUPS
+			)
+			PreferenceRowLink(
+				titleRes = R.string.ignore_repeat,
+				subtitleRes = R.string.ignore_repeat_summary,
+				onClick = { showIgnoreRepeats = true }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.device_state,
+				subtitleRes = R.string.device_state_summary,
+				onClick = { showDeviceStates = true }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.quiet_start,
+				subtitleRes = R.string.quiet_start_summary,
+				onClick = { showQuietTimeStart = true }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.quiet_end,
+				subtitleRes = R.string.quiet_end_summary,
+				onClick = { showQuietTimeEnd = true }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.test,
+				subtitleRes = R.string.test_summary,
+				onClick = {
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+						postNotificationPermissionState!!.requestPermission {
+							showPostNotificationRationale = true
+						}
+					) {
+						runTestNotification(context)
 					}
-				) {
-					runTestNotification(context)
 				}
-			}
-		)
-		PreferenceRowLink(
-			titleRes = R.string.notify_log,
-			subtitle = stringResource(R.string.notify_log_summary, NotifyList.HISTORY_LIMIT),
-			onClick = { showLog = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.support,
-			subtitleRes = R.string.support_summary,
-			onClick = { showSupport = true }
-		)
+			)
+			PreferenceRowLink(
+				titleRes = R.string.notify_log,
+				subtitle = stringResource(R.string.notify_log_summary, NotifyList.HISTORY_LIMIT),
+				onClick = { showLog = true }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.support,
+				subtitleRes = R.string.support_summary,
+				onClick = { showSupport = true },
+				isEnd = true
+			)
+		}
 	}
 	if (showShakeToSilence) {
 		ShakeThresholdDialog { showShakeToSilence = false }
@@ -402,6 +450,7 @@ private fun MainScreen(
 		}
 	}
 }
+
 
 private const val NOTIFICATION_CHANNEL_ID = "test"
 

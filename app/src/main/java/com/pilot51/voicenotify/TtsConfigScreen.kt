@@ -17,13 +17,23 @@ package com.pilot51.voicenotify
 
 import android.content.Intent
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.overscroll
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 
 @Composable
 fun TtsConfigScreen() {
@@ -46,7 +56,17 @@ fun TtsConfigScreen() {
 	var showTtsStream by remember { mutableStateOf(false) }
 	var showTtsDelay by remember { mutableStateOf(false) }
 	var showTtsRepeat by remember { mutableStateOf(false) }
-	Column(modifier = Modifier.fillMaxSize()) {
+	Column(
+		modifier = Modifier
+			.fillMaxWidth()
+			.background(VoicenotifyTheme.colors.background)
+			.padding(12.dp , 0.dp)
+	) {
+		Column(modifier = Modifier
+			.fillMaxWidth()
+			.clip(RoundedCornerShape(12.dp))
+			.background(VoicenotifyTheme.colors.boxItem)
+		) {
 		PreferenceRowLink(
 			titleRes = R.string.tts_settings,
 			subtitle = ttsSummary,
@@ -83,6 +103,7 @@ fun TtsConfigScreen() {
 			subtitleRes = R.string.tts_repeat_summary,
 			onClick = { showTtsRepeat = true }
 		)
+	}
 	}
 	if (showTtsMessage) {
 		TtsMessageDialog { showTtsMessage = false }

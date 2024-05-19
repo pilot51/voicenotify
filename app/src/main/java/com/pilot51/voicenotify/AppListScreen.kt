@@ -25,8 +25,8 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -34,41 +34,29 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckBox
-import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
-import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pilot51.voicenotify.AppListViewModel.IgnoreType
-import kotlinx.coroutines.delay
-
+import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 private lateinit var vmStoreOwner: ViewModelStoreOwner
 
 
@@ -76,51 +64,6 @@ private lateinit var vmStoreOwner: ViewModelStoreOwner
 @Composable
 fun AppListActions(modifier: Modifier = Modifier) {
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
-	// var showSearchBar by remember { mutableStateOf(false) }
-	// val focusRequester = remember { FocusRequester() }
-	// val keyboard = LocalSoftwareKeyboardController.current
-//	Row(
-//		modifier = modifier
-//	) {
-//		TextField(
-//			value = vm.searchQuery ?: "",
-//			onValueChange = {
-//				vm.searchQuery = it
-//				vm.filterApps(it)
-//			},
-//			modifier = Modifier
-//				.fillMaxWidth()
-//				.padding(horizontal = 4.dp)
-//				.focusRequester(focusRequester),
-//			maxLines = 1,
-//			singleLine = true,
-//			leadingIcon = {
-//				Icon(
-//					imageVector = Icons.Filled.Search,
-//					contentDescription = null
-//				)
-//			},
-//			trailingIcon = {
-//				IconButton(onClick = {
-//					showSearchBar = false
-//					vm.searchQuery = null
-//					vm.filterApps(null)
-//				}) {
-//					Icon(
-//						imageVector = Icons.Filled.Close,
-//						contentDescription = stringResource(R.string.close)
-//					)
-//				}
-//			}
-//		)
-
-//	}
-
-//	LaunchedEffect(focusRequester) {
-//		focusRequester.requestFocus()
-//		delay(100)
-//		keyboard?.show()
-//	}
 	SealSearchBar(
 		modifier = modifier,
 		text = vm.searchQuery ?: "",
@@ -134,44 +77,46 @@ fun AppListActions(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun AppListScreen() {
+fun AppListScreen(
+	list:  List<App> = emptyList()
+) {
 	vmStoreOwner = LocalViewModelStoreOwner.current!!
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
+
 	Column(
 		modifier = Modifier.fillMaxSize()
+			.background(VoicenotifyTheme.colors.background)
+			.padding(12.dp , 0.dp)
 	) {
 
 		AppListActions(
-			modifier = Modifier.fillMaxWidth()
-							 .padding(8.dp, 4.dp)
-							 
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(0.dp, 4.dp, 0.dp, 8.dp)
 		)
 		Box(
 			modifier = Modifier
-				.weight(1f)
 				.fillMaxWidth()
+				.clip(RoundedCornerShape(12.dp))
+				.background(VoicenotifyTheme.colors.boxItem)
 		) {
 			AppList(
-				filteredApps = vm.filteredApps,
+				filteredApps = if (list.isNotEmpty()) list else vm.filteredApps,
 				showList = vm.showList,
 				stickyHeader = {
 					val modifier = Modifier
 						.fillMaxWidth()
-						.background(
-							color = MaterialTheme.colorScheme.surface,
-							shape = MaterialTheme.shapes.medium
-						).
-						padding(8.dp, 4.dp)
+						.background(MaterialTheme.colorScheme.surface)
 					Row(
 						modifier = modifier,
 						horizontalArrangement = Arrangement.SpaceBetween,
 						verticalAlignment = Alignment.CenterVertically
 						) {
 						Text(
-							text = stringResource(R.string.ignore_all),
+							text = stringResource(R.string.ignore_none),
 							modifier = Modifier.padding(8.dp)
 						)
-						Switch(
+						SwitchCustom(
 							checked = vm.appEnable,
 							onCheckedChange = {
 								vm.massIgnore(if (it) IgnoreType.IGNORE_NONE else IgnoreType.IGNORE_ALL)
@@ -199,11 +144,12 @@ private fun AppList(
 ) {
 	if (!showList) return
 	Column(
-		modifier = Modifier.fillMaxHeight(),
+		modifier = Modifier.fillMaxSize()
+			.background(MaterialTheme.colorScheme.surface),
 		verticalArrangement = Arrangement.Top
 	) {
 		LazyColumn(
-
+			contentPadding = PaddingValues(0.dp)
 		) {
 			stickyHeader {
 				stickyHeader()
@@ -237,6 +183,34 @@ fun PackageImage(context: Context, packageName: String, modifier: Modifier = Mod
 	}
 }
 
+ @Composable
+ fun ListItem(
+ 	modifier: Modifier = Modifier,
+ 	leadingContent: @Composable (() -> Unit)? = null,
+ 	headlineContent: @Composable (() -> Unit)? = null,
+ 	supportingContent: @Composable (() -> Unit)? = null,
+ 	trailingContent: @Composable (() -> Unit)? = null
+ ) {
+ 	Row(
+ 		modifier = modifier
+ 			.padding(8.dp)
+ 			.fillMaxWidth(),
+ 		horizontalArrangement = Arrangement.Start,
+ 		verticalAlignment = Alignment.CenterVertically
+ 	) {
+ 		leadingContent?.invoke()
+ 		Column(
+ 			modifier = Modifier
+ 				.weight(1f)
+ 				.padding(start = 8.dp)
+ 		) {
+ 			headlineContent?.invoke()
+ 			supportingContent?.invoke()
+ 		}
+ 		trailingContent?.invoke()
+ 	}
+ }
+
 @Composable
 private fun AppListItem(app: App, toggleIgnore: (app: App) -> Unit) {
 	ListItem(
@@ -244,7 +218,7 @@ private fun AppListItem(app: App, toggleIgnore: (app: App) -> Unit) {
 			value = app.enabled,
 			role = Role.Checkbox,
 			onValueChange = { toggleIgnore(app) }
-		),
+		).fillMaxWidth(),
 		leadingContent = {
 			PackageImage(
 				context = LocalContext.current,
@@ -259,22 +233,22 @@ private fun AppListItem(app: App, toggleIgnore: (app: App) -> Unit) {
 			)
 		},
 		supportingContent = {
-			Text(app.packageName)
+			Text(
+				text = app.packageName,
+				fontSize = 12.sp
+			)
 		},
 		trailingContent = {
-			Switch(
+			SwitchCustom(
 				checked = app.enabled,
 				onCheckedChange = { toggleIgnore(app) },
 				modifier = Modifier.focusable(false)
 			)
-//			Checkbox(
-//				checked = app.enabled,
-//				modifier = Modifier.focusable(false),
-//				onCheckedChange = { toggleIgnore(app) }
-//			)
 		}
 	)
 }
+
+
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
@@ -285,6 +259,17 @@ private fun AppListPreview() {
 		App(2, "package.name.two", "App Name 2", false)
 	)
 	AppTheme {
-		AppList(apps, true) {}
+		AppListScreen(apps)
+	}
+}
+
+
+// preview AppListActions
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
+@Composable
+private fun AppListActionsPreview() {
+	AppTheme {
+		AppListActions()
 	}
 }

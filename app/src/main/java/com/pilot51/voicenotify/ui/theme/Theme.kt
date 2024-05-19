@@ -19,7 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
+    primary = ClearBlue,
     secondary = PurpleGrey80,
     tertiary = Pink80,
     // background color
@@ -27,7 +27,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
+    primary = ClearBlue,
     secondary = PurpleGrey40,
     tertiary = Pink40,
     surface = Color(0xFFf2f3f8),
@@ -45,8 +45,11 @@ private val LightColorScheme = lightColorScheme(
 )
 
 private val lightExtendedColors = ExtendedColors(
+    colorPrimary = ClearBlue,
     neutralSurface = Color(0x99FFFFFF),
     colorOnCustom = Color(0xFFFFFFFF),
+    colorOffCustom = Color(0xFFE5E4E5),
+    colorThumbOffCustom = Color(0xFF7A767E),
     colorOnCustomVariant = Color(0xB3FFFFFF),
     colorSurface1 = Color(0xFFF2F5F9),
     colorSurface2 = Color(0xFFEDF0F6),
@@ -66,12 +69,18 @@ private val lightExtendedColors = ExtendedColors(
     colorTransparentInverse4 = Color(0xB8000000),
     colorTransparentInverse5 = Color(0xE0000000),
     colorNeutralInverse = Color(0xFF121212),
-    colorNeutralVariantInverse = Color(0xFF5C5C5C)
+    colorNeutralVariantInverse = Color(0xFF5C5C5C),
+    background = Color(0xFFf2f3f8),
+    boxItem = Color(0xFFFFFFFF),
+    divider = Color(0xFFE7E7E6),
 )
 
 private val darkExtendedColors = ExtendedColors(
+    colorPrimary = ClearBlue,
     neutralSurface = Color(0x14FFFFFF),
     colorOnCustom = Color(0xFFFFFFFF),
+    colorOffCustom = Color(0xFFE5E4E5),
+    colorThumbOffCustom = Color(0xFF7A767E),
     colorOnCustomVariant = Color(0xB3FFFFFF),
     colorSurface1 = Color(0xFF23242A),
     colorSurface2 = Color(0xFF272A31),
@@ -91,7 +100,10 @@ private val darkExtendedColors = ExtendedColors(
     colorTransparentInverse4 = Color(0xB8000000),
     colorTransparentInverse5 = Color(0xF5000000),
     colorNeutralInverse = Color(0xE0FFFFFF),
-    colorNeutralVariantInverse = Color(0xA3FFFFFF)
+    colorNeutralVariantInverse = Color(0xA3FFFFFF),
+    background = Color(0xFF010001),
+    boxItem = Color(0xFF202022),
+    divider = Color(0xFF323234),
 )
 
 @Composable
@@ -128,6 +140,9 @@ object VoicenotifyTheme {
     val colors: ExtendedColors
         @Composable
         get() = LocalExtendedColors.current
+    val colorScheme: ColorScheme
+        @Composable
+        get() = MaterialTheme.colorScheme
 }
 
 

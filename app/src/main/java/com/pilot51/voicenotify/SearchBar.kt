@@ -4,9 +4,13 @@ package com.pilot51.voicenotify
 import android.view.HapticFeedbackConstants
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.requiredHeight
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Clear
 import androidx.compose.material.icons.outlined.Search
@@ -38,7 +42,7 @@ fun SealSearchBar(
 
     Surface(
         modifier = modifier,
-        shape = MaterialTheme.shapes.medium,
+        shape = RoundedCornerShape(50.dp),
         color = MaterialTheme.colorScheme.surfaceVariant,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
@@ -48,27 +52,13 @@ fun SealSearchBar(
                 contentDescription = null,
                 tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
-            SealAutoFocusTextField(
+            SealTextField(
                 value = text,
                 onValueChange = onValueChange,
                 placeholder = { Text(text = placeholderText) },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f).height(40.dp),
                 contentDescription = stringResource(id = R.string.test),
-                trailingIcon = {
-                    if (text.isNotEmpty()) {
-                        IconButton(onClick = {
-                            onValueChange("")
-                            view.performHapticFeedback(HapticFeedbackConstants.CLOCK_TICK)
-                        }) {
-                            Icon(
-                                modifier = Modifier.size(24.dp),
-                                imageVector = Icons.Outlined.Clear,
-                                contentDescription = stringResource(id = R.string.close),
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    }
-                }
+                singleLine = true
             )
         }
     }
@@ -76,7 +66,7 @@ fun SealSearchBar(
 
 @Preview
 @Composable
-private fun SearchBarPreview() {
+private fun SearchBarPreviewEmpty() {
     var text by remember { mutableStateOf("") }
     AppTheme {
         Surface {
@@ -88,3 +78,19 @@ private fun SearchBarPreview() {
 
     }
 }
+
+@Preview
+@Composable
+private fun SearchBarPreview() {
+    var text by remember { mutableStateOf("some thing") }
+    AppTheme {
+        Surface {
+            SealSearchBar(
+                text = text,
+                placeholderText = "test",
+            ) { text = it }
+        }
+
+    }
+}
+
