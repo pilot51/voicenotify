@@ -16,12 +16,7 @@
 package com.pilot51.voicenotify
 
 import android.content.Context
-import android.media.AudioManager
 import android.os.Build
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -48,10 +43,8 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.io.File
 import kotlin.math.roundToInt
 
@@ -70,50 +63,25 @@ object PreferenceHelper {
 	const val DEFAULT_APP_DEFAULT_ENABLE = true
 	const val DEFAULT_IS_SUSPENDED = false
 
-	private val settingsDao = AppDatabase.db.settingsDao
 	private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("prefs")
 	private val dataStore = appContext.dataStore
-
-	lateinit var globalSettings: Settings
-	val globalSettingsFlow = settingsDao.getGlobalSettings().filterNotNull().also { flow ->
-		CoroutineScope(Dispatchers.IO).launch {
-			flow.collect { globalSettings = it }
-		}
-	}
-	val globalSettingsState @Composable get() =
-		if (isPreview) {
-			remember { mutableStateOf(Settings.defaults) }
-		} else {
-			globalSettingsFlow.collectAsState(initial = Settings.defaults)
-		}
-	/** @return The selected audio stream matching the `STREAM_` constant from [AudioManager]. */
-	val selectedAudioStreamFlow = globalSettingsFlow.map { it.ttsStream ?: DEFAULT_TTS_STREAM }
+	private val settingsDao = AppDatabase.db.settingsDao
+	private val globalSettingsFlow = settingsDao.getGlobalSettings().filterNotNull()
+	private lateinit var globalSettings: Settings
 
 	init {
 		CoroutineScope(Dispatchers.IO).launch {
 			initSettings()
-		}
-	}
-
-	fun Settings.save() {
-		CoroutineScope(Dispatchers.IO).launch {
-			settingsDao.update(this@save)
+			launch {
+				globalSettingsFlow.collect {
+					globalSettings = it
+				}
+			}
 		}
 	}
 
 	fun <T> getPrefFlow(key: Preferences.Key<T>, default: T) =
 		dataStore.data.map { it[key] ?: default }
-
-	@Composable
-	fun <T> getPrefState(key: Preferences.Key<T>, default: T) =
-		if (isPreview) {
-			remember { mutableStateOf(default) }
-		} else {
-			getPrefFlow(key, default).collectAsState(initial = default)
-		}
-
-	fun <T> getPref(key: Preferences.Key<T>, default: T) =
-		runBlocking(Dispatchers.IO) { getPrefFlow(key, default).first() }
 
 	/** Sets the value of the preference for [key], or removes it if [newValue] is `null`. */
 	fun <T> setPref(key: Preferences.Key<T>, newValue: T?) {

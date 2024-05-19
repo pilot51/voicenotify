@@ -47,9 +47,10 @@ import com.pilot51.voicenotify.PermissionHelper.isPermissionGranted
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IS_SUSPENDED
 import com.pilot51.voicenotify.PreferenceHelper.KEY_IS_SUSPENDED
 import com.pilot51.voicenotify.PreferenceHelper.getPrefFlow
-import com.pilot51.voicenotify.PreferenceHelper.globalSettings
 import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.db.AppDatabase
+import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
@@ -64,11 +65,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class Service : NotificationListenerService() {
 	private val appContext by ::applicationContext
+	private val settingsDao = AppDatabase.db.settingsDao
 	private val lastMsg = mutableMapOf<App?, String?>()
 	private val lastMsgTime = mutableMapOf<App?, Long>()
 	private var tts: TextToSpeech? = null
@@ -85,10 +90,8 @@ class Service : NotificationListenerService() {
 				.setLegacyStreamType(AudioManager.STREAM_MUSIC).build())
 			.build()
 	} else null
-
-	private val ttsParams get() = Bundle().apply {
-		putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, globalSettings.ttsStream ?: DEFAULT_TTS_STREAM)
-	}
+	private val globalSettingsFlow = settingsDao.getGlobalSettings().filterNotNull()
+	private lateinit var globalSettings: Settings
 
 	/**
 	 * this is used to determine if we are the first, middle, or last thing to be spoken at the moment, for enabling/disabling shake and audio focus request
@@ -99,7 +102,8 @@ class Service : NotificationListenerService() {
 	private val ttsQueue = linkedMapOf<Long, NotificationInfo>()
 
 	override fun onCreate() {
-		CoroutineScope(Dispatchers.IO).launch {
+		val ioScope = CoroutineScope(Dispatchers.IO)
+		ioScope.launch {
 			isSuspended.collect {
 				if (!it) return@collect
 				tts?.run {
@@ -112,6 +116,7 @@ class Service : NotificationListenerService() {
 				}
 			}
 		}
+		ioScope.launch { globalSettingsFlow.collect { globalSettings = it } }
 		initTts()
 		super.onCreate()
 	}
@@ -179,13 +184,13 @@ class Service : NotificationListenerService() {
 		tts?.shutdown()
 		initTts {
 			CoroutineScope(Dispatchers.IO).launch {
-				val params = ttsParams
 				synchronized(ttsQueue) {
 					val queueIterator = ttsQueue.iterator()
 					queueIterator.forEach {
 						val info = it.value
 						val isFailed = tts?.speak(
-							info.ttsMessage, TextToSpeech.QUEUE_ADD, params, it.key.toString()
+							info.ttsMessage, TextToSpeech.QUEUE_ADD,
+							getTtsParams(info.settings), it.key.toString()
 						) != TextToSpeech.SUCCESS
 						if (isFailed) {
 							Log.e(TAG, "Error adding notification to queue after TTS restart. Not retrying again.")
@@ -204,29 +209,30 @@ class Service : NotificationListenerService() {
 
 	override fun onNotificationPosted(sbn: StatusBarNotification) {
 		val notification = sbn.notification
-		if (globalSettings.ignoreGroups ?: DEFAULT_IGNORE_GROUPS
+		val app = Common.findOrAddApp(sbn.packageName)
+		val settings = getCombinedSettings(app)
+		if (settings.ignoreGroups ?: DEFAULT_IGNORE_GROUPS
 			&& notification.flags and Notification.FLAG_GROUP_SUMMARY != 0) {
 			return  // Completely ignore group summary notifications.
 		}
-		val app = Common.findOrAddApp(sbn.packageName)
-		val info = NotificationInfo(app, notification)
+		val info = NotificationInfo(app, notification, settings)
 		val msgTime = info.calendar.timeInMillis
 		val ttsMsg = info.ttsMessage
 		if (app != null && !app.enabled) {
 			info.ignoreReasons.add(IgnoreReason.APP)
 		}
-		if (info.isEmpty && globalSettings.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY) {
+		if (info.isEmpty && settings.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY) {
 			info.ignoreReasons.add(IgnoreReason.EMPTY_MSG)
 		}
 		if (ttsMsg != null) {
-			val requireStrings = globalSettings.requireStrings?.split("\n")
+			val requireStrings = settings.requireStrings?.split("\n")
 			val stringRequired = requireStrings?.all {
 				it.isNotEmpty() && !ttsMsg.contains(it, true)
 			} ?: false
 			if (stringRequired) {
 				info.ignoreReasons.add(IgnoreReason.STRING_REQUIRED)
 			}
-			val ignoreStrings = globalSettings.ignoreStrings?.split("\n")
+			val ignoreStrings = settings.ignoreStrings?.split("\n")
 			val stringIgnored = ignoreStrings?.any {
 				it.isNotEmpty() && ttsMsg.contains(it, true)
 			} ?: false
@@ -234,7 +240,7 @@ class Service : NotificationListenerService() {
 				info.ignoreReasons.add(IgnoreReason.STRING_IGNORED)
 			}
 		}
-		val ignoreRepeat = globalSettings.ignoreRepeat ?: -1
+		val ignoreRepeat = settings.ignoreRepeat ?: -1
 		if (lastMsg.containsKey(app)) {
 			if (lastMsg[app] == ttsMsg && (ignoreRepeat == -1 || msgTime - lastMsgTime[app]!! < ignoreRepeat * 1000)) {
 				info.addIgnoreReasonIdentical(ignoreRepeat)
@@ -242,9 +248,9 @@ class Service : NotificationListenerService() {
 		}
 		NotifyList.addNotification(info)
 		if (info.ignoreReasons.isEmpty()) {
-			val delay = globalSettings.ttsDelay ?: 0
+			val delay = settings.ttsDelay ?: 0
 			if (!isScreenOn()) {
-				val interval = globalSettings.ttsRepeat ?: 0.0
+				val interval = settings.ttsRepeat ?: 0.0
 				if (interval > 0) {
 					synchronized(repeatList) { repeatList.add(info) }
 					if (repeater == null) {
@@ -254,7 +260,7 @@ class Service : NotificationListenerService() {
 			}
 			Timer().schedule(object : TimerTask() {
 				override fun run() {
-					val ignoreReasons = ignore()
+					val ignoreReasons = ignore(info.settings)
 					if (ignoreReasons.isNotEmpty()) {
 						Log.i(TAG, "Notification ignored for reason(s): "
 							+ ignoreReasons.joinToString())
@@ -295,7 +301,7 @@ class Service : NotificationListenerService() {
 		synchronized(ttsQueue) {
 			if (ttsQueue.isEmpty()) { //if there are no messages in the queue, start up shake detection and audio focus requesting
 				shake.enable()
-				shouldRequestFocus = globalSettings.audioFocus ?: DEFAULT_AUDIO_FOCUS
+				shouldRequestFocus = info.settings.audioFocus ?: DEFAULT_AUDIO_FOCUS
 				if (shouldRequestFocus) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 						audioMan.requestAudioFocus(audioFocusRequest!!)
@@ -313,7 +319,7 @@ class Service : NotificationListenerService() {
 		val utteranceId = notificationTime.toString()
 		CoroutineScope(Dispatchers.IO).launch {
 			val isSpeakFailed = tts?.speak(
-				info.ttsMessage, TextToSpeech.QUEUE_ADD, ttsParams, utteranceId
+				info.ttsMessage, TextToSpeech.QUEUE_ADD, getTtsParams(info.settings), utteranceId
 			) != TextToSpeech.SUCCESS
 			if (isSpeakFailed) {
 				Log.e(TAG, "Error adding notification to TTS queue. Attempting to restart TTS.")
@@ -331,21 +337,21 @@ class Service : NotificationListenerService() {
 	 * Checks for any notification-independent ignore states.
 	 * @return Set of ignore reasons.
 	 */
-	private fun ignore(): Set<IgnoreReason> {
+	private fun ignore(settings: Settings): Set<IgnoreReason> {
 		val ignoreReasons: MutableSet<IgnoreReason> = HashSet()
 		if (isSuspended.value) {
 			ignoreReasons.add(IgnoreReason.SUSPENDED)
 		}
 		val c = Calendar.getInstance()
 		val calTime = c[Calendar.HOUR_OF_DAY] * 60 + c[Calendar.MINUTE]
-		val quietStart = globalSettings.quietStart ?: DEFAULT_QUIET_TIME
-		val quietEnd = globalSettings.quietEnd ?: DEFAULT_QUIET_TIME
+		val quietStart = settings.quietStart ?: DEFAULT_QUIET_TIME
+		val quietEnd = settings.quietEnd ?: DEFAULT_QUIET_TIME
 		if ((quietStart < quietEnd && quietStart <= calTime && calTime < quietEnd)
 			|| (quietEnd < quietStart && (quietStart <= calTime || calTime < quietEnd))
 		) ignoreReasons.add(IgnoreReason.QUIET)
 		if ((audioMan.ringerMode == AudioManager.RINGER_MODE_SILENT
 				|| audioMan.ringerMode == AudioManager.RINGER_MODE_VIBRATE)
-			&& !(globalSettings.speakSilentOn ?: DEFAULT_SPEAK_SILENT_ON)) {
+			&& !(settings.speakSilentOn ?: DEFAULT_SPEAK_SILENT_ON)) {
 			ignoreReasons.add(IgnoreReason.SILENT)
 		}
 		val telecomMan = getSystemService(TELECOM_SERVICE) as TelecomManager
@@ -356,16 +362,16 @@ class Service : NotificationListenerService() {
 		if (isInCall) {
 			ignoreReasons.add(IgnoreReason.CALL)
 		}
-		if (!isScreenOn() && !(globalSettings.speakScreenOff ?: DEFAULT_SPEAK_SCREEN_OFF)) {
+		if (!isScreenOn() && !(settings.speakScreenOff ?: DEFAULT_SPEAK_SCREEN_OFF)) {
 			ignoreReasons.add(IgnoreReason.SCREEN_OFF)
 		}
-		if (isScreenOn() && !(globalSettings.speakScreenOn ?: DEFAULT_SPEAK_SCREEN_ON)) {
+		if (isScreenOn() && !(settings.speakScreenOn ?: DEFAULT_SPEAK_SCREEN_ON)) {
 			ignoreReasons.add(IgnoreReason.SCREEN_ON)
 		}
-		if (!isHeadsetOn() && !(globalSettings.speakHeadsetOff ?: DEFAULT_SPEAK_HEADSET_OFF)) {
+		if (!isHeadsetOn() && !(settings.speakHeadsetOff ?: DEFAULT_SPEAK_HEADSET_OFF)) {
 			ignoreReasons.add(IgnoreReason.HEADSET_OFF)
 		}
-		if (isHeadsetOn() && !(globalSettings.speakHeadsetOn ?: DEFAULT_SPEAK_HEADSET_ON)) {
+		if (isHeadsetOn() && !(settings.speakHeadsetOn ?: DEFAULT_SPEAK_HEADSET_ON)) {
 			ignoreReasons.add(IgnoreReason.HEADSET_ON)
 		}
 		return ignoreReasons
@@ -380,12 +386,10 @@ class Service : NotificationListenerService() {
 		}
 
 		override fun run() {
-			if (ignore().isNotEmpty()) return
-			CoroutineScope(Dispatchers.Main).launch {
-				synchronized(repeatList) {
-					for (info in repeatList) {
-						speak(info)
-					}
+			synchronized(repeatList) {
+				for (info in repeatList) {
+					if (ignore(info.settings).isNotEmpty()) continue
+					speak(info)
 				}
 			}
 		}
@@ -492,21 +496,27 @@ class Service : NotificationListenerService() {
 			}
 			if (interruptIfIgnored) {
 				tts?.run {
-					val ignoreReasons = ignore()
-					if (ignoreReasons.isNotEmpty()) {
-						Log.i(TAG, "Notifications silenced/ignored for reason(s): "
-							+ ignoreReasons.joinToString())
-						synchronized(ttsQueue) {
-							for (info in ttsQueue.values) {
+					synchronized(ttsQueue) {
+						for (info in ttsQueue.values) {
+							val ignoreReasons = ignore(info.settings)
+							if (ignoreReasons.isNotEmpty()) {
+								Log.i(TAG, "Notification from ${info.app?.label} silenced/ignored" +
+									" for reason(s): ${ignoreReasons.joinToString()}")
 								info.ignoreReasons.addAll(ignoreReasons)
 							}
 						}
-						stop()
 					}
+					stop()
 				}
 			}
 		}
 	}
+
+	private fun getCombinedSettings(app: App?) = app?.let {
+		runBlocking(Dispatchers.IO) {
+			settingsDao.getAppSettings(app.packageName).firstOrNull()
+		}?.let { globalSettings.merge(it) }
+	} ?: globalSettings
 
 	companion object {
 		private val TAG = Service::class.simpleName
@@ -522,6 +532,8 @@ class Service : NotificationListenerService() {
 			}
 		}
 
+		private fun getTtsParams(settings: Settings) = Bundle().apply {
+			putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, settings.ttsStream ?: DEFAULT_TTS_STREAM)
 		}
 
 		fun toggleSuspend(): Boolean {

@@ -18,6 +18,7 @@
 
 	<!-- AppBar -->
 	<string name="back">Back</string>
+	<string name="app_overrides">%s Overrides</string>
 
 	<!-- MainScreen and AppWidget -->
 	<string name="service_running">Voice Notify service is running</string>
@@ -140,12 +141,16 @@
 	<string name="error_market">Error: Unable to find Google Play Store installed.</string>
 	<string name="error_email">Error: Unable to find an installed email app.</string>
 	<string name="error_browser">Error: Unable to find an installed browser app.</string>
+	<string name="remove_override">Remove override</string>
+	<string name="remove_override_confirm">Remove %1$s override for %2$s?</string>
 
 	<!-- AppListScreen -->
 	<string name="close">Close</string>
 	<string name="ignore_all">Ignore All</string>
 	<string name="ignore_none">Ignore None</string>
 	<string name="filter">Filter</string>
+	<string name="remove_app_overrides">Remove all app overrides</string>
+	<string name="remove_app_overrides_confirm">Remove all overrides for %s?</string>
 
 	<!-- TtsConfigScreen and dialogs -->
 	<string name="tts_settings">TTS Settings</string>

@@ -17,6 +17,8 @@ package com.pilot51.voicenotify.db
 
 import android.media.AudioManager
 import androidx.room.*
+import kotlin.reflect.KProperty1
+import kotlin.reflect.full.memberProperties
 
 @Entity(
 	tableName = "settings",
@@ -67,6 +69,7 @@ data class Settings(
 	var ttsTextReplace: String? = null,
 	@ColumnInfo(name = "tts_max_length")
 	var ttsMaxLength: Int? = null,
+	/** The selected audio stream matching the `STREAM_` constant from [AudioManager]. */
 	@ColumnInfo(name = "tts_stream")
 	var ttsStream: Int? = null,
 	@ColumnInfo(name = "tts_delay")
@@ -74,6 +77,52 @@ data class Settings(
 	@ColumnInfo(name = "tts_repeat")
 	var ttsRepeat: Double? = null
 ) {
+	@Ignore
+	val isGlobal = appPackage == null
+
+	/**
+	 * Creates a new instance where only the `null` values
+	 * in [overrides] fall back to the values in `this`.
+	 * The result should not be saved to the database.
+	 * @throws IllegalStateException if `this` is not the global settings.
+	 */
+	fun merge(overrides: Settings): Settings {
+		if (!isGlobal) throw IllegalStateException(
+			"Must only be called on the global settings instance." +
+				" Called on id=$id appPackage=$appPackage"
+		)
+		return copy(
+			id = 0,
+			appPackage = overrides.appPackage,
+			audioFocus = overrides.audioFocus ?: audioFocus,
+			requireStrings = overrides.requireStrings ?: requireStrings,
+			ignoreStrings = overrides.ignoreStrings ?: ignoreStrings,
+			ignoreEmpty = overrides.ignoreEmpty ?: ignoreEmpty,
+			ignoreGroups = overrides.ignoreGroups ?: ignoreGroups,
+			ignoreRepeat = overrides.ignoreRepeat ?: ignoreRepeat,
+			speakScreenOff = overrides.speakScreenOff ?: speakScreenOff,
+			speakScreenOn = overrides.speakScreenOn ?: speakScreenOn,
+			speakHeadsetOff = overrides.speakHeadsetOff ?: speakHeadsetOff,
+			speakHeadsetOn = overrides.speakHeadsetOn ?: speakHeadsetOn,
+			speakSilentOn = overrides.speakSilentOn ?: speakSilentOn,
+			quietStart = overrides.quietStart ?: quietStart,
+			quietEnd = overrides.quietEnd ?: quietEnd,
+			ttsString = overrides.ttsString ?: ttsString,
+			ttsTextReplace = overrides.ttsTextReplace ?: ttsTextReplace,
+			ttsMaxLength = overrides.ttsMaxLength ?: ttsMaxLength,
+			ttsStream = overrides.ttsStream ?: ttsStream,
+			ttsDelay = overrides.ttsDelay ?: ttsDelay,
+			ttsRepeat = overrides.ttsRepeat ?: ttsRepeat
+		)
+	}
+
+	@Suppress("UNCHECKED_CAST")
+	fun areAllSettingsNull() = this::class.memberProperties.filter {
+		it.returnType.isMarkedNullable && it.name != "appPackage"
+	}.all {
+		(it as KProperty1<Settings, *>).get(this) == null
+	}
+
 	companion object {
 		const val DEFAULT_AUDIO_FOCUS = true
 		const val DEFAULT_IGNORE_EMPTY = true

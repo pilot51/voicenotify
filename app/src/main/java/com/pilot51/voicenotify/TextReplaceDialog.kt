@@ -35,37 +35,28 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.pilot51.voicenotify.TextReplaceDialogViewModel.Companion.isDuplicate
-import com.pilot51.voicenotify.TextReplaceDialogViewModel.Companion.updateListItem
+import com.pilot51.voicenotify.PreferencesViewModel.Companion.isDuplicate
+import com.pilot51.voicenotify.PreferencesViewModel.Companion.updateListItem
 
 /**
  * Dialog that provides a dynamic list with two
  * text fields in each row for defining text replacement.
  */
 @Composable
-fun TextReplaceDialog(onDismiss: () -> Unit) {
-	val vm: TextReplaceDialogViewModel = viewModel()
-	val savedList by vm.ttsTextReplace
+fun TextReplaceDialog(
+	vm: IPreferencesViewModel,
+	onDismiss: () -> Unit
+) {
+	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
+	val savedList = vm.getTtsTextReplace(settingsCombo)
 	val replaceList = remember(savedList) {
 		mutableStateListOf<Pair<String, String>?>().apply {
 			addAll(savedList)
 			add(null)
 		}
 	}
-	TextReplaceDialog(
-		replaceList = replaceList,
-		onSave = { vm.save(replaceList) },
-		onDismiss = onDismiss
-	)
-}
-
-@Composable
-private fun TextReplaceDialog(
-	replaceList: MutableList<Pair<String, String>?>,
-	onSave: () -> Unit,
-	onDismiss: () -> Unit
-) {
+	val onSave = { vm.saveTtsTextReplace(settings, replaceList) }
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
@@ -222,16 +213,7 @@ private fun TextReplaceListItem(
 @VNPreview
 @Composable
 private fun TextReplaceListPreview() {
-	val replaceList = mutableListOf(
-		Pair("first", "second"),
-		Pair("this", "that"),
-		null
-	)
 	AppTheme {
-		TextReplaceDialog(
-			replaceList = replaceList,
-			onSave = {},
-			onDismiss = {}
-		)
+		TextReplaceDialog(PreferencesPreviewVM) {}
 	}
 }

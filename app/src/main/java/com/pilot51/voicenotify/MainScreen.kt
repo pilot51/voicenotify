@@ -23,151 +23,42 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
-import androidx.annotation.StringRes
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.pilot51.voicenotify.NotifyList.NotificationLogDialog
 import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
 import com.pilot51.voicenotify.PermissionHelper.requestPermission
-import com.pilot51.voicenotify.PreferenceHelper.save
+import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 
-private enum class Screen(@StringRes val title: Int) {
-	MAIN(R.string.app_name),
-	APP_LIST(R.string.app_list),
-	TTS(R.string.tts)
-}
-
-@Composable
-fun AppTheme(content: @Composable () -> Unit) {
-	MaterialTheme(
-		colorScheme = if (isSystemInDarkTheme()) {
-			darkColorScheme(primary = Color(0xFF1CB7D5), primaryContainer = Color(0xFF1E4696))
-		} else {
-			lightColorScheme(primary = Color(0xFF2A54A5), primaryContainer = Color(0xFF64F0FF))
-		},
-		typography = MaterialTheme.typography.copy(
-			// Increased font size for dialog buttons
-			labelLarge = TextStyle(
-				fontFamily = FontFamily.SansSerif,
-				fontWeight = FontWeight.Medium,
-				fontSize = 20.sp,
-				lineHeight = 20.sp,
-				letterSpacing = 0.1.sp,
-			)
-		),
-		content = content
-	)
-}
-
-@Composable
-fun AppMain() {
-	val navController = rememberNavController()
-	val backStackEntry by navController.currentBackStackEntryAsState()
-	val currentScreen = Screen.valueOf(
-		backStackEntry?.destination?.route ?: Screen.MAIN.name
-	)
-	Scaffold(
-		topBar = {
-			AppBar(
-				currentScreen = currentScreen,
-				canNavigateBack = navController.previousBackStackEntry != null,
-				navigateUp = { navController.navigateUp() }
-			)
-		}
-	) { innerPadding ->
-		NavHost(
-			navController = navController,
-			startDestination = Screen.MAIN.name,
-			modifier = Modifier.padding(innerPadding)
-		) {
-			composable(route = Screen.MAIN.name) {
-				MainScreen(
-					onClickAppList = { navController.navigate(Screen.APP_LIST.name) },
-					onClickTtsConfig = { navController.navigate(Screen.TTS.name) }
-				)
-			}
-			composable(route = Screen.APP_LIST.name) {
-				AppListScreen()
-			}
-			composable(route = Screen.TTS.name) {
-				TtsConfigScreen()
-			}
-		}
-	}
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun AppBar(
-	currentScreen: Screen,
-	canNavigateBack: Boolean,
-	navigateUp: () -> Unit,
-	modifier: Modifier = Modifier
-) {
-	TopAppBar(
-		title = { Text(stringResource(currentScreen.title)) },
-		modifier = modifier,
-		navigationIcon = {
-			if (canNavigateBack) {
-				IconButton(onClick = navigateUp) {
-					Icon(
-						imageVector = Icons.Filled.ArrowBack,
-						contentDescription = stringResource(R.string.back)
-					)
-				}
-			}
-		},
-		actions = {
-			if (currentScreen == Screen.APP_LIST) {
-				AppListActions()
-			}
-		},
-		colors = TopAppBarDefaults.mediumTopAppBarColors(
-			containerColor = MaterialTheme.colorScheme.primaryContainer
-		)
-	)
-}
-
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun MainScreen(
+fun MainScreen(
+	vm: IPreferencesViewModel,
+	configApp: App?,
 	onClickAppList: () -> Unit,
 	onClickTtsConfig: () -> Unit
 ) {
 	val context = LocalContext.current
-	val settings by PreferenceHelper.globalSettingsState
+	val settings by vm.getSettingsState(configApp)
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	val phoneStatePermissionState = if (isPreview) null
 		else rememberPermissionState(Manifest.permission.READ_PHONE_STATE)
 	val postNotificationPermissionState =
@@ -234,20 +125,22 @@ private fun MainScreen(
 			.fillMaxSize()
 			.verticalScroll(rememberScrollState())
 	) {
-		PreferenceRowLink(
-			title = statusTitle,
-			summary = statusSummary,
-			onClick = {
-				if (isRunning) Service.toggleSuspend()
-				else context.startActivity(statusIntent)
-			},
-			onLongClick = { context.startActivity(statusIntent) }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.app_list,
-			summaryRes = R.string.app_list_summary,
-			onClick = onClickAppList
-		)
+		if (settings.isGlobal) {
+			PreferenceRowLink(
+				title = statusTitle,
+				summary = statusSummary,
+				onClick = {
+					if (isRunning) Service.toggleSuspend()
+					else context.startActivity(statusIntent)
+				},
+				onLongClick = { context.startActivity(statusIntent) }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.app_list,
+				summaryRes = R.string.app_list_summary,
+				onClick = onClickAppList
+			)
+		}
 		PreferenceRowLink(
 			titleRes = R.string.tts,
 			summaryRes = R.string.tts_summary,
@@ -256,114 +149,172 @@ private fun MainScreen(
 		PreferenceRowCheckbox(
 			titleRes = R.string.audio_focus,
 			summaryResOn = R.string.audio_focus_summary,
-			initialValue = settings.audioFocus ?: DEFAULT_AUDIO_FOCUS
-		) {
-			settings.run {
-				audioFocus = it
-				save()
+			initialValue = settingsCombo.audioFocus ?: DEFAULT_AUDIO_FOCUS,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.audioFocus != null,
+			onRemove = {
+				vm.save(settings.copy(audioFocus = null))
 			}
+		) {
+			vm.save(settings.copy(audioFocus = it))
 		}
-		PreferenceRowLink(
-			titleRes = R.string.shake_to_silence,
-			summaryRes = R.string.shake_to_silence_summary,
-			onClick = { showShakeToSilence = true }
-		)
+		if (settings.isGlobal) {
+			PreferenceRowLink(
+				titleRes = R.string.shake_to_silence,
+				summaryRes = R.string.shake_to_silence_summary,
+				onClick = { showShakeToSilence = true }
+			)
+		}
 		PreferenceRowLink(
 			titleRes = R.string.require_strings,
 			summaryRes = R.string.require_strings_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.requireStrings != null,
+			onRemove = {
+				vm.save(settings.copy(requireStrings = null))
+			},
 			onClick = { showRequireText = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.ignore_strings,
 			summaryRes = R.string.ignore_strings_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ignoreStrings != null,
+			onRemove = {
+				vm.save(settings.copy(ignoreStrings = null))
+			},
 			onClick = { showIgnoreText = true }
 		)
 		PreferenceRowCheckbox(
 			titleRes = R.string.ignore_empty,
 			summaryResOn = R.string.ignore_empty_summary_on,
 			summaryResOff = R.string.ignore_empty_summary_off,
-			initialValue = settings.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY
-		) {
-			settings.run {
-				ignoreEmpty = it
-				save()
+			initialValue = settingsCombo.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ignoreEmpty != null,
+			onRemove = {
+				vm.save(settings.copy(ignoreEmpty = null))
 			}
+		) {
+			vm.save(settings.copy(ignoreEmpty = it))
 		}
 		PreferenceRowCheckbox(
 			titleRes = R.string.ignore_groups,
 			summaryResOn = R.string.ignore_groups_summary_on,
 			summaryResOff = R.string.ignore_groups_summary_off,
-			initialValue = settings.ignoreGroups ?: DEFAULT_IGNORE_GROUPS
-		) {
-			settings.run {
-				ignoreGroups = it
-				save()
+			initialValue = settingsCombo.ignoreGroups ?: DEFAULT_IGNORE_GROUPS,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ignoreGroups != null,
+			onRemove = {
+				vm.save(settings.copy(ignoreGroups = null))
 			}
+		) {
+			vm.save(settings.copy(ignoreGroups = it))
 		}
 		PreferenceRowLink(
 			titleRes = R.string.ignore_repeat,
 			summaryRes = R.string.ignore_repeat_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ignoreRepeat != null,
+			onRemove = {
+				vm.save(settings.copy(ignoreRepeat = null))
+			},
 			onClick = { showIgnoreRepeats = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.device_state,
 			summaryRes = R.string.device_state_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.run {
+				speakScreenOff != null ||
+					speakScreenOn != null ||
+					speakHeadsetOff != null ||
+					speakHeadsetOn != null ||
+					speakSilentOn != null
+			},
+			onRemove = {
+				vm.save(settings.copy(
+					speakScreenOff = null,
+					speakScreenOn = null,
+					speakHeadsetOff = null,
+					speakHeadsetOn = null,
+					speakSilentOn = null
+				))
+			},
 			onClick = { showDeviceStates = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.quiet_start,
 			summaryRes = R.string.quiet_start_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.quietStart != null,
+			onRemove = {
+				vm.save(settings.copy(quietStart = null))
+			},
 			onClick = { showQuietTimeStart = true }
 		)
 		PreferenceRowLink(
 			titleRes = R.string.quiet_end,
 			summaryRes = R.string.quiet_end_summary,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.quietEnd != null,
+			onRemove = {
+				vm.save(settings.copy(quietEnd = null))
+			},
 			onClick = { showQuietTimeEnd = true }
 		)
-		PreferenceRowLink(
-			titleRes = R.string.test,
-			summaryRes = R.string.test_summary,
-			onClick = {
-				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-					postNotificationPermissionState!!.requestPermission {
-						showPostNotificationRationale = true
+		if (settings.isGlobal) {
+			PreferenceRowLink(
+				titleRes = R.string.test,
+				summaryRes = R.string.test_summary,
+				onClick = {
+					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+						postNotificationPermissionState!!.requestPermission {
+							showPostNotificationRationale = true
+						}
+					) {
+						runTestNotification(context)
 					}
-				) {
-					runTestNotification(context)
 				}
-			}
-		)
-		PreferenceRowLink(
-			titleRes = R.string.notify_log,
-			summary = stringResource(R.string.notify_log_summary, NotifyList.HISTORY_LIMIT),
-			onClick = { showLog = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.support,
-			summaryRes = R.string.support_summary,
-			onClick = { showSupport = true }
-		)
+			)
+			PreferenceRowLink(
+				titleRes = R.string.notify_log,
+				summary = stringResource(R.string.notify_log_summary, NotifyList.HISTORY_LIMIT),
+				onClick = { showLog = true }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.support,
+				summaryRes = R.string.support_summary,
+				onClick = { showSupport = true }
+			)
+		}
 	}
 	if (showShakeToSilence) {
-		ShakeThresholdDialog { showShakeToSilence = false }
+		ShakeThresholdDialog(vm) { showShakeToSilence = false }
 	}
 	if (showRequireText) {
-		RequireTextDialog { showRequireText = false }
+		RequireTextDialog(vm) { showRequireText = false }
 	}
 	if (showIgnoreText) {
-		IgnoreTextDialog { showIgnoreText = false }
+		IgnoreTextDialog(vm) { showIgnoreText = false }
 	}
 	if (showIgnoreRepeats) {
-		IgnoreRepeatsDialog { showIgnoreRepeats = false }
+		IgnoreRepeatsDialog(vm) { showIgnoreRepeats = false }
 	}
 	if (showDeviceStates) {
-		DeviceStatesDialog { showDeviceStates = false }
+		DeviceStatesDialog(vm) { showDeviceStates = false }
 	}
 	if (showQuietTimeStart) {
-		QuietTimeDialog(QuietTimeMode.START) { showQuietTimeStart = false }
+		QuietTimeDialog(
+			vm = vm,
+			mode = QuietTimeMode.START
+		) { showQuietTimeStart = false }
 	}
 	if (showQuietTimeEnd) {
-		QuietTimeDialog(QuietTimeMode.END) { showQuietTimeEnd = false }
+		QuietTimeDialog(
+			vm = vm,
+			mode = QuietTimeMode.END
+		) { showQuietTimeEnd = false }
 	}
 	if (showLog) {
 		NotificationLogDialog { showLog = false }
@@ -432,8 +383,8 @@ private fun runTestNotification(context: Context) {
 
 @VNPreview
 @Composable
-private fun AppPreview() {
+private fun MainScreenPreview() {
 	AppTheme {
-		AppMain()
+		MainScreen(PreferencesPreviewVM, null, {}, {})
 	}
 }

@@ -15,18 +15,17 @@
  */
 package com.pilot51.voicenotify
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckBox
 import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -34,7 +33,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModelStoreOwner
@@ -118,36 +116,55 @@ fun AppListActions() {
 }
 
 @Composable
-fun AppListScreen() {
+fun AppListScreen(
+	onConfigureApp: (app: App) -> Unit
+) {
 	vmStoreOwner = LocalViewModelStoreOwner.current!!
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
-	AppList(vm.filteredApps, vm.showList) { app ->
-		vm.setIgnore(app, IgnoreType.IGNORE_TOGGLE)
-	}
+	val packagesWithOverride by vm.packagesWithOverride
+	AppList(
+		vm.filteredApps,
+		vm.showList,
+		packagesWithOverride,
+		toggleIgnore = { app ->
+			vm.setIgnore(app, IgnoreType.IGNORE_TOGGLE)
+		},
+		onConfigureApp = onConfigureApp,
+		onRemoveOverrides = vm::removeOverrides
+	)
 }
 
 @Composable
 private fun AppList(
 	filteredApps: List<App>,
 	showList: Boolean,
-	toggleIgnore: (app: App) -> Unit
+	packagesWithOverride: List<String>,
+	toggleIgnore: (app: App) -> Unit,
+	onConfigureApp: (app: App) -> Unit,
+	onRemoveOverrides: (app: App) -> Unit
 ) {
 	if (!showList) return
 	LazyColumn(modifier = Modifier.fillMaxSize()) {
 		items(filteredApps) {
-			AppListItem(it, toggleIgnore)
+			val hasOverride = packagesWithOverride.contains(it.packageName)
+			AppListItem(it, hasOverride, toggleIgnore, onConfigureApp, onRemoveOverrides)
 		}
 	}
 }
 
 @Composable
-private fun AppListItem(app: App, toggleIgnore: (app: App) -> Unit) {
+private fun AppListItem(
+	app: App,
+	hasOverride: Boolean,
+	toggleIgnore: (app: App) -> Unit,
+	onConfigureApp: (app: App) -> Unit,
+	onRemoveOverrides: (app: App) -> Unit
+) {
+	var showRemoveOverridesDialog by remember { mutableStateOf(false) }
 	ListItem(
-		modifier = Modifier.toggleable(
-			value = app.enabled,
-			role = Role.Checkbox,
-			onValueChange = { toggleIgnore(app) }
-		),
+		modifier = Modifier.clickable {
+			onConfigureApp(app)
+		},
 		headlineContent = {
 			Text(
 				text = app.label,
@@ -158,13 +175,30 @@ private fun AppListItem(app: App, toggleIgnore: (app: App) -> Unit) {
 			Text(app.packageName)
 		},
 		trailingContent = {
-			Checkbox(
-				checked = app.enabled,
-				modifier = Modifier.focusable(false),
-				onCheckedChange = { toggleIgnore(app) }
-			)
+			Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+				if (hasOverride) {
+					IconButton(onClick = { showRemoveOverridesDialog = true }) {
+						Icon(
+							imageVector = Icons.Outlined.Cancel,
+							contentDescription = stringResource(R.string.remove_app_overrides)
+						)
+					}
+				}
+				Checkbox(
+					checked = app.enabled,
+					modifier = Modifier.focusable(false),
+					onCheckedChange = { toggleIgnore(app) }
+				)
+			}
 		}
 	)
+	if (showRemoveOverridesDialog) {
+		ConfirmDialog(
+			text = stringResource(R.string.remove_app_overrides_confirm, app.label),
+			onConfirm = { onRemoveOverrides(app) },
+			onDismiss = { showRemoveOverridesDialog = false }
+		)
+	}
 }
 
 @VNPreview
@@ -175,6 +209,6 @@ private fun AppListPreview() {
 		App("package.name.two", "App Name 2", false)
 	)
 	AppTheme {
-		AppList(apps, true) {}
+		AppList(apps, true, listOf("package.name.one"), {}, {}, {})
 	}
 }

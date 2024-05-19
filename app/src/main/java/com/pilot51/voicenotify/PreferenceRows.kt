@@ -20,10 +20,9 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Cancel
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.pilot51.voicenotify.db.App
 
 // Simplified and heavily modified from https://github.com/alorma/Compose-Settings
 
@@ -46,6 +46,9 @@ fun PreferenceRowLink(
 	title: String = titleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
 	summary: String = summaryRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
 	enabled: Boolean = true,
+	app: App? = null,
+	showRemove: Boolean = false,
+	onRemove: (() -> Unit)? = null,
 	onClick: () -> Unit,
 	onLongClick: (() -> Unit)? = null
 ) {
@@ -63,7 +66,10 @@ fun PreferenceRowLink(
 		PreferenceRowScaffold(
 			title = title,
 			enabled = enabled,
-			summary = summary
+			summary = summary,
+			app = app,
+			showRemove = showRemove,
+			onRemove = onRemove,
 		)
 	}
 }
@@ -78,6 +84,9 @@ fun PreferenceRowCheckbox(
 	@StringRes summaryResOn: Int,
 	@StringRes summaryResOff: Int = summaryResOn,
 	initialValue: Boolean,
+	app: App? = null,
+	showRemove: Boolean = false,
+	onRemove: (() -> Unit)? = null,
 	onChange: (Boolean) -> Unit
 ) {
 	var prefValue by remember(initialValue) { mutableStateOf(initialValue) }
@@ -99,6 +108,9 @@ fun PreferenceRowCheckbox(
 		PreferenceRowScaffold(
 			title = stringResource(titleRes),
 			summary = stringResource(summaryRes),
+			app = app,
+			showRemove = showRemove,
+			onRemove = onRemove,
 			action = {
 				Checkbox(
 					checked = prefValue,
@@ -117,8 +129,12 @@ private fun PreferenceRowScaffold(
 	enabled: Boolean = true,
 	title: String,
 	summary: String,
+	app: App? = null,
+	showRemove: Boolean = false,
+	onRemove: (() -> Unit)? = null,
 	action: (@Composable (Boolean) -> Unit)? = null
 ) {
+	var showRemoveDialog by remember { mutableStateOf(false) }
 	ListItem(
 		modifier = Modifier.defaultMinSize(minHeight = 88.dp),
 		headlineContent = {
@@ -131,17 +147,30 @@ private fun PreferenceRowScaffold(
 				Text(summary)
 			}
 		},
-		trailingContent = action?.run {
-			{
-				Row(
-					modifier = Modifier.fillMaxHeight(),
-					verticalAlignment = Alignment.CenterVertically
-				) {
-					action(enabled)
+		trailingContent = {
+			Row(
+				modifier = Modifier.fillMaxHeight(),
+				verticalAlignment = Alignment.CenterVertically
+			) {
+				if (showRemove) {
+					IconButton(onClick = { showRemoveDialog = true }) {
+						Icon(
+							imageVector = Icons.Outlined.Cancel,
+							contentDescription = stringResource(R.string.remove_override)
+						)
+					}
 				}
+				action?.invoke(enabled)
 			}
 		}
 	)
+	if (showRemoveDialog && app != null) {
+		ConfirmDialog(
+			text = stringResource(R.string.remove_override_confirm, title, app.label),
+			onConfirm = onRemove!!,
+			onDismiss = { showRemoveDialog = false }
+		)
+	}
 }
 
 @Composable
@@ -159,12 +188,15 @@ private fun ColorWrap(
 
 @VNPreview
 @Composable
-private fun PreferenceRowLinkPreview() {
+private fun PreferenceRowLinkPreview(
+	@PreviewParameter(BooleanProvider::class) showRemove: Boolean
+) {
 	AppTheme {
 		PreferenceRowLink(
 			titleRes = R.string.tts_settings,
 			summaryRes = R.string.tts_settings_summary_fail,
 			enabled = false,
+			showRemove = showRemove,
 			onClick = {}
 		)
 	}
@@ -181,6 +213,7 @@ private fun PreferenceRowCheckboxPreview(
 			summaryResOn = R.string.ignore_groups_summary_on,
 			summaryResOff = R.string.ignore_groups_summary_off,
 			initialValue = value,
+			showRemove = value,
 			onChange = {}
 		)
 	}
