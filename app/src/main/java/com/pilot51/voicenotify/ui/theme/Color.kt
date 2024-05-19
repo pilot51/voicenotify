@@ -34,7 +34,8 @@ data class ExtendedColors(
     val colorNeutralVariantInverse: Color,
     val background: Color,
     val boxItem: Color,
-    var divider: Color = Color.Unspecified
+    var divider: Color = Color.Unspecified,
+    var textFieldContainer: Color = Color.Unspecified
 )
 
 val LocalExtendedColors = staticCompositionLocalOf {
@@ -66,6 +67,7 @@ val LocalExtendedColors = staticCompositionLocalOf {
         colorNeutralVariantInverse = Color.Unspecified,
         background = Color.Unspecified,
         boxItem = Color.Unspecified,
-        divider = Color.Unspecified
+        divider = Color.Unspecified,
+        textFieldContainer = Color.Unspecified
     )
 }

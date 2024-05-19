@@ -92,6 +92,7 @@ private val lightExtendedColors = ExtendedColors(
     background = Color(0xFFf2f3f8),
     boxItem = Color(0xFFFFFFFF),
     divider = Color(0xFFE7E7E6),
+    textFieldContainer = Color(0xFFE6E7E9),
 )
 
 private val darkExtendedColors = ExtendedColors(
@@ -123,6 +124,7 @@ private val darkExtendedColors = ExtendedColors(
     background = Color(0xFF010001),
     boxItem = Color(0xFF202022),
     divider = Color(0xFF323234),
+    textFieldContainer = Color(0xFF1A1A1A),
 )
 
 @Composable

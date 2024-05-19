@@ -47,15 +47,16 @@ fun SealSearchBar(
                 color = VoicenotifyTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(50.dp)),
             verticalAlignment = Alignment.CenterVertically) {
-            Spacer(modifier = Modifier.width(16.dp))
-            Icon(
-                imageVector = Icons.Outlined.Search,
-                contentDescription = null,
-                tint = VoicenotifyTheme.colorScheme.onSurfaceVariant
-            )
             SealTextField(
                 value = text,
                 onValueChange = onValueChange,
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Search,
+                        contentDescription = null,
+                        tint = VoicenotifyTheme.colorScheme.onSurfaceVariant
+                    )
+                },
                 placeholder = { Text(text = placeholderText) },
                 modifier = Modifier.weight(1f).height(40.dp),
                 contentDescription = stringResource(id = R.string.test),
