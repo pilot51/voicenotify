@@ -109,6 +109,7 @@ fun AppListScreen(
 				stickyHeader = {
 					val modifier = Modifier
 						.fillMaxWidth()
+						.background(VoicenotifyTheme.colorScheme.surface)
 					Row(
 						modifier = modifier,
 						horizontalArrangement = Arrangement.SpaceBetween,

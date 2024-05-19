@@ -1,0 +1,58 @@
+{
+    "formatVersion": 1,
+    "database": {
+      "version": 1,
+      "identityHash": "10896f7f2edd7a5e91670d81d13c009c",
+      "entities": [
+        {
+          "tableName": "apps",
+          "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`_id` INTEGER PRIMARY KEY AUTOINCREMENT, `package` TEXT NOT NULL, `name` TEXT NOT NULL COLLATE NOCASE, `is_enabled` INTEGER, `sortLetter` TEXT NOT NULL)",
+          "fields": [
+            {
+              "fieldPath": "id",
+              "columnName": "_id",
+              "affinity": "INTEGER",
+              "notNull": false
+            },
+            {
+              "fieldPath": "packageName",
+              "columnName": "package",
+              "affinity": "TEXT",
+              "notNull": true
+            },
+            {
+              "fieldPath": "label",
+              "columnName": "name",
+              "affinity": "TEXT",
+              "notNull": true
+            },
+            {
+              "fieldPath": "isEnabled",
+              "columnName": "is_enabled",
+              "affinity": "INTEGER",
+              "notNull": false
+            },
+            {
+              "fieldPath": "sortLetter",
+              "columnName": "sortLetter",
+              "affinity": "TEXT",
+              "notNull": true
+            }
+          ],
+          "primaryKey": {
+            "autoGenerate": true,
+            "columnNames": [
+              "_id"
+            ]
+          },
+          "indices": [],
+          "foreignKeys": []
+        }
+      ],
+      "views": [],
+      "setupQueries": [
+        "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+        "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '10896f7f2edd7a5e91670d81d13c009c')"
+      ]
+    }
+  }
