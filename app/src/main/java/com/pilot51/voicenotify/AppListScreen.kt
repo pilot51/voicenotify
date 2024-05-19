@@ -32,6 +32,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
@@ -49,6 +50,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelStoreOwner
@@ -232,14 +234,14 @@ private fun AppListItem(
 ) {
 	var showRemoveOverridesDialog by remember { mutableStateOf(false) }
 	ListItem(
-		modifier = Modifier.clickable {
-			onConfigureApp(app)
-		}.fillMaxWidth(),
-		// modifier = Modifier.toggleable(
-		// 	value = app.enabled,
-		// 	role = Role.Checkbox,
-		// 	onValueChange = { toggleIgnore(app) }
-		// 	).fillMaxWidth(),
+//		modifier = Modifier.clickable {
+//			onConfigureApp(app)
+//		}.fillMaxWidth(),
+		 modifier = Modifier.toggleable(
+		 	value = app.enabled,
+		 	role = Role.Checkbox,
+		 	onValueChange = { toggleIgnore(app) }
+		 	).fillMaxWidth(),
 		leadingContent = {
 			PackageImage(
 				context = LocalContext.current,
