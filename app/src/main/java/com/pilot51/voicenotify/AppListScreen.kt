@@ -57,6 +57,7 @@ import com.pilot51.voicenotify.ui.ListBox
 import com.pilot51.voicenotify.ui.ListItem
 import com.pilot51.voicenotify.ui.SearchBar
 import com.pilot51.voicenotify.ui.Switch
+import com.pilot51.voicenotify.ui.bottomBorder
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 private lateinit var vmStoreOwner: ViewModelStoreOwner
 
@@ -101,26 +102,31 @@ fun AppListScreen(
 				filteredApps = if (list.isNotEmpty()) list else vm.filteredApps,
 				showList = vm.showList,
 				stickyHeader = {
-					val modifier = Modifier
-						.fillMaxWidth()
-						.background(VoicenotifyTheme.colors.boxItem)
 					Row(
-						modifier = modifier,
-						horizontalArrangement = Arrangement.SpaceBetween,
-						verticalAlignment = Alignment.CenterVertically
+						modifier = Modifier
+							.fillMaxWidth()
+							.background(VoicenotifyTheme.colors.boxItem)
+
+					) {
+						Row(
+							modifier = Modifier.weight(1f)
+								.padding(start = 8.dp, end = 8.dp)
+							.bottomBorder(1.dp, VoicenotifyTheme.colors.divider),
+							horizontalArrangement = Arrangement.SpaceBetween,
+							verticalAlignment = Alignment.CenterVertically
 						) {
-						Text(
-							text = stringResource(R.string.ignore_none),
-							modifier = Modifier.padding(8.dp)
-						)
-						Switch(
-							checked = vm.appEnable,
-							onCheckedChange = {
-								vm.massIgnore(if (it) IgnoreType.IGNORE_NONE else IgnoreType.IGNORE_ALL)
-							},
-							modifier = Modifier.padding(8.dp)
-						)
+							Text(
+								text = stringResource(R.string.ignore_none),
+							)
+							Switch(
+								checked = vm.appEnable,
+								onCheckedChange = {
+									vm.massIgnore(if (it) IgnoreType.IGNORE_NONE else IgnoreType.IGNORE_ALL)
+								}
+							)
+						}
 					}
+
 				},
 				packagesWithOverride = packagesWithOverride,
 				toggleIgnore = { app ->
@@ -202,11 +208,13 @@ private fun AppListItem(
 //		modifier = Modifier.clickable {
 //			onConfigureApp(app)
 //		}.fillMaxWidth(),
-		 modifier = Modifier.toggleable(
-		 	value = app.enabled,
-		 	role = Role.Checkbox,
-		 	onValueChange = { toggleIgnore(app) }
-		 	).fillMaxWidth(),
+		 modifier = Modifier
+			 .toggleable(
+				 value = app.enabled,
+				 role = Role.Checkbox,
+				 onValueChange = { toggleIgnore(app) }
+			 )
+			 .fillMaxWidth(),
 		leadingContent = {
 			PackageImage(
 				context = LocalContext.current,
