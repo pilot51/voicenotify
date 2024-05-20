@@ -190,10 +190,6 @@
     <string name="reason_tts_restarted">文本转语音在排队或正在播报时被重新启动。已重新排队。</string>
     <string name="reason_tts_interrupted">文本转语音被未知原因中断</string>
     <string name="reason_tts_length_limit">消息超出文本转语音长度限制</string>
-    <string name="title_activity_app_list_demo.kt">AppListDemo.kt</string>
-    <string name="title_activity_list_demo">ListDemo</string>
-    <string name="title_activity_alphabet">Alphabet</string>
-    <string name="title_activity_alphabet_index_helper">AlphabetIndexHelper</string>
     <string-array name="stream_name">
         <item>媒体</item>
         <item>通知</item>
