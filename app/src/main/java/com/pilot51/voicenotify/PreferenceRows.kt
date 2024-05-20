@@ -24,7 +24,6 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.*
-import androidx.compose.material3.ListItem
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -155,8 +154,10 @@ private fun PreferenceRowScaffold(
     ) {
         ListItem(
             modifier = Modifier
-				.defaultMinSize(minHeight = 88.dp)
-				.background(VoicenotifyTheme.colors.boxItem),
+				.defaultMinSize(minHeight = 88.dp),
+            colors = ListItemDefaults.colors(
+                containerColor = VoicenotifyTheme.colors.boxItem
+            ),
             headlineContent = {
                 ColorWrap(enabled) {
                     Text(title)
