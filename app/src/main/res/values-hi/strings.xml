@@ -136,8 +136,11 @@
     <string name="audio_focus_summary">बोलते समय अन्य मीडिया से रुकने/धीमे होने का अनुरोध करें</string>
     <string name="shake_to_silence_dialog_msg">निम्न मान अधिक संवेदनशील होते हैं।
 \n
-\nतयशुदा: %d
-\nअक्षम करने के लिए रिक्त।</string>
+\nतयशुदा: %1$d
+\nअक्षम हेतु रिक्त या 0।
+\n
+\nरीयलटाइम शेक मान: %2$d
+\nअधिकतम (5 सेकंड): %3$d</string>
     <string name="device_state_summary">चुनें कि डिवाइस की कुछ स्थितियों के दौरान बोलना है या नहीं</string>
     <string name="test_summary">वर्तमान सेटिंग्स का परीक्षण करने के लिए एक अधिसूचना पोस्ट करें (5 सेकंड विलंबित)</string>
     <string name="support">सहायता एवं समर्थन</string>
