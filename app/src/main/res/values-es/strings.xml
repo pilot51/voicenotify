@@ -28,10 +28,13 @@
     <string name="audio_focus_summary">Pedir otro sonido multimedia para pausar/apagar mientras se habla</string>
     <string name="shake_to_silence">Sacudir-Para-Silencio</string>
     <string name="shake_to_silence_summary">Ajuste el umbral de sensibilidad de Shake-To-Silence</string>
-    <string name="shake_to_silence_dialog_msg">Valores inferiores son más sensibles.
+    <string name="shake_to_silence_dialog_msg">Los valores más bajos son más sensibles.
 \n
-\nDefecto: %d
-\nDejar en blanco para deshabilitar.</string>
+\nPor defecto: %1$d
+\nEn blanco o 0 para desactivar.
+\n
+\nValor de agitación en tiempo real: %2$d
+\nPico (5 segundos): %3$d</string>
     <string-array name="stream_name">
         <item>Medios</item>
         <item>Notificación</item>
@@ -234,4 +237,5 @@
     <string name="remove_override">Eliminar anulación</string>
     <string name="remove_override_confirm">¿Eliminar anulación de %1$s para %2$s ?</string>
     <string name="remove_app_overrides_confirm">¿Eliminar todas las anulaciones para %s?</string>
+    <string name="remove_app_overrides">Eliminar todas las anulaciones de las aplicaciones</string>
 </resources>
