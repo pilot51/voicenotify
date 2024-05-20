@@ -19,7 +19,6 @@ package com.pilot51.voicenotify
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -61,9 +60,11 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pilot51.voicenotify.AppListViewModel.IgnoreType
 import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.ui.Layout
+import com.pilot51.voicenotify.ui.ListBox
 import com.pilot51.voicenotify.ui.ListItem
-import com.pilot51.voicenotify.ui.SealSearchBar
-import com.pilot51.voicenotify.ui.SwitchCustom
+import com.pilot51.voicenotify.ui.SearchBar
+import com.pilot51.voicenotify.ui.Switch
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 private lateinit var vmStoreOwner: ViewModelStoreOwner
 
@@ -71,7 +72,7 @@ private lateinit var vmStoreOwner: ViewModelStoreOwner
 @Composable
 fun AppListActions(modifier: Modifier = Modifier) {
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
-	SealSearchBar(
+	SearchBar(
 		modifier = modifier,
 		text = vm.searchQuery ?: "",
 		onValueChange = {
@@ -92,10 +93,8 @@ fun AppListScreen(
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
 	val packagesWithOverride by vm.packagesWithOverride
 
-	Column(
-		modifier = Modifier.fillMaxSize()
-			.background(VoicenotifyTheme.colors.background)
-			.padding(12.dp , 0.dp)
+	Layout(
+		modifier = Modifier
 	) {
 
 		AppListActions(
@@ -103,11 +102,8 @@ fun AppListScreen(
 				.fillMaxWidth()
 				.padding(0.dp, 4.dp, 0.dp, 8.dp)
 		)
-		Box(
+		ListBox(
 			modifier = Modifier
-				.fillMaxWidth()
-				.clip(RoundedCornerShape(12.dp))
-				.background(VoicenotifyTheme.colors.boxItem)
 		) {
 			AppList(
 				filteredApps = if (list.isNotEmpty()) list else vm.filteredApps,
@@ -125,7 +121,7 @@ fun AppListScreen(
 							text = stringResource(R.string.ignore_none),
 							modifier = Modifier.padding(8.dp)
 						)
-						SwitchCustom(
+						Switch(
 							checked = vm.appEnable,
 							onCheckedChange = {
 								vm.massIgnore(if (it) IgnoreType.IGNORE_NONE else IgnoreType.IGNORE_ALL)
@@ -249,7 +245,7 @@ private fun AppListItem(
 						)
 					}
 				}
-				SwitchCustom(
+				Switch(
 					checked = app.enabled,
 					onCheckedChange = { toggleIgnore(app) },
 					modifier = Modifier.focusable(false)

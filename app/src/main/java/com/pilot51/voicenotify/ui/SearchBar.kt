@@ -3,14 +3,11 @@ package com.pilot51.voicenotify.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Search
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +26,7 @@ import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 
 @Composable
-fun SealSearchBar(
+fun SearchBar(
     modifier: Modifier = Modifier,
     text: String,
     placeholderText: String,
@@ -47,7 +44,7 @@ fun SealSearchBar(
                 color = VoicenotifyTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(50.dp)),
             verticalAlignment = Alignment.CenterVertically) {
-            SealTextField(
+            TextField(
                 value = text,
                 onValueChange = onValueChange,
                 leadingIcon = {
@@ -72,7 +69,7 @@ private fun SearchBarPreviewEmpty() {
     var text by remember { mutableStateOf("") }
     AppTheme {
         Surface {
-            SealSearchBar(
+            SearchBar(
                 text = text,
                 placeholderText = "test",
             ) { text = it }
@@ -87,7 +84,7 @@ private fun SearchBarPreview() {
     var text by remember { mutableStateOf("some thing") }
     AppTheme {
         Surface {
-            SealSearchBar(
+            SearchBar(
                 text = text,
                 placeholderText = "test",
             ) { text = it }

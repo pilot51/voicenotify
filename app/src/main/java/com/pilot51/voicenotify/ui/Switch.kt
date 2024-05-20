@@ -3,7 +3,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.Switch
+import androidx.compose.material3.Switch as OSwitch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -16,13 +16,13 @@ import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 
 
 @Composable
-fun SwitchCustom(
+fun Switch(
     checked: Boolean,
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape
 ) {
-    Switch(
+    OSwitch(
         checked = checked,
         onCheckedChange = onCheckedChange,
         colors = SwitchDefaults.colors(
@@ -41,10 +41,10 @@ fun SwitchCustom(
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun SwitchCustomPreview() {
+private fun SwitchPreview() {
     AppTheme {
         var isChecked by remember { mutableStateOf(false) }
-        SwitchCustom(
+        Switch(
             checked = isChecked,
             onCheckedChange = { isChecked = it },
             modifier = Modifier.padding(16.dp)
@@ -55,10 +55,10 @@ private fun SwitchCustomPreview() {
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
-private fun PreviewSwitchCustomChecked() {
+private fun PreviewSwitchChecked() {
     AppTheme {
         var isChecked by remember { mutableStateOf(true) }
-        SwitchCustom(
+        Switch(
             checked = isChecked,
             onCheckedChange = { isChecked = it },
             modifier = Modifier.padding(16.dp)

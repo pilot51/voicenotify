@@ -53,6 +53,8 @@ import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
+import com.pilot51.voicenotify.ui.Layout
+import com.pilot51.voicenotify.ui.ListBox
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
@@ -135,21 +137,13 @@ fun MainScreen(
 	}
 	val overscrollEffect = ScrollableDefaults.overscrollEffect()
 
-	Column(
+	Layout(
 		modifier = Modifier
-			.fillMaxWidth()
-			.background(VoicenotifyTheme.colors.background)
-			.padding(12.dp , 0.dp)
 			.verticalScroll(rememberScrollState())
 			.overscroll(overscrollEffect)
 	) {
-		Column(
-			modifier = Modifier
-				.fillMaxWidth()
-				.clip(RoundedCornerShape(12.dp))
-				.background(VoicenotifyTheme.colors.boxItem)
+		ListBox(
 		) {
-
 			if (settings.isGlobal) {
 				PreferenceRowLink(
 					title = statusTitle,
