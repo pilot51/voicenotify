@@ -21,7 +21,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
-import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase
 import com.pilot51.voicenotify.db.Settings
@@ -65,13 +64,16 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 
 	@Composable
 	override fun getShakeThreshold(): State<Int> {
-		val default = DEFAULT_SHAKE_THRESHOLD
 		return if (isPreview) {
-			remember { mutableIntStateOf(default) }
+			remember { mutableIntStateOf(DEFAULT_SHAKE_THRESHOLD) }
 		} else {
-			PreferenceHelper.getPrefFlow(KEY_SHAKE_THRESHOLD, default)
-				.collectAsState(initial = default)
+			PreferenceHelper.getPrefFlow(KEY_SHAKE_THRESHOLD, 0)
+				.collectAsState(initial = 0)
 		}
+	}
+
+	override fun setShakeThreshold(threshold: Int?) {
+		PreferenceHelper.setPref(KEY_SHAKE_THRESHOLD, threshold)
 	}
 
 	override fun getApp(appPkg: String) = runBlocking(Dispatchers.IO) {
@@ -95,10 +97,6 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 				settingsDao.delete(settings)
 			} else settingsDao.upsert(settings)
 		}
-	}
-
-	override fun setShakeThreshold(threshold: Int?) {
-		setPref(KEY_SHAKE_THRESHOLD, threshold)
 	}
 
 	override fun getTtsTextReplace(settings: Settings) = convertTextReplaceStringToList(settings.ttsTextReplace)

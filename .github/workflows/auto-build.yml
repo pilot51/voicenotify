@@ -1,5 +1,8 @@
 name: "Auto Build"
 
+env:
+  tag: auto-build
+
 on:
   push:
     branches:
@@ -38,13 +41,20 @@ jobs:
         id: build
         run: ./gradlew assemble
 
-      - name: GH Release
+      - name: Update tag
+        run: |
+          git tag -d ${{ env.tag }} || true
+          git push origin :refs/tags/${{ env.tag }} || true
+          git tag ${{ env.tag }}
+          git push origin ${{ env.tag }}
+
+      - name: Release
         uses: softprops/action-gh-release@v2
         if: ${{ steps.build.outcome == 'success' }}
         with:
           name: "Auto build"
           token: "${{ secrets.GITHUB_TOKEN }}"
-          tag_name: "latest"
+          tag_name: ${{ env.tag }}
           prerelease: true
           body: |
             Use at your own risk!

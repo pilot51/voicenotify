@@ -58,6 +58,10 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_ON
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SILENT_ON
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STREAM
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 private fun openBrowser(context: Context, url: String) {
 	try {
@@ -74,14 +78,44 @@ fun ShakeThresholdDialog(
 	onDismiss: () -> Unit
 ) {
 	val value by vm.getShakeThreshold()
+	var realtimeShake by remember { mutableIntStateOf(0) }
+	var peak by remember { mutableIntStateOf(0) }
+	val context = LocalContext.current
+	val scope = rememberCoroutineScope()
+	DisposableEffect(value) {
+		val shake = Shake(context)
+		scope.launch {
+			var peakTimeoutJob: Job? = null
+			shake.enable()
+			shake.jerk.collect {
+				realtimeShake = it.toInt()
+				if (realtimeShake > peak) {
+					peakTimeoutJob?.cancel()
+					peak = realtimeShake
+					peakTimeoutJob = launch {
+						delay(5.seconds)
+						peak = 0
+					}
+				}
+			}
+		}
+		onDispose {
+			shake.disable()
+		}
+	}
 	TextEditDialog(
 		titleRes = R.string.shake_to_silence,
-		message = stringResource(R.string.shake_to_silence_dialog_msg, DEFAULT_SHAKE_THRESHOLD),
-		initialText = value.toString(),
+		message = stringResource(
+			R.string.shake_to_silence_dialog_msg,
+			DEFAULT_SHAKE_THRESHOLD,
+			realtimeShake,
+			peak
+		),
+		initialText = value.takeIf { it > 0 }?.toString() ?: "",
 		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss
-	) {
-		vm.setShakeThreshold(it.toIntOrNull())
+	) { str ->
+		vm.setShakeThreshold(str.toIntOrNull()?.takeIf { it > 0 })
 	}
 }
 

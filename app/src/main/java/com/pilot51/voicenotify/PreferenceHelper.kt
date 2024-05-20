@@ -99,7 +99,7 @@ object PreferenceHelper {
 	private suspend fun initSettings() {
 		if (settingsDao.hasGlobalSettings()) return
 		val spDir = File(appContext.applicationInfo.dataDir, "shared_prefs")
-		val spName = "com.pilot51.voicenotify_preferences"
+		val spName = "${BuildConfig.APPLICATION_ID}_preferences"
 		val spFile = File(spDir, "$spName.xml")
 		if (spFile.exists()) {
 			val sp = PreferenceManager.getDefaultSharedPreferences(appContext)
@@ -130,8 +130,9 @@ object PreferenceHelper {
 					?.toDoubleOrNull() ?: 0.0
 			))
 			dataStore.edit { prefs ->
-				prefs[KEY_SHAKE_THRESHOLD] = sp.getString("shake_threshold", null)
-					?.toDoubleOrNull()?.roundToInt() ?: DEFAULT_SHAKE_THRESHOLD
+				sp.getString("shake_threshold", null)?.toDoubleOrNull()?.roundToInt()?.let {
+					prefs[KEY_SHAKE_THRESHOLD] = it
+				}
 				prefs[KEY_APP_DEFAULT_ENABLE] = sp.getBoolean("defEnable", DEFAULT_APP_DEFAULT_ENABLE)
 				prefs[KEY_IS_SUSPENDED] = sp.getBoolean("isSuspended", DEFAULT_IS_SUSPENDED)
 			}
