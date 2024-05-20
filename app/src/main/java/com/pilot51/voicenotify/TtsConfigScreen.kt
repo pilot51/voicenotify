@@ -60,7 +60,7 @@ fun TtsConfigScreen(vm: IPreferencesViewModel) {
 	var showTtsRepeat by remember { mutableStateOf(false) }
 	Column(
 		modifier = Modifier
-			.fillMaxWidth()
+			.fillMaxSize()
 			.background(VoicenotifyTheme.colors.background)
 			.padding(12.dp , 0.dp)
 	) {

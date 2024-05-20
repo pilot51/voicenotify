@@ -15,6 +15,7 @@
  */
 package com.pilot51.voicenotify
 
+
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
@@ -36,7 +37,9 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -58,6 +61,7 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pilot51.voicenotify.AppListViewModel.IgnoreType
 import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.ui.ListItem
 import com.pilot51.voicenotify.ui.SealSearchBar
 import com.pilot51.voicenotify.ui.SwitchCustom
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
@@ -157,7 +161,7 @@ private fun AppList(
 	if (!showList) return
 	Column(
 		modifier = Modifier.fillMaxSize()
-			.background(MaterialTheme.colorScheme.surface),
+			.background(VoicenotifyTheme.colorScheme.surface),
 		verticalArrangement = Arrangement.Top
 	) {
 		LazyColumn(
@@ -196,33 +200,7 @@ fun PackageImage(context: Context, packageName: String, modifier: Modifier = Mod
 	}
 }
 
- @Composable
- fun ListItem(
- 	modifier: Modifier = Modifier,
- 	leadingContent: @Composable (() -> Unit)? = null,
- 	headlineContent: @Composable (() -> Unit)? = null,
- 	supportingContent: @Composable (() -> Unit)? = null,
- 	trailingContent: @Composable (() -> Unit)? = null
- ) {
- 	Row(
- 		modifier = modifier
- 			.padding(8.dp)
- 			.fillMaxWidth(),
- 		horizontalArrangement = Arrangement.Start,
- 		verticalAlignment = Alignment.CenterVertically
- 	) {
- 		leadingContent?.invoke()
- 		Column(
- 			modifier = Modifier
- 				.weight(1f)
- 				.padding(start = 8.dp)
- 		) {
- 			headlineContent?.invoke()
- 			supportingContent?.invoke()
- 		}
- 		trailingContent?.invoke()
- 	}
- }
+
 
 @Composable
 private fun AppListItem(
