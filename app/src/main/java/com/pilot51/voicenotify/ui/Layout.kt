@@ -1,7 +1,7 @@
 package com.pilot51.voicenotify.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -15,7 +15,7 @@ fun Layout(
     modifier: Modifier = Modifier,
     content: @Composable () -> Unit
 ) {
-    Box(
+    Column(
         modifier = modifier
             .fillMaxSize()
             .background(VoicenotifyTheme.colors.background)
