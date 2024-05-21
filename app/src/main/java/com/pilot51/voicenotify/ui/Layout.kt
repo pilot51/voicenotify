@@ -10,6 +10,9 @@ import androidx.compose.ui.unit.dp
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 
 
+/**
+ * A layout with padding and background.
+ */
 @Composable
 fun Layout(
     modifier: Modifier = Modifier,

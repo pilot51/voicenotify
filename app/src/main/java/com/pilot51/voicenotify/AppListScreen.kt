@@ -26,8 +26,11 @@ import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.*
@@ -58,6 +61,8 @@ import com.pilot51.voicenotify.ui.ListItem
 import com.pilot51.voicenotify.ui.SearchBar
 import com.pilot51.voicenotify.ui.Switch
 import com.pilot51.voicenotify.ui.bottomBorder
+import com.pilot51.voicenotify.ui.overScrollVertical
+import com.pilot51.voicenotify.ui.rememberOverscrollFlingBehavior
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 private lateinit var vmStoreOwner: ViewModelStoreOwner
 
@@ -85,11 +90,9 @@ fun AppListScreen(
 	vmStoreOwner = LocalViewModelStoreOwner.current!!
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
 	val packagesWithOverride by vm.packagesWithOverride
-
 	Layout(
 		modifier = Modifier
 	) {
-
 		AppListActions(
 			modifier = Modifier
 				.fillMaxWidth()
@@ -153,9 +156,9 @@ private fun AppList(
 	stickyHeader: @Composable () -> Unit = {}
 ) {
 	if (!showList) return
-	Column(
-		modifier = Modifier.fillMaxSize(),
-		verticalArrangement = Arrangement.Top
+	var scrollState = rememberScrollState()
+	Row(
+		modifier = Modifier.fillMaxSize()
 	) {
 		LazyColumn(
 			contentPadding = PaddingValues(0.dp)

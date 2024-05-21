@@ -55,6 +55,8 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
 import com.pilot51.voicenotify.ui.Layout
 import com.pilot51.voicenotify.ui.ListBox
+import com.pilot51.voicenotify.ui.overScrollVertical
+import com.pilot51.voicenotify.ui.rememberOverscrollFlingBehavior
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
@@ -135,12 +137,13 @@ fun MainScreen(
 			}
 		}
 	}
-	val overscrollEffect = ScrollableDefaults.overscrollEffect()
+
+	var scrollState = rememberScrollState()
 
 	Layout(
 		modifier = Modifier
-			.verticalScroll(rememberScrollState())
-			.overscroll(overscrollEffect)
+			.overScrollVertical()
+			.verticalScroll(state = scrollState, flingBehavior = rememberOverscrollFlingBehavior { scrollState })
 	) {
 		ListBox(
 		) {

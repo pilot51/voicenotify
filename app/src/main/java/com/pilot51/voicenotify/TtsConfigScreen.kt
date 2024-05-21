@@ -35,6 +35,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pilot51.voicenotify.ui.Layout
 import com.pilot51.voicenotify.ui.ListBox
+import com.pilot51.voicenotify.ui.overScrollVertical
+import com.pilot51.voicenotify.ui.rememberOverscrollFlingBehavior
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 
 @Composable
@@ -60,8 +62,13 @@ fun TtsConfigScreen(vm: IPreferencesViewModel) {
     var showTtsStream by remember { mutableStateOf(false) }
     var showTtsDelay by remember { mutableStateOf(false) }
     var showTtsRepeat by remember { mutableStateOf(false) }
+    var scrollState = rememberScrollState()
+
     Layout(
         modifier = Modifier
+            .fillMaxSize()
+            .overScrollVertical()
+            .verticalScroll(state = scrollState, flingBehavior = rememberOverscrollFlingBehavior { scrollState })
     ) {
         ListBox(
             modifier = Modifier

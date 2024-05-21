@@ -52,7 +52,10 @@ fun Modifier.topBorder(strokeWidth: Dp, color: Color) = composed(
     }
 )
 
-
+/**
+ * @example
+ *  Modifier.addIf(condition) { Modifier.padding(16.dp) }
+ */
 inline fun Modifier.addIf(
     predicate: Boolean,
     crossinline whenTrue: @Composable () -> Modifier,
@@ -64,11 +67,26 @@ inline fun Modifier.addIf(
     }
 }
 
+/**
+ *  @example
+ * 
+ *  Modifier.measured { topBarHeight = it.height }
+ * 
+ *  Modifier.measured { size ->
+ *  topBarHeight = size.height
+ * }
+ * 
+ */
 fun Modifier.measured(block: (DpSize) -> Unit): Modifier = composed {
     val density = LocalDensity.current
     onPlaced { block(it.size.toDp(density)) }
 }
 
+
+/**
+ * @example
+ *  Modifier.debugBounds()
+ */
 fun Modifier.debugBounds(color: Color = Color.Magenta, shape: Shape = RectangleShape) =
     this.border(1.dp, color, shape)
 
