@@ -31,6 +31,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.overscroll
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
@@ -166,8 +168,13 @@ fun MainScreen(
 			PreferenceRowLink(
 				titleRes = R.string.tts,
 				summaryRes = R.string.tts_summary,
-				onClick = onClickTtsConfig
+				onClick = onClickTtsConfig,
+				isEnd = true
 			)
+		}
+		Spacer(modifier = Modifier.size(16.dp))
+		ListBox(
+		) {
 			PreferenceRowCheckbox(
 				titleRes = R.string.audio_focus,
 				summaryResOn = R.string.audio_focus_summary,
@@ -309,7 +316,8 @@ fun MainScreen(
 				PreferenceRowLink(
 					titleRes = R.string.support,
 					summaryRes = R.string.support_summary,
-					onClick = { showSupport = true }
+					onClick = { showSupport = true },
+					isEnd = true
 				)
 			}
 		}

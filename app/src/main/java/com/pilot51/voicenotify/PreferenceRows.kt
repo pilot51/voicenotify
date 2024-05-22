@@ -41,6 +41,9 @@ import androidx.compose.ui.unit.dp
 import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.ui.Switch
+import com.pilot51.voicenotify.ui.addIf
+import com.pilot51.voicenotify.ui.bottomBorder
+import com.pilot51.voicenotify.ui.ListItem
 
 // Simplified and heavily modified from https://github.com/alorma/Compose-Settings
 
@@ -185,13 +188,14 @@ private fun PreferenceRowScaffold(
                 }
             }
         )
-        if (!isEnd) {
-            HorizontalDivider(
-                modifier = Modifier.padding(horizontal = 16.dp),
-                thickness = 1.dp,
-                color = VoicenotifyTheme.colors.divider
-            )
-        }
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .addIf(!isEnd) {
+                    Modifier.bottomBorder(2f, VoicenotifyTheme.colors.divider)
+                }
+        )
     }
     if (showRemoveDialog && app != null) {
         ConfirmDialog(
