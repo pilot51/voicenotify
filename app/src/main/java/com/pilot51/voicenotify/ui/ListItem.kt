@@ -41,7 +41,7 @@ fun ListItem(
                 .weight(1f)
                 .fillMaxHeight()
                 .padding(end = 8.dp)
-                .bottomBorder(1.dp, VoicenotifyTheme.colors.divider)
+                .bottomBorder(2f, VoicenotifyTheme.colors.divider)
                 .padding(0.dp, 8.dp, 0.dp, 8.dp),
         ) {
             Column(

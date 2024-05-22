@@ -114,7 +114,7 @@ fun AppListScreen(
 						Row(
 							modifier = Modifier.weight(1f)
 								.padding(start = 8.dp, end = 8.dp)
-							.bottomBorder(1.dp, VoicenotifyTheme.colors.divider),
+							.bottomBorder(2f, VoicenotifyTheme.colors.divider),
 							horizontalArrangement = Arrangement.SpaceBetween,
 							verticalAlignment = Alignment.CenterVertically
 						) {

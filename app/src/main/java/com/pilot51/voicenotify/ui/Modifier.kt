@@ -16,12 +16,10 @@ import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.unit.dp
 
 
-fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
+fun Modifier.bottomBorder(strokeWidth: Float, color: Color) = composed(
     factory = {
-        val density = LocalDensity.current
-        val strokeWidthPx = density.run { strokeWidth.toPx() }
+        val strokeWidthPx = strokeWidth
         Modifier.drawBehind {
-        //  val strokeWidth = Dp.Hairline.toPx()
             val width = size.width
             val height = size.height + Math.round(-strokeWidthPx/2)
             drawLine(
@@ -35,10 +33,9 @@ fun Modifier.bottomBorder(strokeWidth: Dp, color: Color) = composed(
 )
 
 
-fun Modifier.topBorder(strokeWidth: Dp, color: Color) = composed(
+fun Modifier.topBorder(strokeWidth: Float, color: Color) = composed(
     factory = {
-        val density = LocalDensity.current
-        val strokeWidthPx = density.run { strokeWidth.toPx() }
+        val strokeWidthPx = strokeWidth
         Modifier.drawBehind {
             val width = size.width
             val height = 0f +  Math.round(-strokeWidthPx/2)

@@ -71,7 +71,7 @@ private val lightExtendedColors = ExtendedColors(
     colorNeutralVariantInverse = Color(0xFF5C5C5C),
     background = Color(0xFFf2f3f8),
     boxItem = Color(0xFFFFFFFF),
-    divider = Color(0xFFE7E7E6),
+    divider = Color(0xFFE8E8E8),
     textFieldContainer = Color(0xFFE6E7E9),
 )
 
@@ -103,7 +103,7 @@ private val darkExtendedColors = ExtendedColors(
     colorNeutralVariantInverse = Color(0xA3FFFFFF),
     background = Color(0xFF010001),
     boxItem = Color(0xFF202022),
-    divider = Color(0xFF323234),
+    divider = Color(0xFF323232),
     textFieldContainer = Color(0xFF1A1A1A),
 )
 
