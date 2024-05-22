@@ -7,6 +7,7 @@ import androidx.compose.material3.Switch as OSwitch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
@@ -33,8 +34,7 @@ fun Switch(
             checkedBorderColor = Color.Transparent,
             uncheckedBorderColor = Color.Transparent
         ),
-        modifier = (modifier?: Modifier).focusable(false),
-
+        modifier = (modifier?: Modifier).scale(scale = 0.75f).focusable(false),
     )
 }
 
