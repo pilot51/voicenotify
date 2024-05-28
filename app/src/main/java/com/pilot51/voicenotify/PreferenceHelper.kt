@@ -16,6 +16,7 @@
 package com.pilot51.voicenotify
 
 import android.content.Context
+import android.net.Uri
 import android.os.Build
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -23,9 +24,11 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.preference.PreferenceManager
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.db.AppDatabase
+import com.pilot51.voicenotify.db.AppDatabase.Companion.db
 import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
@@ -42,10 +45,12 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STREAM
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
-import java.io.File
+import java.io.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
+import java.util.zip.ZipOutputStream
 import kotlin.math.roundToInt
 
 object PreferenceHelper {
@@ -65,18 +70,16 @@ object PreferenceHelper {
 
 	private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("prefs")
 	private val dataStore = appContext.dataStore
-	private val settingsDao = AppDatabase.db.settingsDao
-	private val globalSettingsFlow = settingsDao.getGlobalSettings().filterNotNull()
-	private lateinit var globalSettings: Settings
+	private val dataFiles get() = arrayOf(
+		appContext.getDatabasePath(AppDatabase.DB_NAME),
+		appContext.preferencesDataStoreFile("prefs")
+	)
+	private val backupDir get() = appContext.getExternalFilesDir(null)
+
 
 	init {
 		CoroutineScope(Dispatchers.IO).launch {
 			initSettings()
-			launch {
-				globalSettingsFlow.collect {
-					globalSettings = it
-				}
-			}
 		}
 	}
 
@@ -97,6 +100,7 @@ object PreferenceHelper {
 	 * with default values or migrated from shared preferences.
 	 */
 	private suspend fun initSettings() {
+		val settingsDao = db.settingsDao
 		if (settingsDao.hasGlobalSettings()) return
 		val spDir = File(appContext.applicationInfo.dataDir, "shared_prefs")
 		val spName = "${BuildConfig.APPLICATION_ID}_preferences"
@@ -142,5 +146,52 @@ object PreferenceHelper {
 				spFile.delete()
 			}
 		} else settingsDao.insert(Settings.defaults)
+	}
+
+	fun exportBackup(uri: Uri) {
+		CoroutineScope(Dispatchers.IO).launch {
+			db.close()
+			appContext.contentResolver.openOutputStream(uri)?.use { outStream ->
+				ZipOutputStream(BufferedOutputStream(outStream)).use { zipOut ->
+					dataFiles.forEach { file ->
+						BufferedInputStream(FileInputStream(file)).use { origin ->
+							val buffer = ByteArray(1024)
+							val entry = ZipEntry(file.name)
+							zipOut.putNextEntry(entry)
+							var length: Int
+							while (origin.read(buffer).also { length = it } != -1) {
+								zipOut.write(buffer, 0, length)
+							}
+						}
+					}
+				}
+			}
+			AppDatabase.resetInstance()
+		}
+	}
+
+	fun importBackup(uri: Uri) {
+		CoroutineScope(Dispatchers.IO).launch {
+			db.close()
+			appContext.contentResolver.openInputStream(uri)?.use { inStream ->
+				ZipInputStream(BufferedInputStream(inStream)).use { zipIn ->
+					var entry = zipIn.nextEntry
+					while (entry != null) {
+						val outFile = dataFiles.find { it.name == entry.name } ?: continue
+						FileOutputStream(outFile).use { fos ->
+							val buffer = ByteArray(1024)
+							var length: Int
+							while (zipIn.read(buffer).also { length = it } > 0) {
+								fos.write(buffer, 0, length)
+							}
+							fos.flush()
+						}
+						zipIn.closeEntry()
+						entry = zipIn.nextEntry
+					}
+				}
+			}
+			AppDatabase.resetInstance()
+		}
 	}
 }

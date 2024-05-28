@@ -50,6 +50,7 @@ import com.pilot51.voicenotify.PreferenceHelper.getPrefFlow
 import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase
+import com.pilot51.voicenotify.db.AppDatabase.Companion.db
 import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
@@ -65,15 +66,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class Service : NotificationListenerService() {
 	private val appContext by ::applicationContext
-	private val settingsDao = AppDatabase.db.settingsDao
 	private val lastMsg = mutableMapOf<App?, String?>()
 	private val lastMsgTime = mutableMapOf<App?, Long>()
 	private var tts: TextToSpeech? = null
@@ -90,8 +89,6 @@ class Service : NotificationListenerService() {
 				.setLegacyStreamType(AudioManager.STREAM_MUSIC).build())
 			.build()
 	} else null
-	private val globalSettingsFlow = settingsDao.getGlobalSettings().filterNotNull()
-	private lateinit var globalSettings: Settings
 
 	/**
 	 * this is used to determine if we are the first, middle, or last thing to be spoken at the moment, for enabling/disabling shake and audio focus request
@@ -116,7 +113,6 @@ class Service : NotificationListenerService() {
 				}
 			}
 		}
-		ioScope.launch { globalSettingsFlow.collect { globalSettings = it } }
 		initTts()
 		super.onCreate()
 	}
@@ -208,75 +204,77 @@ class Service : NotificationListenerService() {
 	}
 
 	override fun onNotificationPosted(sbn: StatusBarNotification) {
-		val notification = sbn.notification
-		val app = Common.findOrAddApp(sbn.packageName)
-		val settings = getCombinedSettings(app)
-		if (settings.ignoreGroups ?: DEFAULT_IGNORE_GROUPS
-			&& notification.flags and Notification.FLAG_GROUP_SUMMARY != 0) {
-			return  // Completely ignore group summary notifications.
-		}
-		val info = NotificationInfo(app, notification, settings)
-		val msgTime = info.calendar.timeInMillis
-		val ttsMsg = info.ttsMessage
-		if (app != null && !app.enabled) {
-			info.ignoreReasons.add(IgnoreReason.APP)
-		}
-		if (info.isEmpty && settings.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY) {
-			info.ignoreReasons.add(IgnoreReason.EMPTY_MSG)
-		}
-		if (ttsMsg != null) {
-			val requireStrings = settings.requireStrings?.split("\n")
-			val stringRequired = requireStrings?.all {
-				it.isNotEmpty() && !ttsMsg.contains(it, true)
-			} ?: false
-			if (stringRequired) {
-				info.ignoreReasons.add(IgnoreReason.STRING_REQUIRED)
+		CoroutineScope(Dispatchers.IO).launch {
+			val notification = sbn.notification
+			val app = Common.findOrAddApp(sbn.packageName)
+			val settings = getCombinedSettings(app)
+			if (settings.ignoreGroups ?: DEFAULT_IGNORE_GROUPS
+				&& notification.flags and Notification.FLAG_GROUP_SUMMARY != 0) {
+				return@launch  // Completely ignore group summary notifications.
 			}
-			val ignoreStrings = settings.ignoreStrings?.split("\n")
-			val stringIgnored = ignoreStrings?.any {
-				it.isNotEmpty() && ttsMsg.contains(it, true)
-			} ?: false
-			if (stringIgnored) {
-				info.ignoreReasons.add(IgnoreReason.STRING_IGNORED)
+			val info = NotificationInfo(app, notification, settings)
+			val msgTime = info.calendar.timeInMillis
+			val ttsMsg = info.ttsMessage
+			if (app != null && !app.enabled) {
+				info.ignoreReasons.add(IgnoreReason.APP)
 			}
-		}
-		val ignoreRepeat = settings.ignoreRepeat ?: -1
-		if (lastMsg.containsKey(app)) {
-			if (lastMsg[app] == ttsMsg && (ignoreRepeat == -1 || msgTime - lastMsgTime[app]!! < ignoreRepeat * 1000)) {
-				info.addIgnoreReasonIdentical(ignoreRepeat)
+			if (info.isEmpty && settings.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY) {
+				info.ignoreReasons.add(IgnoreReason.EMPTY_MSG)
 			}
-		}
-		NotifyList.addNotification(info)
-		if (info.ignoreReasons.isEmpty()) {
-			val delay = settings.ttsDelay ?: 0
-			if (!isScreenOn()) {
-				val interval = settings.ttsRepeat ?: 0.0
-				if (interval > 0) {
-					synchronized(repeatList) { repeatList.add(info) }
-					if (repeater == null) {
-						repeater = RepeatTimer(interval)
-					}
+			if (ttsMsg != null) {
+				val requireStrings = settings.requireStrings?.split("\n")
+				val stringRequired = requireStrings?.all {
+					it.isNotEmpty() && !ttsMsg.contains(it, true)
+				} ?: false
+				if (stringRequired) {
+					info.ignoreReasons.add(IgnoreReason.STRING_REQUIRED)
+				}
+				val ignoreStrings = settings.ignoreStrings?.split("\n")
+				val stringIgnored = ignoreStrings?.any {
+					it.isNotEmpty() && ttsMsg.contains(it, true)
+				} ?: false
+				if (stringIgnored) {
+					info.ignoreReasons.add(IgnoreReason.STRING_IGNORED)
 				}
 			}
-			Timer().schedule(object : TimerTask() {
-				override fun run() {
-					val ignoreReasons = ignore(info.settings)
-					if (ignoreReasons.isNotEmpty()) {
-						Log.i(TAG, "Notification ignored for reason(s): "
-							+ ignoreReasons.joinToString())
-						info.ignoreReasons.addAll(ignoreReasons)
-						return
-					}
-					CoroutineScope(Dispatchers.Main).launch {
-						speak(info)
+			val ignoreRepeat = settings.ignoreRepeat ?: -1
+			if (lastMsg.containsKey(app)) {
+				if (lastMsg[app] == ttsMsg && (ignoreRepeat == -1 || msgTime - lastMsgTime[app]!! < ignoreRepeat * 1000)) {
+					info.addIgnoreReasonIdentical(ignoreRepeat)
+				}
+			}
+			NotifyList.addNotification(info)
+			if (info.ignoreReasons.isEmpty()) {
+				val delay = settings.ttsDelay ?: 0
+				if (!isScreenOn()) {
+					val interval = settings.ttsRepeat ?: 0.0
+					if (interval > 0) {
+						synchronized(repeatList) { repeatList.add(info) }
+						if (repeater == null) {
+							repeater = RepeatTimer(interval)
+						}
 					}
 				}
-			}, (delay * 1000).toLong()) // A delay of 0 works fine, and means that all speak calls anywhere are running in their own thread and not blocking.
-			lastMsg[app] = ttsMsg
-			lastMsgTime[app] = msgTime
-		} else {
-			Log.i(TAG, "Notification from " + app?.label
-				+ " ignored for reason(s): " + info.getIgnoreReasonsAsText())
+				Timer().schedule(object : TimerTask() {
+					override fun run() {
+						val ignoreReasons = ignore(info.settings)
+						if (ignoreReasons.isNotEmpty()) {
+							Log.i(TAG, "Notification ignored for reason(s): "
+								+ ignoreReasons.joinToString())
+							info.ignoreReasons.addAll(ignoreReasons)
+							return
+						}
+						CoroutineScope(Dispatchers.Main).launch {
+							speak(info)
+						}
+					}
+				}, (delay * 1000).toLong()) // A delay of 0 works fine, and means that all speak calls anywhere are running in their own thread and not blocking.
+				lastMsg[app] = ttsMsg
+				lastMsgTime[app] = msgTime
+			} else {
+				Log.i(TAG, "Notification from " + app?.label
+					+ " ignored for reason(s): " + info.getIgnoreReasonsAsText())
+			}
 		}
 	}
 
@@ -512,11 +510,12 @@ class Service : NotificationListenerService() {
 		}
 	}
 
-	private fun getCombinedSettings(app: App?) = app?.let {
-		runBlocking(Dispatchers.IO) {
-			settingsDao.getAppSettings(app.packageName).firstOrNull()
-		}?.let { globalSettings.merge(it) }
-	} ?: globalSettings
+	private suspend fun getCombinedSettings(app: App?): Settings {
+		val gs = AppDatabase.globalSettingsFlow.first()
+		return app?.run {
+			db.settingsDao.getAppSettings(packageName).firstOrNull()?.let { gs.merge(it) }
+		} ?: gs
+	}
 
 	companion object {
 		private val TAG = Service::class.simpleName

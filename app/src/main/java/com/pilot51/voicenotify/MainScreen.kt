@@ -101,6 +101,7 @@ fun MainScreen(
 	var showQuietTimeStart by remember { mutableStateOf(false) }
 	var showQuietTimeEnd by remember { mutableStateOf(false) }
 	var showLog by remember { mutableStateOf(false) }
+	var showBackupRestore by remember { mutableStateOf(false) }
 	var showSupport by remember { mutableStateOf(false) }
 	var showReadPhoneStateRationale by remember { mutableStateOf(false) }
 	var showPostNotificationRationale by remember { mutableStateOf(false) }
@@ -283,6 +284,11 @@ fun MainScreen(
 				onClick = { showLog = true }
 			)
 			PreferenceRowLink(
+				titleRes = R.string.backup_restore,
+				summaryRes = R.string.backup_restore_summary,
+				onClick = { showBackupRestore = true }
+			)
+			PreferenceRowLink(
 				titleRes = R.string.support,
 				summaryRes = R.string.support_summary,
 				onClick = { showSupport = true }
@@ -318,6 +324,9 @@ fun MainScreen(
 	}
 	if (showLog) {
 		NotificationLogDialog { showLog = false }
+	}
+	if (showBackupRestore) {
+		BackupDialog { showBackupRestore = false }
 	}
 	if (showSupport) {
 		SupportDialog { showSupport = false }
