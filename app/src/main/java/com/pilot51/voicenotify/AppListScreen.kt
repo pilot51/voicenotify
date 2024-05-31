@@ -88,28 +88,40 @@ fun AppListActions() {
 			keyboard?.show()
 		}
 	} else {
-		IconButton(onClick = {
-			showSearchBar = true
-		}) {
+		var showConfirmDialog by remember { mutableStateOf<IgnoreType?>(null) }
+		IconButton(
+			onClick = { showSearchBar = true }
+		) {
 			Icon(
 				imageVector = Icons.Filled.Search,
 				contentDescription = stringResource(R.string.filter)
 			)
 		}
-		IconButton(onClick = {
-			vm.massIgnore(IgnoreType.IGNORE_ALL)
-		}) {
+		IconButton(
+			onClick = { showConfirmDialog = IgnoreType.IGNORE_ALL }
+		) {
 			Icon(
 				imageVector = Icons.Filled.CheckBoxOutlineBlank,
 				contentDescription = stringResource(R.string.ignore_all)
 			)
 		}
-		IconButton(onClick = {
-			vm.massIgnore(IgnoreType.IGNORE_NONE)
-		}) {
+		IconButton(
+			onClick = { showConfirmDialog = IgnoreType.IGNORE_NONE }
+		) {
 			Icon(
 				imageVector = Icons.Filled.CheckBox,
 				contentDescription = stringResource(R.string.ignore_none)
+			)
+		}
+		showConfirmDialog?.let {
+			val isEnableAll = it == IgnoreType.IGNORE_NONE
+			ConfirmDialog(
+				text = stringResource(
+					R.string.ignore_enable_apps_confirm,
+					stringResource(if (isEnableAll) R.string.enable else R.string.ignore).lowercase()
+				),
+				onConfirm = { vm.massIgnore(it) },
+				onDismiss = { showConfirmDialog = null }
 			)
 		}
 	}
