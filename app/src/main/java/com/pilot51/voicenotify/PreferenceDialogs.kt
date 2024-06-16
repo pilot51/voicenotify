@@ -23,6 +23,8 @@ import android.net.Uri
 import android.os.Build
 import android.text.format.DateFormat
 import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -523,6 +525,44 @@ private fun rememberTimePickerState(
 		initialHour = initialHour,
 		initialMinute = initialMinute,
 		is24Hour = is24Hour,
+	)
+}
+
+@Composable
+fun BackupDialog(onDismiss: () -> Unit) {
+	val exportBackupLauncher = rememberLauncherForActivityResult(
+		contract = ActivityResultContracts.CreateDocument("application/zip")
+	) {
+		it?.let { PreferenceHelper.exportBackup(it) }
+		onDismiss()
+	}
+	val importBackupLauncher = rememberLauncherForActivityResult(
+		contract = ActivityResultContracts.OpenDocument()
+	) {
+		it?.let { PreferenceHelper.importBackup(it) }
+		onDismiss()
+	}
+	AlertDialog(
+		onDismissRequest = onDismiss,
+		confirmButton = {},
+		dismissButton = {
+			TextButton(onClick = onDismiss) {
+				Text(stringResource(android.R.string.cancel))
+			}
+		},
+		title = { Text(stringResource(R.string.backup_restore)) },
+		text = {
+			LazyColumn {
+				supportItem(title = R.string.backup_settings) {
+					val version = BuildConfig.VERSION_NAME
+						.replace(" ", "-").replace(Regex("[\\[\\]]"), "")
+					exportBackupLauncher.launch("voice_notify_${version}_backup.zip")
+				}
+				supportItem(title = R.string.restore_settings) {
+					importBackupLauncher.launch(arrayOf("application/zip"))
+				}
+			}
+		}
 	)
 }
 

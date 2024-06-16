@@ -17,8 +17,9 @@ package com.pilot51.voicenotify.db
 
 import androidx.room.*
 import androidx.room.migration.AutoMigrationSpec
-import com.pilot51.voicenotify.VNApplication
-import kotlinx.coroutines.flow.Flow
+import com.pilot51.voicenotify.VNApplication.Companion.appContext
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.*
 
 @Database(
 	version = 2,
@@ -131,11 +132,21 @@ abstract class AppDatabase : RoomDatabase() {
 	class Migration1To2 : AutoMigrationSpec
 
 	companion object {
-		val db by lazy {
-			Room.databaseBuilder(
-				VNApplication.appContext,
-				AppDatabase::class.java, "apps.db"
-			).build()
+		const val DB_NAME = "apps.db"
+		private val _db = MutableStateFlow(buildDB())
+		val db: AppDatabase get() = _db.value
+		@OptIn(ExperimentalCoroutinesApi::class)
+		val globalSettingsFlow = _db.flatMapMerge { it.settingsDao.getGlobalSettings().filterNotNull() }
+
+		private fun buildDB() = Room.databaseBuilder(appContext, AppDatabase::class.java, DB_NAME).build()
+
+		fun resetInstance() { _db.value = buildDB() }
+
+		@OptIn(ExperimentalCoroutinesApi::class)
+		fun getAppSettingsFlow(app: App) = _db.flatMapMerge { db ->
+			db.settingsDao.getAppSettings(app.packageName).map {
+				it ?: Settings(appPackage = app.packageName)
+			}
 		}
 	}
 }

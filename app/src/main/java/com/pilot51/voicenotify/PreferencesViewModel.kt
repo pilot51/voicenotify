@@ -22,20 +22,18 @@ import androidx.lifecycle.viewModelScope
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.AppDatabase
+import com.pilot51.voicenotify.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.db.AppDatabase.Companion.getAppSettingsFlow
+import com.pilot51.voicenotify.db.AppDatabase.Companion.globalSettingsFlow
 import com.pilot51.voicenotify.db.Settings
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
-	private val settingsDao = AppDatabase.db.settingsDao
-	private val globalSettingsFlow = settingsDao.getGlobalSettings().filterNotNull()
 	override val configuringAppState = MutableStateFlow<App?>(null)
 	override val configuringSettingsState = MutableStateFlow(Settings.defaults)
 	override val configuringSettingsComboState = MutableStateFlow(Settings.defaults)
@@ -43,18 +41,22 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 	init {
 		viewModelScope.launch(Dispatchers.IO) {
 			var settingsFlowJob: Job? = null
+			var gSettingsFlowJob: Job? = null
 			configuringAppState.collect { app ->
 				settingsFlowJob?.cancel()
 				settingsFlowJob = launch {
-					val settingsFlow = app?.let {
-						settingsDao.getAppSettings(app.packageName).map {
-							it ?: Settings(appPackage = app.packageName)
-						}
-					} ?: globalSettingsFlow
+					val settingsFlow = app?.let { getAppSettingsFlow(it) } ?: globalSettingsFlow
 					settingsFlow.collect {
+						gSettingsFlowJob?.cancel()
 						configuringSettingsState.value = it
-						configuringSettingsComboState.value = globalSettingsFlow.first().let { gs ->
-							if (app == null) gs else gs.merge(it)
+						if (settingsFlow == globalSettingsFlow) {
+							configuringSettingsComboState.value = it
+						} else {
+							gSettingsFlowJob = launch {
+								globalSettingsFlow.collect { gs ->
+									configuringSettingsComboState.value = gs.merge(it)
+								}
+							}
 						}
 					}
 				}
@@ -77,7 +79,7 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 	}
 
 	override fun getApp(appPkg: String) = runBlocking(Dispatchers.IO) {
-		AppDatabase.db.appDao.get(appPkg)
+		db.appDao.get(appPkg)
 	}
 
 	override fun setCurrentConfigApp(app: App?) {
@@ -85,14 +87,13 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 	}
 
 	@Composable
-	override fun getSettingsState(app: App?) = (app?.let {
-		settingsDao.getAppSettings(app.packageName).map {
-			it ?: Settings(appPackage = app.packageName)
-		}
-	} ?: globalSettingsFlow).collectAsState(initial = Settings.defaults)
+	override fun getSettingsState(app: App?) =
+		(app?.let { getAppSettingsFlow(it) } ?: globalSettingsFlow.filterNotNull())
+			.collectAsState(initial = Settings.defaults)
 
 	override fun save(settings: Settings) {
 		viewModelScope.launch(Dispatchers.IO) {
+			val settingsDao = db.settingsDao
 			if (settings.areAllSettingsNull()) {
 				settingsDao.delete(settings)
 			} else settingsDao.upsert(settings)

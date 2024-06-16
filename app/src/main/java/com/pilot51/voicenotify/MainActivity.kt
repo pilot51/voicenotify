@@ -51,7 +51,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -79,8 +85,10 @@ class MainActivity : ComponentActivity() {
 
 		val vm: PreferencesViewModel by viewModels()
 		lifecycleScope.launch(Dispatchers.IO) {
-			vm.configuringSettingsComboState.collect {
-				volumeControlStream = it.ttsStream ?: Settings.DEFAULT_TTS_STREAM
+			repeatOnLifecycle(Lifecycle.State.STARTED) {
+				vm.configuringSettingsComboState.collect {
+					volumeControlStream = it.ttsStream ?: Settings.DEFAULT_TTS_STREAM
+				}
 			}
 		}
 

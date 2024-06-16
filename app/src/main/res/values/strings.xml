@@ -111,6 +111,10 @@
 	<string name="ignore_app">Ignore %s?</string>
 	<string name="unignore_app">Unignore %s?</string>
 	<string name="yes">Yes</string>
+	<string name="backup_restore">Backup / Restore</string>
+	<string name="backup_restore_summary">Backup or restore all Voice Notify settings</string>
+	<string name="backup_settings">Backup Settings</string>
+	<string name="restore_settings">Restore Settings</string>
 	<string name="support">Help &amp; Support</string>
 	<string name="support_summary">Rate &amp; review, email the developer, community chat, translations, source code, issue tracker, privacy policy</string>
 	<string name="support_rate">Rate &amp; Review</string>
@@ -148,6 +152,8 @@
 	<string name="close">Close</string>
 	<string name="ignore_all">Ignore All</string>
 	<string name="ignore_none">Ignore None</string>
+	<string name="ignore_enable_apps_confirm">Are you sure you want to %s all apps?</string>
+	<string name="ignore">ignore</string>
 	<string name="filter">Filter</string>
 	<string name="remove_app_overrides">Remove all app overrides</string>
 	<string name="remove_app_overrides_confirm">Remove all overrides for %s?</string>

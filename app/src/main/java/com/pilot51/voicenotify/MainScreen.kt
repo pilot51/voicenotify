@@ -119,6 +119,7 @@ fun MainScreen(
 	var showQuietTimeStart by remember { mutableStateOf(false) }
 	var showQuietTimeEnd by remember { mutableStateOf(false) }
 	var showLog by remember { mutableStateOf(false) }
+	var showBackupRestore by remember { mutableStateOf(false) }
 	var showSupport by remember { mutableStateOf(false) }
 	var showReadPhoneStateRationale by remember { mutableStateOf(false) }
 	var showPostNotificationRationale by remember { mutableStateOf(false) }
@@ -251,28 +252,14 @@ fun MainScreen(
 				onClick = { showIgnoreRepeats = true }
 			)
 			PreferenceRowLink(
-				titleRes = R.string.device_state,
-				summaryRes = R.string.device_state_summary,
-				app = configApp,
-				showRemove = !settings.isGlobal && settings.run {
-					speakScreenOff != null ||
-							speakScreenOn != null ||
-							speakHeadsetOff != null ||
-							speakHeadsetOn != null ||
-							speakSilentOn != null
-				},
-				onRemove = {
-					vm.save(
-						settings.copy(
-							speakScreenOff = null,
-							speakScreenOn = null,
-							speakHeadsetOff = null,
-							speakHeadsetOn = null,
-							speakSilentOn = null
-						)
-					)
-				},
-				onClick = { showDeviceStates = true }
+				titleRes = R.string.backup_restore,
+				summaryRes = R.string.backup_restore_summary,
+				onClick = { showBackupRestore = true }
+			)
+			PreferenceRowLink(
+				titleRes = R.string.support,
+				summaryRes = R.string.support_summary,
+				onClick = { showSupport = true }
 			)
 			PreferenceRowLink(
 				titleRes = R.string.quiet_start,
@@ -351,6 +338,9 @@ fun MainScreen(
 	}
 	if (showLog) {
 		NotificationLogDialog { showLog = false }
+	}
+	if (showBackupRestore) {
+		BackupDialog { showBackupRestore = false }
 	}
 	if (showSupport) {
 		SupportDialog { showSupport = false }

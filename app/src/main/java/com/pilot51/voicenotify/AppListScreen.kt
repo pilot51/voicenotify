@@ -90,6 +90,7 @@ fun AppListScreen(
 	vmStoreOwner = LocalViewModelStoreOwner.current!!
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
 	val packagesWithOverride by vm.packagesWithOverride
+	var showConfirmDialog by remember { mutableStateOf<IgnoreType?>(null) }
 	Layout(
 		modifier = Modifier
 	) {
@@ -124,9 +125,21 @@ fun AppListScreen(
 							Switch(
 								checked = vm.appEnable,
 								onCheckedChange = {
-									vm.massIgnore(if (it) IgnoreType.IGNORE_NONE else IgnoreType.IGNORE_ALL)
+									showConfirmDialog = if (it) IgnoreType.IGNORE_NONE else IgnoreType.IGNORE_ALL
+									// vm.massIgnore(if (it) IgnoreType.IGNORE_NONE else IgnoreType.IGNORE_ALL)
 								}
 							)
+							showConfirmDialog?.let {
+								val isEnableAll = it == IgnoreType.IGNORE_NONE
+								ConfirmDialog(
+									text = stringResource(
+										R.string.ignore_enable_apps_confirm,
+										stringResource(if (isEnableAll) R.string.enable else R.string.ignore).lowercase()
+									),
+									onConfirm = { vm.massIgnore(it) },
+									onDismiss = { showConfirmDialog = null }
+								)
+							}
 						}
 					}
 
