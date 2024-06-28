@@ -1,4 +1,4 @@
-package com.pilot51.voicenotify
+package com.pilot51.voicenotify.ui
 
 import android.icu.text.AlphabeticIndex
 import android.os.Build
@@ -11,7 +11,7 @@ import java.util.Locale
  *
  * Use:
  * ```
- *      val sectionName = AlphabeticIndexHelper.computeSectionName(Locale.CHINESE, "神")
+ *      val sectionName = AlphabeticIndexHelper.computeSectionName(Locale.CHINESE, "食神")
  *      log: sectionName = "S"
  * ```
  */

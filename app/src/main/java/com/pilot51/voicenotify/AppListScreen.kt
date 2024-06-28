@@ -55,6 +55,7 @@ import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pilot51.voicenotify.AppListViewModel.IgnoreType
 import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.ui.IndexedLazyColumn
 import com.pilot51.voicenotify.ui.Layout
 import com.pilot51.voicenotify.ui.ListBox
 import com.pilot51.voicenotify.ui.ListItem
@@ -184,6 +185,19 @@ private fun AppList(
 				AppListItem(it, hasOverride, toggleIgnore, onConfigureApp, onRemoveOverrides)
 			}
 		}
+
+//		IndexedLazyColumn(
+//			indices = filteredApps,
+//			data = filteredApps,
+//			mainModifier = Modifier.fillMaxSize(),
+//			predicate = { it.packageName },
+//			mainItemContent = { index ->
+//				val app = filteredApps[index]
+//				val hasOverride = packagesWithOverride.contains(app.packageName)
+//				AppListItem(app, hasOverride, toggleIgnore, onConfigureApp, onRemoveOverrides)
+//			},
+//			stickyHeader = stickyHeader
+//		)
 	}
 }
 
