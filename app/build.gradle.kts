@@ -106,7 +106,7 @@ android {
 		generateLocaleConfig = true
 	}
 
-	applicationVariants.all {
+    applicationVariants.all {
 		outputs.all {
 			this as BaseVariantOutputImpl
 			outputFileName = "VoiceNotify_v${defaultConfig.versionName}-${name}_$gitCommitHash.apk"
@@ -117,15 +117,16 @@ android {
 dependencies {
 	implementation("androidx.core:core-ktx:1.13.1")
 	implementation("androidx.activity:activity-compose:1.9.0")
-	implementation("androidx.compose.material3:material3:1.3.0-beta01")
-	implementation("androidx.compose.material:material-icons-extended-android:1.6.7")
-	implementation("androidx.compose.ui:ui-tooling-preview:1.6.7")
-	debugImplementation("androidx.compose.ui:ui-tooling:1.6.7")
+	implementation("androidx.compose.material3:material3:1.3.0-beta04")
+	implementation("androidx.compose.material:material-icons-extended-android:1.6.8")
+	implementation("androidx.compose.ui:ui-tooling-preview:1.6.8")
+    debugImplementation("androidx.compose.ui:ui-tooling:1.6.8")
 	implementation("androidx.navigation:navigation-compose:2.7.7")
-	implementation("androidx.glance:glance-appwidget:1.0.0")
+	implementation("androidx.glance:glance-appwidget:1.1.0")
 	implementation("androidx.preference:preference-ktx:1.2.1")
 	implementation("androidx.room:room-ktx:2.6.1")
 	ksp("androidx.room:room-compiler:2.6.1")
 	implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.24")
+	implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.4")
 	implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 }

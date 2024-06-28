@@ -17,20 +17,33 @@ package com.pilot51.voicenotify
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.ui.Switch
+import com.pilot51.voicenotify.ui.addIf
+import com.pilot51.voicenotify.ui.bottomBorder
+import com.pilot51.voicenotify.ui.ListItem
 
 // Simplified and heavily modified from https://github.com/alorma/Compose-Settings
 
@@ -41,19 +54,20 @@ import com.pilot51.voicenotify.db.App
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PreferenceRowLink(
-	@StringRes titleRes: Int = 0,
-	@StringRes summaryRes: Int = 0,
-	title: String = titleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
-	summary: String = summaryRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
-	enabled: Boolean = true,
-	app: App? = null,
-	showRemove: Boolean = false,
-	onRemove: (() -> Unit)? = null,
-	onClick: () -> Unit,
-	onLongClick: (() -> Unit)? = null
+    @StringRes titleRes: Int = 0,
+    @StringRes summaryRes: Int = 0,
+    title: String = titleRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
+    summary: String = summaryRes.takeUnless { it == 0 }?.let { stringResource(it) }!!,
+    enabled: Boolean = true,
+    app: App? = null,
+    showRemove: Boolean = false,
+    onRemove: (() -> Unit)? = null,
+    onClick: () -> Unit,
+    onLongClick: (() -> Unit)? = null,
+    isEnd: Boolean = false
 ) {
-	Row(
-		modifier = Modifier
+    Row(
+        modifier = Modifier
 			.fillMaxWidth()
 			.height(IntrinsicSize.Min)
 			.combinedClickable(
@@ -61,17 +75,18 @@ fun PreferenceRowLink(
 				onClick = onClick,
 				onLongClick = onLongClick
 			),
-		verticalAlignment = Alignment.CenterVertically
-	) {
-		PreferenceRowScaffold(
-			title = title,
-			enabled = enabled,
-			summary = summary,
-			app = app,
-			showRemove = showRemove,
-			onRemove = onRemove,
-		)
-	}
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        PreferenceRowScaffold(
+            title = title,
+            enabled = enabled,
+            summary = summary,
+            app = app,
+            showRemove = showRemove,
+            onRemove = onRemove,
+            isEnd = isEnd
+        )
+    }
 }
 
 /**
@@ -80,19 +95,20 @@ fun PreferenceRowLink(
  */
 @Composable
 fun PreferenceRowCheckbox(
-	@StringRes titleRes: Int,
-	@StringRes summaryResOn: Int,
-	@StringRes summaryResOff: Int = summaryResOn,
-	initialValue: Boolean,
-	app: App? = null,
-	showRemove: Boolean = false,
-	onRemove: (() -> Unit)? = null,
-	onChange: (Boolean) -> Unit
+    @StringRes titleRes: Int,
+    @StringRes summaryResOn: Int,
+    @StringRes summaryResOff: Int = summaryResOn,
+    initialValue: Boolean,
+    app: App? = null,
+    showRemove: Boolean = false,
+    isEnd: Boolean = false,
+    onRemove: (() -> Unit)? = null,
+    onChange: (Boolean) -> Unit
 ) {
-	var prefValue by remember(initialValue) { mutableStateOf(initialValue) }
-	val summaryRes = if (prefValue) summaryResOn else summaryResOff
-	Row(
-		modifier = Modifier
+    var prefValue by remember(initialValue) { mutableStateOf(initialValue) }
+    val summaryRes = if (prefValue) summaryResOn else summaryResOff
+    Row(
+        modifier = Modifier
 			.fillMaxWidth()
 			.height(IntrinsicSize.Min)
 			.toggleable(
@@ -103,118 +119,135 @@ fun PreferenceRowCheckbox(
 					onChange(prefValue)
 				}
 			),
-		verticalAlignment = Alignment.CenterVertically
-	) {
-		PreferenceRowScaffold(
-			title = stringResource(titleRes),
-			summary = stringResource(summaryRes),
-			app = app,
-			showRemove = showRemove,
-			onRemove = onRemove,
-			action = {
-				Checkbox(
-					checked = prefValue,
-					onCheckedChange = {
-						prefValue = it
-						onChange(it)
-					}
-				)
-			}
-		)
-	}
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        PreferenceRowScaffold(
+            title = stringResource(titleRes),
+            summary = stringResource(summaryRes),
+            app = app,
+            showRemove = showRemove,
+            onRemove = onRemove,
+            action = {
+                Switch(
+                    checked = prefValue,
+                    onCheckedChange = {
+                        prefValue = it
+                        onChange(it)
+                    }
+                )
+            },
+            isEnd = isEnd
+        )
+    }
 }
 
 @Composable
 private fun PreferenceRowScaffold(
-	enabled: Boolean = true,
-	title: String,
-	summary: String,
-	app: App? = null,
-	showRemove: Boolean = false,
-	onRemove: (() -> Unit)? = null,
-	action: (@Composable (Boolean) -> Unit)? = null
+    enabled: Boolean = true,
+    title: String,
+    summary: String,
+    app: App? = null,
+    showRemove: Boolean = false,
+    onRemove: (() -> Unit)? = null,
+    action: (@Composable (Boolean) -> Unit)? = null,
+    isEnd: Boolean
 ) {
-	var showRemoveDialog by remember { mutableStateOf(false) }
-	ListItem(
-		modifier = Modifier.defaultMinSize(minHeight = 88.dp),
-		headlineContent = {
-			ColorWrap(enabled) {
-				Text(title)
-			}
-		},
-		supportingContent = {
-			ColorWrap(enabled) {
-				Text(summary)
-			}
-		},
-		trailingContent = {
-			Row(
-				modifier = Modifier.fillMaxHeight(),
-				verticalAlignment = Alignment.CenterVertically
-			) {
-				if (showRemove) {
-					IconButton(onClick = { showRemoveDialog = true }) {
-						Icon(
-							imageVector = Icons.Outlined.Cancel,
-							contentDescription = stringResource(R.string.remove_override)
-						)
-					}
-				}
-				action?.invoke(enabled)
-			}
-		}
-	)
-	if (showRemoveDialog && app != null) {
-		ConfirmDialog(
-			text = stringResource(R.string.remove_override_confirm, title, app.label),
-			onConfirm = onRemove!!,
-			onDismiss = { showRemoveDialog = false }
-		)
-	}
+    var showRemoveDialog by remember { mutableStateOf(false) }
+    Column(
+    ) {
+        ListItem(
+            modifier = Modifier
+				.defaultMinSize(minHeight = 88.dp),
+            colors = ListItemDefaults.colors(
+                containerColor = VoiceNotifyTheme.colors.boxItem
+            ),
+            headlineContent = {
+                ColorWrap(enabled) {
+                    Text(title)
+                }
+            },
+            supportingContent = {
+                ColorWrap(enabled) {
+                    Text(summary)
+                }
+            },
+            trailingContent = {
+                Row(
+                    modifier = Modifier.fillMaxHeight(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    if (showRemove) {
+                        IconButton(onClick = { showRemoveDialog = true }) {
+                            Icon(
+                                imageVector = Icons.Outlined.Cancel,
+                                contentDescription = stringResource(R.string.remove_override)
+                            )
+                        }
+                    }
+                    action?.invoke(enabled)
+                }
+            }
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+                .addIf(!isEnd) {
+                    Modifier.bottomBorder(2f, VoiceNotifyTheme.colors.divider)
+                }
+        )
+    }
+    if (showRemoveDialog && app != null) {
+        ConfirmDialog(
+            text = stringResource(R.string.remove_override_confirm, title, app.label),
+            onConfirm = onRemove!!,
+            onDismiss = { showRemoveDialog = false }
+        )
+    }
 }
 
 @Composable
 private fun ColorWrap(
-	enabled: Boolean,
-	content: @Composable () -> Unit
+    enabled: Boolean,
+    content: @Composable () -> Unit
 ) {
-	val color = LocalContentColor.current.let {
-		if (enabled) it else it.copy(alpha = 0.6f)
-	}
-	CompositionLocalProvider(LocalContentColor provides color) {
-		content()
-	}
+    val color = LocalContentColor.current.let {
+        if (enabled) it else it.copy(alpha = 0.6f)
+    }
+    CompositionLocalProvider(LocalContentColor provides color) {
+        content()
+    }
 }
 
 @VNPreview
 @Composable
 private fun PreferenceRowLinkPreview(
-	@PreviewParameter(BooleanProvider::class) showRemove: Boolean
+    @PreviewParameter(BooleanProvider::class) showRemove: Boolean
 ) {
-	AppTheme {
-		PreferenceRowLink(
-			titleRes = R.string.tts_settings,
-			summaryRes = R.string.tts_settings_summary_fail,
-			enabled = false,
-			showRemove = showRemove,
-			onClick = {}
-		)
-	}
+    AppTheme {
+        PreferenceRowLink(
+            titleRes = R.string.tts_settings,
+            summaryRes = R.string.tts_settings_summary_fail,
+            enabled = false,
+            showRemove = showRemove,
+            onClick = {}
+        )
+    }
 }
 
 @VNPreview
 @Composable
 private fun PreferenceRowCheckboxPreview(
-	@PreviewParameter(BooleanProvider::class) value: Boolean
+    @PreviewParameter(BooleanProvider::class) value: Boolean
 ) {
-	AppTheme {
-		PreferenceRowCheckbox(
-			titleRes = R.string.ignore_groups,
-			summaryResOn = R.string.ignore_groups_summary_on,
-			summaryResOff = R.string.ignore_groups_summary_off,
-			initialValue = value,
-			showRemove = value,
-			onChange = {}
-		)
-	}
+    AppTheme {
+        PreferenceRowCheckbox(
+            titleRes = R.string.ignore_groups,
+            summaryResOn = R.string.ignore_groups_summary_on,
+            summaryResOff = R.string.ignore_groups_summary_off,
+            initialValue = value,
+            showRemove = value,
+            onChange = {}
+        )
+    }
 }

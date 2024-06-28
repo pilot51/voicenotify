@@ -15,137 +15,150 @@
  */
 package com.pilot51.voicenotify
 
-import androidx.compose.foundation.clickable
+
+import android.content.Context
+import android.content.pm.PackageManager
+import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CheckBox
-import androidx.compose.material.icons.filled.CheckBoxOutlineBlank
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pilot51.voicenotify.AppListViewModel.IgnoreType
 import com.pilot51.voicenotify.db.App
-import kotlinx.coroutines.delay
-
+import com.pilot51.voicenotify.ui.IndexedLazyColumn
+import com.pilot51.voicenotify.ui.Layout
+import com.pilot51.voicenotify.ui.ListBox
+import com.pilot51.voicenotify.ui.ListItem
+import com.pilot51.voicenotify.ui.SearchBar
+import com.pilot51.voicenotify.ui.Switch
+import com.pilot51.voicenotify.ui.bottomBorder
+import com.pilot51.voicenotify.ui.overScrollVertical
+import com.pilot51.voicenotify.ui.rememberOverscrollFlingBehavior
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 private lateinit var vmStoreOwner: ViewModelStoreOwner
 
+
 @Composable
-fun AppListActions() {
+fun AppListActions(modifier: Modifier = Modifier) {
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
-	var showSearchBar by remember { mutableStateOf(false) }
-	if (showSearchBar) {
-		val focusRequester = remember { FocusRequester() }
-		val keyboard = LocalSoftwareKeyboardController.current
-		TextField(
-			value = vm.searchQuery ?: "",
-			onValueChange = {
-				vm.searchQuery = it
-				vm.filterApps(it)
-			},
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(horizontal = 4.dp)
-				.focusRequester(focusRequester),
-			maxLines = 1,
-			singleLine = true,
-			leadingIcon = {
-				Icon(
-					imageVector = Icons.Filled.Search,
-					contentDescription = null
-				)
-			},
-			trailingIcon = {
-				IconButton(onClick = {
-					showSearchBar = false
-					vm.searchQuery = null
-					vm.filterApps(null)
-				}) {
-					Icon(
-						imageVector = Icons.Filled.Close,
-						contentDescription = stringResource(R.string.close)
-					)
-				}
-			}
-		)
-		LaunchedEffect(focusRequester) {
-			focusRequester.requestFocus()
-			delay(100)
-			keyboard?.show()
-		}
-	} else {
-		var showConfirmDialog by remember { mutableStateOf<IgnoreType?>(null) }
-		IconButton(
-			onClick = { showSearchBar = true }
-		) {
-			Icon(
-				imageVector = Icons.Filled.Search,
-				contentDescription = stringResource(R.string.filter)
-			)
-		}
-		IconButton(
-			onClick = { showConfirmDialog = IgnoreType.IGNORE_ALL }
-		) {
-			Icon(
-				imageVector = Icons.Filled.CheckBoxOutlineBlank,
-				contentDescription = stringResource(R.string.ignore_all)
-			)
-		}
-		IconButton(
-			onClick = { showConfirmDialog = IgnoreType.IGNORE_NONE }
-		) {
-			Icon(
-				imageVector = Icons.Filled.CheckBox,
-				contentDescription = stringResource(R.string.ignore_none)
-			)
-		}
-		showConfirmDialog?.let {
-			val isEnableAll = it == IgnoreType.IGNORE_NONE
-			ConfirmDialog(
-				text = stringResource(
-					R.string.ignore_enable_apps_confirm,
-					stringResource(if (isEnableAll) R.string.enable else R.string.ignore).lowercase()
-				),
-				onConfirm = { vm.massIgnore(it) },
-				onDismiss = { showConfirmDialog = null }
-			)
-		}
-	}
+	SearchBar(
+		modifier = modifier,
+		text = vm.searchQuery ?: "",
+		onValueChange = {
+			vm.searchQuery = it
+			vm.filterApps(it)
+		},
+		placeholderText = "Search"
+	)
+
 }
 
 @Composable
 fun AppListScreen(
+	list:  List<App> = emptyList(),
 	onConfigureApp: (app: App) -> Unit
 ) {
 	vmStoreOwner = LocalViewModelStoreOwner.current!!
 	val vm: AppListViewModel = viewModel(vmStoreOwner)
 	val packagesWithOverride by vm.packagesWithOverride
-	AppList(
-		vm.filteredApps,
-		vm.showList,
-		packagesWithOverride,
-		toggleIgnore = { app ->
-			vm.setIgnore(app, IgnoreType.IGNORE_TOGGLE)
-		},
-		onConfigureApp = onConfigureApp,
-		onRemoveOverrides = vm::removeOverrides
-	)
+	var showConfirmDialog by remember { mutableStateOf<IgnoreType?>(null) }
+	Layout(
+		modifier = Modifier
+	) {
+		AppListActions(
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(0.dp, 4.dp, 0.dp, 8.dp)
+		)
+		ListBox(
+			modifier = Modifier
+		) {
+			AppList(
+				filteredApps = if (list.isNotEmpty()) list else vm.filteredApps,
+				showList = vm.showList,
+				stickyHeader = {
+					Row(
+						modifier = Modifier
+							.fillMaxWidth()
+							.background(VoiceNotifyTheme.colors.boxItem)
+
+					) {
+						Row(
+							modifier = Modifier.weight(1f)
+								.padding(start = 8.dp, end = 8.dp)
+							.bottomBorder(2f, VoiceNotifyTheme.colors.divider),
+							horizontalArrangement = Arrangement.SpaceBetween,
+							verticalAlignment = Alignment.CenterVertically
+						) {
+							Text(
+								text = stringResource(R.string.ignore_none),
+							)
+							Switch(
+								checked = vm.appEnable,
+								onCheckedChange = {
+									showConfirmDialog = if (it) IgnoreType.IGNORE_NONE else IgnoreType.IGNORE_ALL
+									// vm.massIgnore(if (it) IgnoreType.IGNORE_NONE else IgnoreType.IGNORE_ALL)
+								}
+							)
+							showConfirmDialog?.let {
+								val isEnableAll = it == IgnoreType.IGNORE_NONE
+								ConfirmDialog(
+									text = stringResource(
+										R.string.ignore_enable_apps_confirm,
+										stringResource(if (isEnableAll) R.string.enable else R.string.ignore).lowercase()
+									),
+									onConfirm = { vm.massIgnore(it) },
+									onDismiss = { showConfirmDialog = null }
+								)
+							}
+						}
+					}
+
+				},
+				packagesWithOverride = packagesWithOverride,
+				toggleIgnore = { app ->
+					vm.setIgnore(app, IgnoreType.IGNORE_TOGGLE)
+				},
+				onConfigureApp = onConfigureApp,
+				onRemoveOverrides = vm::removeOverrides
+			)
+		}
+	}
+
+
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppList(
 	filteredApps: List<App>,
@@ -153,16 +166,64 @@ private fun AppList(
 	packagesWithOverride: List<String>,
 	toggleIgnore: (app: App) -> Unit,
 	onConfigureApp: (app: App) -> Unit,
-	onRemoveOverrides: (app: App) -> Unit
+	onRemoveOverrides: (app: App) -> Unit,
+	stickyHeader: @Composable () -> Unit = {}
 ) {
 	if (!showList) return
-	LazyColumn(modifier = Modifier.fillMaxSize()) {
-		items(filteredApps) {
-			val hasOverride = packagesWithOverride.contains(it.packageName)
-			AppListItem(it, hasOverride, toggleIgnore, onConfigureApp, onRemoveOverrides)
+	var scrollState = rememberScrollState()
+	Row(
+		modifier = Modifier.fillMaxSize()
+	) {
+		LazyColumn(
+			contentPadding = PaddingValues(0.dp)
+		) {
+			stickyHeader {
+				stickyHeader()
+			}
+			items(filteredApps) {
+				val hasOverride = packagesWithOverride.contains(it.packageName)
+				AppListItem(it, hasOverride, toggleIgnore, onConfigureApp, onRemoveOverrides)
+			}
 		}
+
+//		IndexedLazyColumn(
+//			indices = filteredApps,
+//			data = filteredApps,
+//			mainModifier = Modifier.fillMaxSize(),
+//			predicate = { it.packageName },
+//			mainItemContent = { index ->
+//				val app = filteredApps[index]
+//				val hasOverride = packagesWithOverride.contains(app.packageName)
+//				AppListItem(app, hasOverride, toggleIgnore, onConfigureApp, onRemoveOverrides)
+//			},
+//			stickyHeader = stickyHeader
+//		)
 	}
 }
+
+@Composable
+fun PackageImage(context: Context, packageName: String, modifier: Modifier = Modifier) {
+	val packageManager: PackageManager = context.packageManager
+	val result = runCatching {
+		val appInfo = packageManager.getApplicationInfo(packageName, 0)
+		val icon = appInfo.loadIcon(packageManager).toBitmap().asImageBitmap()
+		Image(
+			painter = BitmapPainter(icon),
+			contentDescription = null,
+			modifier = modifier
+		)
+	}
+	result.onFailure {
+		// If there's an exception, use the default image resource
+		Image(
+			painter = painterResource(R.drawable.ic_launcher_foreground),
+			contentDescription = null,
+			modifier = modifier
+		)
+	}
+}
+
+
 
 @Composable
 private fun AppListItem(
@@ -174,17 +235,34 @@ private fun AppListItem(
 ) {
 	var showRemoveOverridesDialog by remember { mutableStateOf(false) }
 	ListItem(
-		modifier = Modifier.clickable {
-			onConfigureApp(app)
+//		modifier = Modifier.clickable {
+//			onConfigureApp(app)
+//		}.fillMaxWidth(),
+		 modifier = Modifier
+			 .toggleable(
+				 value = app.enabled,
+				 role = Role.Checkbox,
+				 onValueChange = { toggleIgnore(app) }
+			 )
+			 .fillMaxWidth(),
+		leadingContent = {
+			PackageImage(
+				context = LocalContext.current,
+				packageName = app.packageName,
+				modifier = Modifier.size(48.dp)
+			)
 		},
 		headlineContent = {
 			Text(
 				text = app.label,
-				fontSize = 24.sp
+				fontSize = 18.sp
 			)
 		},
 		supportingContent = {
-			Text(app.packageName)
+			Text(
+				text = app.packageName,
+				fontSize = 12.sp
+			)
 		},
 		trailingContent = {
 			Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
@@ -196,10 +274,10 @@ private fun AppListItem(
 						)
 					}
 				}
-				Checkbox(
+				Switch(
 					checked = app.enabled,
-					modifier = Modifier.focusable(false),
-					onCheckedChange = { toggleIgnore(app) }
+					onCheckedChange = { toggleIgnore(app) },
+					modifier = Modifier.focusable(false)
 				)
 			}
 		}
@@ -213,7 +291,8 @@ private fun AppListItem(
 	}
 }
 
-@VNPreview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun AppListPreview() {
 	val apps = listOf(
@@ -224,3 +303,8 @@ private fun AppListPreview() {
 		AppList(apps, true, listOf("package.name.one"), {}, {}, {})
 	}
 }
+
+
+
+
+

@@ -16,9 +16,13 @@
 package com.pilot51.voicenotify
 
 import android.app.Application
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.widget.Toast
+import androidx.activity.ComponentActivity
+import androidx.annotation.RequiresApi
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,6 +40,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 
+
 class AppListViewModel(application: Application) : AndroidViewModel(application) {
 	private val appContext = application.applicationContext
 	private val apps by Common::apps
@@ -47,6 +52,11 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	private val settingsDao = AppDatabase.db.settingsDao
 	val packagesWithOverride @Composable get() =
 		settingsDao.packagesWithOverride().collectAsState(listOf())
+
+	var appEnable by mutableStateOf(false)
+
+
+
 
 	init {
 		updateAppsList()
@@ -85,11 +95,15 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 				}
 
 				// Add new
-				val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-					packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
-				} else {
-					packMan.getInstalledApplications(0)
-				}
+				// val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+				// 	packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
+				// } else {
+				// 	packMan.getInstalledApplications(0)
+				// }
+				var installedApps = Common.getAppsInfo(appContext)
+
+
+
 				inst@ for (appInfo in installedApps) {
 					for (app in apps) {
 						if (app.packageName == appInfo.packageName) {
@@ -103,14 +117,20 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 					)
 					apps.add(app)
 					if (!isFirstLoad) app.updateDb()
+
 				}
 				apps.sortWith { app1, app2 -> app1.label.compareTo(app2.label, ignoreCase = true) }
 				if (isFirstLoad) AppDatabase.db.appDao.upsert(apps)
 			}
 			isUpdating = false
 			filterApps()
+			updateAppEnableState()
 			showList = true
 		}
+	}
+
+	private fun updateAppEnableState() {
+		appEnable = apps.all { it.enabled }
 	}
 
 	fun filterApps(search: String? = searchQuery) {
@@ -133,12 +153,14 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	fun massIgnore(ignoreType: IgnoreType) {
 		if (ignoreType == IGNORE_ALL) appDefaultEnable = false
 		else if (ignoreType == IGNORE_NONE) appDefaultEnable = true
+		appEnable = appDefaultEnable
 		CoroutineScope(Dispatchers.IO).launch {
 			syncAppsMutex.withLock {
 				if (apps.isEmpty()) return@launch
 				for (app in apps) {
 					setIgnore(app, ignoreType)
 				}
+				updateAppEnableState()
 				filterApps()
 			}
 			AppDatabase.db.appDao.upsert(apps)
@@ -160,6 +182,8 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 		if (ignoreType == IGNORE_TOGGLE) {
 			filterApps()
 		}
+
+		updateAppEnableState()
 	}
 
 	enum class IgnoreType {

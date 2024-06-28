@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "ae7f6f1a5c600a07f3be1875546a6874",
+    "identityHash": "b22a90d85b20cfe9a8ddd00924d4ac34",
     "entities": [
       {
         "tableName": "apps",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`package` TEXT NOT NULL, `name` TEXT NOT NULL COLLATE NOCASE, `is_enabled` INTEGER, PRIMARY KEY(`package`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`package` TEXT NOT NULL, `name` TEXT NOT NULL COLLATE NOCASE, `is_enabled` INTEGER, `sortLetter` TEXT NOT NULL, PRIMARY KEY(`package`))",
         "fields": [
           {
             "fieldPath": "packageName",
@@ -25,6 +25,12 @@
             "columnName": "is_enabled",
             "affinity": "INTEGER",
             "notNull": false
+          },
+          {
+            "fieldPath": "sortLetter",
+            "columnName": "sortLetter",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -202,7 +208,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ae7f6f1a5c600a07f3be1875546a6874')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'b22a90d85b20cfe9a8ddd00924d4ac34')"
     ]
   }
 }
