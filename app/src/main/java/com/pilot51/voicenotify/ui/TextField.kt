@@ -34,7 +34,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 import kotlinx.coroutines.delay
 
 /**
@@ -77,8 +77,8 @@ fun TextField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.shape,
     colors: TextFieldColors = TextFieldDefaults.colors(
-        focusedContainerColor = VoicenotifyTheme.colors.textFieldContainer,
-        unfocusedContainerColor = VoicenotifyTheme.colors.textFieldContainer,
+        focusedContainerColor = VoiceNotifyTheme.colors.textFieldContainer,
+        unfocusedContainerColor = VoiceNotifyTheme.colors.textFieldContainer,
         disabledContainerColor = Color.Transparent,
         focusedIndicatorColor = Color.Transparent,
         disabledIndicatorColor = Color.Transparent,
@@ -129,52 +129,6 @@ fun TextField(
             )
         }
     )
-//    BasicTextField(
-//        value = value,
-//        onValueChange = onValueChange,
-//        modifier = modifier,
-//        enabled = enabled,
-//        readOnly = readOnly,
-//        textStyle = textStyle,
-//        keyboardOptions = keyboardOptions,
-//        keyboardActions = keyboardActions,
-//        visualTransformation = visualTransformation,
-//        interactionSource = interactionSource,
-//        singleLine = true,
-//        decorationBox = { innerTextField ->
-//            Row(
-//                verticalAlignment = Alignment.CenterVertically,
-//                modifier = Modifier
-//                    .padding(horizontal = 8.dp, vertical = 8.dp)
-//                    .then(
-//                        Modifier.background(
-//                            color = colors.focusedContainerColor,
-//                            shape = shape
-//                        )
-//                    )
-//            ) {
-//                if (leadingIcon != null) {
-//                    leadingIcon()
-//                    Spacer(modifier = Modifier.width(8.dp))
-//                }
-//                Box(Modifier.weight(1f)) {
-//                    if (value.isEmpty() && placeholder != null) {
-//                        placeholder()
-//                    }
-//                    innerTextField()
-//                }
-//                if (value.isNotEmpty()) {
-//                    if (clearIcon != null) {
-//                        clearIcon()
-//                    }
-//                }
-//                if (trailingIcon != null) {
-//                    Spacer(modifier = Modifier.width(8.dp))
-//                    trailingIcon()
-//                }
-//            }
-//        }
-//    )
 }
 
 

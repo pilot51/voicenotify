@@ -61,7 +61,7 @@ import com.pilot51.voicenotify.ui.overScrollVertical
 import com.pilot51.voicenotify.ui.rememberOverscrollFlingBehavior
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 
 
 
@@ -252,14 +252,26 @@ fun MainScreen(
 				onClick = { showIgnoreRepeats = true }
 			)
 			PreferenceRowLink(
-				titleRes = R.string.backup_restore,
-				summaryRes = R.string.backup_restore_summary,
-				onClick = { showBackupRestore = true }
-			)
-			PreferenceRowLink(
-				titleRes = R.string.support,
-				summaryRes = R.string.support_summary,
-				onClick = { showSupport = true }
+				titleRes = R.string.device_state,
+				summaryRes = R.string.device_state_summary,
+				app = configApp,
+				showRemove = !settings.isGlobal && settings.run {
+					speakScreenOff != null ||
+							speakScreenOn != null ||
+							speakHeadsetOff != null ||
+							speakHeadsetOn != null ||
+							speakSilentOn != null
+				},
+				onRemove = {
+					vm.save(settings.copy(
+						speakScreenOff = null,
+						speakScreenOn = null,
+						speakHeadsetOff = null,
+						speakHeadsetOn = null,
+						speakSilentOn = null
+					))
+				},
+				onClick = { showDeviceStates = true }
 			)
 			PreferenceRowLink(
 				titleRes = R.string.quiet_start,
@@ -299,6 +311,11 @@ fun MainScreen(
 					titleRes = R.string.notify_log,
 					summary = stringResource(R.string.notify_log_summary, NotifyList.HISTORY_LIMIT),
 					onClick = { showLog = true }
+				)
+				PreferenceRowLink(
+					titleRes = R.string.backup_restore,
+					summaryRes = R.string.backup_restore_summary,
+					onClick = { showBackupRestore = true }
 				)
 				PreferenceRowLink(
 					titleRes = R.string.support,

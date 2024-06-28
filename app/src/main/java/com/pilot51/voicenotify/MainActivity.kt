@@ -69,7 +69,7 @@ import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.ui.LargeTopAppBar
 import com.pilot51.voicenotify.ui.SmallTopAppBar
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -125,7 +125,7 @@ private enum class Screen(@StringRes val title: Int) {
 
 @Composable
 fun AppTheme(content: @Composable () -> Unit) {
-	VoicenotifyTheme(
+	VoiceNotifyTheme(
 		darkTheme = isSystemInDarkTheme(),
 		dynamicColor = true,
 		content = content
@@ -145,8 +145,8 @@ private fun AppBar(
 	scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 ) {
 	var colors = TopAppBarDefaults.mediumTopAppBarColors(
-		containerColor = VoicenotifyTheme.colors.background,
-		scrolledContainerColor = VoicenotifyTheme.colors.background,
+		containerColor = VoiceNotifyTheme.colors.background,
+		scrolledContainerColor = VoiceNotifyTheme.colors.background,
 	)
 	if (currentScreen !== Screen.valueOf(Screen.MAIN.name)) {
 		SmallTopAppBar(
@@ -222,7 +222,7 @@ fun AppMain(
 	Scaffold(
 			modifier = Modifier
 			.fillMaxSize()
-			.background(VoicenotifyTheme.colors.background)
+			.background(VoiceNotifyTheme.colors.background)
 			.nestedScroll(scrollBehavior.nestedScrollConnection),
 		topBar = {
 			AppBar(
@@ -240,7 +240,7 @@ fun AppMain(
 			navController = navController,
 			startDestination = Screen.MAIN.name,
 			modifier = Modifier.padding(innerPadding)
-				.background(VoicenotifyTheme.colorScheme.background)
+				.background(VoiceNotifyTheme.colorScheme.background)
 		) {
 			composable(
 				route = "${Screen.MAIN.name}?appPkg={appPkg}",

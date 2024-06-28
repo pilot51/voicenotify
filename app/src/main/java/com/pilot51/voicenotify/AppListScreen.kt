@@ -63,7 +63,7 @@ import com.pilot51.voicenotify.ui.Switch
 import com.pilot51.voicenotify.ui.bottomBorder
 import com.pilot51.voicenotify.ui.overScrollVertical
 import com.pilot51.voicenotify.ui.rememberOverscrollFlingBehavior
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 private lateinit var vmStoreOwner: ViewModelStoreOwner
 
 
@@ -109,13 +109,13 @@ fun AppListScreen(
 					Row(
 						modifier = Modifier
 							.fillMaxWidth()
-							.background(VoicenotifyTheme.colors.boxItem)
+							.background(VoiceNotifyTheme.colors.boxItem)
 
 					) {
 						Row(
 							modifier = Modifier.weight(1f)
 								.padding(start = 8.dp, end = 8.dp)
-							.bottomBorder(2f, VoicenotifyTheme.colors.divider),
+							.bottomBorder(2f, VoiceNotifyTheme.colors.divider),
 							horizontalArrangement = Arrangement.SpaceBetween,
 							verticalAlignment = Alignment.CenterVertically
 						) {

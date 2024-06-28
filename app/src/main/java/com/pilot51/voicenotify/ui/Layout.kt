@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 
 
 /**
@@ -21,7 +21,7 @@ fun Layout(
     Column(
         modifier = modifier
             .fillMaxSize()
-            .background(VoicenotifyTheme.colors.background)
+            .background(VoiceNotifyTheme.colors.background)
             .padding(12.dp, 0.dp)
     ) {
         content()

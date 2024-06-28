@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 
 @Composable
 fun ListItem(
@@ -41,7 +41,7 @@ fun ListItem(
                 .weight(1f)
                 .fillMaxHeight()
                 .padding(end = 8.dp)
-                .bottomBorder(2f, VoicenotifyTheme.colors.divider)
+                .bottomBorder(2f, VoiceNotifyTheme.colors.divider)
                 .padding(0.dp, 8.dp, 0.dp, 8.dp),
         ) {
             Column(

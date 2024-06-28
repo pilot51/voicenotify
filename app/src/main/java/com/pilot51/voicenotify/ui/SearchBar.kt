@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 
 @Composable
 fun SearchBar(
@@ -37,11 +37,11 @@ fun SearchBar(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(50.dp),
-        color = VoicenotifyTheme.colorScheme.surfaceVariant
+        color = VoiceNotifyTheme.colorScheme.surfaceVariant
     ) {
         Row(
             modifier = Modifier.background(
-                color = VoicenotifyTheme.colorScheme.surfaceVariant,
+                color = VoiceNotifyTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(50.dp)),
             verticalAlignment = Alignment.CenterVertically) {
             TextField(
@@ -51,7 +51,7 @@ fun SearchBar(
                     Icon(
                         imageVector = Icons.Outlined.Search,
                         contentDescription = null,
-                        tint = VoicenotifyTheme.colorScheme.onSurfaceVariant
+                        tint = VoiceNotifyTheme.colorScheme.onSurfaceVariant
                     )
                 },
                 placeholder = { Text(text = placeholderText) },

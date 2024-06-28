@@ -13,7 +13,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.pilot51.voicenotify.AppTheme
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 
 
 @Composable
@@ -27,10 +27,10 @@ fun Switch(
         checked = checked,
         onCheckedChange = onCheckedChange,
         colors = SwitchDefaults.colors(
-            checkedThumbColor = VoicenotifyTheme.colors.colorOnCustom,
-            uncheckedThumbColor = VoicenotifyTheme.colors.colorThumbOffCustom,
-            checkedTrackColor = VoicenotifyTheme.colors.colorPrimary,
-            uncheckedTrackColor = VoicenotifyTheme.colors.colorOffCustom,
+            checkedThumbColor = VoiceNotifyTheme.colors.colorOnCustom,
+            uncheckedThumbColor = VoiceNotifyTheme.colors.colorThumbOffCustom,
+            checkedTrackColor = VoiceNotifyTheme.colors.colorPrimary,
+            uncheckedTrackColor = VoiceNotifyTheme.colors.colorOffCustom,
             checkedBorderColor = Color.Transparent,
             uncheckedBorderColor = Color.Transparent
         ),

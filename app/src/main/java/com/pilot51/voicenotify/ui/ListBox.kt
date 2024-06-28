@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 
 @Composable
 fun ListBox(
@@ -19,7 +19,7 @@ fun ListBox(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
-            .background(VoicenotifyTheme.colors.boxItem)
+            .background(VoiceNotifyTheme.colors.boxItem)
     ) {
         content()
     }

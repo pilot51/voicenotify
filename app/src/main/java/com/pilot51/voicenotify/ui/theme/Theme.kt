@@ -108,7 +108,7 @@ private val darkExtendedColors = ExtendedColors(
 )
 
 @Composable
-fun VoicenotifyTheme(
+fun VoiceNotifyTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = true,
@@ -136,7 +136,7 @@ fun VoicenotifyTheme(
 }
 
 
-object VoicenotifyTheme {
+object VoiceNotifyTheme {
     val colors: ExtendedColors
         @Composable
         get() = LocalExtendedColors.current

@@ -45,7 +45,7 @@ android {
 	compileSdk = 34
 	defaultConfig {
 		applicationId = "com.pilot51.voicenotify"
-		minSdk = 24
+		minSdk = 21
 		targetSdk = 34
 		versionName = "1.4.0-beta"
 		versionCode = 29

@@ -38,7 +38,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.ui.Switch
 import com.pilot51.voicenotify.ui.addIf
@@ -159,7 +159,7 @@ private fun PreferenceRowScaffold(
             modifier = Modifier
 				.defaultMinSize(minHeight = 88.dp),
             colors = ListItemDefaults.colors(
-                containerColor = VoicenotifyTheme.colors.boxItem
+                containerColor = VoiceNotifyTheme.colors.boxItem
             ),
             headlineContent = {
                 ColorWrap(enabled) {
@@ -193,7 +193,7 @@ private fun PreferenceRowScaffold(
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp)
                 .addIf(!isEnd) {
-                    Modifier.bottomBorder(2f, VoicenotifyTheme.colors.divider)
+                    Modifier.bottomBorder(2f, VoiceNotifyTheme.colors.divider)
                 }
         )
     }

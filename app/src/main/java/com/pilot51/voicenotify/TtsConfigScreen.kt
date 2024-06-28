@@ -37,7 +37,7 @@ import com.pilot51.voicenotify.ui.Layout
 import com.pilot51.voicenotify.ui.ListBox
 import com.pilot51.voicenotify.ui.overScrollVertical
 import com.pilot51.voicenotify.ui.rememberOverscrollFlingBehavior
-import com.pilot51.voicenotify.ui.theme.VoicenotifyTheme
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 
 @Composable
 fun TtsConfigScreen(vm: IPreferencesViewModel) {
