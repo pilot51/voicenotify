@@ -45,7 +45,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
 import java.util.Locale
 
-
+data class AppInfo(
+	val icon: Drawable,
+	val label: String,
+	val packageName: String,
+	val isEnabled: Boolean
+)
 
 @RequiresApi(Build.VERSION_CODES.N)
 class AppListViewModel(application: Application) : AndroidViewModel(application) {
@@ -241,4 +246,6 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 			}
 	}
 }
+
+
 
