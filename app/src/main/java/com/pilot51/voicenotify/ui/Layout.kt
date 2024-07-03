@@ -15,14 +15,13 @@ import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
  */
 @Composable
 fun Layout(
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.padding(12.dp, 0.dp),
     content: @Composable () -> Unit
 ) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .background(VoiceNotifyTheme.colors.background)
-            .padding(12.dp, 0.dp)
     ) {
         content()
     }

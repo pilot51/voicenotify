@@ -145,6 +145,7 @@ fun MainScreen(
 
 	Layout(
 		modifier = Modifier
+			.padding(12.dp, 0.dp)
 			.overScrollVertical()
 			.verticalScroll(state = scrollState, flingBehavior = rememberOverscrollFlingBehavior { scrollState })
 	) {

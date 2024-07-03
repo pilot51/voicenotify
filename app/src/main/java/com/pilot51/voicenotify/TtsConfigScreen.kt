@@ -66,6 +66,7 @@ fun TtsConfigScreen(vm: IPreferencesViewModel) {
 
     Layout(
         modifier = Modifier
+            .padding(12.dp, 0.dp)
             .fillMaxSize()
             .overScrollVertical()
             .verticalScroll(state = scrollState, flingBehavior = rememberOverscrollFlingBehavior { scrollState })

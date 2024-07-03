@@ -26,7 +26,6 @@ import androidx.room.Entity
 import androidx.room.Ignore
 import androidx.room.MapColumn
 import androidx.room.PrimaryKey
-import com.pilot51.voicenotify.AlphabeticIndexHelper
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
 import kotlinx.coroutines.CoroutineScope
@@ -52,17 +51,6 @@ data class App(
 	var iconImage: ImageBitmap
 		get() = null!!
 		set(value) {}
-
-	var sortLetter: String = ""
-		get() {
-			var rlabel = AlphabeticIndexHelper.computeSectionName(label)
-			if (rlabel.matches("[A-Z]".toRegex())) {
-				return rlabel
-			} else {
-				return "#"
-			}
-		}
-
 
 	/**
 	 * Updates self in database.

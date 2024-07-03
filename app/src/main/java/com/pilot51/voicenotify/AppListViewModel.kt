@@ -16,8 +16,12 @@
 package com.pilot51.voicenotify
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
+import android.icu.text.Collator
 import android.os.Build
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -39,8 +43,11 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
+import java.util.Locale
 
 
+
+@RequiresApi(Build.VERSION_CODES.N)
 class AppListViewModel(application: Application) : AndroidViewModel(application) {
 	private val appContext = application.applicationContext
 	private val apps by Common::apps
@@ -56,8 +63,6 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	var appEnable by mutableStateOf(false)
 
 
-
-
 	init {
 		updateAppsList()
 	}
@@ -68,10 +73,41 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 		}
 	}
 
+
+	private fun isSystemApp(applicationInfo: ApplicationInfo): Boolean {
+		return applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
+	}
+
+	/**
+	 * get application info use queryIntentActivities method
+	 * @param activity
+	 * @return
+	 */
+	private fun getInstalledApps(context: Context, includeSystemApps: Boolean): MutableMap<String, AppInfo> {
+		val pm = context.packageManager
+		val intent = Intent(Intent.ACTION_MAIN, null)
+		intent.addCategory(Intent.CATEGORY_LAUNCHER)
+		val resolveInfos = pm.queryIntentActivities(intent, PackageManager.GET_META_DATA)
+		val apps = mutableMapOf<String, AppInfo>()
+		for (resolveInfo in resolveInfos) {
+			// filer system apps
+			if (!includeSystemApps && isSystemApp(resolveInfo.activityInfo.applicationInfo)) continue
+			apps[resolveInfo.activityInfo.applicationInfo.packageName] = AppInfo(
+				resolveInfo.activityInfo.applicationInfo.loadIcon(pm),
+				resolveInfo.activityInfo.applicationInfo.loadLabel(pm).toString(),
+				resolveInfo.activityInfo.applicationInfo.packageName,
+				appDefaultEnable
+			)
+		}
+		return apps
+	}
+
+	@RequiresApi(Build.VERSION_CODES.N)
 	private fun updateAppsList() {
 		if (isUpdating) return
 		showList = false
 		isUpdating = true
+		val collator = Collator.getInstance(Locale.getDefault())
 		CoroutineScope(Dispatchers.IO).launch {
 			syncAppsMutex.withLock {
 				apps.clear()
@@ -119,7 +155,8 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 					if (!isFirstLoad) app.updateDb()
 
 				}
-				apps.sortWith { app1, app2 -> app1.label.compareTo(app2.label, ignoreCase = true) }
+
+				apps.sortWith(compareBy(collator) { AlphabeticIndexHelper.computeSectionName(it.label) + it.label})
 				if (isFirstLoad) AppDatabase.db.appDao.upsert(apps)
 			}
 			isUpdating = false
@@ -204,3 +241,4 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 			}
 	}
 }
+
