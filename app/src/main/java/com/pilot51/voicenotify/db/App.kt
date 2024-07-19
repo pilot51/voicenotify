@@ -47,10 +47,7 @@ data class App(
 		get() = isEnabled!!
 		set(value) { isEnabled = value }
 
-	@get:Ignore
-	var iconImage: ImageBitmap
-		get() = null!!
-		set(value) {}
+
 
 	/**
 	 * Updates self in database.
