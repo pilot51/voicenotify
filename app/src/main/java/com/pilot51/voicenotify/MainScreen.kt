@@ -142,7 +142,6 @@ fun MainScreen(
 	}
 
 	var scrollState = rememberScrollState()
-
 	Layout(
 		modifier = Modifier
 			.padding(12.dp, 0.dp)

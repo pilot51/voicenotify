@@ -76,13 +76,16 @@ fun TextField(
     minLines: Int = 1,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.shape,
-    colors: TextFieldColors = TextFieldDefaults.colors(
+    colors: TextFieldColors = TextFieldDefaults.colors().copy(
         focusedContainerColor = VoiceNotifyTheme.colors.textFieldContainer,
         unfocusedContainerColor = VoiceNotifyTheme.colors.textFieldContainer,
         disabledContainerColor = Color.Transparent,
         focusedIndicatorColor = Color.Transparent,
         disabledIndicatorColor = Color.Transparent,
-        unfocusedIndicatorColor = Color.Transparent
+        unfocusedIndicatorColor = Color.Transparent,
+        focusedTextColor = VoiceNotifyTheme.colors.textInputColor,
+        unfocusedTextColor = VoiceNotifyTheme.colors.textInputColor,
+//        focusedLabelColor = VoiceNotifyTheme.colors.textFieldContainer,
     )
 ) {
     BasicTextField(
@@ -157,7 +160,7 @@ fun AutoFocusTextField(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     shape: Shape = TextFieldDefaults.shape,
     colors: TextFieldColors = TextFieldDefaults.colors(
-        unfocusedTextColor = MaterialTheme.colorScheme.onSurfaceVariant,
+        unfocusedTextColor = VoiceNotifyTheme.colorScheme.onSurfaceVariant,
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor = Color.Transparent,
         disabledContainerColor = Color.Transparent,
@@ -210,7 +213,7 @@ fun AutoFocusTextField(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextField(
+fun TextField2(
     value: TextFieldValue,
     onValueChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,

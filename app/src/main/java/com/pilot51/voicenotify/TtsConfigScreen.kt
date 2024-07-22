@@ -40,7 +40,9 @@ import com.pilot51.voicenotify.ui.rememberOverscrollFlingBehavior
 import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 
 @Composable
-fun TtsConfigScreen(vm: IPreferencesViewModel) {
+fun TtsConfigScreen(
+    vm: IPreferencesViewModel
+) {
     val context = LocalContext.current
     val configApp by vm.configuringAppState.collectAsState()
     val settings by vm.configuringSettingsState.collectAsState()
@@ -63,13 +65,14 @@ fun TtsConfigScreen(vm: IPreferencesViewModel) {
     var showTtsDelay by remember { mutableStateOf(false) }
     var showTtsRepeat by remember { mutableStateOf(false) }
     var scrollState = rememberScrollState()
-
     Layout(
         modifier = Modifier
             .padding(12.dp, 0.dp)
             .fillMaxSize()
             .overScrollVertical()
-            .verticalScroll(state = scrollState, flingBehavior = rememberOverscrollFlingBehavior { scrollState })
+            .verticalScroll(
+                state = scrollState,
+                flingBehavior = rememberOverscrollFlingBehavior { scrollState })
     ) {
         ListBox(
             modifier = Modifier

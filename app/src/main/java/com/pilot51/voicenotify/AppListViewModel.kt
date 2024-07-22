@@ -24,9 +24,6 @@ import android.graphics.drawable.Drawable
 import android.icu.text.Collator
 import android.os.Build
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.annotation.RequiresApi
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,6 +36,7 @@ import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -52,7 +50,7 @@ data class AppInfo(
 	val isEnabled: Boolean
 )
 
-@RequiresApi(Build.VERSION_CODES.N)
+
 class AppListViewModel(application: Application) : AndroidViewModel(application) {
 	private val appContext = application.applicationContext
 	private val apps by Common::apps
@@ -107,12 +105,10 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 		return apps
 	}
 
-	@RequiresApi(Build.VERSION_CODES.N)
-	private fun updateAppsList() {
+	private fun updateAppsListZ() {
 		if (isUpdating) return
 		showList = false
 		isUpdating = true
-		val collator = Collator.getInstance(Locale.getDefault())
 		CoroutineScope(Dispatchers.IO).launch {
 			syncAppsMutex.withLock {
 				apps.clear()
@@ -136,15 +132,11 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 				}
 
 				// Add new
-				// val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-				// 	packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
-				// } else {
-				// 	packMan.getInstalledApplications(0)
-				// }
-				var installedApps = Common.getAppsInfo(appContext)
-
-
-
+				val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+					packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
+				} else {
+					packMan.getInstalledApplications(0)
+				}
 				inst@ for (appInfo in installedApps) {
 					for (app in apps) {
 						if (app.packageName == appInfo.packageName) {
@@ -158,18 +150,96 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 					)
 					apps.add(app)
 					if (!isFirstLoad) app.updateDb()
-
+				}
+				val collator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+					Collator.getInstance(Locale.getDefault())
+				} else {
+					TODO("VERSION.SDK_INT < N")
 				}
 
-				apps.sortWith(compareBy(collator) { AlphabeticIndexHelper.computeSectionName(it.label) + it.label})
+				apps.sortWith(compareBy(collator) { AlphabeticIndexHelper.computeSectionName(it.label) + it.label })
+				// apps.sortWith { app1, app2 -> app1.label.compareTo(app2.label, ignoreCase = true) }
 				if (isFirstLoad) AppDatabase.db.appDao.upsert(apps)
 			}
 			isUpdating = false
 			filterApps()
-			updateAppEnableState()
 			showList = true
 		}
 	}
+
+	private fun updateAppsList() {
+		if (isUpdating) return
+		showList = false
+		isUpdating = true
+		viewModelScope.launch(Dispatchers.IO) {
+			syncAppsMutex.withLock {
+				val collator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+					Collator.getInstance(Locale.getDefault())
+				} else {
+					TODO("VERSION.SDK_INT < N")
+				}
+				// Use a HashSet to quickly check if an app is already in the list
+				val existingAppSet = apps.map { it.packageName }.toHashSet()
+
+				val packMan = appContext.packageManager
+
+				// Fetch installed apps asynchronously
+//				val installedApps = async { Common.getAppsInfo(appContext) }.await()
+				val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+					packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
+				} else {
+					packMan.getInstalledApplications(0)
+				}
+
+				// Remove uninstalled apps
+//				apps.retainAll { app ->
+//					try {
+//						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//							appContext.packageManager.getApplicationInfo(app.packageName, PackageManager.ApplicationInfoFlags.of(0L))
+//						} else {
+//							appContext.packageManager.getApplicationInfo(app.packageName, 0)
+//						}
+//						true
+//					} catch (e: PackageManager.NameNotFoundException) {
+//						app.remove()
+//						false
+//					}
+//				}
+				// Remove uninstalled apps
+				apps.retainAll { app ->
+					installedApps.any { it.packageName == app.packageName }
+				}
+
+				// Add new apps
+				val newApps = installedApps.filter { appInfo ->
+					!existingAppSet.contains(appInfo.packageName)
+				}.map { appInfo ->
+					App(
+						packageName = appInfo.packageName,
+						label = appInfo.loadLabel(appContext.packageManager).toString(),
+						isEnabled = appDefaultEnable
+					).apply {
+						if (apps.isNotEmpty()) updateDb()
+					}
+				}
+
+
+
+				// Update the app list
+				apps.addAll(newApps)
+				apps.sortWith(compareBy(collator) { AlphabeticIndexHelper.computeSectionName(it.label) + it.label })
+
+				// Batch update the database if it's the first load
+				if (apps.isEmpty()) AppDatabase.db.appDao.upsert(apps)
+
+				isUpdating = false
+				filterApps()
+				updateAppEnableState()
+				showList = true
+			}
+		}
+	}
+
 
 	private fun updateAppEnableState() {
 		appEnable = apps.all { it.enabled }

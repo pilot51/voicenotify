@@ -24,6 +24,7 @@ private val LightColorScheme = lightColorScheme(
     secondary = Color(0xFF2A54A5),
     tertiary = Color(0xFF2A54A5),
     surface = Color(0xFFf2f3f8),
+    onSurface = Color(0xFF1D1B20),
     primaryContainer = Color(0xFF1E4696),
     surfaceVariant = Color(0xFFf2f3f8),
     background = Color(0xFFf2f3f8),
@@ -38,6 +39,7 @@ private val DarkColorScheme = darkColorScheme(
     tertiary = Color(0xFF2A54A5),
     // background color
     surface = Color(0xFF010001),
+    onSurface = Color(0xFFE0E0E0),
     primaryContainer = Color(0xFF1E4696),
     surfaceVariant = Color(0xFF121212),
     background = Color(0xFF010001),
@@ -75,6 +77,7 @@ private val lightExtendedColors = ExtendedColors(
     boxItem = Color(0xFFFFFFFF),
     divider = Color(0xFFE8E8E8),
     textFieldContainer = Color(0xFFE6E7E9),
+    textInputColor = Color(0xFF1D1B20),
 )
 
 private val darkExtendedColors = ExtendedColors(
@@ -107,6 +110,7 @@ private val darkExtendedColors = ExtendedColors(
     boxItem = Color(0xFF202022),
     divider = Color(0xFF323232),
     textFieldContainer = Color(0xFF1A1A1A),
+    textInputColor = Color(0xFFE0E0E0),
 )
 
 @Composable

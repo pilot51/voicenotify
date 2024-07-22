@@ -15,16 +15,23 @@
  */
 package com.pilot51.voicenotify
 
+
 import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -40,7 +47,6 @@ import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -51,10 +57,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowCompat
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -68,6 +70,7 @@ import androidx.navigation.navArgument
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.ui.LargeTopAppBar
+import com.pilot51.voicenotify.ui.Page
 import com.pilot51.voicenotify.ui.SmallTopAppBar
 import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 import kotlinx.coroutines.Dispatchers
@@ -142,57 +145,72 @@ private fun AppBar(
 	canNavigateBack: Boolean,
 	navigateUp: () -> Unit,
 	modifier: Modifier = Modifier,
+	scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+	actions: @Composable RowScope.() -> Unit = {}
+) {
+	var colors = TopAppBarDefaults.mediumTopAppBarColors(
+		containerColor = VoiceNotifyTheme.colors.background,
+		scrolledContainerColor = VoiceNotifyTheme.colors.background,
+	)
+	SmallTopAppBar(
+		title = {
+			Text(configApp?.run {
+				stringResource(R.string.app_overrides, label)
+			} ?: stringResource(currentScreen.title))
+		},
+		modifier = modifier,
+		navigationIcon = {
+			if (canNavigateBack) {
+				IconButton(onClick = navigateUp) {
+					Icon(
+						imageVector = Icons.Filled.ArrowBack,
+						contentDescription = stringResource(R.string.back)
+					)
+				}
+			}
+		},
+		actions = actions,
+		colors = colors
+	)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun MainAppBar(
+	currentScreen: Screen,
+	configApp: App?,
+	canNavigateBack: Boolean,
+	navigateUp: () -> Unit,
+	modifier: Modifier = Modifier,
 	scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 ) {
 	var colors = TopAppBarDefaults.mediumTopAppBarColors(
 		containerColor = VoiceNotifyTheme.colors.background,
 		scrolledContainerColor = VoiceNotifyTheme.colors.background,
 	)
-	if (currentScreen !== Screen.valueOf(Screen.MAIN.name)) {
-		SmallTopAppBar(
-			title = {
-				Text(configApp?.run {
-					stringResource(R.string.app_overrides, label)
-				} ?: stringResource(currentScreen.title))
-			},
-			modifier = modifier,
-			navigationIcon = {
-				if (canNavigateBack) {
-					IconButton(onClick = navigateUp) {
-						Icon(
-							imageVector = Icons.Filled.ArrowBack,
-							contentDescription = stringResource(R.string.back)
-						)
-					}
+	LargeTopAppBar(
+		title = {
+			Text(configApp?.run {
+				stringResource(R.string.app_overrides, label)
+			} ?: stringResource(currentScreen.title))
+		},
+		modifier = modifier,
+		navigationIcon = {
+			if (canNavigateBack) {
+				IconButton(onClick = navigateUp) {
+					Icon(
+						imageVector = Icons.Filled.ArrowBack,
+						contentDescription = stringResource(R.string.back)
+					)
 				}
-			},
-			colors = colors
-		)
-	} else {
-		LargeTopAppBar(
-			title = {
-				Text(configApp?.run {
-					stringResource(R.string.app_overrides, label)
-				} ?: stringResource(currentScreen.title))
-			},
-			modifier = modifier,
-			navigationIcon = {
-				if (canNavigateBack) {
-					IconButton(onClick = navigateUp) {
-						Icon(
-							imageVector = Icons.Filled.ArrowBack,
-							contentDescription = stringResource(R.string.back)
-						)
-					}
-				}
-			},
-			scrollBehavior = scrollBehavior,
-			actions = {
+			}
+		},
+		scrollBehavior = scrollBehavior,
+		actions = {
 
-			},
-			colors = colors
-		)
-	}
+		},
+		colors = colors
+	)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -219,32 +237,33 @@ fun AppMain(
 	val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(
 		rememberTopAppBarState(),
 		canScroll = { true })
-	Scaffold(
-			modifier = Modifier
-			.fillMaxSize()
-			.background(VoiceNotifyTheme.colors.background)
-			.nestedScroll(scrollBehavior.nestedScrollConnection),
-		topBar = {
-			AppBar(
-				currentScreen = currentScreen,
-				configApp = configApp,
-				canNavigateBack = navController.previousBackStackEntry != null,
-				navigateUp = navController::navigateUp,
-				modifier = Modifier
-					.fillMaxWidth(),
-				scrollBehavior = scrollBehavior
-			)
-		}
-	) { innerPadding ->
-		NavHost(
-			navController = navController,
-			startDestination = Screen.MAIN.name,
-			modifier = Modifier.padding(innerPadding)
-				.background(VoiceNotifyTheme.colorScheme.background)
+	NavHost(
+		navController = navController,
+		startDestination = Screen.MAIN.name,
+		enterTransition = {
+			slideInHorizontally { it }
+		},
+		exitTransition = { slideOutHorizontally { -it } },
+		popEnterTransition = { -> EnterTransition.None },
+		popExitTransition = { -> ExitTransition.None }
+	) {
+		composable(
+			route = "${Screen.MAIN.name}?appPkg={appPkg}",
+			arguments = argsAppPkg
 		) {
-			composable(
-				route = "${Screen.MAIN.name}?appPkg={appPkg}",
-				arguments = argsAppPkg
+			Page(
+				scrollBehavior = scrollBehavior,
+				topBar = {
+					MainAppBar(
+						currentScreen = Screen.valueOf(Screen.MAIN.name),
+						configApp = configApp,
+						canNavigateBack = navController.previousBackStackEntry != null,
+						navigateUp = navController::navigateUp,
+						modifier = Modifier
+							.fillMaxWidth(),
+						scrollBehavior = scrollBehavior
+					)
+				}
 			) {
 				MainScreen(
 					vm = vm,
@@ -255,18 +274,58 @@ fun AppMain(
 					}
 				)
 			}
-			composable(route = Screen.APP_LIST.name) {
+
+		}
+		composable(route = Screen.APP_LIST.name) {
+			Page(
+				scrollBehavior = scrollBehavior,
+				topBar = {
+					AppBar(
+						currentScreen = currentScreen,
+						configApp = configApp,
+						canNavigateBack = navController.previousBackStackEntry != null,
+						navigateUp = navController::navigateUp,
+						modifier = Modifier
+							.fillMaxWidth(),
+						scrollBehavior = scrollBehavior,
+						actions = {
+							// dropdown menu
+
+
+
+
+						}
+					)
+				}
+			) {
 				AppListScreen(
 					onConfigureApp = { app ->
 						navController.navigate("${Screen.MAIN.name}?appPkg=${app.packageName}")
 					}
 				)
 			}
-			composable(
-				route = "${Screen.TTS.name}?appPkg={appPkg}",
-				arguments = argsAppPkg
+		}
+		composable(
+			route = "${Screen.TTS.name}?appPkg={appPkg}",
+			arguments = argsAppPkg
+		) {
+			Page(
+				scrollBehavior = scrollBehavior,
+				topBar = {
+					AppBar(
+						currentScreen = currentScreen,
+						configApp = configApp,
+						canNavigateBack = navController.previousBackStackEntry != null,
+						navigateUp = navController::navigateUp,
+						modifier = Modifier
+							.fillMaxWidth(),
+						scrollBehavior = scrollBehavior
+					)
+				}
 			) {
-				TtsConfigScreen(vm)
+				TtsConfigScreen(
+					vm = vm
+				)
 			}
 		}
 	}
