@@ -12,7 +12,6 @@ import androidx.compose.animation.rememberSplineBasedDecay
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollScope
 import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
@@ -38,6 +37,9 @@ import kotlinx.coroutines.launch
 import kotlin.math.abs
 import kotlin.math.sign
 import kotlin.math.sqrt
+
+// Define a small threshold to ignore minor offsets
+private const val SCROLL_THRESHOLD = 0.1f
 
 /**
  * A parabolic rolling easing curve.
@@ -153,7 +155,7 @@ fun Modifier.overScrollOutOfBound(
                 }
                 val realAvailable = when {
                     nestedScrollToParent -> available - dispatcher.dispatchPreScroll(available, source)
-                    else                 -> available
+                    else -> available
                 }
                 val realOffset = if (isVertical) realAvailable.y else realAvailable.x
 
@@ -187,7 +189,7 @@ fun Modifier.overScrollOutOfBound(
                 }
                 val realAvailable = when {
                     nestedScrollToParent -> available - dispatcher.dispatchPostScroll(consumed, available, source)
-                    else                 -> available
+                    else -> available
                 }
                 offset = scrollEasing(offset, if (isVertical) realAvailable.y else realAvailable.x)
                 return if (isVertical) {
@@ -203,7 +205,7 @@ fun Modifier.overScrollOutOfBound(
                 }
                 val parentConsumed = when {
                     nestedScrollToParent -> dispatcher.dispatchPreFling(available)
-                    else                 -> Velocity.Zero
+                    else -> Velocity.Zero
                 }
                 val realAvailable = available - parentConsumed
                 var leftVelocity = if (isVertical) realAvailable.y else realAvailable.x
@@ -229,7 +231,7 @@ fun Modifier.overScrollOutOfBound(
             override suspend fun onPostFling(consumed: Velocity, available: Velocity): Velocity {
                 val realAvailable = when {
                     nestedScrollToParent -> available - dispatcher.dispatchPostFling(consumed, available)
-                    else                 -> available
+                    else -> available
                 }
 
                 lastFlingAnimator = Animatable(offset)
@@ -249,7 +251,8 @@ fun Modifier.overScrollOutOfBound(
         .clipToBounds()
         .nestedScroll(nestedConnection, dispatcher)
         .graphicsLayer {
-            if (isVertical) translationY = offset else translationX = offset
+            if (isVertical) translationY = if (abs(offset) > SCROLL_THRESHOLD) offset else 0f
+            else translationX = if (abs(offset) > SCROLL_THRESHOLD) offset else 0f
         }
 }
 
