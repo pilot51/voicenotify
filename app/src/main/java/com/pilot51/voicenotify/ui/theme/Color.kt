@@ -36,7 +36,8 @@ data class ExtendedColors(
     val boxItem: Color,
     var divider: Color = Color.Unspecified,
     var textFieldContainer: Color = Color.Unspecified,
-    var textInputColor: Color = Color.Unspecified
+    var textInputColor: Color = Color.Unspecified,
+    var placeholder: Color = Color.Unspecified
 )
 
 val LocalExtendedColors = staticCompositionLocalOf {

@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.os.VibrationEffect
 import android.os.VibratorManager
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectVerticalDragGestures
@@ -97,10 +98,11 @@ fun<T> List<T>.getFirstUniqueSeenCharIndex(callback: (T) -> String): ImmutableMa
     this
         .map {
             // if is number return #
-            if (it.toString().first().isDigit()) {
+            val firstLetter = callback(it).uppercase().first()
+            if (firstLetter.isDigit()) {
                 '#'
             } else {
-                callback(it).uppercase().first()
+                firstLetter
             }
         }
         .forEachIndexed { index, char ->
@@ -255,7 +257,6 @@ private fun AlphabetScroller(
         Spacer(modifier = Modifier.height(alphabetPaddingValues.calculateTopPadding()))
         Column(
             modifier = modifier
-//                .background(VoiceNotifyTheme.colorScheme.tertiary)
                 .onGloballyPositioned {
                     distanceFromTopOfScreen = it.positionInRoot().y
                 }
@@ -362,14 +363,14 @@ fun ScrollingBubble(
             Text(
                 text = currAlphabetScrolledOn.toString(),
                 style = VoiceNotifyTheme.typography.headlineLarge,
-                color = VoiceNotifyTheme.colors.colorNeutralInverse
+                color = Color.White
             )
         }
     }
 }
 @Composable
-fun ScrollRect(
-    currAlphabetScrolledOn: Char
+fun ScrollingRect(
+    currAlphabetScrolledOn: Char?
 ) {
     Popup(
         alignment = Alignment.Center

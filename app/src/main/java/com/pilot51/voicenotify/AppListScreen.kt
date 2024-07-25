@@ -19,45 +19,57 @@ package com.pilot51.voicenotify
 import android.content.Context
 import android.content.pm.PackageManager
 import android.content.res.Configuration
-import android.graphics.drawable.Drawable
-import android.os.Build
-import androidx.annotation.RequiresApi
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Cancel
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.core.content.ContextCompat
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.ViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
@@ -66,14 +78,11 @@ import com.pilot51.voicenotify.AppListViewModel.IgnoreType
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.ui.Layout
 import com.pilot51.voicenotify.ui.LazyAlphabetIndexRow
-import com.pilot51.voicenotify.ui.ListBox
 import com.pilot51.voicenotify.ui.ListItem
 import com.pilot51.voicenotify.ui.ScrollingBubble
 import com.pilot51.voicenotify.ui.SearchBar
 import com.pilot51.voicenotify.ui.Switch
-import com.pilot51.voicenotify.ui.alphabetItemSize
 import com.pilot51.voicenotify.ui.bottomBorder
-import com.pilot51.voicenotify.ui.getIndexOfCharBasedOnYPosition
 import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 
 private lateinit var vmStoreOwner: ViewModelStoreOwner
@@ -105,29 +114,31 @@ fun AppListScreen(
     var showConfirmDialog by remember { mutableStateOf<IgnoreType?>(null) }
     var filteredApps = list.takeIf { it.isNotEmpty() } ?: vm.filteredApps
     val lazyListState = rememberLazyListState()
-
+    val showList by vm::showList
+    val appListLocalMap by vm::appListLocalMap
 
     Layout(modifier = Modifier) {
         AppListActions(
             modifier = Modifier
-				.fillMaxWidth()
-				.padding(12.dp, 4.dp, 16.dp, 8.dp)
+                .fillMaxWidth()
+                .padding(12.dp, 4.dp, 16.dp, 8.dp)
         )
         AppList(
             lazyListState = lazyListState,
             filteredApps = filteredApps,
-            showList = vm.showList,
+            appListLocalMap = appListLocalMap,
+            showList = showList,
             stickyHeader = {
                 Row(
                     modifier = Modifier
-						.fillMaxWidth()
-						.background(VoiceNotifyTheme.colors.boxItem)
+                        .fillMaxWidth()
+                        .background(VoiceNotifyTheme.colors.boxItem)
                 ) {
                     Row(
                         modifier = Modifier
-							.weight(1f)
-							.padding(start = 8.dp, end = 8.dp)
-							.bottomBorder(2f, VoiceNotifyTheme.colors.divider),
+                            .weight(1f)
+                            .padding(start = 8.dp, end = 8.dp)
+                            .bottomBorder(2f, VoiceNotifyTheme.colors.divider),
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -161,11 +172,54 @@ fun AppListScreen(
     }
 }
 
+@Composable
+fun SkeletonListItem() {
+    ListItem(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.Gray.copy(alpha = 0.1f)),
+        leadingContent = {
+            Box(
+                modifier = Modifier
+                    .size(48.dp)
+                    .background(Color.Gray.copy(alpha = 0.3f), shape = CircleShape)
+            )
+        },
+        headlineContent = {
+            Box(
+                modifier = Modifier
+                    .height(18.dp)
+                    .fillMaxWidth(0.5f)
+                    .background(Color.Gray.copy(alpha = 0.3f))
+            )
+        },
+        supportingContent = {
+            Box(
+                modifier = Modifier
+                    .height(12.dp)
+                    .fillMaxWidth(0.7f)
+                    .background(Color.Gray.copy(alpha = 0.3f))
+            )
+        },
+        trailingContent = {
+            Row(horizontalArrangement = Arrangement.spacedBy(6.dp)) {
+                Box(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .background(Color.Gray.copy(alpha = 0.3f))
+                )
+            }
+        }
+    )
+}
+
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AppList(
     lazyListState: LazyListState = rememberLazyListState(),
     filteredApps: List<App>,
+    appListLocalMap: MutableMap<String, Char>,
     showList: Boolean,
     packagesWithOverride: List<String>,
     toggleIgnore: (app: App) -> Unit,
@@ -173,20 +227,20 @@ private fun AppList(
     onRemoveOverrides: (app: App) -> Unit,
     stickyHeader: @Composable () -> Unit = {}
 ) {
+
     if (!showList) return
-    val context = LocalDensity.current
     var alphabetRelativeDragYOffset: Float? by remember { mutableStateOf(null) }
     var alphabetDistanceFromTopOfScreen: Float by remember { mutableStateOf(0F) }
     var currentLetter by remember { mutableStateOf<Char?>(null) }
     BoxWithConstraints {
         LazyAlphabetIndexRow(
             items = filteredApps,
-            keySelector = { AlphabeticIndexHelper.computeSectionName(it.label) },
+            keySelector = { appListLocalMap[it.packageName].toString() },
             lazyListState = lazyListState,
             alphabetModifier = Modifier
-				.fillMaxHeight()
-				.width(16.dp)
-				.clip(RoundedCornerShape(8.dp)),
+                .fillMaxHeight()
+                .width(16.dp)
+                .clip(RoundedCornerShape(8.dp)),
             alphabetPaddingValues = PaddingValues(0.dp, 0.dp, 0.dp, 60.dp),
             onAlphabetListDrag = { relativeDragYOffset, containerDistance, char ->
                 alphabetRelativeDragYOffset = relativeDragYOffset
@@ -196,9 +250,9 @@ private fun AppList(
         ) {
             Box(
                 modifier = Modifier
-					.padding(12.dp, 0.dp, 0.dp, 0.dp)
-					.clip(RoundedCornerShape(12.dp))
-					.background(VoiceNotifyTheme.colors.boxItem)
+                    .padding(12.dp, 0.dp, 0.dp, 0.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(VoiceNotifyTheme.colors.boxItem)
             ) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -265,12 +319,12 @@ private fun AppListItem(
 
     ListItem(
         modifier = Modifier
-			.toggleable(
-				value = app.enabled,
-				role = Role.Checkbox,
-				onValueChange = { toggleIgnore(app) }
-			)
-			.fillMaxWidth(),
+            .toggleable(
+                value = app.enabled,
+                role = Role.Checkbox,
+                onValueChange = { toggleIgnore(app) }
+            )
+            .fillMaxWidth(),
         leadingContent = {
             PackageImage(
                 context = context,
@@ -331,6 +385,7 @@ private fun AppListPreview() {
             lazyListState = lazyListState,
             filteredApps = apps,
             showList = true,
+            appListLocalMap = mutableMapOf("package.name.one" to 'A', "package.name.two" to 'B'),
             packagesWithOverride = listOf("package.name.one"),
             toggleIgnore = {},
             onConfigureApp = {},

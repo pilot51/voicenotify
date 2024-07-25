@@ -28,7 +28,8 @@ private val LightColorScheme = lightColorScheme(
     primaryContainer = Color(0xFF1E4696),
     surfaceVariant = Color(0xFFf2f3f8),
     background = Color(0xFFf2f3f8),
-    surfaceContainerHigh = Color(0xFFf2f2f2)
+    surfaceContainerHigh = Color(0xFFf2f2f2),
+
 
 )
 
@@ -78,6 +79,7 @@ private val lightExtendedColors = ExtendedColors(
     divider = Color(0xFFE8E8E8),
     textFieldContainer = Color(0xFFE6E7E9),
     textInputColor = Color(0xFF1D1B20),
+    placeholder = Color(0xFFA3A3A3)
 )
 
 private val darkExtendedColors = ExtendedColors(
@@ -111,6 +113,7 @@ private val darkExtendedColors = ExtendedColors(
     divider = Color(0xFF323232),
     textFieldContainer = Color(0xFF1A1A1A),
     textInputColor = Color(0xFFE0E0E0),
+    placeholder = Color(0xFFA3A3A3)
 )
 
 @Composable
