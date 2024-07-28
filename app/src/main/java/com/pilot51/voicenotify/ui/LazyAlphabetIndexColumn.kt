@@ -63,6 +63,7 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Popup
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
+import com.pilot51.voicenotify.ui.toDp
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toPersistentMap
@@ -72,7 +73,7 @@ import kotlinx.coroutines.launch
 val vibrationCooldown = 50 // Cooldown time in milliseconds
 val alphabetItemSize = 20.dp
 
-val alphabetCharList = (listOf('#') + ('A'..'Z'))
+val alphabetCharList = (listOf('↑','#') + ('A'..'Z'))
 
 
 val alphabetCharSize = alphabetCharList.size
@@ -151,8 +152,15 @@ fun<T> LazyAlphabetIndexColumn(
             onAlphabetListDrag = { relativeDragYOffset, containerDistanceFromTopOfScreen, indexOfChar ->
                 onAlphabetListDrag(relativeDragYOffset, containerDistanceFromTopOfScreen, indexOfChar)
                 coroutineScope.launch {
-                    mapOfFirstLetterIndex[indexOfChar]?.let {
-                        lazyListState.scrollToItem(it)
+                    if (indexOfChar == null) {
+                        return@launch
+                    }
+                    val index = mapOfFirstLetterIndex[indexOfChar]
+                    // '↑' is a special case where it should scroll to the top
+                    if (indexOfChar == '↑') {
+                        lazyListState.scrollToItem(0)
+                    } else if (index != null) {
+                        lazyListState.scrollToItem(index)
                     }
                 }
             },
@@ -195,8 +203,15 @@ fun<T> LazyAlphabetIndexRow(
             onAlphabetListDrag = { relativeDragYOffset, containerDistanceFromTopOfScreen, indexOfChar ->
                 onAlphabetListDrag(relativeDragYOffset, containerDistanceFromTopOfScreen, indexOfChar)
                 coroutineScope.launch {
-                    mapOfFirstLetterIndex[indexOfChar]?.let {
-                        lazyListState.scrollToItem(it)
+                    if (indexOfChar == null) {
+                        return@launch
+                    }
+                    val index = mapOfFirstLetterIndex[indexOfChar]
+                    // '↑' is a special case where it should scroll to the top
+                    if (indexOfChar == '↑') {
+                        lazyListState.scrollToItem(0)
+                    } else if (index != null) {
+                        lazyListState.scrollToItem(index)
                     }
                 }
             },
@@ -339,47 +354,24 @@ private fun AlphabetScroller(
 
 @Composable
 fun ScrollingBubble(
-    boxConstraintMaxWidth: Dp,
-    bubbleOffsetYFloat: Float,
+    bubbleOffsetY: Dp,
+    bubbleOffsetX: Dp,
     currAlphabetScrolledOn: Char?,
     bubbleSize: Dp = 50.dp
 ) {
     Surface(
-        shape = CircleShape,
+        shape = RoundedCornerShape(8.dp),
         modifier = Modifier
             .size(bubbleSize)
             .offset(
-                x = (boxConstraintMaxWidth - (bubbleSize + alphabetItemSize)),
-                y = with(LocalDensity.current) {
-                    bubbleOffsetYFloat.toDp() - (bubbleSize / 2)
-                },
-            ),
-        color = VoiceNotifyTheme.colorScheme.primary,
-    ) {
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = currAlphabetScrolledOn.toString(),
-                style = VoiceNotifyTheme.typography.headlineLarge,
-                color = Color.White
+                x = (bubbleOffsetX - (bubbleSize + alphabetItemSize)),
+                y =  bubbleOffsetY - (bubbleSize / 2),
             )
-        }
-    }
-}
-@Composable
-fun ScrollingRect(
-    currAlphabetScrolledOn: Char?
-) {
-    Popup(
-        alignment = Alignment.Center
     ) {
         Box(
-            modifier = Modifier
-                .size(50.dp, 50.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(Color.Gray.copy(alpha = 0.5f))
+            modifier = Modifier.fillMaxSize()
+            .background(Color.Gray.copy(alpha = 0.5f)),
+            contentAlignment = Alignment.Center
         ) {
             Text(
                 text = currAlphabetScrolledOn.toString(),
@@ -392,6 +384,7 @@ fun ScrollingRect(
         }
     }
 }
+
 
 
 @Composable
@@ -434,49 +427,6 @@ fun ContactItem(
 
 
 
-data class AppInfo(
-    val name: String,
-    val icon: Drawable,
-    val packageName: String
-)
-
-fun getInstalledApps(context: Context): List<AppInfo> {
-    val pm: PackageManager = context.packageManager
-    val packages: List<ApplicationInfo> = pm.getInstalledApplications(PackageManager.GET_META_DATA)
-
-    return packages.map { packageInfo ->
-        AppInfo(
-            name = packageInfo.loadLabel(pm).toString(),
-            icon = packageInfo.loadIcon(pm),
-            packageName = packageInfo.packageName
-        )
-    }
-}
-
-@Composable
-fun AppListItem(app: AppInfo, isAlphabeticallyFirstInCharGroup: Boolean) {
-    Row(modifier = Modifier.padding(8.dp)) {
-        if (isAlphabeticallyFirstInCharGroup) {
-            // label
-            Text(
-                text = app.name.first().toString(),
-                style = VoiceNotifyTheme.typography.bodyLarge
-            )
-        }
-        val iconBitmap = (app.icon as BitmapDrawable).bitmap
-        Image(
-            bitmap = iconBitmap.asImageBitmap(),
-            contentDescription = app.name,
-            modifier = Modifier.padding(end = 8.dp)
-        )
-        Column {
-            Text(text = app.name, style = VoiceNotifyTheme.typography.titleLarge)
-            Text(text = app.packageName, style = VoiceNotifyTheme.typography.bodySmall)
-        }
-    }
-}
-
-
 @Composable
 fun LazyAlphabetIndexColumnDemo() {
     val items = listOf("360", "HK01", "Apple", "Banana", "Cherry",
@@ -516,8 +466,8 @@ fun LazyAlphabetIndexColumnDemo() {
                 val yOffset = alphabetRelativeDragYOffset
                 if (yOffset != null && currentLetter != null) {
                     ScrollingBubble(
-                        boxConstraintMaxWidth = this.maxWidth,
-                        bubbleOffsetYFloat = yOffset + alphabetDistanceFromTopOfScreen,
+                        bubbleOffsetX = this.maxWidth - 50.dp,
+                        bubbleOffsetY = with(LocalDensity.current) { (yOffset + alphabetDistanceFromTopOfScreen).toDp() },
                         currAlphabetScrolledOn = currentLetter,
                     )
                 }
@@ -538,6 +488,7 @@ fun LazyAlphabetIndexRowDemo() {
     val alphabetHeightInPixels = remember { with(context) { alphabetItemSize.toPx() } }
     var alphabetRelativeDragYOffset: Float? by remember { mutableStateOf(null) }
     var alphabetDistanceFromTopOfScreen: Float by remember { mutableStateOf(0F) }
+    var currentLetter by remember { mutableStateOf<Char?>(null) }
     AppTheme {
         Surface(
             modifier = Modifier.fillMaxSize(),
@@ -550,6 +501,7 @@ fun LazyAlphabetIndexRowDemo() {
                     onAlphabetListDrag = { relativeDragYOffset, containerDistance, char ->
                         alphabetRelativeDragYOffset = relativeDragYOffset
                         alphabetDistanceFromTopOfScreen = containerDistance
+                        currentLetter = char
                     }
                 ) { firstLetterIndexes ->
                     LazyColumn(
@@ -568,11 +520,9 @@ fun LazyAlphabetIndexRowDemo() {
                 val yOffset = alphabetRelativeDragYOffset
                 if (yOffset != null) {
                     ScrollingBubble(
-                        boxConstraintMaxWidth = this.maxWidth,
-                        bubbleOffsetYFloat = yOffset + alphabetDistanceFromTopOfScreen,
-                        currAlphabetScrolledOn = yOffset.getIndexOfCharBasedOnYPosition(
-                            alphabetHeightInPixels = alphabetHeightInPixels,
-                        ),
+                        bubbleOffsetX = this.maxWidth - 50.dp,
+                        bubbleOffsetY = with(LocalDensity.current) { (yOffset + alphabetDistanceFromTopOfScreen).toDp() },
+                        currAlphabetScrolledOn = currentLetter,
                     )
                 }
             }
@@ -580,54 +530,6 @@ fun LazyAlphabetIndexRowDemo() {
     }
 }
 
-@Composable
-fun LazyInstalledAppsColumnDemo() {
-    // get installed app list
-    val installedApps = getInstalledApps(LocalContext.current).toImmutableList()
-    // log
-    val lazyListState = rememberLazyListState()
-    val context = LocalDensity.current
-    val alphabetHeightInPixels = remember { with(context) { alphabetItemSize.toPx() } }
-    var alphabetRelativeDragYOffset: Float? by remember { mutableStateOf(null) }
-    var alphabetDistanceFromTopOfScreen: Float by remember { mutableStateOf(0F) }
-    AppTheme {
-        Surface(
-            modifier = Modifier.fillMaxSize(),
-            color = VoiceNotifyTheme.colorScheme.background
-        ) {
-            BoxWithConstraints {
-                LazyAlphabetIndexColumn(
-                    items = installedApps,
-                    alphabetModifier = Modifier,
-                    onAlphabetListDrag = { relativeDragYOffset, containerDistance, char ->
-                        alphabetRelativeDragYOffset = relativeDragYOffset
-                        alphabetDistanceFromTopOfScreen = containerDistance
-                    }
-                ) { firstLetterIndexes ->
-                    itemsIndexed(installedApps) { index, app ->
-                        AppListItem(
-                            app = app,
-                            isAlphabeticallyFirstInCharGroup =
-                            firstLetterIndexes[app.name.uppercase().first()] == index,
-                        )
-                    }
-
-                }
-                val yOffset = alphabetRelativeDragYOffset
-                if (yOffset != null) {
-                    ScrollingBubble(
-                        boxConstraintMaxWidth = this.maxWidth,
-                        bubbleOffsetYFloat = yOffset + alphabetDistanceFromTopOfScreen,
-                        currAlphabetScrolledOn = yOffset.getIndexOfCharBasedOnYPosition(
-                            alphabetHeightInPixels = alphabetHeightInPixels,
-                        ),
-                    )
-                }
-            }
-        }
-    }
-
-}
 
 @Composable
 @Preview
@@ -642,8 +544,3 @@ fun PreviewLazyAlphabetIndexRowDemo() {
 }
 
 
-@Composable
-@Preview
-fun PreviewInstalledAppDemo() {
-    LazyInstalledAppsColumnDemo()
-}

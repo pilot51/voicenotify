@@ -23,6 +23,7 @@ import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -62,6 +63,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInWindow
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
@@ -232,7 +235,13 @@ private fun AppList(
     var alphabetRelativeDragYOffset: Float? by remember { mutableStateOf(null) }
     var alphabetDistanceFromTopOfScreen: Float by remember { mutableStateOf(0F) }
     var currentLetter by remember { mutableStateOf<Char?>(null) }
-    BoxWithConstraints {
+    var appListTopOffset by remember { mutableStateOf(0F) }
+
+    BoxWithConstraints(
+        Modifier.onGloballyPositioned { coordinates ->
+            appListTopOffset = coordinates.positionInWindow().y
+        }
+    ) {
         LazyAlphabetIndexRow(
             items = filteredApps,
             keySelector = { appListLocalMap[it.packageName].toString() },
@@ -276,8 +285,8 @@ private fun AppList(
         val yOffset = alphabetRelativeDragYOffset
         if (yOffset != null && currentLetter != null) {
             ScrollingBubble(
-                boxConstraintMaxWidth = this.maxWidth,
-                bubbleOffsetYFloat = yOffset + alphabetDistanceFromTopOfScreen,
+                bubbleOffsetX = this.maxWidth - 80.dp,
+                bubbleOffsetY = this.maxHeight / 4,
                 currAlphabetScrolledOn = currentLetter,
             )
         }
@@ -319,11 +328,14 @@ private fun AppListItem(
 
     ListItem(
         modifier = Modifier
-            .toggleable(
-                value = app.enabled,
-                role = Role.Checkbox,
-                onValueChange = { toggleIgnore(app) }
-            )
+            // .toggleable(
+            //     value = app.enabled,
+            //     role = Role.Checkbox,
+            //     onValueChange = { toggleIgnore(app) }
+            // )
+            .clickable {
+                onConfigureApp(app)
+            }
             .fillMaxWidth(),
         leadingContent = {
             PackageImage(

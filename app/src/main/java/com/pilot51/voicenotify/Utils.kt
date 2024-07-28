@@ -54,6 +54,7 @@ object AlphabeticIndexHelper {
 
 	@JvmStatic
 	fun computeSectionName(c: CharSequence): String {
+		if (isStartsWithDigit(c)) return c.toString()
 		return computeSectionName(Locale.getDefault(), c)
 	}
 
