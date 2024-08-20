@@ -103,6 +103,7 @@ data class NotificationInfo(
 			.replace("#Y", "%8\$s", true) // Big Content Summary
 			.replace("#B", "%9\$s", true) // Big Content Text
 			.replace("#L", "%10\$s", true) // Text Lines
+			.trim()
 		try {
 			ttsMessage = String.format(ttsUnformattedMsg,
 				app?.label ?: "",
@@ -114,29 +115,31 @@ data class NotificationInfo(
 				bigContentTitle ?: "",
 				bigContentSummary ?: "",
 				bigContentText ?: "",
-				textLines?.joinToString("\n") ?: "")
+				textLines?.joinToString("\n") ?: "").trim()
 		} catch (e: IllegalFormatException) {
 			Log.w(TAG, "Error formatting custom TTS string!")
 			e.printStackTrace()
 		}
 		isEmpty = ttsMessage.isNullOrBlank() ||
 			ttsMessage == ttsStringPref.replace(Regex("#[atscmi]"), "")
-		if (app != null && (ttsMessage == null || ttsMessage == app.label) && !isComposePreview) {
+		if (app != null
+			&& (ttsMessage == null || (ttsMessage == app.label && !ttsStringPref.equals("#a", true)))
+			&& !isComposePreview
+		) {
 			ttsMessage = appContext.getString(R.string.notification_from, app.label)
 		}
-		ttsMessage?.takeIf { it.isNotEmpty() }?.let {
-			val ttsTextReplace = if (isComposePreview) null else settings.ttsTextReplace
-			val textReplaceList = PreferencesViewModel.convertTextReplaceStringToList(ttsTextReplace)
-			for (pair in textReplaceList) {
-				ttsMessage = it.replace(
-					"(?i)${Pattern.quote(pair.first)}".toRegex(), pair.second)
-			}
-			val maxLength = if (isComposePreview) 0 else {
-				settings.ttsMaxLength ?: DEFAULT_MAX_LENGTH
-			}
-			if (maxLength > 0 && maxLength < it.length) {
-				ttsMessage = it.substring(0, min(maxLength, it.length))
-			}
+		if (ttsMessage.isNullOrBlank()) return
+		val ttsTextReplace = if (isComposePreview) null else settings.ttsTextReplace
+		val textReplaceList = PreferencesViewModel.convertTextReplaceStringToList(ttsTextReplace)
+		for (pair in textReplaceList) {
+			ttsMessage = ttsMessage!!.replace(
+				"(?i)${Pattern.quote(pair.first)}".toRegex(), pair.second)
+		}
+		val maxLength = if (isComposePreview) 0 else {
+			settings.ttsMaxLength ?: DEFAULT_MAX_LENGTH
+		}
+		if (maxLength > 0 && maxLength < ttsMessage!!.length) {
+			ttsMessage = ttsMessage!!.substring(0, min(maxLength, ttsMessage!!.length))
 		}
 	}
 
