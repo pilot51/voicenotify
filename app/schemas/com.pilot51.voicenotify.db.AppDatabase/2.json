@@ -6,7 +6,7 @@
     "entities": [
       {
         "tableName": "apps",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`package` TEXT NOT NULL, `name` TEXT NOT NULL COLLATE NOCASE, `is_enabled` INTEGER, PRIMARY KEY(`package`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`package` TEXT NOT NULL, `name` TEXT NOT NULL COLLATE NOCASE, `is_enabled` INTEGER,  PRIMARY KEY(`package`))",
         "fields": [
           {
             "fieldPath": "packageName",

@@ -36,7 +36,9 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
+import androidx.compose.material3.TimePickerState
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -517,16 +519,48 @@ private fun rememberTimePickerState(
 	initialMinute: Int = 0,
 	is24Hour: Boolean = DateFormat.is24HourFormat(LocalContext.current),
 	key: Any
-): TimePickerState = rememberSaveable(
-	saver = TimePickerState.Saver(),
-	inputs = arrayOf(key)
-) {
-	TimePickerState(
-		initialHour = initialHour,
-		initialMinute = initialMinute,
-		is24Hour = is24Hour,
+): TimePickerState {
+	return rememberSaveable(
+		saver = timePickerStateSaver,
+		inputs = arrayOf(key)
+	) {
+		TimePickerState(
+			initialHour = initialHour,
+			initialMinute = initialMinute,
+			is24Hour = is24Hour,
+		)
+	}
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+val timePickerStateSaver = run {
+	val hourKey = "hour"
+	val minuteKey = "minute"
+	val is24HourKey = "is24Hour"
+
+	mapSaver(
+		save = { state ->
+			mapOf(
+				hourKey to state.hour,
+				minuteKey to state.minute,
+				is24HourKey to state.is24hour
+			)
+		},
+		restore = { map ->
+			TimePickerState(
+				initialHour = map[hourKey] as Int,
+				initialMinute = map[minuteKey] as Int,
+				is24Hour = map[is24HourKey] as Boolean
+			)
+		}
 	)
 }
+
+data class TimePickerState(
+	val hour: Int,
+	val minute: Int,
+	val is24Hour: Boolean
+)
 
 @Composable
 fun BackupDialog(onDismiss: () -> Unit) {

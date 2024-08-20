@@ -15,20 +15,26 @@
  */
 package com.pilot51.voicenotify
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
 import android.os.Build
 import android.provider.Settings
 import android.util.Pair
+import androidx.activity.ComponentActivity
 import androidx.compose.runtime.mutableStateListOf
 import com.pilot51.voicenotify.AppListViewModel.Companion.appDefaultEnable
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
+import kotlinx.coroutines.CoroutineScope
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+
 
 object Common {
 	val notificationListenerSettingsIntent: Intent by lazy {
@@ -78,4 +84,61 @@ object Common {
 			}
 		}
 	}
+
+	fun convertTextReplaceListToString(list: List<Pair<String, String>?>): String {
+		val saveString = StringBuilder()
+		for (pair in list) {
+			if (pair == null) break
+			if (saveString.isNotEmpty()) {
+				saveString.append("\n")
+			}
+			saveString.append(pair.first)
+			saveString.append("\n")
+			saveString.append(pair.second)
+		}
+		return saveString.toString()
+	}
+
+	/**
+	 * Converts a string of paired substrings separated by newlines into a list of string pairs.
+	 * @param string The string to convert. Each string in and between pairs must be separated by a newline.
+	 * There should be an odd number of newlines for an even number of substrings (including zero-length),
+	 * otherwise the last substring will be discarded.
+	 * @return A List of string pairs.
+	 */
+	fun convertTextReplaceStringToList(string: String?): List<Pair<String, String>> {
+		val list = mutableListOf<Pair<String, String>>()
+		if (string.isNullOrEmpty()) return list
+		val array = string.split("\n").dropLastWhile { it.isEmpty() }.toTypedArray()
+		var i = 0
+		while (i + 1 < array.size) {
+			list.add(Pair(array[i], array[i + 1]))
+			i += 2
+		}
+		return list
+	}
+
+	fun isSystemApp(applicationInfo: ApplicationInfo): Boolean {
+		return applicationInfo.flags and ApplicationInfo.FLAG_SYSTEM != 0
+	}
+
+	/**
+	 * get application info use queryIntentActivities method
+	 * @param activity
+	 * @return
+	 */
+	fun getAppsInfo(context: Context): List<ApplicationInfo> {
+		val pm = context.packageManager
+		val intent = Intent(Intent.ACTION_MAIN, null)
+		intent.addCategory(Intent.CATEGORY_LAUNCHER)
+		val resolveInfos = pm.queryIntentActivities(intent, PackageManager.GET_META_DATA)
+		val apps: MutableList<ApplicationInfo> = ArrayList(0)
+		for (resolveInfo in resolveInfos) {
+			// filer system apps
+			if (isSystemApp(resolveInfo.activityInfo.applicationInfo)) continue
+			apps.add(resolveInfo.activityInfo.applicationInfo)
+		}
+		return apps
+	}
+
 }

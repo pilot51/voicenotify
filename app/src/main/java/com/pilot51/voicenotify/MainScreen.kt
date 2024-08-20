@@ -23,15 +23,25 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.gestures.ScrollableDefaults
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.overscroll
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
@@ -45,10 +55,18 @@ import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
+import com.pilot51.voicenotify.ui.Layout
+import com.pilot51.voicenotify.ui.ListBox
+import com.pilot51.voicenotify.ui.overScrollVertical
+import com.pilot51.voicenotify.ui.rememberOverscrollFlingBehavior
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.util.*
+import com.pilot51.voicenotify.ui.theme.VoiceNotifyTheme
 
-@OptIn(ExperimentalPermissionsApi::class)
+
+
+
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun MainScreen(
 	vm: IPreferencesViewModel,
@@ -106,6 +124,7 @@ fun MainScreen(
 	var showReadPhoneStateRationale by remember { mutableStateOf(false) }
 	var showPostNotificationRationale by remember { mutableStateOf(false) }
 	val lifeCycleOwner = LocalLifecycleOwner.current
+
 	DisposableEffect(lifeCycleOwner) {
 		val observer = LifecycleEventObserver { _, event ->
 			if (event == Lifecycle.Event.ON_CREATE) {
@@ -121,178 +140,190 @@ fun MainScreen(
 			}
 		}
 	}
-	Column(
+
+	var scrollState = rememberScrollState()
+	Layout(
 		modifier = Modifier
-			.fillMaxSize()
-			.verticalScroll(rememberScrollState())
+			.padding(12.dp, 0.dp)
+			.overScrollVertical()
+			.verticalScroll(state = scrollState, flingBehavior = rememberOverscrollFlingBehavior { scrollState })
 	) {
-		if (settings.isGlobal) {
-			PreferenceRowLink(
-				title = statusTitle,
-				summary = statusSummary,
-				onClick = {
-					if (isRunning) Service.toggleSuspend()
-					else context.startActivity(statusIntent)
-				},
-				onLongClick = { context.startActivity(statusIntent) }
-			)
-			PreferenceRowLink(
-				titleRes = R.string.app_list,
-				summaryRes = R.string.app_list_summary,
-				onClick = onClickAppList
-			)
-		}
-		PreferenceRowLink(
-			titleRes = R.string.tts,
-			summaryRes = R.string.tts_summary,
-			onClick = onClickTtsConfig
-		)
-		PreferenceRowCheckbox(
-			titleRes = R.string.audio_focus,
-			summaryResOn = R.string.audio_focus_summary,
-			initialValue = settingsCombo.audioFocus ?: DEFAULT_AUDIO_FOCUS,
-			app = configApp,
-			showRemove = !settings.isGlobal && settings.audioFocus != null,
-			onRemove = {
-				vm.save(settings.copy(audioFocus = null))
-			}
+		ListBox(
 		) {
-			vm.save(settings.copy(audioFocus = it))
-		}
-		if (settings.isGlobal) {
+			if (settings.isGlobal) {
+				PreferenceRowLink(
+					title = statusTitle,
+					summary = statusSummary,
+					onClick = {
+						if (isRunning) Service.toggleSuspend()
+						else context.startActivity(statusIntent)
+					},
+					onLongClick = { context.startActivity(statusIntent) }
+				)
+				PreferenceRowLink(
+					titleRes = R.string.app_list,
+					summaryRes = R.string.app_list_summary,
+					onClick = onClickAppList
+				)
+			}
 			PreferenceRowLink(
-				titleRes = R.string.shake_to_silence,
-				summaryRes = R.string.shake_to_silence_summary,
-				onClick = { showShakeToSilence = true }
+				titleRes = R.string.tts,
+				summaryRes = R.string.tts_summary,
+				onClick = onClickTtsConfig,
+				isEnd = true
 			)
 		}
-		PreferenceRowLink(
-			titleRes = R.string.require_strings,
-			summaryRes = R.string.require_strings_summary,
-			app = configApp,
-			showRemove = !settings.isGlobal && settings.requireStrings != null,
-			onRemove = {
-				vm.save(settings.copy(requireStrings = null))
-			},
-			onClick = { showRequireText = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.ignore_strings,
-			summaryRes = R.string.ignore_strings_summary,
-			app = configApp,
-			showRemove = !settings.isGlobal && settings.ignoreStrings != null,
-			onRemove = {
-				vm.save(settings.copy(ignoreStrings = null))
-			},
-			onClick = { showIgnoreText = true }
-		)
-		PreferenceRowCheckbox(
-			titleRes = R.string.ignore_empty,
-			summaryResOn = R.string.ignore_empty_summary_on,
-			summaryResOff = R.string.ignore_empty_summary_off,
-			initialValue = settingsCombo.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY,
-			app = configApp,
-			showRemove = !settings.isGlobal && settings.ignoreEmpty != null,
-			onRemove = {
-				vm.save(settings.copy(ignoreEmpty = null))
-			}
+		Spacer(modifier = Modifier.size(16.dp))
+		ListBox(
 		) {
-			vm.save(settings.copy(ignoreEmpty = it))
-		}
-		PreferenceRowCheckbox(
-			titleRes = R.string.ignore_groups,
-			summaryResOn = R.string.ignore_groups_summary_on,
-			summaryResOff = R.string.ignore_groups_summary_off,
-			initialValue = settingsCombo.ignoreGroups ?: DEFAULT_IGNORE_GROUPS,
-			app = configApp,
-			showRemove = !settings.isGlobal && settings.ignoreGroups != null,
-			onRemove = {
-				vm.save(settings.copy(ignoreGroups = null))
-			}
-		) {
-			vm.save(settings.copy(ignoreGroups = it))
-		}
-		PreferenceRowLink(
-			titleRes = R.string.ignore_repeat,
-			summaryRes = R.string.ignore_repeat_summary,
-			app = configApp,
-			showRemove = !settings.isGlobal && settings.ignoreRepeat != null,
-			onRemove = {
-				vm.save(settings.copy(ignoreRepeat = null))
-			},
-			onClick = { showIgnoreRepeats = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.device_state,
-			summaryRes = R.string.device_state_summary,
-			app = configApp,
-			showRemove = !settings.isGlobal && settings.run {
-				speakScreenOff != null ||
-					speakScreenOn != null ||
-					speakHeadsetOff != null ||
-					speakHeadsetOn != null ||
-					speakSilentOn != null
-			},
-			onRemove = {
-				vm.save(settings.copy(
-					speakScreenOff = null,
-					speakScreenOn = null,
-					speakHeadsetOff = null,
-					speakHeadsetOn = null,
-					speakSilentOn = null
-				))
-			},
-			onClick = { showDeviceStates = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.quiet_start,
-			summaryRes = R.string.quiet_start_summary,
-			app = configApp,
-			showRemove = !settings.isGlobal && settings.quietStart != null,
-			onRemove = {
-				vm.save(settings.copy(quietStart = null))
-			},
-			onClick = { showQuietTimeStart = true }
-		)
-		PreferenceRowLink(
-			titleRes = R.string.quiet_end,
-			summaryRes = R.string.quiet_end_summary,
-			app = configApp,
-			showRemove = !settings.isGlobal && settings.quietEnd != null,
-			onRemove = {
-				vm.save(settings.copy(quietEnd = null))
-			},
-			onClick = { showQuietTimeEnd = true }
-		)
-		if (settings.isGlobal) {
-			PreferenceRowLink(
-				titleRes = R.string.test,
-				summaryRes = R.string.test_summary,
-				onClick = {
-					if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
-						postNotificationPermissionState!!.requestPermission {
-							showPostNotificationRationale = true
-						}
-					) {
-						runTestNotification(context)
-					}
+			PreferenceRowCheckbox(
+				titleRes = R.string.audio_focus,
+				summaryResOn = R.string.audio_focus_summary,
+				initialValue = settingsCombo.audioFocus ?: DEFAULT_AUDIO_FOCUS,
+				app = configApp,
+				showRemove = !settings.isGlobal && settings.audioFocus != null,
+				onRemove = {
+					vm.save(settings.copy(audioFocus = null))
 				}
+			) {
+				vm.save(settings.copy(audioFocus = it))
+			}
+			if (settings.isGlobal) {
+				PreferenceRowLink(
+					titleRes = R.string.shake_to_silence,
+					summaryRes = R.string.shake_to_silence_summary,
+					onClick = { showShakeToSilence = true }
+				)
+			}
+			PreferenceRowLink(
+				titleRes = R.string.require_strings,
+				summaryRes = R.string.require_strings_summary,
+				app = configApp,
+				showRemove = !settings.isGlobal && settings.requireStrings != null,
+				onRemove = {
+					vm.save(settings.copy(requireStrings = null))
+				},
+				onClick = { showRequireText = true }
 			)
 			PreferenceRowLink(
-				titleRes = R.string.notify_log,
-				summary = stringResource(R.string.notify_log_summary, NotifyList.HISTORY_LIMIT),
-				onClick = { showLog = true }
+				titleRes = R.string.ignore_strings,
+				summaryRes = R.string.ignore_strings_summary,
+				app = configApp,
+				showRemove = !settings.isGlobal && settings.ignoreStrings != null,
+				onRemove = {
+					vm.save(settings.copy(ignoreStrings = null))
+				},
+				onClick = { showIgnoreText = true }
+			)
+			PreferenceRowCheckbox(
+				titleRes = R.string.ignore_empty,
+				summaryResOn = R.string.ignore_empty_summary_on,
+				summaryResOff = R.string.ignore_empty_summary_off,
+				initialValue = settingsCombo.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY,
+				app = configApp,
+				showRemove = !settings.isGlobal && settings.ignoreEmpty != null,
+				onRemove = {
+					vm.save(settings.copy(ignoreEmpty = null))
+				}
+			) {
+				vm.save(settings.copy(ignoreEmpty = it))
+			}
+			PreferenceRowCheckbox(
+				titleRes = R.string.ignore_groups,
+				summaryResOn = R.string.ignore_groups_summary_on,
+				summaryResOff = R.string.ignore_groups_summary_off,
+				initialValue = settingsCombo.ignoreGroups ?: DEFAULT_IGNORE_GROUPS,
+				app = configApp,
+				showRemove = !settings.isGlobal && settings.ignoreGroups != null,
+				onRemove = {
+					vm.save(settings.copy(ignoreGroups = null))
+				}
+			) {
+				vm.save(settings.copy(ignoreGroups = it))
+			}
+			PreferenceRowLink(
+				titleRes = R.string.ignore_repeat,
+				summaryRes = R.string.ignore_repeat_summary,
+				app = configApp,
+				showRemove = !settings.isGlobal && settings.ignoreRepeat != null,
+				onRemove = {
+					vm.save(settings.copy(ignoreRepeat = null))
+				},
+				onClick = { showIgnoreRepeats = true }
 			)
 			PreferenceRowLink(
-				titleRes = R.string.backup_restore,
-				summaryRes = R.string.backup_restore_summary,
-				onClick = { showBackupRestore = true }
+				titleRes = R.string.device_state,
+				summaryRes = R.string.device_state_summary,
+				app = configApp,
+				showRemove = !settings.isGlobal && settings.run {
+					speakScreenOff != null ||
+							speakScreenOn != null ||
+							speakHeadsetOff != null ||
+							speakHeadsetOn != null ||
+							speakSilentOn != null
+				},
+				onRemove = {
+					vm.save(settings.copy(
+						speakScreenOff = null,
+						speakScreenOn = null,
+						speakHeadsetOff = null,
+						speakHeadsetOn = null,
+						speakSilentOn = null
+					))
+				},
+				onClick = { showDeviceStates = true }
 			)
 			PreferenceRowLink(
-				titleRes = R.string.support,
-				summaryRes = R.string.support_summary,
-				onClick = { showSupport = true }
+				titleRes = R.string.quiet_start,
+				summaryRes = R.string.quiet_start_summary,
+				app = configApp,
+				showRemove = !settings.isGlobal && settings.quietStart != null,
+				onRemove = {
+					vm.save(settings.copy(quietStart = null))
+				},
+				onClick = { showQuietTimeStart = true }
 			)
+			PreferenceRowLink(
+				titleRes = R.string.quiet_end,
+				summaryRes = R.string.quiet_end_summary,
+				app = configApp,
+				showRemove = !settings.isGlobal && settings.quietEnd != null,
+				onRemove = {
+					vm.save(settings.copy(quietEnd = null))
+				},
+				onClick = { showQuietTimeEnd = true }
+			)
+			if (settings.isGlobal) {
+				PreferenceRowLink(
+					titleRes = R.string.test,
+					summaryRes = R.string.test_summary,
+					onClick = {
+						if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU ||
+							postNotificationPermissionState!!.requestPermission {
+								showPostNotificationRationale = true
+							}
+						) {
+							runTestNotification(context)
+						}
+					}
+				)
+				PreferenceRowLink(
+					titleRes = R.string.notify_log,
+					summary = stringResource(R.string.notify_log_summary, NotifyList.HISTORY_LIMIT),
+					onClick = { showLog = true }
+				)
+				PreferenceRowLink(
+					titleRes = R.string.backup_restore,
+					summaryRes = R.string.backup_restore_summary,
+					onClick = { showBackupRestore = true }
+				)
+				PreferenceRowLink(
+					titleRes = R.string.support,
+					summaryRes = R.string.support_summary,
+					onClick = { showSupport = true },
+					isEnd = true
+				)
+			}
 		}
 	}
 	if (showShakeToSilence) {
@@ -346,6 +377,7 @@ fun MainScreen(
 		}
 	}
 }
+
 
 private const val NOTIFICATION_CHANNEL_ID = "test"
 

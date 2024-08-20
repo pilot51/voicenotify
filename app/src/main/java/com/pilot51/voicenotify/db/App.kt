@@ -16,10 +16,15 @@
 package com.pilot51.voicenotify.db
 
 import android.content.Context
+import android.os.Build
+import android.provider.BaseColumns
 import android.widget.Toast
+import androidx.annotation.RequiresApi
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.Ignore
+import androidx.room.MapColumn
 import androidx.room.PrimaryKey
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
@@ -41,6 +46,8 @@ data class App(
 	var enabled: Boolean
 		get() = isEnabled!!
 		set(value) { isEnabled = value }
+
+
 
 	/**
 	 * Updates self in database.

@@ -16,8 +16,14 @@
 package com.pilot51.voicenotify
 
 import android.app.Application
+import android.content.Context
+import android.content.Intent
+import android.content.pm.ApplicationInfo
 import android.content.pm.PackageManager
+import android.graphics.drawable.Drawable
+import android.icu.text.Collator
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
@@ -29,12 +35,23 @@ import com.pilot51.voicenotify.PreferenceHelper.getPrefFlow
 import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase
+import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
+import java.util.Locale
+
+data class AppInfo(
+	val icon: Drawable,
+	val label: String,
+	val packageName: String,
+	val isEnabled: Boolean
+)
+
 
 class AppListViewModel(application: Application) : AndroidViewModel(application) {
 	private val appContext = application.applicationContext
@@ -47,6 +64,12 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	private val settingsDao = AppDatabase.db.settingsDao
 	val packagesWithOverride @Composable get() =
 		settingsDao.packagesWithOverride().collectAsState(listOf())
+	var appEnable by mutableStateOf(false)
+	// mutableMap
+	var appListLocalMap = mutableMapOf<String, Char>(
+		"" to ' '
+	)
+
 
 	init {
 		updateAppsList()
@@ -64,53 +87,81 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 		isUpdating = true
 		CoroutineScope(Dispatchers.IO).launch {
 			syncAppsMutex.withLock {
-				apps.clear()
-				apps.addAll(AppDatabase.db.appDao.getAll())
-				val isFirstLoad = apps.isEmpty()
-				val packMan = appContext.packageManager
+				val collator = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+					Collator.getInstance(Locale.getDefault())
+				} else {
+					TODO("VERSION.SDK_INT < N")
+				}
+				// Use a HashSet to quickly check if an app is already in the list
+				val existingAppSet = apps.map { it.packageName }.toHashSet()
 
-				// Remove uninstalled
-				for (a in apps.indices.reversed()) {
-					val app = apps[a]
+
+
+				// Fetch installed apps
+				val installedApps = Common.getAppsInfo(appContext)
+
+// 				val packMan = appContext.packageManager
+//				val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+//					packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
+//				} else {
+//					packMan.getInstalledApplications(0)
+//				}
+
+				// Remove uninstalled apps
+				apps.retainAll { app ->
 					try {
 						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-							packMan.getApplicationInfo(app.packageName, PackageManager.ApplicationInfoFlags.of(0L))
+							appContext.packageManager.getApplicationInfo(app.packageName, PackageManager.ApplicationInfoFlags.of(0L))
 						} else {
-							packMan.getApplicationInfo(app.packageName, 0)
+							appContext.packageManager.getApplicationInfo(app.packageName, 0)
 						}
+						true
 					} catch (e: PackageManager.NameNotFoundException) {
-						if (!isFirstLoad) app.remove()
-						apps.removeAt(a)
+						app.remove()
+						false
+					}
+				}
+				// Remove uninstalled apps
+//				apps.retainAll { app ->
+//					installedApps.any { it.packageName == app.packageName }
+//				}
+
+				// Add new apps
+				val newApps = installedApps.filter { appInfo ->
+					!existingAppSet.contains(appInfo.packageName)
+				}.map { appInfo ->
+					App(
+						packageName = appInfo.packageName,
+						label = appInfo.loadLabel(appContext.packageManager).toString(),
+						isEnabled = appDefaultEnable
+					).apply {
+						if (apps.isNotEmpty()) updateDb()
 					}
 				}
 
-				// Add new
-				val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-					packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
-				} else {
-					packMan.getInstalledApplications(0)
-				}
-				inst@ for (appInfo in installedApps) {
-					for (app in apps) {
-						if (app.packageName == appInfo.packageName) {
-							continue@inst
-						}
-					}
-					val app = App(
-						packageName = appInfo.packageName,
-						label = appInfo.loadLabel(packMan).toString(),
-						isEnabled = appDefaultEnable
-					)
-					apps.add(app)
-					if (!isFirstLoad) app.updateDb()
-				}
-				apps.sortWith { app1, app2 -> app1.label.compareTo(app2.label, ignoreCase = true) }
-				if (isFirstLoad) AppDatabase.db.appDao.upsert(apps)
+				// Update the app list
+				apps.addAll(newApps)
+
+
+				appListLocalMap = apps.associateBy({ it.packageName }, { AlphabeticIndexHelper.computeSectionName(it.label).uppercase().first() }).toMutableMap()
+
+
+				apps.sortWith(compareBy(collator) { appListLocalMap[it.packageName].toString() + it.label })
+
+				// Batch update the database if it's the first load
+				if (apps.isEmpty()) AppDatabase.db.appDao.upsert(apps)
+
+				isUpdating = false
+				filterApps()
+				updateAppEnableState()
+				showList = true
 			}
-			isUpdating = false
-			filterApps()
-			showList = true
 		}
+	}
+
+
+	private fun updateAppEnableState() {
+		appEnable = apps.all { it.enabled }
 	}
 
 	fun filterApps(search: String? = searchQuery) {
@@ -133,12 +184,14 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	fun massIgnore(ignoreType: IgnoreType) {
 		if (ignoreType == IGNORE_ALL) appDefaultEnable = false
 		else if (ignoreType == IGNORE_NONE) appDefaultEnable = true
+		appEnable = appDefaultEnable
 		CoroutineScope(Dispatchers.IO).launch {
 			syncAppsMutex.withLock {
 				if (apps.isEmpty()) return@launch
 				for (app in apps) {
 					setIgnore(app, ignoreType)
 				}
+				updateAppEnableState()
 				filterApps()
 			}
 			AppDatabase.db.appDao.upsert(apps)
@@ -160,6 +213,8 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 		if (ignoreType == IGNORE_TOGGLE) {
 			filterApps()
 		}
+
+		updateAppEnableState()
 	}
 
 	enum class IgnoreType {
@@ -180,3 +235,6 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 			}
 	}
 }
+
+
+
