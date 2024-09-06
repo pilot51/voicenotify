@@ -1,2 +1,197 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="service_running">语音通知服务正在运行</string>
+    <string name="service_suspended">语音通知服务已暂停</string>
+    <string name="permission_rationale_read_phone_state">需要电话通话权限以防止语音通知在通话期间播报。</string>
+    <string name="permission_rationale_post_notifications">需要发送通知权限以允许语音通知发送测试通知。</string>
+    <string name="service_disabled">语音通知服务已禁用</string>
+    <string name="status_summary_notification_access_enabled">点击暂停语音通知。
+\n长按打开安卓通知访问设置以禁用服务。</string>
+    <string name="status_summary_notification_access_disabled">点击打开安卓通知访问设置以启用服务。</string>
+    <string name="status_summary_suspended">点击激活语音通知。
+\n长按打开安卓通知访问设置以禁用服务。</string>
+    <string name="app_list">应用列表</string>
+    <string name="app_list_summary">列出可以被忽略的已安装应用</string>
+    <string name="tts">文字转语音</string>
+    <string name="tts_summary">配置文字转语音行为</string>
+    <string name="audio_focus">暂停/降低媒体音量</string>
+    <string name="audio_focus_summary">在播报时请求其他媒体暂停/降低音量</string>
+    <string name="shake_to_silence">摇动静音</string>
+    <string name="shake_to_silence_summary">调整摇动静音的灵敏度阈值</string>
+    <string name="shake_to_silence_dialog_msg">较低的值更灵敏。
+\n
+\n默认值：%1$d
+\n留空或0表示禁用。
+\n
+\n实时摇动值：%2$d
+\n峰值（5秒内）：%3$d</string>
+    <string name="require_strings">要求包含文本</string>
+    <string name="require_strings_summary">仅播报消息中包含特定文本的通知</string>
+    <string name="ignore_strings">忽略文本</string>
+    <string name="ignore_strings_summary">忽略消息中包含特定文本的通知</string>
+    <string name="require_ignore_strings_dialog_msg">这将匹配发送给TTS的消息，在TTS消息格式化和文本替换之后，包括标点符号。
+\n
+\n用换行符分隔各个条目。
+\n消息只需包含任一条目即可匹配，不需要包含所有条目。
+\n不区分大小写。</string>
+    <string name="ignore_empty">忽略空白通知</string>
+    <string name="ignore_empty_summary_on">没有消息内容的通知将不会被播报</string>
+    <string name="ignore_empty_summary_off">没有消息内容的通知将被播报为来自[应用名称]的通知。</string>
+    <string name="ignore_groups">忽略群组消息</string>
+    <string name="ignore_groups_summary_on">包含多条消息的通知将不会被播报</string>
+    <string name="ignore_groups_summary_off">包含多条消息的通知将被播报</string>
+    <string name="ignore_repeat">忽略重复通知</string>
+    <string name="ignore_repeat_dialog_msg">设置在上一条通知后必须经过的秒数，之后才能播报重复通知。
+\n被忽略的重复通知会重置计数，不同的通知会清除计数。
+\n留空 = 无限。</string>
+    <string name="device_state_summary">选择在某些设备状态下是否播报</string>
+    <string name="device_state_dialog_title">在这些设备状态下播报</string>
+    <string name="quiet_start">安静时间开始</string>
+    <string name="quiet_start_summary">在此时间之后不播报。
+\n与结束时间相同则禁用。</string>
+    <string name="quiet_end">安静时间结束</string>
+    <string name="quiet_end_summary">在此时间之前不播报。
+\n与开始时间相同则禁用。</string>
+    <string name="test">测试</string>
+    <string name="test_summary">发送一条通知（延迟5秒）以测试当前设置</string>
+    <string name="test_ignored">语音通知在应用列表中被忽略。
+\n测试将运行，但通知不会被播报。</string>
+    <string name="notification_channel_desc">用于测试通知</string>
+    <string name="test_ticker">这是滚动消息</string>
+    <string name="test_subtext">子文本</string>
+    <string name="test_content_title">内容标题</string>
+    <string name="test_content_text">这是内容消息。</string>
+    <string name="test_content_info">内容信息</string>
+    <string name="test_big_content_title">大内容标题</string>
+    <string name="test_big_content_summary">这是大内容摘要</string>
+    <string name="test_big_content_text">这是大内容文本。</string>
+    <string name="test_text_lines">这是一行文本。
+\n这是另一行文本。</string>
+    <string name="notify_log">通知日志</string>
+    <string name="notify_log_summary">列出最近%d条通知。
+\n显示时间、应用名称、消息和忽略原因。</string>
+    <string name="notification_details">通知详情</string>
+    <string name="enable">启用</string>
+    <string name="ticker">滚动消息</string>
+    <string name="subtext">子文本</string>
+    <string name="title">标题</string>
+    <string name="content_text">内容文本</string>
+    <string name="content_info_text">内容信息文本</string>
+    <string name="big_content_summary">大内容摘要</string>
+    <string name="big_content_title">大内容标题</string>
+    <string name="big_content_text">大内容文本</string>
+    <string name="text_lines">文本行</string>
+    <string name="ignored_reasons">忽略原因</string>
+    <string name="interrupted_reason">中断原因</string>
+    <string name="metadata">元数据</string>
+    <string name="metadata_id">ID：%d</string>
+    <string name="metadata_category">类别：%s</string>
+    <string name="metadata_progress">进度：%1$d / %2$d</string>
+    <string name="metadata_progress_indeterminate">进度：不确定</string>
+    <string name="ignore_app">忽略 %s？</string>
+    <string name="support_summary">评分 &amp; 评论，发送邮件给开发者，社区聊天，翻译，源代码，问题追踪，隐私政策</string>
+    <string name="support_email">发送邮件给开发者</string>
+    <string name="support_email_subtext">一般反馈</string>
+    <string name="support_discord">Discord</string>
+    <string name="support_matrix">Matrix</string>
+    <string name="support_chat_subtext">用户聊天，开发者最快回复</string>
+    <string name="support_translations">翻译</string>
+    <string name="support_github">GitHub</string>
+    <string name="support_github_subtext">错误报告，功能请求，源代码</string>
+    <string name="support_privacy">隐私政策</string>
+    <string name="support_privacy_message">语音通知不会收集或传输设备外的数据。然而，它确实使用了可能传输数据的第三方应用或服务，如下面第三方应用和服务中所述。 在不太可能发生的情况下，如果开发者收到敏感或个人信息，未经信息所有者的明确同意，不会出售、分享、复制或使用这些信息。如果没有得到同意，这些信息将在可能的情况下被删除。 语音通知的目的是播报通知，因此播报的通知可能会被附近的人或麦克风听到。建议配置语音通知和设备以防止不必要的通知播报。使用风险自负。 语音通知接收的通知仅保存在内存中以在通知日志中显示（最多最近20条），不会写入存储。这可以防止其他应用访问数据，特别是在设备已root的情况下。因此，如果语音通知进程被终止，通知日志将被清除。 已安装的应用会被读取并列出，以允许用户选择哪些应用的通知会被播报。应用标题和包名存储在语音通知的内部私有数据存储中的数据库里，用于保存选择并作为缓存以提高加载应用列表的性能。 第三方应用和服务： - 文字转语音引擎 - 语音通知将要播报的通知文本传递给默认的文字转语音引擎，这超出了语音通知的直接控制范围。请阅读TTS引擎的隐私政策以了解它如何使用数据。 - Google Play服务可能会向开发者发送匿名的崩溃和基本分析数据，以帮助改进应用。 - 消息应用 - 联系开发者选项会打开用户选择或默认的消息应用，如电子邮件应用，并预填写包含语音通知版本、Android版本、Android构建号和设备名称的消息。对于电子邮件应用，收件人字段设置为开发者的地址（pilota51@gmail.com）。通过发送消息，用户理解并同意他们的姓名和联系信息将根据消息应用的决定与收件人共享。 - 帮助 &amp; 支持下的其他选项会打开相关的外部应用或网站（Play Store、Weblate.org、GitHub.com），只向语音通知页面发送硬编码的URL。 以下是语音通知使用的权限及其需要的原因： - 蓝牙 - 需要检测蓝牙耳机是否连接。 - 振动 - 在手机处于振动模式时需要用于测试功能。 - 修改音频设置 - 需要用于改进有线耳机检测。 - 读取电话状态 - 需要在电话通话变为活动状态时中断TTS。</string>
+    <string name="error_market">错误：无法找到已安装的Google Play商店。</string>
+    <string name="error_email">错误：无法找到已安装的电子邮件应用。</string>
+    <string name="error_browser">错误：无法找到已安装的浏览器应用。</string>
+    <string name="remove_override">移除覆盖设置</string>
+    <string name="remove_override_confirm">移除 %2$s 的 %1$s 覆盖设置？</string>
+    <string name="close">关闭</string>
+    <string name="ignore_all">忽略所有</string>
+    <string name="ignore_none">不忽略任何</string>
+    <string name="filter">过滤器</string>
+    <string name="remove_app_overrides">移除所有应用覆盖设置</string>
+    <string name="remove_app_overrides_confirm">移除 %s 的所有覆盖设置？</string>
+    <string name="tts_settings">TTS设置</string>
+    <string name="tts_settings_summary">打开Android文字转语音设置</string>
+    <string name="tts_settings_summary_fail">无法找到TTS设置！如果它存在于您的设备上（应该存在），请联系开发者。</string>
+    <string name="tts_message">TTS消息</string>
+    <string name="tts_message_summary">自定义播报通知的哪些部分</string>
+    <string name="tts_message_dialog">#A = 应用标题
+\n#T = 滚动消息
+\n#S = 子文本
+\n#C =内容标题
+\n#M = 内容消息
+\n#I = 内容信息
+\n#H = 大内容标题
+\n#Y = 大内容摘要
+\n#B = 大内容文本
+\n#L = 文本行
+\n不区分大小写
+\n
+\n默认：
+\n%1$s
+\n
+\n旧默认（v1.1.0 - v1.3.0）：
+\n#A. #C. #M.
+\n
+\n旧默认（v1.0.x）：
+\n#A: #T</string>
+    <string name="tts_text_replace">TTS文本替换</string>
+    <string name="tts_text_replace_summary">替换要播报的文本，例如修正发音</string>
+    <string name="tts_text_replace_dialog">替换要播报的文本，允许您自定义文字转语音如何发音或出于任何其他原因替换文本。
+\n
+\n要替换的文本不区分大小写，并在TTS消息中设置的格式之后应用，包括标点符号。</string>
+    <string name="text_replace_error_duplicate">重复！不会被保存。</string>
+    <string name="text_to_replace">要替换的文本</string>
+    <string name="replacement_text">替换文本</string>
+    <string name="remove">移除</string>
+    <string name="error">错误</string>
+    <string name="max_length">最大消息长度</string>
+    <string name="max_length_summary">要播报的最大消息长度。更长的消息将被截断。</string>
+    <string name="max_length_dialog_msg">要播报的最大消息长度
+\n更长的消息将被截断。</string>
+    <string name="tts_stream">TTS音频流</string>
+    <string name="tts_stream_summary">选择文字转语音播放的音频流</string>
+    <string name="tts_delay">TTS延迟</string>
+    <string name="tts_delay_summary">在通知后延迟一定秒数再进行TTS</string>
+    <string name="tts_delay_dialog_msg">通知后等待多少秒再播报。</string>
+    <string name="app_is_ignored">%s 已被忽略</string>
+    <string name="app_is_not_ignored">%s 未被忽略</string>
+    <string name="notification_from">来自 %s 的通知。</string>
+    <string name="error_tts_init">错误：无法初始化TTS！状态码 %d</string>
+    <string name="reason_app">已忽略的应用</string>
+    <string name="reason_string_ignored">已忽略的文本</string>
+    <string name="reason_string_required">缺少所需文本</string>
+    <string name="reason_empty_msg">空消息</string>
+    <string name="reason_identical">在{0,choice,-1#无限秒|1#{0}秒|1&lt;{0}秒}内相同的消息</string>
+    <string name="reason_quiet">安静时间</string>
+    <string name="reason_silent">静音或振动模式</string>
+    <string name="reason_call">通话中</string>
+    <string name="reason_screen_off">屏幕关闭</string>
+    <string name="reason_screen_on">屏幕开启</string>
+    <string name="reason_headset_off">未连接耳机</string>
+    <string name="reason_headset_on">已连接耳机</string>
+    <string name="reason_shake">通过摇动静音</string>
+    <string name="reason_suspended">通过小部件暂停语音通知</string>
+    <string name="reason_service_stopped">服务已停止</string>
+    <string name="reason_tts_failed">TTS失败。已尝试重启和重试。
+\n如果重试成功，此文本应为黄色，否则为红色。
+\n如果通知无法播报，请尝试重启语音通知服务。</string>
+    <string name="reason_tts_restarted">消息在队列中或播报时TTS重启。已重新排队。</string>
+    <string name="reason_tts_interrupted">TTS因未知原因中断</string>
+    <string name="reason_tts_length_limit">消息超过TTS长度限制</string>
+    <string name="app_name">语音通知</string>
+    <string name="back">返回</string>
+    <string name="app_overrides">%s 覆盖设置</string>
+    <string name="ignore_repeat_summary">在设定时间内忽略后续相同的通知</string>
+    <string name="device_state">设备状态</string>
+    <string name="unignore_app">取消忽略 %s？</string>
+    <string name="yes">是</string>
+    <string name="support">帮助 &amp; 支持</string>
+    <string name="support_rate">评分 &amp; 评论</string>
+    <string name="tts_repeat">TTS重复</string>
+    <string name="tts_repeat_summary">持续重复TTS通知直到屏幕打开</string>
+    <string name="tts_repeat_dialog_msg">通知会按照定义的时间间隔重复，直到屏幕打开。屏幕打开时创建的通知不会重复。
+\n
+\n值以分钟为单位。留空或0表示禁用。</string>
+</resources>
