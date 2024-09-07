@@ -238,4 +238,10 @@
     <string name="remove_override_confirm">¿Eliminar anulación de %1$s para %2$s ?</string>
     <string name="remove_app_overrides_confirm">¿Eliminar todas las anulaciones para %s?</string>
     <string name="remove_app_overrides">Eliminar todas las anulaciones de las aplicaciones</string>
+    <string name="backup_restore">Copia de seguridad / Restauración</string>
+    <string name="backup_settings">Ajustes de la copia de seguridad</string>
+    <string name="restore_settings">Restaurar los ajustes</string>
+    <string name="ignore">ignorar</string>
+    <string name="backup_restore_summary">Copia de seguridad o restauración de todos los ajustes de Voice Notify</string>
+    <string name="ignore_enable_apps_confirm">¿Estás seguro de que quieres %s todas las aplicaciones?</string>
 </resources>
