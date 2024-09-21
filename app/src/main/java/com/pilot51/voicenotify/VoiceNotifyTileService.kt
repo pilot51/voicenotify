@@ -16,8 +16,8 @@ class VoiceNotifyTileService : TileService() {
     // Called when the user taps on the tile in an active or inactive state.
     override fun onClick() {
         super.onClick()
-        val result = Service.toggleSuspend()
-        updateTile(result)
+        val isSuspended = Service.toggleSuspend()
+        updateTile(isSuspended)
     }
 
     private fun updateTile(suspended: Boolean) {
