@@ -226,7 +226,8 @@ class Service : NotificationListenerService() {
 				fun containsOrMatchesRegex(it: String): Boolean {
 					return if (it.startsWith(Constants.REGEX_PREFIX))
 						try {
-							Regex(it.removePrefix(Constants.REGEX_PREFIX), RegexOption.IGNORE_CASE)
+							val pattern = it.removePrefix(Constants.REGEX_PREFIX)
+							Regex(pattern, RegexOption.IGNORE_CASE)
 								.containsMatchIn(ttsMsg)
 						} catch (e: PatternSyntaxException) {
 							false
