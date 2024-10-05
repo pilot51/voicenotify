@@ -132,8 +132,13 @@ data class NotificationInfo(
 		val ttsTextReplace = if (isComposePreview) null else settings.ttsTextReplace
 		val textReplaceList = PreferencesViewModel.convertTextReplaceStringToList(ttsTextReplace)
 		for (pair in textReplaceList) {
-			ttsMessage = ttsMessage!!.replace(
-				"(?i)${Pattern.quote(pair.first)}".toRegex(), pair.second)
+			val pattern =
+				if (pair.first.startsWith(Constants.REGEX_PREFIX))
+					Regex(pair.first.removePrefix(Constants.REGEX_PREFIX))
+				else
+					"(?i)${Pattern.quote(pair.first)}".toRegex()
+
+			ttsMessage = ttsMessage!!.replace(pattern, pair.second)
 		}
 		val maxLength = if (isComposePreview) 0 else {
 			settings.ttsMaxLength ?: DEFAULT_MAX_LENGTH
