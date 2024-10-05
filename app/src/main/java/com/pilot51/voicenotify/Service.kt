@@ -70,6 +70,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.util.*
+import java.util.regex.PatternSyntaxException
 
 class Service : NotificationListenerService() {
 	private val appContext by ::applicationContext
@@ -222,16 +223,28 @@ class Service : NotificationListenerService() {
 				info.ignoreReasons.add(IgnoreReason.EMPTY_MSG)
 			}
 			if (ttsMsg != null) {
+				fun containsOrMatchesRegex(it: String): Boolean {
+					return if (it.startsWith(Constants.REGEX_PREFIX))
+						try {
+							Regex(it.removePrefix(Constants.REGEX_PREFIX), RegexOption.IGNORE_CASE)
+								.containsMatchIn(ttsMsg)
+						} catch (e: PatternSyntaxException) {
+							false
+						}
+					else
+						ttsMsg.contains(it, true)
+				}
+
 				val requireStrings = settings.requireStrings?.split("\n")
 				val stringRequired = requireStrings?.all {
-					it.isNotEmpty() && !ttsMsg.contains(it, true)
+					it.isNotEmpty() && !containsOrMatchesRegex(it)
 				} ?: false
 				if (stringRequired) {
 					info.ignoreReasons.add(IgnoreReason.STRING_REQUIRED)
 				}
 				val ignoreStrings = settings.ignoreStrings?.split("\n")
 				val stringIgnored = ignoreStrings?.any {
-					it.isNotEmpty() && ttsMsg.contains(it, true)
+					it.isNotEmpty() && containsOrMatchesRegex(it)
 				} ?: false
 				if (stringIgnored) {
 					info.ignoreReasons.add(IgnoreReason.STRING_IGNORED)
