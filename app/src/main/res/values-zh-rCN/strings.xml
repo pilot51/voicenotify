@@ -36,7 +36,7 @@
 \n不区分大小写。</string>
     <string name="ignore_empty">忽略空白通知</string>
     <string name="ignore_empty_summary_on">没有消息内容的通知将不会被播报</string>
-    <string name="ignore_empty_summary_off">没有消息内容的通知将被播报为来自[应用名称]的通知。</string>
+    <string name="ignore_empty_summary_off">没有消息内容的通知将被播报为“来自[app name]的通知”。</string>
     <string name="ignore_groups">忽略群组消息</string>
     <string name="ignore_groups_summary_on">包含多条消息的通知将不会被播报</string>
     <string name="ignore_groups_summary_off">包含多条消息的通知将被播报</string>
@@ -194,4 +194,10 @@
     <string name="tts_repeat_dialog_msg">通知会按照定义的时间间隔重复，直到屏幕打开。屏幕打开时创建的通知不会重复。
 \n
 \n值以分钟为单位。留空或0表示禁用。</string>
+    <string name="backup_restore">备份/恢复</string>
+    <string name="backup_restore_summary">备份或恢复所有语音通知设置</string>
+    <string name="backup_settings">备份设置</string>
+    <string name="restore_settings">恢复设置</string>
+    <string name="ignore">忽略</string>
+    <string name="ignore_enable_apps_confirm">你确定要对所有应用进行 %s 操作吗？</string>
 </resources>
