@@ -113,16 +113,19 @@ class Service : NotificationListenerService() {
 				}
 			}
 		}
-		initTts()
 		super.onCreate()
 	}
 
-	private fun initTts(onInit: (() -> Unit)? = null)  {
+	private fun initTts(onInit: () -> Unit)  {
+		if (tts != null) {
+			onInit()
+			return
+		}
 		tts = TextToSpeech(appContext, OnInitListener { status ->
 			if (status == TextToSpeech.SUCCESS) {
-				onInit?.invoke()
+				onInit()
 			} else {
-				tts = null
+				shutdownTts()
 				val errorMsg = getString(R.string.error_tts_init, status)
 				Log.w(TAG, errorMsg)
 				Toast.makeText(appContext, errorMsg, Toast.LENGTH_LONG).show()
@@ -157,6 +160,7 @@ class Service : NotificationListenerService() {
 							}
 						}
 						shake.disable()
+						shutdownTts()
 					}
 				}
 
@@ -177,7 +181,7 @@ class Service : NotificationListenerService() {
 				NotifyList.updateInfo(it)
 			}
 		}
-		tts?.shutdown()
+		shutdownTts()
 		initTts {
 			CoroutineScope(Dispatchers.IO).launch {
 				synchronized(ttsQueue) {
@@ -201,6 +205,11 @@ class Service : NotificationListenerService() {
 				}
 			}
 		}
+	}
+
+	private fun shutdownTts() {
+		tts?.shutdown()
+		tts = null
 	}
 
 	override fun onNotificationPosted(sbn: StatusBarNotification) {
@@ -285,7 +294,7 @@ class Service : NotificationListenerService() {
 	 * @param info The info for the notification to be spoken.
 	 */
 	private fun speak(info: NotificationInfo) {
-		if (tts == null) {
+		if (!isRunning.value) {
 			Log.w(TAG, "Speak failed due to service destroyed")
 			info.ignoreReasons.add(IgnoreReason.SERVICE_STOPPED)
 			NotifyList.updateInfo(info)
@@ -315,18 +324,20 @@ class Service : NotificationListenerService() {
 		}
 		//once the message is in our queue, send it to the real one with the necessary parameters
 		val utteranceId = notificationTime.toString()
-		CoroutineScope(Dispatchers.IO).launch {
-			val isSpeakFailed = tts?.speak(
-				info.ttsMessage, TextToSpeech.QUEUE_ADD, getTtsParams(info.settings), utteranceId
-			) != TextToSpeech.SUCCESS
-			if (isSpeakFailed) {
-				Log.e(TAG, "Error adding notification to TTS queue. Attempting to restart TTS.")
-				info.ignoreReasons.add(IgnoreReason.TTS_FAILED)
-				info.isInterrupted = false
-				restartTts()
-			}
-			if (info.ignoreReasons.isNotEmpty()) {
-				NotifyList.updateInfo(info)
+		initTts {
+			CoroutineScope(Dispatchers.IO).launch {
+				val isSpeakFailed = tts?.speak(
+					info.ttsMessage, TextToSpeech.QUEUE_ADD, getTtsParams(info.settings), utteranceId
+				) != TextToSpeech.SUCCESS
+				if (isSpeakFailed) {
+					Log.e(TAG, "Error adding notification to TTS queue. Attempting to restart TTS.")
+					info.ignoreReasons.add(IgnoreReason.TTS_FAILED)
+					info.isInterrupted = false
+					restartTts()
+				}
+				if (info.ignoreReasons.isNotEmpty()) {
+					NotifyList.updateInfo(info)
+				}
 			}
 		}
 	}
@@ -400,7 +411,7 @@ class Service : NotificationListenerService() {
 
 
 	override fun onBind(intent: Intent): IBinder? {
-		if (isInitialized.value) return super.onBind(intent)
+		if (isRunning.value) return super.onBind(intent)
 		audioMan = getSystemService(AUDIO_SERVICE) as AudioManager
 		telephony = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
 		val filter = IntentFilter(Intent.ACTION_HEADSET_PLUG)
@@ -418,15 +429,15 @@ class Service : NotificationListenerService() {
 					NotifyList.updateInfo(info)
 				}
 			}
-			tts?.stop()
+			shutdownTts()
 		}
 		setInitialized(true)
 		return super.onBind(intent)
 	}
 
 	override fun onUnbind(intent: Intent): Boolean {
-		if (isInitialized.value) {
-			tts?.stop()
+		if (isRunning.value) {
+			shutdownTts()
 			unregisterReceiver(stateReceiver)
 			setInitialized(false)
 		}
@@ -434,8 +445,7 @@ class Service : NotificationListenerService() {
 	}
 
 	override fun onDestroy() {
-		tts?.shutdown()
-		tts = null
+		shutdownTts()
 		super.onDestroy()
 	}
 
