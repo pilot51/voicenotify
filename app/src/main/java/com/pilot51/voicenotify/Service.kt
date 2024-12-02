@@ -16,7 +16,6 @@
 package com.pilot51.voicenotify
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
@@ -28,6 +27,7 @@ import android.media.AudioAttributes
 import android.media.AudioDeviceInfo
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.media.AudioManager.OnModeChangedListener
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -37,7 +37,7 @@ import android.service.notification.StatusBarNotification
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
 import android.speech.tts.UtteranceProgressListener
-import android.telecom.TelecomManager
+import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.Display
@@ -70,6 +70,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import java.util.*
+import java.util.concurrent.Executors
 
 class Service : NotificationListenerService() {
 	private val appContext by ::applicationContext
@@ -78,7 +79,7 @@ class Service : NotificationListenerService() {
 	private var tts: TextToSpeech? = null
 	private var shouldRequestFocus = false
 	private lateinit var audioMan: AudioManager
-	private lateinit var telephony: TelephonyManager
+	private lateinit var telephonyMan: TelephonyManager
 	private val stateReceiver = DeviceStateReceiver()
 	private var repeater: RepeatTimer? = null
 	private val shake by lazy { Shake(appContext) }
@@ -89,6 +90,20 @@ class Service : NotificationListenerService() {
 				.setLegacyStreamType(AudioManager.STREAM_MUSIC).build())
 			.build()
 	} else null
+	private val phoneStateListener by lazy {
+		@Suppress("DEPRECATION")
+		object : PhoneStateListener() {
+			@Deprecated("Deprecated in Java")
+			override fun onCallStateChanged(state: Int, phoneNumber: String?) {
+				if (isPhoneStateInCall(state)) processIgnoreForQueue()
+			}
+		}
+	}
+	private val audioModeListener by lazy {
+		OnModeChangedListener { mode ->
+			if (isAudioModeInCall(mode)) processIgnoreForQueue()
+		}
+	}
 
 	/**
 	 * this is used to determine if we are the first, middle, or last thing to be spoken at the moment, for enabling/disabling shake and audio focus request
@@ -363,12 +378,7 @@ class Service : NotificationListenerService() {
 			&& !(settings.speakSilentOn ?: DEFAULT_SPEAK_SILENT_ON)) {
 			ignoreReasons.add(IgnoreReason.SILENT)
 		}
-		val telecomMan = getSystemService(TELECOM_SERVICE) as TelecomManager
-		@SuppressLint("MissingPermission")
-		val isInCall = if (isPermissionGranted(Manifest.permission.READ_PHONE_STATE)) {
-			telecomMan.isInCall
-		} else false
-		if (isInCall) {
+		if (isAudioModeInCall() || (usePhoneState && isPhoneStateInCall())) {
 			ignoreReasons.add(IgnoreReason.CALL)
 		}
 		if (!isScreenOn() && !(settings.speakScreenOff ?: DEFAULT_SPEAK_SCREEN_OFF)) {
@@ -413,13 +423,21 @@ class Service : NotificationListenerService() {
 	override fun onBind(intent: Intent): IBinder? {
 		if (isRunning.value) return super.onBind(intent)
 		audioMan = getSystemService(AUDIO_SERVICE) as AudioManager
-		telephony = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
-		val filter = IntentFilter(Intent.ACTION_HEADSET_PLUG)
-		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
-		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
-		filter.addAction(Intent.ACTION_SCREEN_ON)
-		filter.addAction(Intent.ACTION_SCREEN_OFF)
-		filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
+		if (usePhoneState) {
+			telephonyMan = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+			@Suppress("DEPRECATION")
+			telephonyMan.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+		} else {
+			audioMan.addOnModeChangedListener(Executors.newSingleThreadExecutor(), audioModeListener)
+		}
+		val filter = IntentFilter().apply {
+			addAction(Intent.ACTION_HEADSET_PLUG)
+			addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
+			addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
+			addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+			addAction(Intent.ACTION_SCREEN_ON)
+			addAction(Intent.ACTION_SCREEN_OFF)
+		}
 		registerReceiver(stateReceiver, filter)
 		shake.onShake = {
 			Log.i(TAG, "TTS silenced by shake")
@@ -438,6 +456,12 @@ class Service : NotificationListenerService() {
 	override fun onUnbind(intent: Intent): Boolean {
 		if (isRunning.value) {
 			shutdownTts()
+			if (usePhoneState) {
+				@Suppress("DEPRECATION")
+				telephonyMan.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
+			} else {
+				audioMan.removeOnModeChangedListener(audioModeListener)
+			}
 			unregisterReceiver(stateReceiver)
 			setInitialized(false)
 		}
@@ -484,6 +508,29 @@ class Service : NotificationListenerService() {
 		}
 	}
 
+	/**
+	 * @param mode The audio mode to check. Defaults to `mode` from [audioMan].
+	 * @return `true` if [mode] is in call or in communication.
+	 */
+	private fun isAudioModeInCall(mode: Int = audioMan.mode) = mode.isAny(
+		AudioManager.MODE_IN_CALL,
+		AudioManager.MODE_IN_COMMUNICATION
+	) || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && mode.isAny(
+		AudioManager.MODE_CALL_REDIRECT,
+		AudioManager.MODE_COMMUNICATION_REDIRECT
+	))
+
+	/**
+	 * @param state The phone state to check.
+	 * Defaults to `callState` from [telephonyMan] if `READ_PHONE_STATE` permission is granted, otherwise -1.
+	 * @return `true` if [state] is off-hook, `false` if not or if permission is denied for default value.
+	 */
+	private fun isPhoneStateInCall(
+		state: Int = if (isPermissionGranted(Manifest.permission.READ_PHONE_STATE)) {
+			@Suppress("DEPRECATION") telephonyMan.callState
+		} else -1
+	) = state == TelephonyManager.CALL_STATE_OFFHOOK
+
 	private inner class DeviceStateReceiver : BroadcastReceiver() {
 		override fun onReceive(context: Context, intent: Intent) {
 			val action = intent.action
@@ -503,20 +550,24 @@ class Service : NotificationListenerService() {
 				}
 			}
 			if (interruptIfIgnored) {
-				tts?.run {
-					synchronized(ttsQueue) {
-						for (info in ttsQueue.values) {
-							val ignoreReasons = ignore(info.settings)
-							if (ignoreReasons.isNotEmpty()) {
-								Log.i(TAG, "Notification from ${info.app?.label} silenced/ignored" +
-									" for reason(s): ${ignoreReasons.joinToString()}")
-								info.ignoreReasons.addAll(ignoreReasons)
-							}
-						}
+				processIgnoreForQueue()
+			}
+		}
+	}
+
+	private fun processIgnoreForQueue() {
+		tts?.run {
+			synchronized(ttsQueue) {
+				for (info in ttsQueue.values) {
+					val ignoreReasons = ignore(info.settings)
+					if (ignoreReasons.isNotEmpty()) {
+						Log.i(TAG, "Notification from ${info.app?.label} silenced/ignored" +
+							" for reason(s): ${ignoreReasons.joinToString()}")
+						info.ignoreReasons.addAll(ignoreReasons)
 					}
-					stop()
 				}
 			}
+			stop()
 		}
 	}
 
@@ -529,6 +580,7 @@ class Service : NotificationListenerService() {
 
 	companion object {
 		private val TAG = Service::class.simpleName
+		private val usePhoneState = Build.VERSION.SDK_INT < Build.VERSION_CODES.S
 		private val isInitialized = MutableStateFlow(false)
 		val isRunning: StateFlow<Boolean> = isInitialized
 		var isSuspended = MutableStateFlow(false)
