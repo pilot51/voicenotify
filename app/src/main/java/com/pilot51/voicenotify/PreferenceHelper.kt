@@ -145,7 +145,14 @@ object PreferenceHelper {
 			} else {
 				spFile.delete()
 			}
-		} else settingsDao.insert(Settings.defaults)
+		} else {
+			settingsDao.insert(Settings.defaults)
+			dataStore.edit { prefs ->
+				prefs[KEY_SHAKE_THRESHOLD] = DEFAULT_SHAKE_THRESHOLD
+				prefs[KEY_APP_DEFAULT_ENABLE] = DEFAULT_APP_DEFAULT_ENABLE
+				prefs[KEY_IS_SUSPENDED] = DEFAULT_IS_SUSPENDED
+			}
+		}
 	}
 
 	fun exportBackup(uri: Uri) {
