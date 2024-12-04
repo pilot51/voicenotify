@@ -78,6 +78,8 @@ data class NotificationInfo(
 	var isInterrupted = false
 	/** The Ignore Repeats setting in seconds, set by [addIgnoreReasonIdentical]. */
 	private var ignoreRepeatSeconds = -1
+	/** The TTS Message setting. */
+	private lateinit var ttsStringPref: String
 	/** The message that was or shall be spoken. */
 	var ttsMessage: String? = null
 		private set
@@ -89,23 +91,24 @@ data class NotificationInfo(
 	/** Generates the string to be used for TTS. */
 	private fun buildTtsMessage() {
 		val isComposePreview = notification.`when` == Long.MIN_VALUE
-		val ttsStringPref = if (isComposePreview) DEFAULT_TTS_STRING else {
+		ttsStringPref = if (isComposePreview) DEFAULT_TTS_STRING else {
 			settings.ttsString ?: DEFAULT_TTS_STRING
 		}
-		val ttsUnformattedMsg = ttsStringPref
-			.replace("#A", "%1\$s", true) // App Label
-			.replace("#T", "%2\$s", true) // Ticker
-			.replace("#S", "%3\$s", true) // Subtext
-			.replace("#C", "%4\$s", true) // Content Title
-			.replace("#M", "%5\$s", true) // Content Text
-			.replace("#I", "%6\$s", true) // Content Info Text
-			.replace("#H", "%7\$s", true) // Big Content Title
-			.replace("#Y", "%8\$s", true) // Big Content Summary
-			.replace("#B", "%9\$s", true) // Big Content Text
-			.replace("#L", "%10\$s", true) // Text Lines
+		val ttsFormat = ttsStringPref
+			.replace(TTS_APP_LABEL, "%1\$s", true)
+			.replace(TTS_TICKER, "%2\$s", true)
+			.replace(TTS_SUBTEXT, "%3\$s", true)
+			.replace(TTS_CONTENT_TITLE, "%4\$s", true)
+			.replace(TTS_CONTENT_TEXT, "%5\$s", true)
+			.replace(TTS_CONTENT_INFO_TEXT, "%6\$s", true)
+			.replace(TTS_BIG_CONTENT_TITLE, "%7\$s", true)
+			.replace(TTS_BIG_CONTENT_SUMMARY, "%8\$s", true)
+			.replace(TTS_BIG_CONTENT_TEXT, "%9\$s", true)
+			.replace(TTS_TEXT_LINES, "%10\$s", true)
 			.trim()
 		try {
-			ttsMessage = String.format(ttsUnformattedMsg,
+			ttsMessage = String.format(
+				ttsFormat,
 				app?.label ?: "",
 				ticker?.replace("[|\\[\\]{}*<>]+".toRegex(), " ") ?: "",
 				subtext ?: "",
@@ -115,15 +118,25 @@ data class NotificationInfo(
 				bigContentTitle ?: "",
 				bigContentSummary ?: "",
 				bigContentText ?: "",
-				textLines?.joinToString("\n") ?: "").trim()
+				textLines?.joinToString("\n") ?: ""
+			).trim()
 		} catch (e: IllegalFormatException) {
 			Log.w(TAG, "Error formatting custom TTS string!")
 			e.printStackTrace()
 		}
-		isEmpty = ttsMessage.isNullOrBlank() ||
-			ttsMessage == ttsStringPref.replace(Regex("#[atscmi]"), "")
+		isEmpty = isUnusedOrBlank(TTS_TICKER, ticker) &&
+			isUnusedOrBlank(TTS_SUBTEXT, subtext) &&
+			isUnusedOrBlank(TTS_CONTENT_TITLE, contentTitle) &&
+			isUnusedOrBlank(TTS_CONTENT_TEXT, contentText) &&
+			isUnusedOrBlank(TTS_CONTENT_INFO_TEXT, contentInfoText) &&
+			isUnusedOrBlank(TTS_BIG_CONTENT_TITLE, bigContentTitle) &&
+			isUnusedOrBlank(TTS_BIG_CONTENT_SUMMARY, bigContentSummary) &&
+			isUnusedOrBlank(TTS_BIG_CONTENT_TEXT, bigContentText) &&
+			(!ttsStringPref.contains(TTS_TEXT_LINES, true) || textLines.run {
+				isNullOrEmpty() || all { it.isBlank() }
+			})
 		if (app != null
-			&& (ttsMessage == null || (ttsMessage == app.label && !ttsStringPref.equals("#a", true)))
+			&& (ttsMessage == null || (ttsMessage == app.label && !ttsStringPref.equals(TTS_APP_LABEL, true)))
 			&& !isComposePreview
 		) {
 			ttsMessage = appContext.getString(R.string.notification_from, app.label)
@@ -142,6 +155,10 @@ data class NotificationInfo(
 			ttsMessage = ttsMessage!!.substring(0, min(maxLength, ttsMessage!!.length))
 		}
 	}
+
+	/** @return `true` if [tag] is not in [ttsStringPref] or [text] is null or blank. */
+	private fun isUnusedOrBlank(tag: String, text: String?) =
+		!ttsStringPref.contains(tag, true) || text.isNullOrBlank()
 
 	/**
 	 * Gets the reasons this notification was ignored as a single string.
@@ -181,5 +198,15 @@ data class NotificationInfo(
 
 	companion object {
 		private val TAG = NotificationInfo::class.simpleName
+		const val TTS_APP_LABEL = "#A"
+		const val TTS_TICKER = "#T"
+		const val TTS_SUBTEXT = "#S"
+		const val TTS_CONTENT_TITLE = "#C"
+		const val TTS_CONTENT_TEXT = "#M"
+		const val TTS_CONTENT_INFO_TEXT = "#I"
+		const val TTS_BIG_CONTENT_TITLE = "#H"
+		const val TTS_BIG_CONTENT_SUMMARY = "#Y"
+		const val TTS_BIG_CONTENT_TEXT = "#B"
+		const val TTS_TEXT_LINES = "#L"
 	}
 }

@@ -17,6 +17,9 @@ package com.pilot51.voicenotify.db
 
 import android.media.AudioManager
 import androidx.room.*
+import com.pilot51.voicenotify.NotificationInfo.Companion.TTS_APP_LABEL
+import com.pilot51.voicenotify.NotificationInfo.Companion.TTS_CONTENT_TEXT
+import com.pilot51.voicenotify.NotificationInfo.Companion.TTS_CONTENT_TITLE
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.memberProperties
 
@@ -134,7 +137,7 @@ data class Settings(
 		const val DEFAULT_SPEAK_HEADSET_OFF = true
 		const val DEFAULT_SPEAK_HEADSET_ON = true
 		const val DEFAULT_SPEAK_SILENT_ON = false
-		const val DEFAULT_TTS_STRING = "#A\n#C\n#M"
+		const val DEFAULT_TTS_STRING = "${TTS_APP_LABEL}\n${TTS_CONTENT_TITLE}\n${TTS_CONTENT_TEXT}"
 		const val DEFAULT_MAX_LENGTH = 500
 		const val DEFAULT_TTS_STREAM = AudioManager.STREAM_MUSIC
 		val defaults get() = Settings(
