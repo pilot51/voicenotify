@@ -70,6 +70,8 @@ data class Settings(
 	var ttsString: String? = null,
 	@ColumnInfo(name = "tts_text_replace")
 	var ttsTextReplace: String? = null,
+	@ColumnInfo(name = "tts_speak_emojis")
+	var ttsSpeakEmojis: Boolean? = null,
 	@ColumnInfo(name = "tts_max_length")
 	var ttsMaxLength: Int? = null,
 	/** The selected audio stream matching the `STREAM_` constant from [AudioManager]. */
@@ -112,6 +114,7 @@ data class Settings(
 			quietEnd = overrides.quietEnd ?: quietEnd,
 			ttsString = overrides.ttsString ?: ttsString,
 			ttsTextReplace = overrides.ttsTextReplace ?: ttsTextReplace,
+			ttsSpeakEmojis = overrides.ttsSpeakEmojis ?: ttsSpeakEmojis,
 			ttsMaxLength = overrides.ttsMaxLength ?: ttsMaxLength,
 			ttsStream = overrides.ttsStream ?: ttsStream,
 			ttsDelay = overrides.ttsDelay ?: ttsDelay,
@@ -138,6 +141,7 @@ data class Settings(
 		const val DEFAULT_SPEAK_HEADSET_ON = true
 		const val DEFAULT_SPEAK_SILENT_ON = false
 		const val DEFAULT_TTS_STRING = "${TTS_APP_LABEL}\n${TTS_CONTENT_TITLE}\n${TTS_CONTENT_TEXT}"
+		const val DEFAULT_SPEAK_EMOJIS = true
 		const val DEFAULT_MAX_LENGTH = 500
 		const val DEFAULT_TTS_STREAM = AudioManager.STREAM_MUSIC
 		val defaults get() = Settings(
@@ -158,6 +162,7 @@ data class Settings(
 			quietEnd = DEFAULT_QUIET_TIME,
 			ttsString = DEFAULT_TTS_STRING,
 			ttsTextReplace = null,
+			ttsSpeakEmojis = DEFAULT_SPEAK_EMOJIS,
 			ttsMaxLength = DEFAULT_MAX_LENGTH,
 			ttsStream = DEFAULT_TTS_STREAM,
 			ttsDelay = null,

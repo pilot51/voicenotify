@@ -21,6 +21,7 @@ import android.content.Intent
 import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
+import android.speech.tts.TextToSpeech
 import android.text.format.DateFormat
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -200,7 +201,7 @@ fun TtsMaxLengthDialog(
 	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.max_length,
-		messageRes = R.string.max_length_dialog_msg,
+		message = stringResource(R.string.max_length_dialog_msg, TextToSpeech.getMaxSpeechInputLength()),
 		initialText = (settingsCombo.ttsMaxLength ?: DEFAULT_MAX_LENGTH).toString(),
 		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss

@@ -22,7 +22,9 @@ import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_MAX_LENGTH
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_EMOJIS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
+import java.lang.Character.UnicodeBlock
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -90,10 +92,7 @@ data class NotificationInfo(
 
 	/** Generates the string to be used for TTS. */
 	private fun buildTtsMessage() {
-		val isComposePreview = notification.`when` == Long.MIN_VALUE
-		ttsStringPref = if (isComposePreview) DEFAULT_TTS_STRING else {
-			settings.ttsString ?: DEFAULT_TTS_STRING
-		}
+		ttsStringPref = settings.ttsString ?: DEFAULT_TTS_STRING
 		val ttsFormat = ttsStringPref
 			.replace(TTS_APP_LABEL, "%1\$s", true)
 			.replace(TTS_TICKER, "%2\$s", true)
@@ -137,20 +136,21 @@ data class NotificationInfo(
 			})
 		if (app != null
 			&& (ttsMessage == null || (ttsMessage == app.label && !ttsStringPref.equals(TTS_APP_LABEL, true)))
-			&& !isComposePreview
 		) {
 			ttsMessage = appContext.getString(R.string.notification_from, app.label)
 		}
 		if (ttsMessage.isNullOrBlank()) return
-		val ttsTextReplace = if (isComposePreview) null else settings.ttsTextReplace
+		val ttsTextReplace = settings.ttsTextReplace
 		val textReplaceList = PreferencesViewModel.convertTextReplaceStringToList(ttsTextReplace)
 		for (pair in textReplaceList) {
 			ttsMessage = ttsMessage!!.replace(
 				"(?i)${Pattern.quote(pair.first)}".toRegex(), pair.second)
 		}
-		val maxLength = if (isComposePreview) 0 else {
-			settings.ttsMaxLength ?: DEFAULT_MAX_LENGTH
+		val speakEmojis = settings.ttsSpeakEmojis ?: DEFAULT_SPEAK_EMOJIS
+		if (!speakEmojis) {
+			ttsMessage = ttsMessage!!.removeEmojis().trim()
 		}
+		val maxLength = settings.ttsMaxLength ?: DEFAULT_MAX_LENGTH
 		if (maxLength > 0 && maxLength < ttsMessage!!.length) {
 			ttsMessage = ttsMessage!!.substring(0, min(maxLength, ttsMessage!!.length))
 		}
@@ -208,5 +208,12 @@ data class NotificationInfo(
 		const val TTS_BIG_CONTENT_SUMMARY = "#Y"
 		const val TTS_BIG_CONTENT_TEXT = "#B"
 		const val TTS_TEXT_LINES = "#L"
+	}
+
+	private fun String.removeEmojis() = filterNot {
+		Character.isSurrogate(it) || UnicodeBlock.of(it).isAny(
+			UnicodeBlock.DINGBATS,
+			UnicodeBlock.MISCELLANEOUS_SYMBOLS,
+		)
 	}
 }
