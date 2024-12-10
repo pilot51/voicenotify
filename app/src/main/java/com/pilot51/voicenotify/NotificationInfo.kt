@@ -27,6 +27,7 @@ import java.text.MessageFormat
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.regex.Pattern
+import java.util.regex.PatternSyntaxException
 import kotlin.math.min
 
 /**
@@ -132,11 +133,15 @@ data class NotificationInfo(
 		val ttsTextReplace = if (isComposePreview) null else settings.ttsTextReplace
 		val textReplaceList = PreferencesViewModel.convertTextReplaceStringToList(ttsTextReplace)
 		for (pair in textReplaceList) {
-			val pattern =
+			val pattern = try {
 				if (pair.first.startsWith(Constants.REGEX_PREFIX))
 					Regex(pair.first.removePrefix(Constants.REGEX_PREFIX))
 				else
-					"(?i)${Pattern.quote(pair.first)}".toRegex()
+					null
+			} catch (e: PatternSyntaxException) {
+				e.printStackTrace()
+				null
+			} ?: "(?i)${Pattern.quote(pair.first)}".toRegex()
 
 			ttsMessage = ttsMessage!!.replace(pattern, pair.second)
 		}

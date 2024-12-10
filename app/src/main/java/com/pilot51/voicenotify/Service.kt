@@ -230,6 +230,7 @@ class Service : NotificationListenerService() {
 							Regex(pattern, RegexOption.IGNORE_CASE)
 								.containsMatchIn(ttsMsg)
 						} catch (e: PatternSyntaxException) {
+							e.printStackTrace()
 							false
 						}
 					else
