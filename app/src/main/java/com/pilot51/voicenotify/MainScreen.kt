@@ -16,13 +16,7 @@
 package com.pilot51.voicenotify
 
 import android.Manifest
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.app.PendingIntent
-import android.content.Context
-import android.content.Intent
 import android.os.Build
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
@@ -32,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
-import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -46,7 +39,6 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.util.*
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -61,12 +53,6 @@ fun MainScreen(
 	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	val phoneStatePermissionState = if (isPreview) null
 		else rememberPermissionState(Manifest.permission.READ_PHONE_STATE)
-	val postNotificationPermissionState =
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !isPreview) {
-			rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS) { isGranted ->
-				if (isGranted) runTestNotification(context)
-			}
-		} else null
 	var statusTitle by remember { mutableStateOf("") }
 	var statusSummary by remember { mutableStateOf("") }
 	val statusIntent = remember { Common.notificationListenerSettingsIntent }
@@ -100,12 +86,21 @@ fun MainScreen(
 	var showDeviceStates by remember { mutableStateOf(false) }
 	var showQuietTimeStart by remember { mutableStateOf(false) }
 	var showQuietTimeEnd by remember { mutableStateOf(false) }
+	var showTestNotification by remember { mutableStateOf(false) }
 	var showLog by remember { mutableStateOf(false) }
 	var showBackupRestore by remember { mutableStateOf(false) }
 	var showSupport by remember { mutableStateOf(false) }
 	var showReadPhoneStateRationale by remember { mutableStateOf(false) }
 	var showPostNotificationRationale by remember { mutableStateOf(false) }
 	val lifeCycleOwner = LocalLifecycleOwner.current
+
+	val postNotificationPermissionState =
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !isPreview) {
+			rememberPermissionState(Manifest.permission.POST_NOTIFICATIONS) { isGranted ->
+				if (isGranted) showTestNotification = true
+			}
+		} else null
+
 	DisposableEffect(lifeCycleOwner) {
 		val observer = LifecycleEventObserver { _, event ->
 			if (event == Lifecycle.Event.ON_CREATE) {
@@ -274,7 +269,7 @@ fun MainScreen(
 							showPostNotificationRationale = true
 						}
 					) {
-						runTestNotification(context)
+						showTestNotification = true
 					}
 				}
 			)
@@ -322,6 +317,9 @@ fun MainScreen(
 			mode = QuietTimeMode.END
 		) { showQuietTimeEnd = false }
 	}
+	if (showTestNotification) {
+		TestNotificationDialog(context) { showTestNotification = false }
+	}
 	if (showLog) {
 		NotificationLogDialog { showLog = false }
 	}
@@ -345,49 +343,6 @@ fun MainScreen(
 			showPostNotificationRationale = false
 		}
 	}
-}
-
-private const val NOTIFICATION_CHANNEL_ID = "test"
-
-private fun runTestNotification(context: Context) {
-	val vnApp = Common.findOrAddApp(context.packageName)!!
-	if (!vnApp.enabled) {
-		Toast.makeText(context, context.getString(R.string.test_ignored), Toast.LENGTH_LONG).show()
-	}
-	val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-	val intent = Intent(context, MainActivity::class.java)
-	Timer().schedule(object : TimerTask() {
-		override fun run() {
-			val id = NOTIFICATION_CHANNEL_ID
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-				var channel = notificationManager.getNotificationChannel(id)
-				if (channel == null) {
-					channel = NotificationChannel(id, context.getString(R.string.test), NotificationManager.IMPORTANCE_LOW)
-					channel.description = context.getString(R.string.notification_channel_desc)
-					notificationManager.createNotificationChannel(channel)
-				}
-			}
-			val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-				PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-			} else PendingIntent.FLAG_UPDATE_CURRENT
-			val pi = PendingIntent.getActivity(context, 0, intent, flags)
-			val builder = NotificationCompat.Builder(context, id)
-				.setAutoCancel(true)
-				.setContentIntent(pi)
-				.setSmallIcon(R.drawable.ic_notification)
-				.setTicker(context.getString(R.string.test_ticker))
-				.setSubText(context.getString(R.string.test_subtext))
-				.setContentTitle(context.getString(R.string.test_content_title))
-				.setContentText(context.getString(R.string.test_content_text))
-				.setContentInfo(context.getString(R.string.test_content_info))
-				.setStyle(NotificationCompat.BigTextStyle()
-					.setBigContentTitle(context.getString(R.string.test_big_content_title))
-					.setSummaryText(context.getString(R.string.test_big_content_summary))
-					.bigText(context.getString(R.string.test_big_content_text))
-				)
-			notificationManager.notify(0, builder.build())
-		}
-	}, 5000)
 }
 
 @VNPreview
