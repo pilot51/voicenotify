@@ -22,6 +22,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_EMOJIS
 
 @Composable
 fun TtsConfigScreen(vm: IPreferencesViewModel) {
@@ -75,6 +76,19 @@ fun TtsConfigScreen(vm: IPreferencesViewModel) {
 			},
 			onClick = { showTextReplaceDialog = true }
 		)
+		PreferenceRowCheckbox(
+			titleRes = R.string.tts_speak_emojis,
+			summaryResOn = R.string.tts_speak_emojis_summary_on,
+			summaryResOff = R.string.tts_speak_emojis_summary_off,
+			initialValue = settings.ttsSpeakEmojis ?: DEFAULT_SPEAK_EMOJIS,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ttsSpeakEmojis != null,
+			onRemove = {
+				vm.save(settings.copy(ttsSpeakEmojis = null))
+			}
+		) {
+			vm.save(settings.copy(ttsSpeakEmojis = it))
+		}
 		PreferenceRowLink(
 			titleRes = R.string.max_length,
 			summaryRes = R.string.max_length_summary,
