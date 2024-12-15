@@ -17,20 +17,23 @@ package com.pilot51.voicenotify
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import android.provider.Settings
-import android.util.Pair
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import com.pilot51.voicenotify.AppListViewModel.Companion.appDefaultEnable
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.AppDatabase
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
+import com.pilot51.voicenotify.db.AppDatabase.Companion.db
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlin.time.Duration.Companion.seconds
 
 object Common {
+	private val TAG = Common::class.simpleName
+
 	val notificationListenerSettingsIntent: Intent by lazy {
 		Intent(
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
@@ -46,35 +49,38 @@ object Common {
 	 * @param pkg Package name used to find [App] in current list or create a new one from system.
 	 * @return Found or created [App], otherwise null if app not found on system.
 	 */
-	fun findOrAddApp(pkg: String): App? {
-		return runBlocking(Dispatchers.IO) {
-			syncAppsMutex.withLock {
-				if (apps.isEmpty()) {
-					apps.addAll(AppDatabase.db.appDao.getAll())
-				}
-				for (app in apps) {
-					if (app.packageName == pkg) {
-						return@runBlocking app
-					}
-				}
-				return@runBlocking try {
+	suspend fun findOrAddApp(pkg: String): App? {
+		syncAppsMutex.withLock {
+			if (apps.isEmpty()) {
+				apps.addAll(db.appDao.getAll())
+			}
+			apps.find { it.packageName == pkg }?.let {
+				return it
+			}
+			val appLabel = try {
+				withTimeoutInterruptible(2.seconds) {
 					val packMan = appContext.packageManager
-					val appInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 						packMan.getApplicationInfo(pkg, PackageManager.ApplicationInfoFlags.of(0L))
 					} else {
 						packMan.getApplicationInfo(pkg, 0)
+					}.run {
+						loadLabel(packMan).toString()
 					}
-					val app = App(
-						packageName = pkg,
-						label = appInfo.loadLabel(packMan).toString(),
-						isEnabled = appDefaultEnable
-					)
-					apps.add(app.updateDb())
-					app
-				} catch (e: PackageManager.NameNotFoundException) {
-					e.printStackTrace()
-					null
 				}
+			} catch (e: NameNotFoundException) {
+				Log.w(TAG, "App not found for package $pkg")
+				return null
+			} catch (e: TimeoutCancellationException) {
+				Log.e(TAG, "Timed out fetching app info/label for package $pkg")
+				return null
+			}
+			return App(
+				packageName = pkg,
+				label = appLabel,
+				isEnabled = appDefaultEnable
+			).apply {
+				apps.add(updateDb())
 			}
 		}
 	}

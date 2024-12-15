@@ -29,6 +29,7 @@ fun TtsConfigScreen(vm: IPreferencesViewModel) {
 	val context = LocalContext.current
 	val configApp by vm.configuringAppState.collectAsState()
 	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	var ttsEnabled by remember { mutableStateOf(true) }
 	var ttsSummary by remember { mutableStateOf("") }
 	var ttsIntent by remember { mutableStateOf<Intent?>(null) }
@@ -80,7 +81,7 @@ fun TtsConfigScreen(vm: IPreferencesViewModel) {
 			titleRes = R.string.tts_speak_emojis,
 			summaryResOn = R.string.tts_speak_emojis_summary_on,
 			summaryResOff = R.string.tts_speak_emojis_summary_off,
-			initialValue = settings.ttsSpeakEmojis ?: DEFAULT_SPEAK_EMOJIS,
+			initialValue = settingsCombo.ttsSpeakEmojis ?: DEFAULT_SPEAK_EMOJIS,
 			app = configApp,
 			showRemove = !settings.isGlobal && settings.ttsSpeakEmojis != null,
 			onRemove = {

@@ -20,9 +20,10 @@ import java.io.FileInputStream
 import java.util.*
 
 plugins {
-	id("com.android.application")
 	kotlin("android")
-	id("com.google.devtools.ksp")
+	alias(libs.plugins.android.application)
+	alias(libs.plugins.compose)
+	alias(libs.plugins.ksp)
 }
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
@@ -64,13 +65,9 @@ android {
 		compose = true
 	}
 
-	composeOptions {
-		kotlinCompilerExtensionVersion = "1.5.14"
-	}
-
 	compileOptions {
-		sourceCompatibility = JavaVersion.VERSION_17
-		targetCompatibility = JavaVersion.VERSION_17
+		sourceCompatibility = JavaVersion.VERSION_21
+		targetCompatibility = JavaVersion.VERSION_21
 	}
 
 	signingConfigs {
@@ -115,17 +112,17 @@ android {
 }
 
 dependencies {
-	implementation("androidx.core:core-ktx:1.13.1")
-	implementation("androidx.activity:activity-compose:1.9.0")
-	implementation("androidx.compose.material3:material3:1.3.0-beta01")
-	implementation("androidx.compose.material:material-icons-extended-android:1.6.7")
-	implementation("androidx.compose.ui:ui-tooling-preview:1.6.7")
-	debugImplementation("androidx.compose.ui:ui-tooling:1.6.7")
-	implementation("androidx.navigation:navigation-compose:2.7.7")
-	implementation("androidx.glance:glance-appwidget:1.0.0")
-	implementation("androidx.preference:preference-ktx:1.2.1")
-	implementation("androidx.room:room-ktx:2.6.1")
-	ksp("androidx.room:room-compiler:2.6.1")
-	implementation("org.jetbrains.kotlin:kotlin-reflect:1.9.24")
-	implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+	implementation(libs.accompanist.permissions)
+	implementation(libs.androidx.activity.compose)
+	implementation(libs.androidx.compose.material.iconsExtended)
+	implementation(libs.androidx.compose.material3)
+	implementation(libs.androidx.compose.ui.tooling.preview)
+	implementation(libs.androidx.core.ktx)
+	implementation(libs.androidx.glance.appwidget)
+	implementation(libs.androidx.navigation.compose)
+	implementation(libs.androidx.preference)
+	implementation(libs.androidx.room.ktx)
+	implementation(libs.kotlin.reflect)
+	ksp(libs.androidx.room.compiler)
+	debugImplementation(libs.androidx.compose.ui.tooling)
 }

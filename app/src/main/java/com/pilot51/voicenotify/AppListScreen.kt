@@ -42,11 +42,12 @@ import com.pilot51.voicenotify.AppListViewModel.IgnoreType
 import com.pilot51.voicenotify.db.App
 import kotlinx.coroutines.delay
 
-private lateinit var vmStoreOwner: ViewModelStoreOwner
+private val vmStoreOwner = mutableStateOf<ViewModelStoreOwner?>(null)
 
 @Composable
 fun AppListActions() {
-	val vm: AppListViewModel = viewModel(vmStoreOwner)
+	val vmOwner by vmStoreOwner
+	val vm: AppListViewModel = viewModel(vmOwner ?: return)
 	var showSearchBar by remember { mutableStateOf(false) }
 	if (showSearchBar) {
 		val focusRequester = remember { FocusRequester() }
@@ -131,8 +132,9 @@ fun AppListActions() {
 fun AppListScreen(
 	onConfigureApp: (app: App) -> Unit
 ) {
-	vmStoreOwner = LocalViewModelStoreOwner.current!!
-	val vm: AppListViewModel = viewModel(vmStoreOwner)
+	val vmOwner = LocalViewModelStoreOwner.current!!.also { vmStoreOwner.value = it }
+	DisposableEffect(vmOwner) { onDispose { vmStoreOwner.value = null } }
+	val vm: AppListViewModel = viewModel(vmOwner)
 	val packagesWithOverride by vm.packagesWithOverride
 	AppList(
 		vm.filteredApps,
@@ -164,6 +166,7 @@ private fun AppList(
 	}
 }
 
+@NonSkippableComposable
 @Composable
 private fun AppListItem(
 	app: App,
@@ -197,7 +200,7 @@ private fun AppListItem(
 					}
 				}
 				Checkbox(
-					checked = app.enabled,
+					checked = app.isEnabled,
 					modifier = Modifier.focusable(false),
 					onCheckedChange = { toggleIgnore(app) }
 				)
