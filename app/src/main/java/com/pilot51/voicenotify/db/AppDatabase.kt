@@ -40,6 +40,15 @@ abstract class AppDatabase : RoomDatabase() {
 		@Insert
 		suspend fun insert(entity: T)
 
+		@Insert
+		suspend fun insert(entities: Collection<T>)
+
+		@Update
+		suspend fun update(entity: T)
+
+		@Update
+		suspend fun update(entity: Collection<T>)
+
 		@Upsert
 		suspend fun upsert(entity: T)
 
@@ -55,59 +64,17 @@ abstract class AppDatabase : RoomDatabase() {
 		@Query("SELECT * FROM apps")
 		suspend fun getAll(): List<App>
 
-		@Query("SELECT EXISTS (SELECT * FROM apps WHERE package = :pkg)")
-		suspend fun existsByPackage(pkg: String): Boolean
-
-		@Query("UPDATE apps SET name = :name, is_enabled = :enabled WHERE package = :pkg")
-		suspend fun updateByPackage(pkg: String, name: String, enabled: Boolean)
-
-		/**
-		 * Updates app in database matching package name or adds if no match found.
-		 * @param app The app to add or update in the database.
-		 */
-		@Transaction
-		suspend fun addOrUpdateApp(app: App) {
-			if (existsByPackage(app.packageName)) {
-				updateByPackage(
-					pkg = app.packageName,
-					name = app.label,
-					enabled = app.enabled
-				)
-			} else {
-				insert(app)
-			}
-		}
-
-		@Transaction
-		suspend fun upsert(apps: List<App>) {
-			apps.forEach {
-				addOrUpdateApp(it)
-			}
-		}
-
 		/**
 		 * Updates enabled value of app in database matching package name.
 		 * @param app The app to update in the database.
 		 */
 		@Transaction
 		suspend fun updateAppEnable(app: App) {
-			updateAppEnable(app.packageName, app.enabled)
+			updateAppEnable(app.packageName, app.isEnabled)
 		}
 
 		@Query("UPDATE apps SET is_enabled = :enabled WHERE package = :pkg")
-		suspend fun updateAppEnable(pkg: String, enabled: Boolean?)
-
-		/**
-		 * Removes app from database matching package name.
-		 * @param app The app to remove from the database.
-		 */
-		@Transaction
-		suspend fun removeApp(app: App) {
-			removeApp(app.packageName)
-		}
-
-		@Query("DELETE FROM apps WHERE package = :pkg")
-		suspend fun removeApp(pkg: String)
+		suspend fun updateAppEnable(pkg: String, enabled: Boolean)
 	}
 
 	@Dao

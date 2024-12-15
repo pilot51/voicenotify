@@ -22,7 +22,6 @@ import android.media.AudioManager
 import android.net.Uri
 import android.os.Build
 import android.speech.tts.TextToSpeech
-import android.text.format.DateFormat
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -38,7 +37,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -476,8 +474,7 @@ fun QuietTimeDialog(
 	} ?: DEFAULT_QUIET_TIME
 	val timePickerState = rememberTimePickerState(
 		initialHour = quietTime / 60,
-		initialMinute = quietTime % 60,
-		key = settings
+		initialMinute = quietTime % 60
 	)
 	AlertDialog(
 		onDismissRequest = onDismiss,
@@ -508,24 +505,6 @@ fun QuietTimeDialog(
 		text = {
 			TimePicker(timePickerState)
 		}
-	)
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun rememberTimePickerState(
-	initialHour: Int = 0,
-	initialMinute: Int = 0,
-	is24Hour: Boolean = DateFormat.is24HourFormat(LocalContext.current),
-	key: Any
-): TimePickerState = rememberSaveable(
-	saver = TimePickerState.Saver(),
-	inputs = arrayOf(key)
-) {
-	TimePickerState(
-		initialHour = initialHour,
-		initialMinute = initialMinute,
-		is24Hour = is24Hour,
 	)
 }
 

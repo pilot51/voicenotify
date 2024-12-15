@@ -30,12 +30,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.pilot51.voicenotify.NotifyList.NotificationLogDialog
@@ -45,8 +45,12 @@ import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
-import java.util.*
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -350,44 +354,48 @@ fun MainScreen(
 private const val NOTIFICATION_CHANNEL_ID = "test"
 
 private fun runTestNotification(context: Context) {
-	val vnApp = Common.findOrAddApp(context.packageName)!!
-	if (!vnApp.enabled) {
-		Toast.makeText(context, context.getString(R.string.test_ignored), Toast.LENGTH_LONG).show()
-	}
-	val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-	val intent = Intent(context, MainActivity::class.java)
-	Timer().schedule(object : TimerTask() {
-		override fun run() {
-			val id = NOTIFICATION_CHANNEL_ID
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-				var channel = notificationManager.getNotificationChannel(id)
-				if (channel == null) {
-					channel = NotificationChannel(id, context.getString(R.string.test), NotificationManager.IMPORTANCE_LOW)
-					channel.description = context.getString(R.string.notification_channel_desc)
-					notificationManager.createNotificationChannel(channel)
-				}
+	CoroutineScope(Dispatchers.IO).launch {
+		val vnApp = Common.findOrAddApp(context.packageName)!!
+		if (!vnApp.isEnabled) {
+			Toast.makeText(context, context.getString(R.string.test_ignored), Toast.LENGTH_LONG).show()
+		}
+		val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+		val intent = Intent(context, MainActivity::class.java)
+		delay(5.seconds)
+		val id = NOTIFICATION_CHANNEL_ID
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			var channel = notificationManager.getNotificationChannel(id)
+			if (channel == null) {
+				channel = NotificationChannel(
+					id,
+					context.getString(R.string.test),
+					NotificationManager.IMPORTANCE_LOW
+				)
+				channel.description = context.getString(R.string.notification_channel_desc)
+				notificationManager.createNotificationChannel(channel)
 			}
-			val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-				PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-			} else PendingIntent.FLAG_UPDATE_CURRENT
-			val pi = PendingIntent.getActivity(context, 0, intent, flags)
-			val builder = NotificationCompat.Builder(context, id)
-				.setAutoCancel(true)
-				.setContentIntent(pi)
-				.setSmallIcon(R.drawable.ic_notification)
-				.setTicker(context.getString(R.string.test_ticker))
-				.setSubText(context.getString(R.string.test_subtext))
-				.setContentTitle(context.getString(R.string.test_content_title))
-				.setContentText(context.getString(R.string.test_content_text))
-				.setContentInfo(context.getString(R.string.test_content_info))
-				.setStyle(NotificationCompat.BigTextStyle()
+		}
+		val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+			PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+		} else PendingIntent.FLAG_UPDATE_CURRENT
+		val pi = PendingIntent.getActivity(context, 0, intent, flags)
+		val builder = NotificationCompat.Builder(context, id)
+			.setAutoCancel(true)
+			.setContentIntent(pi)
+			.setSmallIcon(R.drawable.ic_notification)
+			.setTicker(context.getString(R.string.test_ticker))
+			.setSubText(context.getString(R.string.test_subtext))
+			.setContentTitle(context.getString(R.string.test_content_title))
+			.setContentText(context.getString(R.string.test_content_text))
+			.setContentInfo(context.getString(R.string.test_content_info))
+			.setStyle(
+				NotificationCompat.BigTextStyle()
 					.setBigContentTitle(context.getString(R.string.test_big_content_title))
 					.setSummaryText(context.getString(R.string.test_big_content_summary))
 					.bigText(context.getString(R.string.test_big_content_text))
-				)
-			notificationManager.notify(0, builder.build())
-		}
-	}, 5000)
+			)
+		notificationManager.notify(0, builder.build())
+	}
 }
 
 @VNPreview

@@ -18,6 +18,7 @@ package com.pilot51.voicenotify
 import android.app.Application
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
@@ -28,13 +29,11 @@ import com.pilot51.voicenotify.PreferenceHelper.KEY_APP_DEFAULT_ENABLE
 import com.pilot51.voicenotify.PreferenceHelper.getPrefFlow
 import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.AppDatabase
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.pilot51.voicenotify.db.AppDatabase.Companion.db
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.withLock
+import kotlin.time.Duration.Companion.seconds
 
 class AppListViewModel(application: Application) : AndroidViewModel(application) {
 	private val appContext = application.applicationContext
@@ -44,7 +43,7 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	private val syncAppsMutex by Common::syncAppsMutex
 	var searchQuery by mutableStateOf<String?>(null)
 	var showList by mutableStateOf(false)
-	private val settingsDao = AppDatabase.db.settingsDao
+	private val settingsDao = db.settingsDao
 	val packagesWithOverride @Composable get() =
 		settingsDao.packagesWithOverride().collectAsState(listOf())
 
@@ -65,47 +64,58 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 		CoroutineScope(Dispatchers.IO).launch {
 			syncAppsMutex.withLock {
 				apps.clear()
-				apps.addAll(AppDatabase.db.appDao.getAll())
+				apps.addAll(db.appDao.getAll())
 				val isFirstLoad = apps.isEmpty()
 				val packMan = appContext.packageManager
+				val installedApps = try {
+					withTimeoutInterruptible(10.seconds) {
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+							packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
+						} else {
+							packMan.getInstalledApplications(0)
+						}
+					}
+				} catch (e: TimeoutCancellationException) {
+					Log.e(TAG, "Timed out fetching list of installed apps")
+					return@withLock
+				}
 
 				// Remove uninstalled
-				for (a in apps.indices.reversed()) {
-					val app = apps[a]
-					try {
-						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-							packMan.getApplicationInfo(app.packageName, PackageManager.ApplicationInfoFlags.of(0L))
-						} else {
-							packMan.getApplicationInfo(app.packageName, 0)
-						}
-					} catch (e: PackageManager.NameNotFoundException) {
+				val appIter = apps.iterator()
+				for (app in appIter) {
+					if (installedApps.none { it.packageName == app.packageName }) {
 						if (!isFirstLoad) app.remove()
-						apps.removeAt(a)
+						appIter.remove()
 					}
 				}
 
 				// Add new
-				val installedApps = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-					packMan.getInstalledApplications(PackageManager.ApplicationInfoFlags.of(0L))
-				} else {
-					packMan.getInstalledApplications(0)
-				}
-				inst@ for (appInfo in installedApps) {
-					for (app in apps) {
-						if (app.packageName == appInfo.packageName) {
-							continue@inst
-						}
+				for (appInfo in installedApps) {
+					if (apps.any { it.packageName == appInfo.packageName }) {
+						continue
+					}
+					val label = try {
+						withTimeoutInterruptible(1.seconds) {
+							appInfo.loadLabel(packMan)
+						}.toString()
+					} catch (e: TimeoutCancellationException) {
+						Log.e(TAG, "Timed out fetching app label for package ${appInfo.packageName}")
+						continue
 					}
 					val app = App(
 						packageName = appInfo.packageName,
-						label = appInfo.loadLabel(packMan).toString(),
+						label = label,
 						isEnabled = appDefaultEnable
 					)
 					apps.add(app)
 					if (!isFirstLoad) app.updateDb()
 				}
+
+				// Sort list
 				apps.sortWith { app1, app2 -> app1.label.compareTo(app2.label, ignoreCase = true) }
-				if (isFirstLoad) AppDatabase.db.appDao.upsert(apps)
+
+				// Bulk add apps to DB if this is the first load
+				if (isFirstLoad) db.appDao.insert(apps)
 			}
 			isUpdating = false
 			filterApps()
@@ -136,22 +146,22 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 		CoroutineScope(Dispatchers.IO).launch {
 			syncAppsMutex.withLock {
 				if (apps.isEmpty()) return@launch
-				for (app in apps) {
-					setIgnore(app, ignoreType)
+				apps.forEach {
+					setIgnore(it, ignoreType)
 				}
 				filterApps()
+				db.appDao.update(apps)
 			}
-			AppDatabase.db.appDao.upsert(apps)
 		}
 	}
 
 	fun setIgnore(app: App, ignoreType: IgnoreType) {
-		if (!app.enabled && (ignoreType == IGNORE_TOGGLE || ignoreType == IGNORE_NONE)) {
+		if (!app.isEnabled && (ignoreType == IGNORE_TOGGLE || ignoreType == IGNORE_NONE)) {
 			app.setEnabled(true, ignoreType == IGNORE_TOGGLE)
 			if (ignoreType == IGNORE_TOGGLE) {
 				Toast.makeText(appContext, appContext.getString(R.string.app_is_not_ignored, app.label), Toast.LENGTH_SHORT).show()
 			}
-		} else if (app.enabled && (ignoreType == IGNORE_TOGGLE || ignoreType == IGNORE_ALL)) {
+		} else if (app.isEnabled && (ignoreType == IGNORE_TOGGLE || ignoreType == IGNORE_ALL)) {
 			app.setEnabled(false, ignoreType == IGNORE_TOGGLE)
 			if (ignoreType == IGNORE_TOGGLE) {
 				Toast.makeText(appContext, appContext.getString(R.string.app_is_ignored, app.label), Toast.LENGTH_SHORT).show()
@@ -169,6 +179,7 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	}
 
 	companion object {
+		private val TAG = AppListViewModel::class.simpleName
 		/** The default enabled value for new apps. */
 		var appDefaultEnable =
 			runBlocking(Dispatchers.IO) {

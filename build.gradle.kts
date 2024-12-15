@@ -1,5 +1,5 @@
 plugins {
-	id("com.google.devtools.ksp") version "1.9.24-1.0.20" apply false
+	alias(libs.plugins.ksp) apply false
 }
 
 buildscript {
@@ -8,8 +8,8 @@ buildscript {
 		google()
 	}
 	dependencies {
-		classpath("com.android.tools.build:gradle:8.4.0")
-		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.24")
+		classpath(libs.android.gradlePlugin)
+		classpath(libs.kotlin.gradlePlugin)
 	}
 }
 

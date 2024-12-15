@@ -212,7 +212,7 @@
 	<string name="reason_headset_off">Headset off</string>
 	<string name="reason_headset_on">Headset on</string>
 	<string name="reason_shake">Silenced by shake</string>
-	<string name="reason_suspended">Voice Notify suspended by widget</string>
+	<string name="reason_suspended">Voice Notify suspended</string>
 	<string name="reason_service_stopped">Service stopped</string>
 	<string name="reason_tts_failed">TTS failed. Restart and retry attempted.\nThis text should be yellow if retry successful or red if not.\nPlease try restarting the Voice Notify service if notifications fail to be spoken.</string>
 	<string name="reason_tts_restarted">TTS restarted while message in queue or speaking. Re-queued.</string>
