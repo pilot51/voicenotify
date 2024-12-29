@@ -120,6 +120,14 @@
 	<string name="support_rate">Rate &amp; Review</string>
 	<string name="support_email">Email Developer</string>
 	<string name="support_email_subtext">General feedback</string>
+	<string name="support_email_dialog_title">Select attachments</string>
+	<string name="support_email_dialog_message">These are only recommended when reporting bugs and crashes.</string>
+	<string name="support_email_dialog_message_log">While potentially sensitive information is not intentionally included, the log may include names of installed apps and some errors could contain relevant notification content or text-based settings. It is limited to 1MB, which may span days. It can be accessed from a computer through USB at %s</string>
+	<string name="support_email_dialog_message_settings">• Database file: Contains a list of all installed apps and all settings that are available in per-app overrides.\n• Preferences file: Contains the settings that are not available in per-app overrides.</string>
+	<string name="debug_log">Debug Log</string>
+	<string name="view">View</string>
+	<string name="view_debug_log_failed">Unable to read debug log</string>
+	<string name="settings">Settings</string>
 	<string name="support_discord">Discord</string>
 	<string name="support_matrix">Matrix</string>
 	<string name="support_chat_subtext">User chat, fastest developer response</string>

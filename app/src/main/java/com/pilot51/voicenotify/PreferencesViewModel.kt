@@ -15,23 +15,30 @@
  */
 package com.pilot51.voicenotify
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.util.Pair
+import android.widget.Toast
 import androidx.compose.runtime.*
+import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
+import com.pilot51.voicenotify.PreferenceHelper.dataFiles
+import com.pilot51.voicenotify.VNApplication.Companion.logFile
 import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.db.AppDatabase
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
 import com.pilot51.voicenotify.db.AppDatabase.Companion.getAppSettingsFlow
 import com.pilot51.voicenotify.db.AppDatabase.Companion.globalSettingsFlow
 import com.pilot51.voicenotify.db.Settings
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 
 class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 	override val configuringAppState = MutableStateFlow<App?>(null)
@@ -142,6 +149,8 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 	}
 
 	companion object {
+		private const val DEV_EMAIL = "pilota51@gmail.com"
+
 		fun updateListItem(
 			position: Int,
 			textFrom: String,
@@ -216,6 +225,81 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 				i += 2
 			}
 			return list
+		}
+
+		fun readDebugLog(
+			scope: CoroutineScope,
+			onReadLine: (line: String) -> Unit,
+			onDone: () -> Unit
+		) {
+			scope.launch(Dispatchers.IO) {
+				logFile?.run {
+					if (exists()) {
+						bufferedReader().useLines { lines ->
+							lines.forEach { onReadLine(it) }
+						}
+					}
+				}
+				onDone()
+			}
+		}
+
+		/**
+		 * @param context Should be an activity context so the intent doesn't need to use [Intent.FLAG_ACTIVITY_NEW_TASK].
+		 * @param includeLog `true` to attach the debug log to the email.
+		 * @param includeSettings `true` to attach the database and datastore to the email.
+		 */
+		fun sendEmail(context: Context, includeLog: Boolean, includeSettings: Boolean) {
+			val iEmail = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+				type = "plain/text"
+				putExtra(Intent.EXTRA_EMAIL, arrayOf(DEV_EMAIL))
+				putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.email_subject))
+				putExtra(Intent.EXTRA_TEXT, context.getString(
+					R.string.email_body,
+					BuildConfig.VERSION_NAME,
+					Build.VERSION.RELEASE,
+					Build.ID,
+					"${Build.MANUFACTURER} ${Build.BRAND} ${Build.MODEL}"
+				))
+				if (includeLog || includeSettings) {
+					val uris = ArrayList<Uri>(3)
+					val auth = "${context.packageName}.fileprovider"
+					if (includeLog) {
+						logFile?.let {
+							if (it.exists()) {
+								try {
+									uris.add(FileProvider.getUriForFile(context, auth, it))
+								} catch (e: IllegalArgumentException) {
+									e.printStackTrace()
+								}
+							}
+						}
+					}
+					if (includeSettings) {
+						val (dbFile, dsFile) = dataFiles
+						db.close()
+						try {
+							uris.add(FileProvider.getUriForFile(context, auth, dbFile))
+						} catch (e: IllegalArgumentException) {
+							e.printStackTrace()
+						}
+						AppDatabase.resetInstance()
+						try {
+							uris.add(FileProvider.getUriForFile(context, auth, dsFile))
+						} catch (e: IllegalArgumentException) {
+							e.printStackTrace()
+						}
+					}
+					putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
+					addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+				}
+			}
+			try {
+				context.startActivity(Intent.createChooser(iEmail, context.getString(R.string.support_email)))
+			} catch (e: ActivityNotFoundException) {
+				e.printStackTrace()
+				Toast.makeText(context, R.string.error_email, Toast.LENGTH_LONG).show()
+			}
 		}
 	}
 }

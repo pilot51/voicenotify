@@ -20,7 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.net.Uri
-import android.os.Build
+import android.os.Environment
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -28,9 +28,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardOptions
@@ -43,12 +41,16 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.text.isDigitsOnly
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
+import com.pilot51.voicenotify.PreferencesViewModel.Companion.readDebugLog
+import com.pilot51.voicenotify.PreferencesViewModel.Companion.sendEmail
+import com.pilot51.voicenotify.VNApplication.Companion.logFile
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_REPEAT
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_MAX_LENGTH
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_QUIET_TIME
@@ -546,12 +548,11 @@ fun BackupDialog(onDismiss: () -> Unit) {
 	)
 }
 
-private const val DEV_EMAIL = "pilota51@gmail.com"
-
 @Composable
 fun SupportDialog(onDismiss: () -> Unit) {
 	val context = LocalContext.current
-	var showPrivacy by remember { mutableStateOf(false) }
+	var showEmailDialog by remember { mutableStateOf(false) }
+	var showPrivacyDialog by remember { mutableStateOf(false) }
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {},
@@ -582,24 +583,7 @@ fun SupportDialog(onDismiss: () -> Unit) {
 						title = R.string.support_email,
 						subtext = R.string.support_email_subtext
 					) {
-						val iEmail = Intent(Intent.ACTION_SEND).apply {
-							type = "plain/text"
-							putExtra(Intent.EXTRA_EMAIL, arrayOf(DEV_EMAIL))
-							putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.email_subject))
-							putExtra(Intent.EXTRA_TEXT, context.getString(
-								R.string.email_body,
-								BuildConfig.VERSION_NAME,
-								Build.VERSION.RELEASE,
-								Build.ID,
-								"${Build.MANUFACTURER} ${Build.BRAND} ${Build.MODEL}"
-							))
-						}
-						try {
-							context.startActivity(iEmail)
-						} catch (e: ActivityNotFoundException) {
-							e.printStackTrace()
-							Toast.makeText(context, R.string.error_email, Toast.LENGTH_LONG).show()
-						}
+						showEmailDialog = true
 					}
 					supportItem(
 						title = R.string.support_discord,
@@ -623,7 +607,7 @@ fun SupportDialog(onDismiss: () -> Unit) {
 						openBrowser(context, "https://github.com/pilot51/voicenotify")
 					}
 					supportItem(title = R.string.support_privacy) {
-						showPrivacy = true
+						showPrivacyDialog = true
 					}
 				}
 				Text(
@@ -637,12 +621,15 @@ fun SupportDialog(onDismiss: () -> Unit) {
 			}
 		}
 	)
-	if (showPrivacy) {
+	if (showEmailDialog) {
+		EmailDialog { showEmailDialog = false }
+	}
+	if (showPrivacyDialog) {
 		AlertDialog(
-			onDismissRequest = { showPrivacy = false },
+			onDismissRequest = { showPrivacyDialog = false },
 			confirmButton = { },
 			dismissButton = {
-				TextButton(onClick = { showPrivacy = false }) {
+				TextButton(onClick = { showPrivacyDialog = false }) {
 					Text(stringResource(android.R.string.ok))
 				}
 			},
@@ -653,6 +640,152 @@ fun SupportDialog(onDismiss: () -> Unit) {
 					modifier = Modifier.verticalScroll(rememberScrollState())
 				)
 			}
+		)
+	}
+}
+
+@Composable
+fun EmailDialog(onDismiss: () -> Unit) {
+	val context = LocalContext.current
+	val isLogChecked = remember { mutableStateOf(false) }
+	val isSettingsChecked = remember { mutableStateOf(false) }
+	var showViewLogDialog by remember { mutableStateOf(false) }
+	AlertDialog(
+		onDismissRequest = onDismiss,
+		confirmButton = {
+			TextButton(
+				onClick = {
+					sendEmail(context, isLogChecked.value, isSettingsChecked.value)
+					onDismiss()
+				}
+			) {
+				Text(stringResource(android.R.string.ok))
+			}
+		},
+		dismissButton = {
+			TextButton(onClick = onDismiss) {
+				Text(stringResource(android.R.string.cancel))
+			}
+		},
+		title = { Text(stringResource(R.string.support_email_dialog_title)) },
+		text = {
+			Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+				Text(
+					text = stringResource(R.string.support_email_dialog_message),
+					modifier = Modifier.fillMaxWidth(),
+					fontSize = 20.sp
+				)
+				Row(
+					modifier = Modifier.padding(top = 16.dp),
+					verticalAlignment = Alignment.CenterVertically
+				) {
+					TextCheckbox(
+						textRes = R.string.debug_log,
+						checkedState = isLogChecked,
+						modifier = Modifier.weight(1f)
+					)
+					TextButton(
+						onClick = { showViewLogDialog = true }
+					) {
+						Text(
+							text = stringResource(R.string.view),
+							fontSize = 20.sp
+						)
+					}
+				}
+				Text(
+					text = stringResource(R.string.support_email_dialog_message_log,
+						logFile?.relativeTo(Environment.getExternalStorageDirectory()).toString()),
+					modifier = Modifier.fillMaxWidth(),
+					fontSize = 20.sp
+				)
+				TextCheckbox(
+					textRes = R.string.settings,
+					checkedState = isSettingsChecked,
+					modifier = Modifier.padding(top = 16.dp)
+				)
+				Text(
+					text = stringResource(R.string.support_email_dialog_message_settings),
+					modifier = Modifier.fillMaxWidth(),
+					fontSize = 20.sp
+				)
+			}
+		}
+	)
+	if (showViewLogDialog) {
+		val logLines = remember { mutableStateListOf<String>() }
+		val scope = rememberCoroutineScope()
+		var isReading by remember { mutableStateOf(true) }
+		LaunchedEffect(Unit) {
+			readDebugLog(
+				scope = scope,
+				onReadLine = { logLines.add(it) },
+				onDone = { isReading = false }
+			)
+		}
+		AlertDialog(
+			onDismissRequest = { showViewLogDialog = false },
+			confirmButton = { },
+			dismissButton = {
+				TextButton(onClick = { showViewLogDialog = false }) {
+					Text(stringResource(android.R.string.ok))
+				}
+			},
+			title = { Text(stringResource(R.string.debug_log)) },
+			text = {
+				Box(
+					modifier = Modifier.fillMaxSize(),
+					contentAlignment = Alignment.Center
+				) {
+					if (isReading) {
+						CircularProgressIndicator()
+					} else if (logLines.isEmpty()) {
+						Text(
+							text = stringResource(R.string.view_debug_log_failed),
+							fontSize = 20.sp
+						)
+					} else {
+						val listState = rememberLazyListState(logLines.lastIndex)
+						LazyColumn(
+							modifier = Modifier.fillMaxSize(),
+							state = listState
+						) {
+							items(logLines) { Text(it) }
+						}
+					}
+				}
+			}
+		)
+	}
+}
+
+@Composable
+private fun TextCheckbox(
+	@StringRes textRes: Int,
+	checkedState: MutableState<Boolean>,
+	modifier: Modifier = Modifier
+) {
+	var isChecked by checkedState
+	Row(
+		modifier = modifier
+			.toggleable(
+				value = isChecked,
+				onValueChange = { isChecked = it },
+				role = Role.Checkbox
+			)
+			.heightIn(min = 56.dp)
+			.padding(horizontal = 16.dp),
+		horizontalArrangement = Arrangement.spacedBy(10.dp),
+		verticalAlignment = Alignment.CenterVertically
+	) {
+		Checkbox(
+			checked = isChecked,
+			onCheckedChange = null
+		)
+		Text(
+			text = stringResource(textRes),
+			fontSize = 22.sp,
+			fontWeight = FontWeight.Bold
 		)
 	}
 }
@@ -758,5 +891,13 @@ private fun QuietTimeDialogPreview() {
 private fun SupportDialogPreview() {
 	AppTheme {
 		SupportDialog {}
+	}
+}
+
+@VNPreview
+@Composable
+private fun EmailDialogPreview() {
+	AppTheme {
+		EmailDialog {}
 	}
 }
