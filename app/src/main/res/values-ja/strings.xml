@@ -14,23 +14,9 @@
     <string name="ignore_repeat_summary">設定した時間内の同じ通知を無視します</string>
     <string name="tts_message">音声読み上げメッセージ</string>
     <string name="tts_summary">音声読み上げの動作設定</string>
-    <string name="shake_to_silence_dialog_msg">値を低くするとより感度が高くなります。
-\n
-\nデフォルト:%d
-\n空白の場合は無効。</string>
+    <string name="shake_to_silence_dialog_msg">値を低くするとより感度が高くなります。 \n \nデフォルト:%1$d\n空白または0の場合は無効。\n\n現在の振動値: %2$d\nピーク値 (5秒間): %3$d</string>
     <string name="tts">音声読み上げ</string>
-    <string name="tts_message_dialog">#a = App title
-\n#t = Ticker
-\n#s = Subtext
-\n#c = Content title
-\n#m = Content message
-\n#i = Content info
-\n
-\nデフォルト:
-\n#a. #c. #m.
-\n
-\n以前のデフォルト (v1.0.x):
-\n#a: #t</string>
+    <string name="tts_message_dialog">#A = App title \n#T = Ticker \n#S = Subtext \n#C = Content title \n#M = Content message \n#I = Content info \n#H = Big content title\n#Y = Big content summary\n#B = Big content text\n#L = Text lines\n大文字小文字を区別します\n \nデフォルト: \n%1$s \n \n以前のデフォルト (v1.1.0 - v1.3.0):\n#A. #C. #M.\n\n以前のデフォルト (v1.0.x): \n#A: #T</string>
     <string name="max_length_summary">読み上げる最大メッセージ長、これを超えるメッセージは切り捨てられます。</string>
     <string name="device_state_dialog_title">これらのデバイス状態で読み上げを行います</string>
     <string name="tts_repeat_dialog_msg">通知は、画面がオンになるまで指定された間隔で繰り返されます。画面がオンになっている間に作成された通知は繰り返されません。
@@ -49,7 +35,7 @@
 \n個々のエントリーは改行で区切ります。
 \nメッセージはいずれかのエントリにマッチする必要があります、完全一致ではありません。
 \n大文字と小文字は区別されません。</string>
-    <string name="app_list">読み上げ対象外アプリ</string>
+    <string name="app_list">読み上げ対象アプリ</string>
     <string name="ignore_repeat">同じメッセージを無視</string>
     <string name="tts_text_replace_summary">単語を置き換えるなど、読み上げるテキストの変換ルール</string>
     <string name="app_list_summary">ここで指定したアプリケーションは読み上げの対象外になります</string>
@@ -171,4 +157,36 @@
     <string name="back">戻る</string>
     <string name="error">エラー</string>
     <string name="reason_tts_interrupted">不明な理由で読み上げが中断されました</string>
+    <string name="backup_settings">バックアップ設定</string>
+    <string name="restore_settings">復元設定</string>
+    <string name="ignore_enable_apps_confirm">すべてのアプリを %s しますか？</string>
+    <string name="ignore">無視</string>
+    <string name="backup_restore">バックアップ / 復元</string>
+    <string name="backup_restore_summary">Voice Notifyの設定をバックアップもしくは復元</string>
+    <string name="test_big_content_text">これはbig content textです。</string>
+    <string name="big_content_text">Big Content Text</string>
+    <string name="ignored_reasons">無視された理由</string>
+    <string name="interrupted_reason">中断された理由</string>
+    <string name="support_email_subtext">フィードバック</string>
+    <string name="notification_details">通知詳細</string>
+    <string name="enable">有効</string>
+    <string name="subtext">Subtext</string>
+    <string name="content_text">Content Text</string>
+    <string name="text_lines">Text Lines</string>
+    <string name="metadata">Metadata</string>
+    <string name="metadata_progress_indeterminate">進捗度: 不明</string>
+    <string name="test_text_lines">これはテキスト行です。\nこれはテキスト行の二行目です。</string>
+    <string name="big_content_summary">Big Content Summary</string>
+    <string name="metadata_id">ID: %d</string>
+    <string name="error_browser">エラー: ブラウザアプリがインストールされていないようです。</string>
+    <string name="ticker">Ticker</string>
+    <string name="title">Title</string>
+    <string name="metadata_progress">進捗度: %1$d / %2$d</string>
+    <string name="test_big_content_summary">これはbig content summaryです</string>
+    <string name="support_github_subtext">バグレポート, 機能リクエスト, ソースコード</string>
+    <string name="content_info_text">Content Info Text</string>
+    <string name="metadata_category">Category: %s</string>
+    <string name="test_big_content_title">Big Content Title</string>
+    <string name="big_content_title">Big Content Title</string>
+    <string name="support_chat_subtext">ユーザーチャット, 開発者からの回答が最も早いです</string>
 </resources>
