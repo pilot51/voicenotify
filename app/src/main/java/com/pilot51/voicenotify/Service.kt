@@ -279,8 +279,8 @@ class Service : NotificationListenerService() {
 				&& notification.flags and Notification.FLAG_GROUP_SUMMARY != 0) {
 				return@launch  // Completely ignore group summary notifications.
 			}
-			val info = NotificationInfo(app, notification, settings)
-			val msgTime = info.calendar.timeInMillis
+			val info = NotificationInfo(app, sbn, settings)
+			val msgTime = info.instant.toEpochMilli()
 			val ttsMsg = info.ttsMessage
 			if (app != null && !app.isEnabled) {
 				info.addIgnoreReasons(IgnoreReason.APP)

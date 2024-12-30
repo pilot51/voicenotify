@@ -16,6 +16,8 @@
 package com.pilot51.voicenotify
 
 import android.app.Notification
+import android.os.Build
+import android.service.notification.StatusBarNotification
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +33,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
 import java.lang.Character.UnicodeBlock
 import java.text.MessageFormat
-import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.*
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
@@ -40,13 +44,14 @@ import kotlin.math.min
 /**
  * Class for all the information about a notification that we use.
  * @param app The app that posted the notification.
- * @param notification The notification from which to get most of the info.
+ * @param sbn The [StatusBarNotification] from which to get most of the info.
  */
 data class NotificationInfo(
 	val app: App?,
-	private val notification: Notification,
+	private val sbn: StatusBarNotification,
 	val settings: Settings
 ) {
+	private val notification = sbn.notification
 	private val extras by notification::extras
 	val id = extras.getInt(NotificationCompat.EXTRA_NOTIFICATION_ID)
 	val category: String? = notification.category
@@ -71,8 +76,9 @@ data class NotificationInfo(
 	val bigContentText = extras.getCharSequence(Notification.EXTRA_BIG_TEXT)?.toString()
 	/** The notification's lines of text for [Notification.InboxStyle]. */
 	val textLines: Array<CharSequence>? = extras.getCharSequenceArray(Notification.EXTRA_TEXT_LINES)
-	/** Calendar representing the time that this instance of NotificationInfo was created. */
-	val calendar: Calendar = Calendar.getInstance()
+	/** The [Instant] when the notification was posted. */
+	val instant: Instant = Instant.ofEpochMilli(sbn.postTime)
+	val flagsText by lazy { flagsToString(notification.flags) }
 	var isEmpty = false
 		private set
 	private val ignoreReasonsState = MutableStateFlow<Set<IgnoreReason>>(linkedSetOf())
@@ -195,12 +201,17 @@ data class NotificationInfo(
 		return text
 	}
 
-	/**
-	 * @return The time that this NotificationInfo was created (just after notification posted).<br></br>
-	 * Formatted as HH:mm:ss.
-	 */
+	/** @return The time that the notification was posted. Format: HH:mm:ss */
 	val time: String
-		get() = SimpleDateFormat("HH:mm:ss", Locale.ENGLISH).format(calendar.time)
+		get() = DateTimeFormatter.ofPattern("HH:mm:ss")
+		.withZone(ZoneId.systemDefault())
+		.format(instant)
+
+	/** @return The date and time that the notification was posted. Format: yyyy-MM-dd HH:mm:ss.SSS */
+	val dateTime: String
+		get() = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+		.withZone(ZoneId.systemDefault())
+		.format(instant)
 
 	/**
 	 * Set this notification as ignored for being identical to a previous notification within the configured time
@@ -231,12 +242,33 @@ data class NotificationInfo(
 		const val TTS_BIG_CONTENT_SUMMARY = "#Y"
 		const val TTS_BIG_CONTENT_TEXT = "#B"
 		const val TTS_TEXT_LINES = "#L"
-	}
-
-	private fun String.removeEmojis() = filterNot {
-		Character.isSurrogate(it) || UnicodeBlock.of(it).isAny(
-			UnicodeBlock.DINGBATS,
-			UnicodeBlock.MISCELLANEOUS_SYMBOLS,
+		private val flagsMap = mapOf(
+			Notification.FLAG_SHOW_LIGHTS to "SHOW_LIGHTS",
+			Notification.FLAG_ONGOING_EVENT to "ONGOING_EVENT",
+			Notification.FLAG_INSISTENT to "INSISTENT",
+			Notification.FLAG_ONLY_ALERT_ONCE to "ONLY_ALERT_ONCE",
+			Notification.FLAG_AUTO_CANCEL to "AUTO_CANCEL",
+			Notification.FLAG_NO_CLEAR to "NO_CLEAR",
+			Notification.FLAG_FOREGROUND_SERVICE to "FOREGROUND_SERVICE",
+			Notification.FLAG_HIGH_PRIORITY to "HIGH_PRIORITY",
+			Notification.FLAG_LOCAL_ONLY to "LOCAL_ONLY",
+			Notification.FLAG_GROUP_SUMMARY to "GROUP_SUMMARY",
+			0x0400 to "AUTOGROUP_SUMMARY",
+			0x0800 to "CAN_COLORIZE",
+			(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) Notification.FLAG_BUBBLE else 0x1000) to "BUBBLE",
+			0x2000 to "NO_DISMISS",
+			0x4000 to "FSI_REQUESTED_BUT_DENIED",
+			0x8000 to "USER_INITIATED_JOB"
 		)
+
+		private fun flagsToString(flags: Int) =
+			flagsMap.filter { (flag, _) -> flags and flag != 0 }.values.joinToString("\n")
+
+		private fun String.removeEmojis() = filterNot {
+			Character.isSurrogate(it) || UnicodeBlock.of(it).isAny(
+				UnicodeBlock.DINGBATS,
+				UnicodeBlock.MISCELLANEOUS_SYMBOLS,
+			)
+		}
 	}
 }

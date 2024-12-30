@@ -68,6 +68,7 @@ android {
 	compileOptions {
 		sourceCompatibility = JavaVersion.VERSION_21
 		targetCompatibility = JavaVersion.VERSION_21
+		isCoreLibraryDesugaringEnabled = true
 	}
 
 	signingConfigs {
@@ -112,6 +113,7 @@ android {
 }
 
 dependencies {
+	coreLibraryDesugaring(libs.android.desugar)
 	implementation(libs.accompanist.permissions)
 	implementation(libs.androidx.activity.compose)
 	implementation(libs.androidx.compose.material.iconsExtended)

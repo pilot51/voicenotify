@@ -104,6 +104,7 @@
 	<string name="big_content_title">Big Content Title</string>
 	<string name="big_content_text">Big Content Text</string>
 	<string name="text_lines">Text Lines</string>
+	<string name="flags">Flags</string>
 	<string name="ignored_reasons">Ignored Reasons</string>
 	<string name="interrupted_reason">Interrupted Reason</string>
 	<string name="metadata">Metadata</string>

@@ -15,7 +15,10 @@
  */
 package com.pilot51.voicenotify
 
+import android.annotation.SuppressLint
 import android.app.Notification
+import android.os.UserHandle
+import android.service.notification.StatusBarNotification
 import androidx.annotation.StringRes
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -202,7 +205,7 @@ private fun DetailDialog(
 				modifier = Modifier.fillMaxWidth(),
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
-				Text(item.time)
+				Text(item.dateTime)
 				item.app?.apply {
 					var isEnabled by remember(this) { mutableStateOf(isEnabled) }
 					Text(text = label, fontSize = 24.sp)
@@ -258,6 +261,9 @@ private fun DetailDialog(
 					}
 					item.ttsMessage?.let {
 						NotificationPart(R.string.tts_message, it)
+					}
+					item.flagsText.takeIf { it.isNotEmpty() }?.let {
+						NotificationPart(R.string.flags, it)
 					}
 					NotificationPart(
 						partName = R.string.metadata,
@@ -350,24 +356,30 @@ private fun IgnoreDialog(
 	)
 }
 
+@Suppress("DEPRECATION")
+@SuppressLint("NewApi")
 @Composable
-private fun previewNotification() = Notification().apply {
-	`when` = Long.MIN_VALUE
-	tickerText = "Ticker"
-	extras.apply {
-		putCharSequence(Notification.EXTRA_SUB_TEXT, stringResource(R.string.test_subtext))
-		putCharSequence(Notification.EXTRA_TITLE, stringResource(R.string.test_content_title))
-		putCharSequence(Notification.EXTRA_TEXT, stringResource(R.string.test_content_text))
-		putCharSequence(Notification.EXTRA_INFO_TEXT, stringResource(R.string.test_content_info))
-		putCharSequence(Notification.EXTRA_TITLE_BIG, stringResource(R.string.test_big_content_title))
-		putCharSequence(Notification.EXTRA_SUMMARY_TEXT, stringResource(R.string.test_big_content_summary))
-		putCharSequence(Notification.EXTRA_BIG_TEXT, stringResource(R.string.test_big_content_text))
-		putCharSequenceArray(Notification.EXTRA_TEXT_LINES,
-			stringResource(R.string.test_text_lines).split("\n").toTypedArray())
-		putInt(Notification.EXTRA_PROGRESS, 50)
-		putInt(Notification.EXTRA_PROGRESS_MAX, 100)
-	}
-}
+private fun previewNotification() = StatusBarNotification(
+	"pkg", "opPkg", 0, "tag", 0, 0, 0,
+	Notification().apply {
+		tickerText = "Ticker"
+		flags = Notification.FLAG_FOREGROUND_SERVICE or Notification.FLAG_ONLY_ALERT_ONCE
+		extras.apply {
+			putCharSequence(Notification.EXTRA_SUB_TEXT, stringResource(R.string.test_subtext))
+			putCharSequence(Notification.EXTRA_TITLE, stringResource(R.string.test_content_title))
+			putCharSequence(Notification.EXTRA_TEXT, stringResource(R.string.test_content_text))
+			putCharSequence(Notification.EXTRA_INFO_TEXT, stringResource(R.string.test_content_info))
+			putCharSequence(Notification.EXTRA_TITLE_BIG, stringResource(R.string.test_big_content_title))
+			putCharSequence(Notification.EXTRA_SUMMARY_TEXT, stringResource(R.string.test_big_content_summary))
+			putCharSequence(Notification.EXTRA_BIG_TEXT, stringResource(R.string.test_big_content_text))
+			putCharSequenceArray(Notification.EXTRA_TEXT_LINES,
+				stringResource(R.string.test_text_lines).split("\n").toTypedArray())
+			putInt(Notification.EXTRA_PROGRESS, 50)
+			putInt(Notification.EXTRA_PROGRESS_MAX, 100)
+		}
+	},
+	UserHandle.getUserHandleForUid(0), System.currentTimeMillis()
+)
 
 @VNPreview
 @Composable
@@ -376,12 +388,12 @@ private fun LogDialogPreview() {
 	val list = listOf(
 		NotificationInfo(
 			app = App("package.name.one", "App Name 1", true),
-			notification = previewNotification,
+			sbn = previewNotification,
 			Settings()
 		),
 		NotificationInfo(
 			app = App("package.name.two", "App Name 2", false),
-			notification = previewNotification,
+			sbn = previewNotification,
 			Settings()
 		)
 	)
@@ -395,7 +407,7 @@ private fun LogDialogPreview() {
 private fun DetailDialogPreview() {
 	val info = NotificationInfo(
 		app = App("package.name.one", "App Name 1", true),
-		notification = previewNotification(),
+		sbn = previewNotification(),
 		Settings()
 	)
 	AppTheme {
