@@ -30,9 +30,7 @@
 \n#a: #t</string>
     <string name="tts_text_replace">Teks Pengganti TKU</string>
     <string name="tts_text_replace_summary">Teks pengganti yang diucapkan, semisal memperbaiki pengucapan</string>
-    <string name="tts_text_replace_dialog">Pecah teks yang diucapkan, memungkinkan Anda untuk menyesuaikan bagaimana Teks-Ke-Ucap mengeja kata atau mengubah teks untuk alasan apapun.
-\n
-\nTeks pengganti tidak peka kapitalisasi.</string>
+    <string name="tts_text_replace_dialog">Pecah teks yang diucapkan, memungkinkan Anda untuk menyesuaikan bagaimana Teks-Ke-Ucap mengeja kata atau mengubah teks untuk alasan apapun. \n \nTeks pengganti tidak peka kapitalisasi.</string>
     <string name="tts_stream">Aliran Audio TKU</string>
     <string name="tts_stream_summary">Pilih aliran audio yang memainkan Teks-Ke-Ucap</string>
     <string name="tts_delay">Tunda TKU</string>
@@ -75,8 +73,7 @@
 \nKosong= tak terhingga.</string>
     <string name="max_length">Pesan Maksimum</string>
     <string name="max_length_summary">Panjang pesan diucapkan maksimum. Pesan panjang akan dipotong.</string>
-    <string name="max_length_dialog_msg">Panjang pesan diucapkan maksimum
-\nPesan panjang akan dipotong.</string>
+    <string name="max_length_dialog_msg">Panjang pesan diucapkan maksimum \nPesan panjang akan dipotong.</string>
     <string name="device_state">Keadaan Perangkat</string>
     <string name="device_state_summary">Pilih apakan akan berucap dalam keadaan perangkat tertentu</string>
     <string name="device_state_dialog_title">Berucap selama keadaan berikut</string>
