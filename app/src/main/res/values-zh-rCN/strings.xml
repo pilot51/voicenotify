@@ -138,9 +138,7 @@
 \n#A: #T</string>
     <string name="tts_text_replace">TTS文本替换</string>
     <string name="tts_text_replace_summary">替换要播报的文本，例如修正发音</string>
-    <string name="tts_text_replace_dialog">替换要播报的文本，允许您自定义文字转语音如何发音或出于任何其他原因替换文本。
-\n
-\n要替换的文本不区分大小写，并在TTS消息中设置的格式之后应用，包括标点符号。</string>
+    <string name="tts_text_replace_dialog">替换要播报的文本，允许您自定义文字转语音如何发音或出于任何其他原因替换文本。 \n \n要替换的文本不区分大小写，并在TTS消息中设置的格式之后应用，包括标点符号。</string>
     <string name="text_replace_error_duplicate">重复！不会被保存。</string>
     <string name="text_to_replace">要替换的文本</string>
     <string name="replacement_text">替换文本</string>
@@ -148,8 +146,7 @@
     <string name="error">错误</string>
     <string name="max_length">最大消息长度</string>
     <string name="max_length_summary">要播报的最大消息长度。更长的消息将被截断。</string>
-    <string name="max_length_dialog_msg">要播报的最大消息长度
-\n更长的消息将被截断。</string>
+    <string name="max_length_dialog_msg">要播报的最大消息长度 \n更长的消息将被截断。</string>
     <string name="tts_stream">TTS音频流</string>
     <string name="tts_stream_summary">选择文字转语音播放的音频流</string>
     <string name="tts_delay">TTS延迟</string>
