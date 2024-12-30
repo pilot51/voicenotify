@@ -57,9 +57,7 @@
     <string name="tts_delay_dialog_msg">Số giây đợi sau khi thông báo trước được đọc.</string>
     <string name="reason_screen_off">Tắt màn hình</string>
     <string name="reason_screen_on">Mở màn hình</string>
-    <string name="tts_text_replace_dialog">Thay thế văn bản đọc thành giọng nói, cho phép bạn tùy chỉnh cách công cụ Text-To-Speech phát âm các từ hoặc thay thế văn bản vì những lý do khác.
-\n
-\nVăn bản cần thay thế không phân biệt chữ hoa chữ thường và được áp dụng sau định dạng được đặt trong Mensage TTS, bao gồm cả dấu câu.</string>
+    <string name="tts_text_replace_dialog">Thay thế văn bản đọc thành giọng nói, cho phép bạn tùy chỉnh cách công cụ Text-To-Speech phát âm các từ hoặc thay thế văn bản vì những lý do khác. \n \nVăn bản cần thay thế không phân biệt chữ hoa chữ thường và được áp dụng sau định dạng được đặt trong Mensage TTS, bao gồm cả dấu câu.</string>
     <string name="tts_repeat_dialog_msg">Thông báo được lặp lại trong khoảng thời gian nhất định cho đến khi màn hình được bật lên. Thông báo được tạo trong khi màn hình bật lên không được lặp lại.
 \n
 \nGiá trị được tính bằng phút. Để trống hoặc đặt giá trị bằng 0 để tắt đi.</string>
@@ -176,8 +174,7 @@
     <string name="error">Lỗi</string>
     <string name="max_length">Số ký tự tối đa</string>
     <string name="max_length_summary">Số ký tự tối đa được đọc. Thông điệp lớn hơn sẽ bị cắt bớt.</string>
-    <string name="max_length_dialog_msg">Số ký tự tối đa được đọc
-\nLớn hơn sẽ bị cắt bớt.</string>
+    <string name="max_length_dialog_msg">Số ký tự tối đa được đọc \nLớn hơn sẽ bị cắt bớt.</string>
     <string name="tts_stream">Luồng âm thanh Chuyển văn bản thành Giọng nói</string>
     <string name="tts_stream_summary">Chọn luồng âm thanh mà Chuyển văn bản thành giọng nói phát</string>
     <string name="tts_delay">Độ trễ của Chuyển văn bản thành Giọng nói</string>
