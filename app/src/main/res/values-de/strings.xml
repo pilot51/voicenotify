@@ -223,11 +223,8 @@
     <string name="support_chat_subtext">Benutzer-Chat, schnellste Entwicklerantwort</string>
     <string name="support_privacy">Datenschutzerklärung</string>
     <string name="error_browser">Fehler: Installierte Browser-App kann nicht gefunden werden.</string>
-    <string name="tts_text_replace_dialog">Ersetzt vorzulesenden Text und erlaubt es dadurch anzupassen, wie Text-To-Speech Wörter ausspricht oder Text aus anderen Gründen zu ersetzen.
-\n
-\nDie Textersetzung ignoriert Groß- und Kleinschreibung und wird nach der Formatierung der TTS-Nachricht angewendet, inklusive Zeichensetzung.</string>
-    <string name="max_length_dialog_msg">Maximale Länge, die vorgelesen wird.
-\nLängere Nachrichten werden gekürzt.</string>
+    <string name="tts_text_replace_dialog">Ersetzt vorzulesenden Text und erlaubt es dadurch anzupassen, wie Text-To-Speech Wörter ausspricht oder Text aus anderen Gründen zu ersetzen. \n \nDie Textersetzung ignoriert Groß- und Kleinschreibung und wird nach der Formatierung der TTS-Nachricht angewendet, inklusive Zeichensetzung.</string>
+    <string name="max_length_dialog_msg">Maximale Länge, die vorgelesen wird. \nLängere Nachrichten werden gekürzt.</string>
     <string name="reason_tts_restarted">TTS wurde neu gestartet, während sich die Nachricht in der Warteschlangen befand oder vorgelesen wurde. Wiederholung geplant.</string>
     <string name="reason_tts_length_limit">Maximale TTS-Länge überschritten</string>
 </resources>
