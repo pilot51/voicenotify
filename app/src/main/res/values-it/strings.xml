@@ -55,8 +55,7 @@
 \nVuoto = infinito</string>
     <string name="max_length">Limite Messaggio</string>
     <string name="max_length_summary">Lunghezza massima del messaggio da sintetizzare. Messaggi più lunghi verranno troncati.</string>
-    <string name="max_length_dialog_msg">Lunghezza massima del messaggio da sintetizzare.
-\nMessaggi più lunghi verranno troncati.</string>
+    <string name="max_length_dialog_msg">Lunghezza massima del messaggio da sintetizzare. \nMessaggi più lunghi verranno troncati.</string>
     <string name="device_state">Stati Dispositivo</string>
     <string name="device_state_summary">Scegli se annunciare durante determinati stati.</string>
     <string name="device_state_dialog_title">Annuncia con questi stati del dispositivo</string>
@@ -160,9 +159,7 @@
     <string name="reason_tts_restarted">TTS riavviato mentre un messaggio era in coda o in corso di lettura. Rimesso in coda.</string>
     <string name="title">Titolo</string>
     <string name="support_github_subtext">Segnalazioni di bug, richiesta nuove caratteristiche, codice sorgente</string>
-    <string name="tts_text_replace_dialog">Sostituisci il testo da leggere per personalizzare il modo in cui la sintesi vocale pronuncia le parole o per sostituire il testo per qualsiasi altro motivo.
-\n
-\nÈ indifferente se il testo viene inserito in maiuscolo o in minuscolo, e si applica dopo la formattazione impostata nel messaggio TTS, inclusa la punteggiatura.</string>
+    <string name="tts_text_replace_dialog">Sostituisci il testo da leggere per personalizzare il modo in cui la sintesi vocale pronuncia le parole o per sostituire il testo per qualsiasi altro motivo. \n \nÈ indifferente se il testo viene inserito in maiuscolo o in minuscolo, e si applica dopo la formattazione impostata nel messaggio TTS, inclusa la punteggiatura.</string>
     <string name="permission_rationale_post_notifications">L\'autorizzazione ad inviare notifiche è richiesta per permettere a Voice Notify di inviare una notifica di prova.</string>
     <string name="test_big_content_title">Titolo contenuto</string>
 </resources>
