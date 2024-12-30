@@ -145,15 +145,12 @@
     <string name="replacement_text">Texto de sustitución</string>
     <string name="test_content_text">Este es el contenido del mensaje.</string>
     <string name="reason_service_stopped">Servicio detenido</string>
-    <string name="max_length_dialog_msg">Longitud máxima del mensaje para hablar
-\nLos mensajes más largos serán truncados.</string>
+    <string name="max_length_dialog_msg">Longitud máxima del mensaje para hablar \nLos mensajes más largos serán truncados.</string>
     <string name="ignore_groups_summary_on">Las notificaciones que contengan varios mensajes no se leerán</string>
     <string name="ignore_groups_summary_off">Las notificaciones que contengan varios mensajes se pronunciarán</string>
     <string name="test_content_title">Título del contenido</string>
     <string name="test_content_info">Información sobre el contenido</string>
-    <string name="tts_text_replace_dialog">Sustituir texto para que se pronuncie, lo que le permite personalizar la forma en que Text-To-Speech pronuncia las palabras o sustituir texto por cualquier otro motivo.
-\n
-\nEl texto a sustituir no distingue entre mayúsculas y minúsculas y se aplica después del formato establecido en Mensaje TTS, incluida la puntuación.</string>
+    <string name="tts_text_replace_dialog">Sustituir texto para que se pronuncie, lo que le permite personalizar la forma en que Text-To-Speech pronuncia las palabras o sustituir texto por cualquier otro motivo. \n \nEl texto a sustituir no distingue entre mayúsculas y minúsculas y se aplica después del formato establecido en Mensaje TTS, incluida la puntuación.</string>
     <string name="ignore_groups">Ignorar mensajes de grupo</string>
     <string name="reason_call">Llamada telefónica activa</string>
     <string name="test_subtext">El subtexto</string>
