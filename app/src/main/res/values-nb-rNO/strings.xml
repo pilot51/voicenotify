@@ -8,9 +8,7 @@
 \n
 \nForvalg: %d
 \nLa stå tom for å skru av.</string>
-    <string name="tts_text_replace_dialog">Erstatt tekst å lese opp, for å tilpasse hvordan tekst til tale uttaler ord eller erstatt tekst av andre grunner.
-\n
-\nDet er ingen forskjell på små og store bokstaver.</string>
+    <string name="tts_text_replace_dialog">Erstatt tekst å lese opp, for å tilpasse hvordan tekst til tale uttaler ord eller erstatt tekst av andre grunner. \n \nDet er ingen forskjell på små og store bokstaver.</string>
     <string name="tts_repeat_dialog_msg">Merknader gjentas ved angitt intervall til skjermen slår seg av. Merknader opprettes mens skjermen er på gjentas ikke.
 \n
 \nVerdien er i minutter. Lå stå tom eller skriv «0» for å skru av.</string>
@@ -135,8 +133,7 @@
     <string name="ignore_groups_summary_on">Merknader som inneholder flere meldinger vil ikke leses opp</string>
     <string name="ignore_groups_summary_off">Merknader som inneholder flere meldinger vil leses opp</string>
     <string name="device_state_summary">Velg hvilke enhetstilstander TTS skal være aktiv i</string>
-    <string name="max_length_dialog_msg">Maks. meldingslengde å kunngjøre
-\nLengre meldinger vil forkortes.</string>
+    <string name="max_length_dialog_msg">Maks. meldingslengde å kunngjøre \nLengre meldinger vil forkortes.</string>
     <string name="device_state_dialog_title">Les opp under disse enhetstilstandene</string>
     <string name="support_privacy_message">Voice Notify samler ikke inn eller sender data far enheten. Den bruker dog tredjepartstjenester som kan sende data, som beskrevet nedenfor under «Tredjepartsprogrammer og tjenester».
 \n
