@@ -52,8 +52,7 @@
     <string name="error">שגיאה</string>
     <string name="max_length">הודעה מקסימלית</string>
     <string name="max_length_summary">אורך הודעה מקסימלי לדיבור. הודעות גדולות יותר יקוצצו.</string>
-    <string name="max_length_dialog_msg">אורך הודעה מקסימלי לדיבור
-\nהודעות גדולות יותר יקוצצו.</string>
+    <string name="max_length_dialog_msg">אורך הודעה מקסימלי לדיבור \nהודעות גדולות יותר יקוצצו.</string>
     <string name="tts_stream">זרם שמע להתראות קוליות</string>
     <string name="tts_stream_summary">בחר את זרם האודיו במכשיר שהאפליקציה תנגן דרכו</string>
     <string name="tts_delay">דיליי בהקראה (עיקוב)</string>
