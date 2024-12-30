@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="service_running">Voice Notify は動作中</string>
-    <string name="max_length_dialog_msg">読み上げるメッセージの最大長
-\n最大長を超えるメッセージは切り捨てられます。</string>
+    <string name="max_length_dialog_msg">読み上げるメッセージの最大長 \n最大長を超えるメッセージは切り捨てられます。</string>
     <string name="ignore_groups">グループメッセージを無視</string>
     <string name="tts_delay">音声読み上げ遅延</string>
     <string name="shake_to_silence_summary">「振って停止」の感度を調整します</string>
@@ -48,9 +47,7 @@
     <string name="ignore_strings">無視する文字列</string>
     <string name="tts_text_replace">音声読み上げテキスト置換</string>
     <string name="ignore_groups_summary_off">複数のメッセージを含む通知を読み上げます</string>
-    <string name="tts_text_replace_dialog">テキストを置き換えることで、音声読み上げがどのように単語を発音するかをカスタマイズしたり、その他の目的でテキストを置き換えたりできます。
-\n
-\n置換するテキストは大文字小文字を区別せず、句読点を含め音声読み上げメッセージで設定された書式が適用されます。</string>
+    <string name="tts_text_replace_dialog">テキストを置き換えることで、音声読み上げがどのように単語を発音するかをカスタマイズしたり、その他の目的でテキストを置き換えたりできます。 \n \n置換するテキストは大文字小文字を区別せず、句読点を含め音声読み上げメッセージで設定された書式が適用されます。</string>
     <string name="service_suspended">Voice Notify は停止中</string>
     <string name="max_length">最大メッセージ長</string>
     <string name="ignore_empty_summary_on">メッセージのない通知を読み上げません</string>
