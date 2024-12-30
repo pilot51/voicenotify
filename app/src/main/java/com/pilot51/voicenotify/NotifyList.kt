@@ -161,10 +161,11 @@ private fun Item(
 				textAlign = TextAlign.Center
 			)
 		}
-		if (item.ignoreReasons.isNotEmpty()) {
+		val ignoreReasons by item.ignoreReasonsTextFlow.collectAsState("")
+		if (ignoreReasons.isNotEmpty()) {
 			val interruptedColor = if (isSystemInDarkTheme()) Color.Yellow else Color(0xFFBBBB00)
 			Text(
-				text = item.getIgnoreReasonsAsText(),
+				text = ignoreReasons,
 				modifier = Modifier.fillMaxWidth(),
 				color = if (item.isInterrupted) interruptedColor else Color.Red,
 				fontWeight = FontWeight.Bold,
@@ -275,7 +276,8 @@ private fun DetailDialog(
 							}
 						}.toString()
 					)
-					if (item.ignoreReasons.isNotEmpty()) {
+					val ignoreReasons by item.ignoreReasonsTextFlow.collectAsState("")
+					if (ignoreReasons.isNotEmpty()) {
 						val interruptedColor = if (isSystemInDarkTheme()) {
 							Color.Yellow
 						} else Color(0xFFBBBB00)
@@ -283,7 +285,7 @@ private fun DetailDialog(
 							partName = if (item.isInterrupted) {
 								R.string.interrupted_reason
 							} else R.string.ignored_reasons,
-							text = item.getIgnoreReasonsAsText(),
+							text = ignoreReasons,
 							color = if (item.isInterrupted) interruptedColor else Color.Red
 						)
 					}

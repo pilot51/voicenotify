@@ -17,6 +17,9 @@ package com.pilot51.voicenotify
 
 import android.app.Notification
 import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.core.app.NotificationCompat
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.db.App
@@ -24,6 +27,8 @@ import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_MAX_LENGTH
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_EMOJIS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.map
 import java.lang.Character.UnicodeBlock
 import java.text.MessageFormat
 import java.text.SimpleDateFormat
@@ -70,15 +75,20 @@ data class NotificationInfo(
 	val calendar: Calendar = Calendar.getInstance()
 	var isEmpty = false
 		private set
-	/** Set of reasons this notification was ignored, or an empty set if not ignored. */
-	val ignoreReasons = linkedSetOf<IgnoreReason>()
+	private val ignoreReasonsState = MutableStateFlow<Set<IgnoreReason>>(linkedSetOf())
+	/** A flow of the reasons this notification was ignored or silenced as a string. */
+	val ignoreReasonsTextFlow = ignoreReasonsState.map { it.asString() }
+	/** Set of reasons, if any, this notification was ignored or silenced. */
+	var ignoreReasons: Set<IgnoreReason>
+		get() = ignoreReasonsState.value
+		private set(value) { ignoreReasonsState.value = value }
 	/**
 	 * Indicates if the notification was interrupted during speech.
 	 * Used to set the color of the ignore reasons in [NotifyList].
 	 * Set to `true` to make the ignore message yellow.
 	 * Default is red for never spoken.
 	 */
-	var isInterrupted = false
+	var isInterrupted by mutableStateOf(false)
 	/** The Ignore Repeats setting in seconds, set by [addIgnoreReasonIdentical]. */
 	private var ignoreRepeatSeconds = -1
 	/** The TTS Message setting. */
@@ -170,17 +180,16 @@ data class NotificationInfo(
 	private fun isUnusedOrBlank(tag: String, text: String?) =
 		!ttsStringPref.contains(tag, true) || text.isNullOrBlank()
 
-	/**
-	 * Gets the reasons this notification was ignored as a single string.
-	 * @return Comma-separated list of ignore reasons.
-	 */
-	fun getIgnoreReasonsAsText(): String {
-		var text = ignoreReasons.joinToString()
+	/** @return The reasons this notification was ignored or silenced as a string. */
+	fun getIgnoreReasonsAsText() = ignoreReasons.asString()
+
+	private fun Set<IgnoreReason>.asString(): String {
+		var text = joinToString()
 			// If message ends with period and isn't last, replaces comma after it with newline
 			.replace("., ", ".\n")
 			// If message ends with period and isn't first, replaces comma before it with newline
 			.replace(Regex(", (.+\\.)$"), "\n$1")
-		if (ignoreReasons.contains(IgnoreReason.IDENTICAL)) {
+		if (contains(IgnoreReason.IDENTICAL)) {
 			text = MessageFormat.format(text, ignoreRepeatSeconds)
 		}
 		return text
@@ -199,7 +208,11 @@ data class NotificationInfo(
 	 */
 	fun addIgnoreReasonIdentical(ignoreRepeatTime: Int) {
 		ignoreRepeatSeconds = ignoreRepeatTime
-		ignoreReasons.add(IgnoreReason.IDENTICAL)
+		addIgnoreReasons(IgnoreReason.IDENTICAL)
+	}
+
+	fun addIgnoreReasons(vararg reasons: IgnoreReason) {
+		ignoreReasons += reasons
 	}
 
 	// For some reason this is needed to force list state update with simple object copy
