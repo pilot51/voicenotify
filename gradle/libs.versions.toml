@@ -8,6 +8,7 @@ androidxCore = "1.13.1"
 androidxGlance = "1.1.1"
 androidxNavigation = "2.8.5"
 androidxPreference = "1.2.1"
+autostarter = "1.1.0"
 kotlin = "2.1.0"
 ksp = "2.1.0-1.0.29"
 room = "2.6.1"
@@ -26,6 +27,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-preference = { group = "androidx.preference", name = "preference-ktx", version.ref = "androidxPreference" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+autostarter = { group = "com.github.judemanutd", name = "autostarter", version.ref = "autostarter" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect", version.ref = "kotlin" }
 

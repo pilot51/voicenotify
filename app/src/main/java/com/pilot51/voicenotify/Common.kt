@@ -15,10 +15,12 @@
  */
 package com.pilot51.voicenotify
 
+import android.content.ComponentName
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
+import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
@@ -34,12 +36,15 @@ import kotlin.time.Duration.Companion.seconds
 object Common {
 	private val TAG = Common::class.simpleName
 
-	val notificationListenerSettingsIntent: Intent by lazy {
-		Intent(
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-				Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
-			} else "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
-		)
+	val notificationListenerSettingsIntent get() = Intent(
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+			Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
+		} else "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
+	).apply {
+		// Highlight Voice Notify when settings opens
+		val serviceId = ComponentName(appContext, Service::class.java).flattenToShortString()
+		val args = Bundle().apply { putString(":settings:fragment_args_key", serviceId) }
+		putExtra(":settings:show_fragment_args", args)
 	}
 
 	val apps = mutableStateListOf<App>()

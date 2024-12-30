@@ -16,11 +16,16 @@
 package com.pilot51.voicenotify
 
 import android.Manifest
+import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -31,6 +36,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
+import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.pilot51.voicenotify.NotifyList.NotificationLogDialog
 import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
 import com.pilot51.voicenotify.PermissionHelper.requestPermission
@@ -49,6 +55,7 @@ fun MainScreen(
 	onClickTtsConfig: () -> Unit
 ) {
 	val context = LocalContext.current
+	val autoStartHelper = remember { AutoStartPermissionHelper.getInstance() }
 	val settings by vm.getSettingsState(configApp)
 	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	val phoneStatePermissionState = if (isPreview) null
@@ -90,6 +97,9 @@ fun MainScreen(
 	var showLog by remember { mutableStateOf(false) }
 	var showBackupRestore by remember { mutableStateOf(false) }
 	var showSupport by remember { mutableStateOf(false) }
+	var showAutostartDialog by remember {
+		mutableStateOf(!Service.isRunning.value && autoStartHelper.isAutoStartPermissionAvailable(context))
+	}
 	var showReadPhoneStateRationale by remember { mutableStateOf(false) }
 	var showPostNotificationRationale by remember { mutableStateOf(false) }
 	val lifeCycleOwner = LocalLifecycleOwner.current
@@ -328,6 +338,42 @@ fun MainScreen(
 	}
 	if (showSupport) {
 		SupportDialog { showSupport = false }
+	}
+	if (showAutostartDialog) {
+		val canOpenDirect = remember {
+			autoStartHelper.getAutoStartPermission(context, open = false)
+				// Library opens wrong screen on Samsung (Sleeping Apps instead of Never Sleeping Apps)
+				&& Build.BRAND.lowercase() != "samsung"
+		}
+		AlertDialog(
+			onDismissRequest = { showAutostartDialog = false },
+			confirmButton = {
+				TextButton(
+					onClick = {
+						if (canOpenDirect) {
+							autoStartHelper.getAutoStartPermission(context)
+						} else context.startActivity(Intent(Settings.ACTION_SETTINGS))
+						showAutostartDialog = false
+					}
+				) {
+					Text(stringResource(android.R.string.ok))
+				}
+			},
+			dismissButton = {
+				TextButton(onClick = { showAutostartDialog = false }) {
+					Text(stringResource(android.R.string.cancel))
+				}
+			},
+			text = {
+				Text(stringResource(R.string.autostart_message) +
+					stringResource(
+						if (canOpenDirect) R.string.autostart_message_direct
+						else R.string.autostart_message_manual,
+						stringResource(android.R.string.ok)
+					)
+				)
+			}
+		)
 	}
 	if (showReadPhoneStateRationale) {
 		RationaleDialog(

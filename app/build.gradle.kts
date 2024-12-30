@@ -123,6 +123,7 @@ dependencies {
 	implementation(libs.androidx.preference)
 	implementation(libs.androidx.room.ktx)
 	implementation(libs.kotlin.reflect)
+	implementation(libs.autostarter)
 	ksp(libs.androidx.room.compiler)
 	debugImplementation(libs.androidx.compose.ui.tooling)
 }
