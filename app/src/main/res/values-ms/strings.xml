@@ -66,8 +66,7 @@
 \nKosong = tak terhingga.</string>
     <string name="max_length">Mesej Maksima</string>
     <string name="max_length_summary">Panjang mesej maksima diucapkan. Mesej yang besar akan dipendekkan.</string>
-    <string name="max_length_dialog_msg">Panjang mesej maksima diucapkan
-\nMesej yang besar akan dipendekkan.</string>
+    <string name="max_length_dialog_msg">Panjang mesej maksima diucapkan \nMesej yang besar akan dipendekkan.</string>
     <string name="device_state">Status Peranti</string>
     <string name="device_state_summary">Pilih jika ingin diucapkan didalam status peranti tertentu</string>
     <string name="device_state_dialog_title">Ucapan semasa peranti distatus ini</string>
