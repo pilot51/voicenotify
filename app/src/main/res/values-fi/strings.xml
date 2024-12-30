@@ -56,8 +56,7 @@
     <string name="ignore_repeat_summary">Ohita myöhemmät identtiset ilmoitukset tietyn ajan kuluessa</string>
     <string name="max_length">Viestin enimmäismäärä</string>
     <string name="max_length_summary">Puhuttavan viestin enimmäispituus. Pidemmät viestit katkaistaan.</string>
-    <string name="max_length_dialog_msg">Puhuttavan viestin enimmäispituus.
-\nPidemmät viestit katkaistaan.</string>
+    <string name="max_length_dialog_msg">Puhuttavan viestin enimmäispituus. \nPidemmät viestit katkaistaan.</string>
     <string name="device_state">Laitteen tilat</string>
     <string name="quiet_start">Hiljainen aika alkaa</string>
     <string name="device_state_summary">Valitse, puhutaanko tiettyjen laitteen tilojen aikana</string>
@@ -111,9 +110,7 @@
     <string name="reason_headset_on">Kuulokkeet käytössä</string>
     <string name="reason_shake">Hiljennetty ravistamalla</string>
     <string name="reason_screen_off">Näyttö pois päältä</string>
-    <string name="tts_text_replace_dialog">Korvattava puhuttava teksti. Sallii sinun muokata miten teksti puheeksi ääntää sanoja, tai korvaa tekstiä minkä tahansa muun syyn takia.
-\n
-\nKorvattavassa tekstissä kirjainkoolla ei ole merkitystä.</string>
+    <string name="tts_text_replace_dialog">Korvattava puhuttava teksti. Sallii sinun muokata miten teksti puheeksi ääntää sanoja, tai korvaa tekstiä minkä tahansa muun syyn takia. \n \nKorvattavassa tekstissä kirjainkoolla ei ole merkitystä.</string>
     <string name="tts_repeat_dialog_msg">Ilmoitukset toistetaan määritetyin väliajoin, kunnes näyttöön laitetaan päälle. Näytön ollessa päällä luotuja ilmoituksia ei toisteta.
 \n
 \n Arvo on minuutteina. Tyhjä tai 0 poistaa käytöstä.</string>
