@@ -23,9 +23,7 @@
 \n値の単位は分です。空白または0を指定すると無効になります。</string>
     <string name="tts_delay_summary">通知後に指定された秒数の間、音声読み上げを遅らせます</string>
     <string name="tts_delay_dialog_msg">通知後、読み上げるまでの待機秒数。</string>
-    <string name="ignore_repeat_dialog_msg">最後の通知から何秒経てば同じメッセージを読み上げられるかを設定します。
-\n同じメッセージが無視された場合カウントはリセットされ、異なる通知が来た場合カウントはクリアされます。
-\n空白 = 無限。</string>
+    <string name="ignore_repeat_dialog_msg">最後の通知から何秒経てば同じメッセージを読み上げられるかを設定します。 \n同じメッセージが無視された場合カウントはリセットされ、異なる通知が来た場合カウントはクリアされます。 \n空白 = 無限。</string>
     <string name="require_strings">特定の文字がある場合のみ読み上げ</string>
     <string name="ignore_empty">空を無視</string>
     <string name="tts_stream_summary">音声読み上げに使用するオーディオストリームを選択します</string>
