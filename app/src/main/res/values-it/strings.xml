@@ -49,10 +49,7 @@
     <string name="ignore_empty_summary_off">Le notifiche senza messaggio verranno annuncite come \"Notifica da [app name].\"</string>
     <string name="ignore_repeat">Ignora Ripetizioni</string>
     <string name="ignore_repeat_summary">Ignora le notifiche identiche e consecutive per un certo tempo.</string>
-    <string name="ignore_repeat_dialog_msg">Imposta quanti secondi passeranno dall\'ultima notifica prima di annunciare una ripetizione.
-\nOgni ripetizione ignorata resetterà il conto alla rovescia mentre notifiche differenti lo annulleranno.
-\n
-\nVuoto = infinito</string>
+    <string name="ignore_repeat_dialog_msg">Imposta quanti secondi passeranno dall\'ultima notifica prima di annunciare una ripetizione. \nOgni ripetizione ignorata resetterà il conto alla rovescia mentre notifiche differenti lo annulleranno. \n \nVuoto = infinito</string>
     <string name="max_length">Limite Messaggio</string>
     <string name="max_length_summary">Lunghezza massima del messaggio da sintetizzare. Messaggi più lunghi verranno troncati.</string>
     <string name="max_length_dialog_msg">Lunghezza massima del messaggio da sintetizzare. \nMessaggi più lunghi verranno troncati.</string>
