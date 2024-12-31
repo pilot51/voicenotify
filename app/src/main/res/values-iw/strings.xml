@@ -103,9 +103,7 @@
 \nעובד גם לאותיות גדולות/קטנות באנגלית.</string>
     <string name="ignore_empty">התעלם מהתראות ריקות</string>
     <string name="ignore_groups_summary_off">התראות הכוללות מספר הודעות בהן יוקראו</string>
-    <string name="ignore_repeat_dialog_msg">הגדר את מספר השניות שחייבות לחלוף מאז ההודעה האחרונה לפני שניתן יהיה לקרוא התראות בעלי אותו טקסט בדיוק.
-\nהתראות דומות מאפסות את הספירה, והתראות שונות מדלגות על הספירה.
-\nריק = אין סוף זמן.</string>
+    <string name="ignore_repeat_dialog_msg">הגדר את מספר השניות שחייבות לחלוף מאז ההודעה האחרונה לפני שניתן יהיה לקרוא התראות בעלי אותו טקסט בדיוק. \nהתראות דומות מאפסות את הספירה, והתראות שונות מדלגות על הספירה. \nריק = אין סוף זמן.</string>
     <string name="device_state_dialog_title">הקרא הודעות רק במצבים אלה</string>
     <string name="device_state">מצבי מכשיר</string>
     <string name="device_state_summary">הגדר באיזה מצבים להקריא הודעות בקול</string>
