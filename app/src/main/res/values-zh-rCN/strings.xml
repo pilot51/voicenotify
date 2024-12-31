@@ -41,9 +41,7 @@
     <string name="ignore_groups_summary_on">包含多条消息的通知将不会被播报</string>
     <string name="ignore_groups_summary_off">包含多条消息的通知将被播报</string>
     <string name="ignore_repeat">忽略重复通知</string>
-    <string name="ignore_repeat_dialog_msg">设置在上一条通知后必须经过的秒数，之后才能播报重复通知。
-\n被忽略的重复通知会重置计数，不同的通知会清除计数。
-\n留空 = 无限。</string>
+    <string name="ignore_repeat_dialog_msg">设置在上一条通知后必须经过的秒数，之后才能播报重复通知。 \n被忽略的重复通知会重置计数，不同的通知会清除计数。 \n留空 = 无限。</string>
     <string name="device_state_summary">选择在某些设备状态下是否播报</string>
     <string name="device_state_dialog_title">在这些设备状态下播报</string>
     <string name="quiet_start">安静时间开始</string>
