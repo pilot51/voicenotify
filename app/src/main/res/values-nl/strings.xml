@@ -47,9 +47,7 @@
     <string name="ignore_empty_summary_off">Notificaties die geen tekst bevatten worden uitgesproken als \"Notificatie met [app naam].\"</string>
     <string name="ignore_repeat">Negeer Herhalingen</string>
     <string name="ignore_repeat_summary">Negeer opeenvolgende identieke notificaties binnen een bepaalde tijd.</string>
-    <string name="ignore_repeat_dialog_msg">Stel het aantal seconden in die voorbij moeten gaan na de vorige notificatie voor een herhaling moet worden uitgesproken.
-\nNegeer herhalingen en reset de teller.
-\nLeeg = oneindig.</string>
+    <string name="ignore_repeat_dialog_msg">Stel het aantal seconden in die voorbij moeten gaan na de vorige notificatie voor een herhaling moet worden uitgesproken. \nNegeer herhalingen en reset de teller. \nLeeg = oneindig.</string>
     <string name="device_state">Apparaat Status</string>
     <string name="device_state_summary">Selecteer wanneer je het apparaat wilt laten spreken.</string>
     <string name="device_state_dialog_title">Selecteer wanneer het apparaat moet spreken.</string>
