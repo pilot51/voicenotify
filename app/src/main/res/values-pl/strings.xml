@@ -51,9 +51,7 @@
     <string name="ignore_empty_summary_off">Powiadomienia będą wymawiane jako \"powiadomienie od [app name].\"</string>
     <string name="ignore_repeat">Ignoruj powtórzenia</string>
     <string name="ignore_repeat_summary">Ignoruj następne identyczne powiadomienia w określonym czasie</string>
-    <string name="ignore_repeat_dialog_msg">Ustaw liczbę sekund które muszą przeminąć aby poprzednie powtórzone powiadomienie było wymówione.
-\nIgorowanie powtórzeń resetuje licznik oraz inne powiadomienie je czyści.
-\nPuste = nieskończoność.</string>
+    <string name="ignore_repeat_dialog_msg">Ustaw liczbę sekund które muszą przeminąć aby poprzednie powtórzone powiadomienie było wymówione. \nIgorowanie powtórzeń resetuje licznik oraz inne powiadomienie je czyści. \nPuste = nieskończoność.</string>
     <string name="max_length">Maksymalna wiadomość</string>
     <string name="max_length_summary">Maksymalna długość wiadomości do wypowiedzenia. Dłuższe wiadomości zostaną przycięte.</string>
     <string name="max_length_dialog_msg">Maksymalna długość wiadomości do wypowiedzenia \nDłuższe wiadomości zostaną przycięte.</string>
