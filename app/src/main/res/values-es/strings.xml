@@ -54,9 +54,7 @@
     <string name="ignore_empty_summary_off">Notificaciones sin mensaje no serán habladas como \"Notificación de [nombre de la aplicación].\"</string>
     <string name="ignore_repeat">Ignorar repeticiones</string>
     <string name="ignore_repeat_summary">Ignora notificaciones consecutivas idénticas dentro de un lapso de tiempo determinado</string>
-    <string name="ignore_repeat_dialog_msg">Defina el número de segundos que deben pasar desde la última notificación antes de repetirla.
-\nLas repeticiones ignoradas reinician el contador y las diferentes lo borran.
-\nBlank = infinito.</string>
+    <string name="ignore_repeat_dialog_msg">Defina el número de segundos que deben pasar desde la última notificación antes de repetirla. \nLas repeticiones ignoradas reinician el contador y las diferentes lo borran. \nBlank = infinito.</string>
     <string name="device_state">Estado del dispositivo</string>
     <string name="device_state_summary">Selecciona si se debe hablar durante según el estado en el que se encuentra el dispositivo</string>
     <string name="device_state_dialog_title">Hablar durante los siguientes estados del dispositivo</string>
