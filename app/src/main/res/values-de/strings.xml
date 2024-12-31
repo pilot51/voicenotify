@@ -90,7 +90,7 @@
     <string name="support_rate">Bewerten &amp; Kommentieren</string>
     <string name="support_email">Entwickler kontaktieren</string>
     <string name="support_translations">Übersetzungen</string>
-    <string name="support_github">Quellcode</string>
+    <string name="support_github">GitHub</string>
     <string name="error_market">Fehler: Google Play Store ist nicht installiert.</string>
     <string name="error_email">Fehler: Konnte kein E-Mail-Programm finden.</string>
     <!-- Service -->
@@ -225,4 +225,7 @@
     <string name="max_length_dialog_msg">Maximale Länge, die vorgelesen wird. \nLängere Nachrichten werden gekürzt.</string>
     <string name="reason_tts_restarted">TTS wurde neu gestartet, während sich die Nachricht in der Warteschlangen befand oder vorgelesen wurde. Wiederholung geplant.</string>
     <string name="reason_tts_length_limit">Maximale TTS-Länge überschritten</string>
+    <string name="view">Ansicht</string>
+    <string name="settings">Einstellungen</string>
+    <string name="support_email_dialog_title">Anhänge auswählen</string>
 </resources>
