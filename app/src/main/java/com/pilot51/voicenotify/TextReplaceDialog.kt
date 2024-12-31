@@ -56,7 +56,19 @@ fun TextReplaceDialog(
 			add(null)
 		}
 	}
-	val onSave = { vm.saveTtsTextReplace(settings, replaceList) }
+	val onSave = {
+		val invalidRegex = replaceList.any { pair ->
+			pair?.first?.startsWith(Constants.REGEX_PREFIX) == true && runCatching {
+				Regex(pair.first.removePrefix(Constants.REGEX_PREFIX))
+			}.isFailure
+		}
+
+		if (invalidRegex) {
+			// Show Toast
+		} else {
+			vm.saveTtsTextReplace(settings, replaceList)
+		}
+	}
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
