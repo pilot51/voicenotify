@@ -123,9 +123,7 @@
 \nViser tid, programnavn, melding og ignoreringsgrunner.</string>
     <string name="support_summary">Vurder og gi tilbakemelding, send e-post til utvikleren, gemenskapssludring, oversettelser, kildekode, feilsporer, personvernspraksis</string>
     <string name="text_replace_error_duplicate">Duplikat. Vil ikke bli lagret.</string>
-    <string name="ignore_repeat_dialog_msg">Sett antall sekunder fra forrige merknad før ny kan kunngjøres.
-\nIgnorerte gjentagelser tilbakestiller telleren og forskjellige merknader fjerner den.
-\nLa stå tom for uendelighet.</string>
+    <string name="ignore_repeat_dialog_msg">Sett antall sekunder fra forrige merknad før ny kan kunngjøres. \nIgnorerte gjentagelser tilbakestiller telleren og forskjellige merknader fjerner den. \nLa stå tom for uendelighet.</string>
     <string name="quiet_start_summary">Ikke annonser etter denne tiden.
 \nLevn samme som slutt for å skru av.</string>
     <string name="test_ignored">Voice Notify er ignorert i programlisten.
