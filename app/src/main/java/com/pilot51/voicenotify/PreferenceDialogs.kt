@@ -15,11 +15,15 @@
  */
 package com.pilot51.voicenotify
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.media.AudioManager
 import android.net.Uri
+import android.os.Build
 import android.os.Environment
 import android.speech.tts.TextToSpeech
 import android.widget.Toast
@@ -46,6 +50,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.NotificationCompat
 import androidx.core.text.isDigitsOnly
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.PreferencesViewModel.Companion.readDebugLog
@@ -61,9 +66,7 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_ON
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SILENT_ON
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STREAM
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
 
 private fun openBrowser(context: Context, url: String) {
@@ -529,6 +532,66 @@ fun QuietTimeDialog(
 			TimePicker(timePickerState)
 		}
 	)
+}
+
+private const val NOTIFICATION_CHANNEL_ID = "test"
+
+@Composable
+fun TestNotificationDialog(
+	context: Context,
+	onDismiss: () -> Unit
+) {
+	TextEditDialog(
+		titleRes = R.string.test,
+		messageRes = R.string.test_summary,
+		initialText = context.getString(R.string.test_content_text),
+		onDismiss = onDismiss
+	) {
+		val content = it
+		CoroutineScope(Dispatchers.IO).launch {
+			val vnApp = Common.findOrAddApp(context.packageName)!!
+			if (!vnApp.isEnabled) {
+				Toast.makeText(context, context.getString(R.string.test_ignored), Toast.LENGTH_LONG).show()
+			}
+			val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+			val intent = Intent(context, MainActivity::class.java)
+			delay(5.seconds)
+			val id = NOTIFICATION_CHANNEL_ID
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				var channel = notificationManager.getNotificationChannel(id)
+				if (channel == null) {
+					channel = NotificationChannel(
+						id,
+						context.getString(R.string.test),
+						NotificationManager.IMPORTANCE_LOW
+					)
+					channel.description = context.getString(R.string.notification_channel_desc)
+					notificationManager.createNotificationChannel(channel)
+				}
+			}
+			val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+				PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+			} else PendingIntent.FLAG_UPDATE_CURRENT
+			val pi = PendingIntent.getActivity(context, 0, intent, flags)
+			val builder = NotificationCompat.Builder(context, id)
+				.setAutoCancel(true)
+				.setContentIntent(pi)
+				.setSmallIcon(R.drawable.ic_notification)
+				.setTicker(context.getString(R.string.test_ticker))
+				.setSubText(context.getString(R.string.test_subtext))
+				.setContentTitle(context.getString(R.string.test_content_title))
+				.setContentText(content)
+				.setContentInfo(context.getString(R.string.test_content_info))
+				.setStyle(
+					NotificationCompat.BigTextStyle()
+						.setBigContentTitle(context.getString(R.string.test_big_content_title))
+						.setSummaryText(context.getString(R.string.test_big_content_summary))
+						.bigText(content)
+				)
+			notificationManager.notify(0, builder.build())
+		}
+		true
+	}
 }
 
 @Composable
