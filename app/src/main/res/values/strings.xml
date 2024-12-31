@@ -51,7 +51,7 @@
 	<string name="require_strings_summary">Only speak notifications that contain certain text in the message</string>
 	<string name="ignore_strings">Ignore Text</string>
 	<string name="ignore_strings_summary">Ignore notifications that contain certain text in the message</string>
-	<string name="require_ignore_strings_dialog_msg">This is matched against the message sent to TTS, after TTS Message formatting and Text Replacement, including punctuation.\n\nSeparate individual entries with a new line.\nThe message needs to contain any entry, not all, to be a match.\nCase insensitive.\nTo use regex, type the prefix $regex: and then your regex.\nFor example: $regex:[^xyz].\nRegex is case sensitive.</string>
+	<string name="require_ignore_strings_dialog_msg">This is matched against the message sent to TTS, after TTS Message formatting and Text Replacement, including punctuation.\n\nSeparate individual entries with a new line.\nThe message needs to contain any entry, not all, to be a match.\nCase insensitive.</string>
 	<string name="ignore_empty">Ignore Empty</string>
 	<string name="ignore_empty_summary_on">Notifications without a message will not be spoken</string>
 	<string name="ignore_empty_summary_off">Notifications without a message will be spoken as \"Notification from [app name].\"</string>
@@ -147,6 +147,8 @@
 	<string name="error_browser">Error: Unable to find an installed browser app.</string>
 	<string name="remove_override">Remove override</string>
 	<string name="remove_override_confirm">Remove %1$s override for %2$s?</string>
+	<string name="regex_message">\n\nTo use regex, prefix the text with \"$regex:\". Regex is case sensitive by default.\nFor example, to match a URL (ignoring case):\n$regex:(?i)https?:\\/\\/[^\s]+\n</string>
+	<string name="invalid_regex">Invalid regex</string>
 
 	<!-- AppListScreen -->
 	<string name="close">Close</string>
@@ -167,7 +169,7 @@
 	<string name="tts_message_dialog">#A = App title\n#T = Ticker\n#S = Subtext\n#C = Content title\n#M = Content message\n#I = Content info\n#H = Big content title\n#Y = Big content summary\n#B = Big content text\n#L = Text lines\nCase insensitive\n\nDefault:\n%1$s\n\nOld default (v1.1.0 - v1.3.0):\n#A. #C. #M.\n\nOld default (v1.0.x):\n#A: #T</string>
 	<string name="tts_text_replace">TTS Text Replacement</string>
 	<string name="tts_text_replace_summary">Substitute text to be spoken, such as to fix pronunciation</string>
-	<string name="tts_text_replace_dialog">Substitute text to be spoken, allowing you to customize how Text-To-Speech pronounces words or replace text for any other reason.\n\nText to replace is case insensitive and applies after TTS Message formatting and before emoji removal.\nTo use regex, type the prefix $regex: and then your regex.\nFor example: $regex:[^xyz].\nRegex is case sensitive.</string>
+	<string name="tts_text_replace_dialog">Substitute text to be spoken, allowing you to customize how Text-To-Speech pronounces words or replace text for any other reason.\n\nText to replace is case insensitive and applies after TTS Message formatting and before emoji removal.</string>
 	<string name="text_replace_error_duplicate">Duplicate! Will not be saved.</string>
 	<string name="text_to_replace">Text to replace</string>
 	<string name="replacement_text">Replacement text</string>

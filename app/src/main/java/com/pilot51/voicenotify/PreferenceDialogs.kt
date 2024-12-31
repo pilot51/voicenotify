@@ -119,6 +119,7 @@ fun ShakeThresholdDialog(
 		onDismiss = onDismiss
 	) { str ->
 		vm.setShakeThreshold(str.toIntOrNull()?.takeIf { it > 0 })
+		true
 	}
 }
 
@@ -127,15 +128,22 @@ fun RequireTextDialog(
 	vm: IPreferencesViewModel,
 	onDismiss: () -> Unit
 ) {
+	val context = LocalContext.current
 	val settings by vm.configuringSettingsState.collectAsState()
 	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.require_strings,
-		messageRes = R.string.require_ignore_strings_dialog_msg,
+		message = stringResource(R.string.require_ignore_strings_dialog_msg) + stringResource(R.string.regex_message),
 		initialText = settingsCombo.requireStrings ?: "",
 		onDismiss = onDismiss
 	) {
-		vm.save(settings.copy(requireStrings = it.takeUnless { it.isEmpty() && settings.isGlobal }))
+		val isValid = validateRegexOption(it)
+		if (isValid) {
+			vm.save(settings.copy(requireStrings = it.takeUnless { it.isEmpty() && settings.isGlobal }))
+		} else {
+			Toast.makeText(context, R.string.invalid_regex, Toast.LENGTH_LONG).show()
+		}
+		isValid
 	}
 }
 
@@ -144,15 +152,22 @@ fun IgnoreTextDialog(
 	vm: IPreferencesViewModel,
 	onDismiss: () -> Unit
 ) {
+	val context = LocalContext.current
 	val settings by vm.configuringSettingsState.collectAsState()
 	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.ignore_strings,
-		messageRes = R.string.require_ignore_strings_dialog_msg,
+		message = stringResource(R.string.require_ignore_strings_dialog_msg) + stringResource(R.string.regex_message),
 		initialText = settingsCombo.ignoreStrings ?: "",
 		onDismiss = onDismiss
 	) {
-		vm.save(settings.copy(ignoreStrings = it.takeUnless { it.isEmpty() && settings.isGlobal }))
+		val isValid = validateRegexOption(it)
+		if (isValid) {
+			vm.save(settings.copy(ignoreStrings = it.takeUnless { it.isEmpty() && settings.isGlobal }))
+		} else {
+			Toast.makeText(context, R.string.invalid_regex, Toast.LENGTH_LONG).show()
+		}
+		isValid
 	}
 }
 
@@ -172,6 +187,7 @@ fun IgnoreRepeatsDialog(
 		onDismiss = onDismiss
 	) {
 		vm.save(settings.copy(ignoreRepeat = it.toIntOrNull() ?: (-1).takeIf { !settings.isGlobal }))
+		true
 	}
 }
 
@@ -189,6 +205,7 @@ fun TtsMessageDialog(
 		onDismiss = onDismiss
 	) {
 		vm.save(settings.copy(ttsString = it.ifEmpty { null }))
+		true
 	}
 }
 
@@ -207,6 +224,7 @@ fun TtsMaxLengthDialog(
 		onDismiss = onDismiss
 	) {
 		vm.save(settings.copy(ttsMaxLength = it.toIntOrNull()))
+		true
 	}
 }
 
@@ -225,6 +243,7 @@ fun TtsDelayDialog(
 		onDismiss = onDismiss
 	) {
 		vm.save(settings.copy(ttsDelay = it.toIntOrNull() ?: 0.takeIf { !settings.isGlobal }))
+		true
 	}
 }
 
@@ -243,6 +262,7 @@ fun TtsRepeatDialog(
 		onDismiss = onDismiss
 	) {
 		vm.save(settings.copy(ttsRepeat = it.toDoubleOrNull() ?: 0.0.takeIf { !settings.isGlobal }))
+		true
 	}
 }
 
@@ -259,7 +279,7 @@ private fun TextEditDialog(
 	initialText: String,
 	keyboardType: KeyboardType = KeyboardOptions.Default.keyboardType,
 	onDismiss: () -> Unit,
-	onSave: (text: String) -> Unit
+	onSave: (text: String) -> Boolean
 ) {
 	var textValue by remember(initialText) { mutableStateOf(initialText) }
 	AlertDialog(
@@ -267,8 +287,9 @@ private fun TextEditDialog(
 		confirmButton = {
 			TextButton(
 				onClick = {
-					onSave(textValue)
-					onDismiss()
+					if (onSave(textValue)) {
+						onDismiss()
+					}
 				}
 			) {
 				Text(stringResource(android.R.string.ok))
@@ -745,8 +766,9 @@ private fun TextEditDialogPreview() {
 			titleRes = R.string.ignore_strings,
 			messageRes = R.string.require_ignore_strings_dialog_msg,
 			initialText = "text value",
-			onDismiss = {}
-		) {}
+			onDismiss = {},
+			onSave = { true }
+		)
 	}
 }
 

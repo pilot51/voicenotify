@@ -16,6 +16,7 @@
 package com.pilot51.voicenotify
 
 import android.util.Pair
+import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -29,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -47,6 +49,7 @@ fun TextReplaceDialog(
 	vm: IPreferencesViewModel,
 	onDismiss: () -> Unit
 ) {
+	val context = LocalContext.current
 	val settings by vm.configuringSettingsState.collectAsState()
 	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	val savedList = vm.getTtsTextReplace(settingsCombo)
@@ -56,26 +59,20 @@ fun TextReplaceDialog(
 			add(null)
 		}
 	}
-	val onSave = {
-		val invalidRegex = replaceList.any { pair ->
-			pair?.first?.startsWith(Constants.REGEX_PREFIX) == true && runCatching {
-				Regex(pair.first.removePrefix(Constants.REGEX_PREFIX))
-			}.isFailure
-		}
-
-		if (invalidRegex) {
-			// Show Toast
-		} else {
-			vm.saveTtsTextReplace(settings, replaceList)
-		}
-	}
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
 			TextButton(
 				onClick = {
-					onSave()
-					onDismiss()
+					val isValid = replaceList.all { pair ->
+						pair?.first?.let { validateRegexOption(it) } ?: true
+					}
+					if (isValid) {
+						vm.saveTtsTextReplace(settings, replaceList)
+						onDismiss()
+					} else {
+						Toast.makeText(context, R.string.invalid_regex, Toast.LENGTH_LONG).show()
+					}
 				}
 			) {
 				Text(stringResource(android.R.string.ok))
@@ -99,7 +96,7 @@ fun TextReplaceDialog(
 private fun TextReplaceList(replaceList: MutableList<Pair<String, String>?>) {
 	Column(modifier = Modifier.fillMaxWidth()) {
 		Text(
-			text = stringResource(R.string.tts_text_replace_dialog),
+			text = stringResource(R.string.tts_text_replace_dialog) + stringResource(R.string.regex_message),
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(bottom = 20.dp),
