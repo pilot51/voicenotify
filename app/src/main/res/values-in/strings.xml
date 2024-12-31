@@ -68,9 +68,7 @@
     <string name="ignore_empty_summary_off">Pemberitahuan tanpa pesan akan diucapkan \"Pemberitahuan dari [nama aplikasi].\"</string>
     <string name="ignore_repeat">Abaikan Pengulangan</string>
     <string name="ignore_repeat_summary">Abaikan pemberitahuan sama yang berulang dalam rentang waktu yang ditentukan</string>
-    <string name="ignore_repeat_dialog_msg">Sejumlah detik yang harus ditunggu sejak pemberitahuan terakhir sebelum pengulangan dapat diucapkan.
-\nMengabaikan pengulangan mengatur ulang penghitungan dan dibersihkan oleh pemberitahuan yang lain.
-\nKosong= tak terhingga.</string>
+    <string name="ignore_repeat_dialog_msg">Sejumlah detik yang harus ditunggu sejak pemberitahuan terakhir sebelum pengulangan dapat diucapkan. \nMengabaikan pengulangan mengatur ulang penghitungan dan dibersihkan oleh pemberitahuan yang lain. \nKosong= tak terhingga.</string>
     <string name="max_length">Pesan Maksimum</string>
     <string name="max_length_summary">Panjang pesan diucapkan maksimum. Pesan panjang akan dipotong.</string>
     <string name="max_length_dialog_msg">Panjang pesan diucapkan maksimum \nPesan panjang akan dipotong.</string>
