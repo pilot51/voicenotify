@@ -96,9 +96,7 @@
     <string name="audio_focus">Tạm dừng/ làm mờ Media</string>
     <string name="audio_focus_summary">Yêu cẩu các phương tiện khác tạm dừng hoặc mờ đi khi đang đọc thông báo</string>
     <string name="shake_to_silence">Lắc để im lặng</string>
-    <string name="ignore_repeat_dialog_msg">Thiết lập số giây để bỏ qua kể từ thông báo cuối cùng trước khi đọc lại.
-\nViệc lặp lại sẽ bị đặt lại khi bỏ qua và xuất hiện thông báo khác.
-\nĐể trống = Vô hạn.</string>
+    <string name="ignore_repeat_dialog_msg">Thiết lập số giây để bỏ qua kể từ thông báo cuối cùng trước khi đọc lại. \nViệc lặp lại sẽ bị đặt lại khi bỏ qua và xuất hiện thông báo khác. \nĐể trống = Vô hạn.</string>
     <string name="device_state">Trạng thái thiết bị</string>
     <string name="device_state_summary">Chọn có đọc thông báo trong các trạng thái của thiết bị hay không</string>
     <string name="device_state_dialog_title">Đọc thông báo trong các trạng thái này của thiết bị</string>
