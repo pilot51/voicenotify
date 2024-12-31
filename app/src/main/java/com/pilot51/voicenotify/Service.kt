@@ -251,8 +251,7 @@ class Service : NotificationListenerService() {
 					return if (it.startsWith(Constants.REGEX_PREFIX))
 						try {
 							val pattern = it.removePrefix(Constants.REGEX_PREFIX)
-							Regex(pattern, RegexOption.IGNORE_CASE)
-								.containsMatchIn(ttsMsg)
+							Regex(pattern).containsMatchIn(ttsMsg)
 						} catch (e: PatternSyntaxException) {
 							e.printStackTrace()
 							false
