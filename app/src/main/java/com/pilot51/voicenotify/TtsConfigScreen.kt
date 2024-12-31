@@ -22,12 +22,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_EMOJIS
 
 @Composable
 fun TtsConfigScreen(vm: IPreferencesViewModel) {
 	val context = LocalContext.current
 	val configApp by vm.configuringAppState.collectAsState()
 	val settings by vm.configuringSettingsState.collectAsState()
+	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	var ttsEnabled by remember { mutableStateOf(true) }
 	var ttsSummary by remember { mutableStateOf("") }
 	var ttsIntent by remember { mutableStateOf<Intent?>(null) }
@@ -75,6 +77,19 @@ fun TtsConfigScreen(vm: IPreferencesViewModel) {
 			},
 			onClick = { showTextReplaceDialog = true }
 		)
+		PreferenceRowCheckbox(
+			titleRes = R.string.tts_speak_emojis,
+			summaryResOn = R.string.tts_speak_emojis_summary_on,
+			summaryResOff = R.string.tts_speak_emojis_summary_off,
+			initialValue = settingsCombo.ttsSpeakEmojis ?: DEFAULT_SPEAK_EMOJIS,
+			app = configApp,
+			showRemove = !settings.isGlobal && settings.ttsSpeakEmojis != null,
+			onRemove = {
+				vm.save(settings.copy(ttsSpeakEmojis = null))
+			}
+		) {
+			vm.save(settings.copy(ttsSpeakEmojis = it))
+		}
 		PreferenceRowLink(
 			titleRes = R.string.max_length,
 			summaryRes = R.string.max_length_summary,

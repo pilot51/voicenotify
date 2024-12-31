@@ -19,7 +19,6 @@ import android.content.Context
 import android.widget.Toast
 import androidx.room.ColumnInfo
 import androidx.room.Entity
-import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
@@ -33,26 +32,21 @@ data class App(
 	@ColumnInfo(name = "package")
 	val packageName: String,
 	@ColumnInfo(name = "name", collate = ColumnInfo.NOCASE)
-	val label: String,
+	var label: String,
 	@ColumnInfo(name = "is_enabled")
-	var isEnabled: Boolean?
+	var isEnabled: Boolean
 ) {
-	@get:Ignore
-	var enabled: Boolean
-		get() = isEnabled!!
-		set(value) { isEnabled = value }
-
 	/**
 	 * Updates self in database.
 	 * @return This instance.
 	 */
 	suspend fun updateDb(): App {
-		db.appDao.addOrUpdateApp(this)
+		db.appDao.update(this)
 		return this
 	}
 
 	fun setEnabled(enable: Boolean, updateDb: Boolean = true) {
-		enabled = enable
+		isEnabled = enable
 		if (updateDb) CoroutineScope(Dispatchers.IO).launch {
 			db.appDao.updateAppEnable(this@App)
 		}
@@ -72,7 +66,7 @@ data class App(
 	/** Removes self from database. */
 	fun remove() {
 		CoroutineScope(Dispatchers.IO).launch {
-			db.appDao.removeApp(this@App)
+			db.appDao.delete(this@App)
 		}
 	}
 }

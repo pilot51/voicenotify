@@ -16,7 +16,6 @@
 package com.pilot51.voicenotify
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Notification
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
@@ -28,16 +27,16 @@ import android.media.AudioAttributes
 import android.media.AudioDeviceInfo
 import android.media.AudioFocusRequest
 import android.media.AudioManager
+import android.media.AudioManager.OnModeChangedListener
 import android.os.Build
 import android.os.Bundle
-import android.os.IBinder
 import android.os.PowerManager
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.speech.tts.TextToSpeech
 import android.speech.tts.TextToSpeech.OnInitListener
 import android.speech.tts.UtteranceProgressListener
-import android.telecom.TelecomManager
+import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
 import android.util.Log
 import android.view.Display
@@ -62,33 +61,54 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_OFF
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_ON
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SILENT_ON
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STREAM
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.util.*
+import java.util.concurrent.Executors
+import java.util.regex.PatternSyntaxException
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 class Service : NotificationListenerService() {
 	private val appContext by ::applicationContext
+	private val ioScope = CoroutineScope(Dispatchers.IO)
 	private val lastMsg = mutableMapOf<App?, String?>()
 	private val lastMsgTime = mutableMapOf<App?, Long>()
 	private var tts: TextToSpeech? = null
 	private var shouldRequestFocus = false
 	private lateinit var audioMan: AudioManager
-	private lateinit var telephony: TelephonyManager
+	private lateinit var telephonyMan: TelephonyManager
 	private val stateReceiver = DeviceStateReceiver()
-	private var repeater: RepeatTimer? = null
+	private var repeaterJob: Job? = null
 	private val shake by lazy { Shake(appContext) }
 	private val repeatList = mutableListOf<NotificationInfo>()
-	private val audioFocusRequest = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+	@get:RequiresApi(26)
+	@delegate:RequiresApi(26)
+	private val audioFocusRequest by lazy {
 		AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
 			.setAudioAttributes(AudioAttributes.Builder()
 				.setLegacyStreamType(AudioManager.STREAM_MUSIC).build())
 			.build()
-	} else null
+	}
+	private val phoneStateListener by lazy {
+		@Suppress("DEPRECATION")
+		object : PhoneStateListener() {
+			@Deprecated("Deprecated in Java")
+			override fun onCallStateChanged(state: Int, phoneNumber: String?) {
+				if (isPhoneStateInCall(state)) processIgnoreForQueue()
+			}
+		}
+	}
+	private val audioModeListener by lazy {
+		OnModeChangedListener { mode ->
+			if (isAudioModeInCall(mode)) processIgnoreForQueue()
+		}
+	}
 
 	/**
 	 * this is used to determine if we are the first, middle, or last thing to be spoken at the moment, for enabling/disabling shake and audio focus request
@@ -99,12 +119,11 @@ class Service : NotificationListenerService() {
 	private val ttsQueue = linkedMapOf<Long, NotificationInfo>()
 
 	override fun onCreate() {
-		val ioScope = CoroutineScope(Dispatchers.IO)
 		ioScope.launch {
 			isSuspended.collect {
 				if (!it) return@collect
 				tts?.run {
-					synchronized(ttsQueue) {
+					ttsQueueMutex.withLock {
 						for (info in ttsQueue.values) {
 							info.ignoreReasons.add(IgnoreReason.SUSPENDED)
 						}
@@ -113,24 +132,30 @@ class Service : NotificationListenerService() {
 				}
 			}
 		}
-		initTts()
-		super.onCreate()
 	}
 
-	private fun initTts(onInit: (() -> Unit)? = null)  {
+	private fun initTts(onInit: () -> Unit)  {
+		if (tts != null) {
+			onInit()
+			return
+		}
 		tts = TextToSpeech(appContext, OnInitListener { status ->
 			if (status == TextToSpeech.SUCCESS) {
-				onInit?.invoke()
+				onInit()
 			} else {
-				tts = null
+				shutdownTts()
 				val errorMsg = getString(R.string.error_tts_init, status)
 				Log.w(TAG, errorMsg)
 				Toast.makeText(appContext, errorMsg, Toast.LENGTH_LONG).show()
 				return@OnInitListener
 			}
 			tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {
-				override fun onStart(utteranceId: String) {}
+				override fun onStart(utteranceId: String) {
+					Log.d(TAG, "TTS starting utterance ID $utteranceId")
+					speakingUtteranceId = utteranceId.toLong()
+				}
 				override fun onStop(utteranceId: String, interrupted: Boolean) {
+					Log.d(TAG, "Stopped utterance ID $utteranceId - interrupted? $interrupted")
 					if (interrupted) {
 						val info = ttsQueue[utteranceId.toLong()]
 						if (info != null) {
@@ -146,30 +171,27 @@ class Service : NotificationListenerService() {
 				}
 
 				override fun onDone(utteranceId: String) {
-					synchronized(ttsQueue) { ttsQueue.remove(utteranceId.toLong()) }
-					if (ttsQueue.isEmpty()) {
-						if (shouldRequestFocus) {
-							if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-								audioMan.abandonAudioFocusRequest(audioFocusRequest!!)
-							} else {
-								@Suppress("DEPRECATION")
-								audioMan.abandonAudioFocus(null)
-							}
+					Log.d(TAG, "Completed utterance ID $utteranceId")
+					speakingUtteranceId = null
+					ioScope.launch {
+						ttsQueueMutex.withLock {
+							ttsQueue.remove(utteranceId.toLong())
 						}
-						shake.disable()
+						if (ttsQueue.isEmpty()) onDoneSpeaking()
 					}
 				}
 
 				@Deprecated("Deprecated in Java")
 				override fun onError(utteranceId: String) {
-					Log.e(TAG, "Utterance error")
+					Log.e(TAG, "Error on utterance ID $utteranceId")
+					speakingUtteranceId = null
 				}
 			})
 		})
 	}
 
-	private fun restartTts() {
-		synchronized(ttsQueue) {
+	private suspend fun restartTts() {
+		ttsQueueMutex.withLock {
 			ttsQueue.values.forEach {
 				if (it.ignoreReasons.contains(IgnoreReason.TTS_FAILED)) return@forEach
 				it.ignoreReasons.add(IgnoreReason.TTS_RESTARTED)
@@ -177,34 +199,57 @@ class Service : NotificationListenerService() {
 				NotifyList.updateInfo(it)
 			}
 		}
-		tts?.shutdown()
+		shutdownTts()
 		initTts {
-			CoroutineScope(Dispatchers.IO).launch {
-				synchronized(ttsQueue) {
-					val queueIterator = ttsQueue.iterator()
-					queueIterator.forEach {
-						val info = it.value
-						val isFailed = tts?.speak(
-							info.ttsMessage, TextToSpeech.QUEUE_ADD,
-							getTtsParams(info.settings), it.key.toString()
-						) != TextToSpeech.SUCCESS
-						if (isFailed) {
-							Log.e(TAG, "Error adding notification to queue after TTS restart. Not retrying again.")
-							info.ignoreReasons.add(IgnoreReason.TTS_FAILED)
-							info.isInterrupted = false
-							queueIterator.remove()
-						} else if (info.ignoreReasons.contains(IgnoreReason.TTS_FAILED)) {
-							info.isInterrupted = true
-						}
-						NotifyList.updateInfo(info)
+			ttsQueueMutex.launchWithLock {
+				val queueIterator = ttsQueue.iterator()
+				queueIterator.forEach {
+					val info = it.value
+					val isFailed = tts?.speak(
+						info.ttsMessage, TextToSpeech.QUEUE_ADD,
+						getTtsParams(info.settings), it.key.toString()
+					) != TextToSpeech.SUCCESS
+					if (isFailed) {
+						Log.e(TAG, "Error adding notification to queue after TTS restart. Not retrying again.")
+						info.ignoreReasons.add(IgnoreReason.TTS_FAILED)
+						info.isInterrupted = false
+						queueIterator.remove()
+					} else if (info.ignoreReasons.contains(IgnoreReason.TTS_FAILED)) {
+						info.isInterrupted = true
 					}
+					NotifyList.updateInfo(info)
+				}
+				Log.d(TAG, "Messages in TTS queue after restart: ${ttsQueue.size}")
+				if (ttsQueue.isEmpty()) {
+					onDoneSpeaking()
 				}
 			}
 		}
 	}
 
+	private fun onDoneSpeaking() {
+		if (shouldRequestFocus) {
+			Log.d(TAG, "Abandoning audio focus")
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				audioMan.abandonAudioFocusRequest(audioFocusRequest!!)
+			} else {
+				@Suppress("DEPRECATION")
+				audioMan.abandonAudioFocus(null)
+			}
+		}
+		shake.disable()
+		shutdownTts()
+	}
+
+	private fun shutdownTts() {
+		tts?.run {
+			tts = null
+			shutdown()
+		}
+	}
+
 	override fun onNotificationPosted(sbn: StatusBarNotification) {
-		CoroutineScope(Dispatchers.IO).launch {
+		ioScope.launch {
 			val notification = sbn.notification
 			val app = Common.findOrAddApp(sbn.packageName)
 			val settings = getCombinedSettings(app)
@@ -215,23 +260,36 @@ class Service : NotificationListenerService() {
 			val info = NotificationInfo(app, notification, settings)
 			val msgTime = info.calendar.timeInMillis
 			val ttsMsg = info.ttsMessage
-			if (app != null && !app.enabled) {
+			if (app != null && !app.isEnabled) {
 				info.ignoreReasons.add(IgnoreReason.APP)
 			}
 			if (info.isEmpty && settings.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY) {
 				info.ignoreReasons.add(IgnoreReason.EMPTY_MSG)
 			}
 			if (ttsMsg != null) {
+				fun containsOrMatchesRegex(it: String): Boolean {
+					return if (it.startsWith(Constants.REGEX_PREFIX))
+						try {
+							val pattern = it.removePrefix(Constants.REGEX_PREFIX)
+							Regex(pattern).containsMatchIn(ttsMsg)
+						} catch (e: PatternSyntaxException) {
+							e.printStackTrace()
+							false
+						}
+					else
+						ttsMsg.contains(it, true)
+				}
+
 				val requireStrings = settings.requireStrings?.split("\n")
 				val stringRequired = requireStrings?.all {
-					it.isNotEmpty() && !ttsMsg.contains(it, true)
+					it.isNotEmpty() && !containsOrMatchesRegex(it)
 				} ?: false
 				if (stringRequired) {
 					info.ignoreReasons.add(IgnoreReason.STRING_REQUIRED)
 				}
 				val ignoreStrings = settings.ignoreStrings?.split("\n")
 				val stringIgnored = ignoreStrings?.any {
-					it.isNotEmpty() && ttsMsg.contains(it, true)
+					it.isNotEmpty() && containsOrMatchesRegex(it)
 				} ?: false
 				if (stringIgnored) {
 					info.ignoreReasons.add(IgnoreReason.STRING_IGNORED)
@@ -249,31 +307,24 @@ class Service : NotificationListenerService() {
 				if (!isScreenOn()) {
 					val interval = settings.ttsRepeat ?: 0.0
 					if (interval > 0) {
-						synchronized(repeatList) { repeatList.add(info) }
-						if (repeater == null) {
-							repeater = RepeatTimer(interval)
-						}
+						repeatListMutex.withLock { repeatList.add(info) }
+						startRepeatTimer(interval)
 					}
 				}
-				Timer().schedule(object : TimerTask() {
-					override fun run() {
-						val ignoreReasons = ignore(info.settings)
-						if (ignoreReasons.isNotEmpty()) {
-							Log.i(TAG, "Notification ignored for reason(s): "
-								+ ignoreReasons.joinToString())
-							info.ignoreReasons.addAll(ignoreReasons)
-							return
-						}
-						CoroutineScope(Dispatchers.Main).launch {
-							speak(info)
-						}
+				launch prepSpeak@{
+					delay(delay.seconds)
+					val ignoreReasons = ignore(info.settings)
+					if (ignoreReasons.isNotEmpty()) {
+						Log.i(TAG, "Notification ignored for reason(s): ${ignoreReasons.joinToString()}")
+						info.ignoreReasons.addAll(ignoreReasons)
+						return@prepSpeak
 					}
-				}, (delay * 1000).toLong()) // A delay of 0 works fine, and means that all speak calls anywhere are running in their own thread and not blocking.
+					speak(info)
+				}
 				lastMsg[app] = ttsMsg
 				lastMsgTime[app] = msgTime
 			} else {
-				Log.i(TAG, "Notification from " + app?.label
-					+ " ignored for reason(s): " + info.getIgnoreReasonsAsText())
+				Log.i(TAG, "Notification from ${app?.label} ignored for reason(s): ${info.getIgnoreReasonsAsText()}")
 			}
 		}
 	}
@@ -284,49 +335,63 @@ class Service : NotificationListenerService() {
 	 * Send a notification to be spoken by TTS.
 	 * @param info The info for the notification to be spoken.
 	 */
-	private fun speak(info: NotificationInfo) {
-		if (tts == null) {
+	private suspend fun speak(info: NotificationInfo) {
+		if (!isRunning.value) {
 			Log.w(TAG, "Speak failed due to service destroyed")
 			info.ignoreReasons.add(IgnoreReason.SERVICE_STOPPED)
 			NotifyList.updateInfo(info)
+			return
+		}
+		if (ttsQueue.any { it.key != speakingUtteranceId && it.value == info }) {
+			Log.d(TAG, "Notification already waiting in TTS queue, not adding again")
 			return
 		}
 		if ((info.ttsMessage?.length ?: 0) > TextToSpeech.getMaxSpeechInputLength()) {
 			info.ignoreReasons.add(IgnoreReason.TTS_LENGTH_LIMIT)
 			info.isInterrupted = true
 		}
-		val notificationTime = info.calendar.timeInMillis
-		synchronized(ttsQueue) {
+		val utteranceId = ++lastQueuedUtteranceId
+		ttsQueueMutex.withLock {
 			if (ttsQueue.isEmpty()) { //if there are no messages in the queue, start up shake detection and audio focus requesting
 				shake.enable()
 				shouldRequestFocus = info.settings.audioFocus ?: DEFAULT_AUDIO_FOCUS
 				if (shouldRequestFocus) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-						audioMan.requestAudioFocus(audioFocusRequest!!)
+						audioMan.requestAudioFocus(audioFocusRequest)
 					} else {
 						@Suppress("DEPRECATION")
 						audioMan.requestAudioFocus(null, AudioManager.STREAM_MUSIC,
 							AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
+					}.let {
+						val focusResult = when (it) {
+							AudioManager.AUDIOFOCUS_REQUEST_GRANTED -> "granted"
+							AudioManager.AUDIOFOCUS_REQUEST_FAILED -> "failed"
+							AudioManager.AUDIOFOCUS_REQUEST_DELAYED -> "delayed"
+							else -> " result unknown ($it)"
+						}
+						Log.d(TAG, "Audio focus request $focusResult")
 					}
 				}
 			}
 			//regardless, add the message to the queue, parallelling the TextToSpeech queue since we can't access it.
-			ttsQueue.put(notificationTime, info)
+			ttsQueue.put(utteranceId, info)
 		}
 		//once the message is in our queue, send it to the real one with the necessary parameters
-		val utteranceId = notificationTime.toString()
-		CoroutineScope(Dispatchers.IO).launch {
-			val isSpeakFailed = tts?.speak(
-				info.ttsMessage, TextToSpeech.QUEUE_ADD, getTtsParams(info.settings), utteranceId
-			) != TextToSpeech.SUCCESS
-			if (isSpeakFailed) {
-				Log.e(TAG, "Error adding notification to TTS queue. Attempting to restart TTS.")
-				info.ignoreReasons.add(IgnoreReason.TTS_FAILED)
-				info.isInterrupted = false
-				restartTts()
-			}
-			if (info.ignoreReasons.isNotEmpty()) {
-				NotifyList.updateInfo(info)
+		Log.d(TAG, "Adding to ttsQueue with utterance ID $utteranceId")
+		initTts {
+			ioScope.launch {
+				val isSpeakFailed = tts?.speak(
+					info.ttsMessage, TextToSpeech.QUEUE_ADD, getTtsParams(info.settings), utteranceId.toString()
+				) != TextToSpeech.SUCCESS
+				if (isSpeakFailed) {
+					Log.e(TAG, "Error adding notification to TTS queue. Attempting to restart TTS.")
+					info.ignoreReasons.add(IgnoreReason.TTS_FAILED)
+					info.isInterrupted = false
+					restartTts()
+				}
+				if (info.ignoreReasons.isNotEmpty()) {
+					NotifyList.updateInfo(info)
+				}
 			}
 		}
 	}
@@ -352,12 +417,7 @@ class Service : NotificationListenerService() {
 			&& !(settings.speakSilentOn ?: DEFAULT_SPEAK_SILENT_ON)) {
 			ignoreReasons.add(IgnoreReason.SILENT)
 		}
-		val telecomMan = getSystemService(TELECOM_SERVICE) as TelecomManager
-		@SuppressLint("MissingPermission")
-		val isInCall = if (isPermissionGranted(Manifest.permission.READ_PHONE_STATE)) {
-			telecomMan.isInCall
-		} else false
-		if (isInCall) {
+		if (isAudioModeInCall() || (usePhoneState && isPhoneStateInCall())) {
 			ignoreReasons.add(IgnoreReason.CALL)
 		}
 		if (!isScreenOn() && !(settings.speakScreenOff ?: DEFAULT_SPEAK_SCREEN_OFF)) {
@@ -375,68 +435,72 @@ class Service : NotificationListenerService() {
 		return ignoreReasons
 	}
 
-	private inner class RepeatTimer(minuteInterval: Double) : TimerTask() {
-		init {
-			if (minuteInterval > 0) {
-				val interval = (minuteInterval * 60000).toLong()
-				Timer().schedule(this, interval, interval)
-			}
-		}
-
-		override fun run() {
-			synchronized(repeatList) {
-				for (info in repeatList) {
-					if (ignore(info.settings).isNotEmpty()) continue
-					speak(info)
+	private fun startRepeatTimer(minuteInterval: Double) {
+		if (minuteInterval <= 0 || repeaterJob != null) return
+		repeaterJob = ioScope.launch {
+			while (isActive) {
+				delay(minuteInterval.minutes)
+				if (isScreenOn()) {
+					Log.d(TAG, "Screen is on, canceling repeater")
+					cancel()
+					repeaterJob = null
+				}
+				repeatListMutex.withLock {
+					for (info in repeatList) {
+						if (ignore(info.settings).isNotEmpty()) continue
+						speak(info)
+					}
 				}
 			}
 		}
-
-		override fun cancel(): Boolean {
-			repeater = null
-			return super.cancel()
-		}
 	}
 
-
-	override fun onBind(intent: Intent): IBinder? {
-		if (isInitialized.value) return super.onBind(intent)
+	override fun onListenerConnected() {
+		Log.i(TAG, "Notification listener connected")
+		if (isRunning.value) return
 		audioMan = getSystemService(AUDIO_SERVICE) as AudioManager
-		telephony = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
-		val filter = IntentFilter(Intent.ACTION_HEADSET_PLUG)
-		filter.addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
-		filter.addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
-		filter.addAction(Intent.ACTION_SCREEN_ON)
-		filter.addAction(Intent.ACTION_SCREEN_OFF)
-		filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED)
+		if (usePhoneState) {
+			telephonyMan = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+			@Suppress("DEPRECATION")
+			telephonyMan.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
+		} else {
+			audioMan.addOnModeChangedListener(Executors.newSingleThreadExecutor(), audioModeListener)
+		}
+		val filter = IntentFilter().apply {
+			addAction(Intent.ACTION_HEADSET_PLUG)
+			addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
+			addAction(BluetoothDevice.ACTION_ACL_CONNECTED)
+			addAction(BluetoothDevice.ACTION_ACL_DISCONNECTED)
+			addAction(Intent.ACTION_SCREEN_ON)
+			addAction(Intent.ACTION_SCREEN_OFF)
+		}
 		registerReceiver(stateReceiver, filter)
 		shake.onShake = {
 			Log.i(TAG, "TTS silenced by shake")
-			synchronized(ttsQueue) {
+			ttsQueueMutex.launchWithLock {
 				for (info in ttsQueue.values) {
 					info.ignoreReasons.add(IgnoreReason.SHAKE)
 					NotifyList.updateInfo(info)
 				}
 			}
-			tts?.stop()
+			shutdownTts()
 		}
 		setInitialized(true)
-		return super.onBind(intent)
 	}
 
-	override fun onUnbind(intent: Intent): Boolean {
-		if (isInitialized.value) {
-			tts?.stop()
+	override fun onListenerDisconnected() {
+		Log.i(TAG, "Notification listener disconnected")
+		if (isRunning.value) {
+			shutdownTts()
+			if (usePhoneState) {
+				@Suppress("DEPRECATION")
+				telephonyMan.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
+			} else {
+				audioMan.removeOnModeChangedListener(audioModeListener)
+			}
 			unregisterReceiver(stateReceiver)
 			setInitialized(false)
 		}
-		return false
-	}
-
-	override fun onDestroy() {
-		tts?.shutdown()
-		tts = null
-		super.onDestroy()
 	}
 
 	private fun setInitialized(initialized: Boolean) {
@@ -474,16 +538,42 @@ class Service : NotificationListenerService() {
 		}
 	}
 
+	/**
+	 * @param mode The audio mode to check. Defaults to `mode` from [audioMan].
+	 * @return `true` if [mode] is in call or in communication.
+	 */
+	private fun isAudioModeInCall(mode: Int = audioMan.mode) = mode.isAny(
+		AudioManager.MODE_IN_CALL,
+		AudioManager.MODE_IN_COMMUNICATION
+	) || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && mode.isAny(
+		AudioManager.MODE_CALL_REDIRECT,
+		AudioManager.MODE_COMMUNICATION_REDIRECT
+	))
+
+	/**
+	 * @param state The phone state to check.
+	 * Defaults to `callState` from [telephonyMan] if `READ_PHONE_STATE` permission is granted, otherwise -1.
+	 * @return `true` if [state] is off-hook, `false` if not or if permission is denied for default value.
+	 */
+	private fun isPhoneStateInCall(
+		state: Int = if (isPermissionGranted(Manifest.permission.READ_PHONE_STATE)) {
+			@Suppress("DEPRECATION") telephonyMan.callState
+		} else -1
+	) = state == TelephonyManager.CALL_STATE_OFFHOOK
+
 	private inner class DeviceStateReceiver : BroadcastReceiver() {
 		override fun onReceive(context: Context, intent: Intent) {
 			val action = intent.action
+			Log.d(TAG, "Received device state: $action")
 			var interruptIfIgnored = true
 			when (action) {
 				Intent.ACTION_SCREEN_ON -> {
 					if (!isScreenOn()) return
-					if (repeater != null) {
-						repeater!!.cancel()
-						synchronized(repeatList) { repeatList.clear() }
+					repeaterJob?.let {
+						repeaterJob = null
+						it.cancel()
+						repeatListMutex.launchWithLock { repeatList.clear() }
+						Log.d(TAG, "Canceled repeater")
 					}
 					interruptIfIgnored = false
 				}
@@ -493,20 +583,24 @@ class Service : NotificationListenerService() {
 				}
 			}
 			if (interruptIfIgnored) {
-				tts?.run {
-					synchronized(ttsQueue) {
-						for (info in ttsQueue.values) {
-							val ignoreReasons = ignore(info.settings)
-							if (ignoreReasons.isNotEmpty()) {
-								Log.i(TAG, "Notification from ${info.app?.label} silenced/ignored" +
-									" for reason(s): ${ignoreReasons.joinToString()}")
-								info.ignoreReasons.addAll(ignoreReasons)
-							}
-						}
+				processIgnoreForQueue()
+			}
+		}
+	}
+
+	private fun processIgnoreForQueue() {
+		tts?.run {
+			ttsQueueMutex.launchWithLock {
+				for (info in ttsQueue.values) {
+					val ignoreReasons = ignore(info.settings)
+					if (ignoreReasons.isNotEmpty()) {
+						Log.i(TAG, "Notification from ${info.app?.label} silenced/ignored" +
+							" for reason(s): ${ignoreReasons.joinToString()}")
+						info.ignoreReasons.addAll(ignoreReasons)
 					}
-					stop()
 				}
 			}
+			stop()
 		}
 	}
 
@@ -517,9 +611,17 @@ class Service : NotificationListenerService() {
 		} ?: gs
 	}
 
+	/** Convenience for calling [withLock] inside a new [ioScope] coroutine. */
+	private fun <T> Mutex.launchWithLock(action: () -> T) = ioScope.launch { withLock(action = action) }
+
 	companion object {
 		private val TAG = Service::class.simpleName
+		private val ttsQueueMutex = Mutex()
+		private val repeatListMutex = Mutex()
+		private val usePhoneState = Build.VERSION.SDK_INT < Build.VERSION_CODES.S
 		private val isInitialized = MutableStateFlow(false)
+		private var lastQueuedUtteranceId = 0L
+		private var speakingUtteranceId: Long? = null
 		val isRunning: StateFlow<Boolean> = isInitialized
 		var isSuspended = MutableStateFlow(false)
 

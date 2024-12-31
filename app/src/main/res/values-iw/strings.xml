@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_overrides">%s שינויים</string>
+    <string name="service_suspended">ההתראות הקוליות כבויות</string>
+    <string name="app_list_summary">בחירת האפליקציות שהתראותן יוקראו</string>
+    <string name="tts">התראות קוליות</string>
+    <string name="tts_summary">הגדרות התראות קוליות</string>
+    <string name="audio_focus">עצור/החלש מדיה</string>
+    <string name="audio_focus_summary">ננסה להחליש את המדיה המופעל במכשיר כשהתראות הקוליות מושמעות</string>
+    <string name="require_strings_summary">הקרא התראות המכילות טקסט מסוים בלבד</string>
+    <string name="ignore_strings">מילת טקסט חסומה</string>
+    <string name="require_strings">מילת טקסט חובה</string>
+    <string name="ignore_empty_summary_on">התראות ללא טקסט לא יוקראו</string>
+    <string name="ignore_groups">התעלם מקיבוץ הודעות</string>
+    <string name="ignore_groups_summary_on">התראות הכוללות מספר הודעות בהן לא יוקראו</string>
+    <string name="ignore_repeat">התעלם מחזרות</string>
+    <string name="ignore_repeat_summary">התראות שנשלחות יותר מפעם אחת בעלי אותו טקסט לא יוקראו שוב אלא רק אחרי זמן מסויים</string>
+    <string name="quiet_start">התחלת זמן שקט</string>
+    <string name="quiet_start_summary">אל תקריא התראות אחרי שעה זו.
+\nהשאר בדיוק את אותה השעה כמו בסוף זמן השקט בשביל לכבות.</string>
+    <string name="quiet_end">סוף זמן השקט</string>
+    <string name="quiet_end_summary">אל תדבר לפני שעה זו.
+\nהשאר בדיוק את אותה השעה כמו בתחילת הזמן השקט בשביל לכבות.</string>
+    <string name="test">בדיקה</string>
+    <string name="notification_channel_desc">משומש לצורכי בדיקות</string>
+    <string name="test_subtext">טקסט משנה</string>
+    <string name="test_ticker">זהו המסר</string>
+    <string name="test_content_info">מידע על ההתראה</string>
+    <string name="test_big_content_title">כותרת התראה גדולה</string>
+    <string name="test_big_content_summary">זה הסיכום של ההתראה המוגדלת</string>
+    <string name="test_big_content_text">זה התוכן המוגדל של ההתראה.</string>
+    <string name="notify_log">הסטוריית התראות</string>
+    <string name="notification_details">פרטי התראה</string>
+    <string name="enable">הפעל</string>
+    <string name="ticker">טיקר</string>
+    <string name="content_text">טקסט התוכן</string>
+    <string name="support_translations">תרגומים</string>
+    <string name="remove_override">הסר שינוי</string>
+    <string name="remove_override_confirm">לבטל את השינוי של %1$s עבור %2$s?</string>
+    <string name="close">סגור</string>
+    <string name="ignore_enable_apps_confirm">האם אתה בטוח שברצונך ל%s את כל האפליקציות?</string>
+    <string name="ignore">התעלם</string>
+    <string name="filter">סינון</string>
+    <string name="remove_app_overrides">בטל את כל שינויי האפליקציה</string>
+    <string name="tts_settings">הגדרות קריאת התראות</string>
+    <string name="tts_message">הודעת טקסט לדיבור</string>
+    <string name="tts_message_summary">התאם אישית אילו חלקים של התראות יושמעו</string>
+    <string name="tts_text_replace">החלפת טקסט לדיבור</string>
+    <string name="text_replace_error_duplicate">כבר קיים! לא ישמר.</string>
+    <string name="text_to_replace">טקסט להחלפה</string>
+    <string name="replacement_text">טקסט חלופי</string>
+    <string name="error">שגיאה</string>
+    <string name="max_length">הודעה מקסימלית</string>
+    <string name="max_length_summary">אורך הודעה מקסימלי לדיבור. הודעות גדולות יותר יקוצצו.</string>
+    <string name="max_length_dialog_msg">אורך הודעה מקסימלי לדיבור
+\nהודעות גדולות יותר יקוצצו.</string>
+    <string name="tts_stream">זרם שמע להתראות קוליות</string>
+    <string name="tts_stream_summary">בחר את זרם האודיו במכשיר שהאפליקציה תנגן דרכו</string>
+    <string name="tts_delay">דיליי בהקראה (עיקוב)</string>
+    <string name="tts_delay_summary">ממתין מספר מוגדר של שניות לפני הקראת ההתראה כשהיא מתקבלת</string>
+    <string name="tts_repeat">חיזור של טקסט לדיבור</string>
+    <string name="app_is_ignored">התעלמו מ-%s</string>
+    <string name="app_is_not_ignored">אל תתעלמו מ-%s</string>
+    <string name="notification_from">התראה מאת %s.</string>
+    <string name="error_tts_init">שגיאה: לא היה ניתן להקריא את ההתראה! קוד שגיאה %d</string>
+    <string name="reason_string_ignored">הטקסט חסום</string>
+    <string name="reason_empty_msg">התראה ריקה</string>
+    <string name="reason_identical">הודעה כפולה תוך {0,choice,-1#אין סוף שניות|1#{0} שנייה|1&lt;{0} שניות}</string>
+    <string name="reason_quiet">בזמן שקט</string>
+    <string name="reason_silent">מכשיר במצב שקט או רטט</string>
+    <string name="reason_call">בזמן שיחת טלפון</string>
+    <string name="reason_screen_off">המסך כבוי</string>
+    <string name="reason_screen_on">המסך דלוק</string>
+    <string name="reason_headset_off">ללא אוזניות</string>
+    <string name="reason_headset_on">עם אוזניות</string>
+    <string name="reason_suspended">האפליקציה מושעת על ידי ווידג\'ט</string>
+    <string name="reason_service_stopped">האפליקציה לא פועלת</string>
+    <string name="back">חזור</string>
+    <string name="service_running">ההתראות הקוליות מופעלות</string>
+    <string name="service_disabled">ההתראות הקוליות מושבתות</string>
+    <string name="permission_rationale_read_phone_state">נדרשת הרשאה לשיחות הטלפון כדי למנוע הקראת התראות במהלך שיחה.</string>
+    <string name="permission_rationale_post_notifications">נדרשת הרשאה להתראות על מנת שנוכל לשלוח הודעת בדיקה.</string>
+    <string name="status_summary_notification_access_enabled">לחץ לכבוי ההתראות הקוליות.
+\nלחץ לחיצה ארוכה לפתיחת הגדרות הגישה להתראות אנדרואיד כדי להשבית לגמרי את האפליקציה.</string>
+    <string name="status_summary_notification_access_disabled">הקש כדי לפתוח את הגדרות הגישה להתראות להפעלת השירות.</string>
+    <string name="status_summary_suspended">הקש כדי להפעיל את ההתראות הקוליות.
+\nלחץ לחיצה ארוכה כדי לפתוח את הגדרות הגישה להתראות כדי להשבית את השירות.</string>
+    <string name="app_list">רשימת אפליקציות</string>
+    <string name="shake_to_silence">שקשק להשתקה</string>
+    <string name="shake_to_silence_summary">הגדר את הרגישות של האפליקציה לשקשוק לצורך השתקת ההתראה הקולית המושמעת</string>
+    <string name="shake_to_silence_dialog_msg">מספר נמוך יותר רגיש יותר.
+\n
+\nברירת מחדל: %1$d
+\nהשאר ריק או 0 כדי להשבית.
+\n
+\nמד שקשוק בזמן אמת: %2$d
+\nשיא (5 שניות אחרונות): %3$d</string>
+    <string name="ignore_strings_summary">התעלם מהתראות המכילות טקסט מסוים</string>
+    <string name="ignore_empty_summary_off">התראות ללא טקסט יוקראו רק כשם האפליקציה ששלחה את ההתראה.</string>
+    <string name="require_ignore_strings_dialog_msg">נבדוק את הטקסט של ההתראה ולא נקריא אותה אם היא כוללת אחד מן המילים החסומים.
+\n
+\nהפרד מילים בשורה חדשה.
+\n
+\nעובד גם לאותיות גדולות/קטנות באנגלית.</string>
+    <string name="ignore_empty">התעלם מהתראות ריקות</string>
+    <string name="ignore_groups_summary_off">התראות הכוללות מספר הודעות בהן יוקראו</string>
+    <string name="ignore_repeat_dialog_msg">הגדר את מספר השניות שחייבות לחלוף מאז ההודעה האחרונה לפני שניתן יהיה לקרוא התראות בעלי אותו טקסט בדיוק.
+\nהתראות דומות מאפסות את הספירה, והתראות שונות מדלגות על הספירה.
+\nריק = אין סוף זמן.</string>
+    <string name="device_state_dialog_title">הקרא הודעות רק במצבים אלה</string>
+    <string name="device_state">מצבי מכשיר</string>
+    <string name="device_state_summary">הגדר באיזה מצבים להקריא הודעות בקול</string>
+    <string name="test_summary">שלח התראה (בדיליי של 5 שניות) לבדיקת האפליקציה</string>
+    <string name="test_text_lines">זוהי שורת טקסט.
+\nזוהי שורת טקסט נוספת.</string>
+    <string name="reason_shake">הושתק על ידי שקשוק</string>
+    <string name="test_ignored">האפליקציה לא נמצאת ברשימת האפליקציות המוקראות.
+\nההודעה תישלח, אבל לא תיקרא בקול.</string>
+    <string name="notify_log_summary">הצג את ה-%d התראות האחרונות.
+\nמציג זמן, שם אפליקציה, הודעה וסיבות אי-הקראה.</string>
+    <string name="test_content_title">כותרת ההתראה</string>
+    <string name="subtext">טקסט משנה</string>
+    <string name="title">כותרת</string>
+    <string name="test_content_text">זה תוכן ההתראה.</string>
+    <string name="content_info_text">טקסט מידע התוכן</string>
+    <string name="metadata">נתונים</string>
+    <string name="metadata_progress_indeterminate">התקדמות: לא ידוע</string>
+    <string name="big_content_summary">תוכן ההתראה המוגדלת</string>
+    <string name="big_content_title">כותרת ההתראה המוגדלת</string>
+    <string name="big_content_text">טקסט ההתראה המוגדלת</string>
+    <string name="text_lines">שורות טקסט</string>
+    <string name="metadata_id">ID: %d</string>
+    <string name="ignored_reasons">סיבות אי-הקראה</string>
+    <string name="interrupted_reason">סיבה שנקטעה</string>
+    <string name="metadata_category">קטגוריה: %s</string>
+    <string name="metadata_progress">התקדמות: %1$d / %2$d</string>
+    <string name="backup_restore">גיבוי / שחזור</string>
+    <string name="ignore_app">האם להתעלם מ-%s?</string>
+    <string name="unignore_app">האם לא להתעלם מ-%s?</string>
+    <string name="yes">כן</string>
+    <string name="support_rate">דרג אותנו</string>
+    <string name="backup_restore_summary">גבה או שחזר את כל הגדרות האפליקציה</string>
+    <string name="tts_repeat_dialog_msg">ההתראות חוזרות על עצמן במרווח המוגדר עד שהמסך מופעל. הודעות שנוצרו בזמן שהמסך מופעל אינן חוזרות על עצמן.
+\n
+\nהערך הוא בדקות. השאירו ריק או 0 כדי להשבית.</string>
+    <string name="backup_settings">הגדרות גיבוי</string>
+    <string name="restore_settings">הגדות שחזור</string>
+    <string name="support">עזרה ותמיכה</string>
+    <string name="support_email">שליחת מייל למפתח האפליקציה</string>
+    <string name="support_github">גיטהאב</string>
+    <string name="support_summary">דרג אותנו, שלח מייל למפתח האפליקציה, שרת הדיסקורד, תרגומים, קוד מקור, מעקב אחר באגים, מדיניות פרטיות</string>
+    <string name="support_email_subtext">משוב כללי</string>
+    <string name="support_discord">דיסקורד</string>
+    <string name="support_matrix">Matrix</string>
+    <string name="support_chat_subtext">פלטפורמת צ\'אטים, הדרך המהירה ביותר לתגובה ממפתח האפליקציה</string>
+    <string name="support_github_subtext">דיווח באגים, בקשת פיצ\'ר חדש, קוד מקור</string>
+    <string name="support_privacy">מדיניות פרטיות</string>
+    <string name="error_market">שגיאה: לא ניתן למצוא את חנות Google Play מותקנת.</string>
+    <string name="support_privacy_message">האפליקציה (Voice Notify) לא שומרת או מעבירה מידע מהמכשיר החוצה. עם זאת, היא משתמשת באפליקציות או שירותים של צד שלישי שעשויים להעביר נתונים, כפי שמפורט בהמשך תחת \"אפליקציות ושירותים של צד שלישי\".
+\n
+\nבמקרה הלא סביר שבו מידע רגיש או אישי מתקבל על ידי המפתח, הוא לא יימכר, יישותף, יועתק או ישמש ללא הסכמה מפורשת של בעל המידע. בהיעדר הסכמה, המידע יימחק במידת האפשר.
+\n
+\nייעוד אפליקציית הודעת קול הוא להקריא התראות. לכן, סביר להניח שהתראות קוליות עשויות להישמע על ידי אנשים או מיקרופונים בסביבה. מומלץ להגדיר את הודעת קול ואת המכשיר כדי למנוע קריאת התראות לא רצויות. השימוש באפליקציה הוא על אחריותך בלבד.
+\n
+\nההתראות שמתקבלות על ידי הודעת קול נשמרות רק בזיכרון כדי להציג אותן ביומן ההתראות (עד 20 האחרונות) ולא נשמרות באחסון. זה מונע מאפליקציות אחרות לגשת למידע, במיוחד אם המכשיר מושרש. כתוצאה מכך, אם תהליך הודעת קול הופסק, יומן ההתראות יתנקה.
+\n
+\nאפליקציות מותקנות נקראות ומפורטות כדי לאפשר למשתמשים לבחור אילו אפליקציות יקריאו את ההתראות שלהן. שמות האפליקציות ושמות החבילות נשמרים במסד נתונים בתוך אחסון המידע הפרטי הפנימי של הודעת קול במכשיר, כדי לשמור את הבחירות ולשמש כמטמון לשיפור ביצועי טעינת רשימת האפליקציות.
+\n
+\nאפליקציות ושירותים של צד שלישי:
+\n
+\nמנוע טקסט לדיבור (TTS): הודעת קול מעבירה את טקסט ההתראה להקראה למנוע טקסט לדיבור ברירת המחדל, אשר נמצא מחוץ לשליטתה הישירה של הודעת קול. אנא קרא את מדיניות הפרטיות של מנוע ה-TTS כדי ללמוד כיצד הוא משתמש בנתונים.
+\nשירותי Google Play: שירותי Google Play עשויים לשלוח נתוני קריסה אנונימיים ונתוני ניתוח בסיסיים בחזרה למפתח כדי לסייע בשיפור האפליקציה.
+\nאפליקציית מסרים: האפשרות \"צור קשר עם מפתח\" פותחת את אפליקציית ההודעות שנבחרה על ידי המשתמש או ברירת המחדל שלו, כגון אפליקציית דואר אלקטרוני, וממלאת מראש את ההודעה עם גרסת הודעת הקול, גרסת אנדרואיד, מספר הבנייה של אנדרואיד ושם המכשיר. עבור אפליקציית דואר אלקטרוני, שדה \"אל\" מוגדר לכתובת המפתח (pilota51@gmail.com). על ידי שליחת ההודעה, המשתמש מבין ומסכים ששמו ופרטי הקשר שלו ישותפו עם הנמען/ים, כפי שקובעת אפליקציית ההודעות.
+\nאפשרויות אחרות תחת \"עזרה ותמיכה\" פותחות את האפליקציות או אתרי האינטרנט החיצוניים הרלוונטיים (חנות Play, Weblate.org, GitHub.com), ושולחות רק כתובת URL מקודדת קבועה לדף של הודעת קול.
+\nההרשאות בהן משתמשת הודעת קול ומדוע הן נחוצות:
+\n
+\nבלוטות\': נדרש כדי לזהות אם אוזניות בלוטות\' מחוברות.
+\nרטט: נדרש לתכונה \"בדיקה\" בזמן שהטלפון במצב רטט.
+\nשנה הגדרות שמע: נדרש לזיהוי משופר של אוזניות חוטיות.
+\nקרא מצב טלפון: נדרש להפסקת TTS אם שיחת טלפון הופכת לפעילה.</string>
+    <string name="error_email">שגיאה: לא ניתן למצוא אפליקציית אימייל מותקנת.</string>
+    <string name="error_browser">שגיאה: לא ניתן למצוא אפליקציית דפדפן מותקנת.</string>
+    <string name="tts_settings_summary">פתח את הגדרות הטקסט לדיבור של Android</string>
+    <string name="ignore_all">התעלם מהכל</string>
+    <string name="remove_app_overrides_confirm">לבטל את כל השינויים ל%s?</string>
+    <string name="ignore_none">לא להתעלם מכלום</string>
+    <string name="tts_settings_summary_fail">לא מצליח למצוא הגדרות טקסט לדיבור! אם זה קיים במכשיר שלך (זה אמור להיות קיים), אנא צור קשר עם המפתח.</string>
+    <string name="tts_message_dialog">#A = כותרת האפליקציה
+\n#T = טיקר
+\n#S = טקסט משנה
+\n#C = כותרת התוכן
+\n#M = הודעת תוכן
+\n#I = מידע תוכן
+\n#H = כותרת תוכן גדולה
+\n#Y = סיכום תוכן גדול
+\n#B = טקסט תוכן גדול
+\n#L = שורות טקסט
+\n
+\nברירת מחדל:
+\n%1$s
+\n
+\nברירת מחדל ישנה (v1.1.0 - v1.3.0):
+\n#A. #C. #M.
+\n
+\nברירת מחדל ישנה (v1.0.x):
+\n#A: #T</string>
+    <string name="tts_text_replace_summary">החלף טקסט שייאמר, לדוגמה לצורך תיקון ההגייה</string>
+    <string name="tts_text_replace_dialog">החלף טקסט שיושמע, מה שמאפשר לך להתאים אישית את האופן שבו האפליקציה מבטאת מילים או להחליף טקסט מכל סיבה אחרת.</string>
+    <string name="remove">להסיר</string>
+    <string name="tts_delay_dialog_msg">מספר שניות לחכות לאחר קבלת ההתראה לפני שתוקרא.</string>
+    <string name="tts_repeat_summary">חזור על ההתראות ללא הפסקה עד שהמסך נדלק</string>
+    <string name="reason_app">לא ברשימת האפליקציות המוקראות</string>
+    <string name="reason_string_required">הטקסט הנדרש לא נמצא</string>
+    <string name="reason_tts_failed">הקראת ההתראה נכשלה. נסו להפעיל מחדש ולנסות שוב.
+\nטקסט זה צריך להיות צהוב אם ההפעלה מחדש עבדה או אדום אם לא.
+\nאנא נסו להפעיל מחדש את האפליקציה בנוסף אם ההתראות לא נקראות.</string>
+    <string name="reason_tts_restarted">הקראת ההתראות הופעלו מחדש תוך כדי שיש התראה בתור או בזמן שיחה. אותחל מחדש.</string>
+    <string name="reason_tts_interrupted">הקראת ההתראה הופסקה מסיבה לא ידועה</string>
+    <string name="reason_tts_length_limit">ההתראה חרגה ממגבלת האורך המותר</string>
+    <string name="app_name">התראות קוליות (וויס נוטיפיי)</string>
+</resources>

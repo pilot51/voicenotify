@@ -82,7 +82,7 @@
 	<string name="test_ticker">This is the ticker message</string>
 	<string name="test_subtext">The Subtext</string>
 	<string name="test_content_title">Content Title</string>
-	<string name="test_content_text">This is the content message.</string>
+	<string name="test_content_text">This is the content message. 🙂</string>
 	<string name="test_content_info">Content Info</string>
 	<string name="test_big_content_title">Big Content Title</string>
 	<string name="test_big_content_summary">This is the big content summary</string>
@@ -120,6 +120,14 @@
 	<string name="support_rate">Rate &amp; Review</string>
 	<string name="support_email">Email Developer</string>
 	<string name="support_email_subtext">General feedback</string>
+	<string name="support_email_dialog_title">Select attachments</string>
+	<string name="support_email_dialog_message">These are only recommended when reporting bugs and crashes.</string>
+	<string name="support_email_dialog_message_log">While potentially sensitive information is not intentionally included, the log may include names of installed apps and some errors could contain relevant notification content or text-based settings. It is limited to 1MB, which may span days. It can be accessed from a computer through USB at %s</string>
+	<string name="support_email_dialog_message_settings">• Database file: Contains a list of all installed apps and all settings that are available in per-app overrides.\n• Preferences file: Contains the settings that are not available in per-app overrides.</string>
+	<string name="debug_log">Debug Log</string>
+	<string name="view">View</string>
+	<string name="view_debug_log_failed">Unable to read debug log</string>
+	<string name="settings">Settings</string>
 	<string name="support_discord">Discord</string>
 	<string name="support_matrix">Matrix</string>
 	<string name="support_chat_subtext">User chat, fastest developer response</string>
@@ -147,6 +155,8 @@
 	<string name="error_browser">Error: Unable to find an installed browser app.</string>
 	<string name="remove_override">Remove override</string>
 	<string name="remove_override_confirm">Remove %1$s override for %2$s?</string>
+	<string name="regex_message">\n\nTo use regex, prefix the text with \"$regex:\". Regex is case sensitive by default.\nFor example, to match a URL (ignoring case):\n$regex:(?i)https?:\\/\\/[^\s]+\n</string>
+	<string name="invalid_regex">Invalid regex</string>
 
 	<!-- AppListScreen -->
 	<string name="close">Close</string>
@@ -167,15 +177,18 @@
 	<string name="tts_message_dialog">#A = App title\n#T = Ticker\n#S = Subtext\n#C = Content title\n#M = Content message\n#I = Content info\n#H = Big content title\n#Y = Big content summary\n#B = Big content text\n#L = Text lines\nCase insensitive\n\nDefault:\n%1$s\n\nOld default (v1.1.0 - v1.3.0):\n#A. #C. #M.\n\nOld default (v1.0.x):\n#A: #T</string>
 	<string name="tts_text_replace">TTS Text Replacement</string>
 	<string name="tts_text_replace_summary">Substitute text to be spoken, such as to fix pronunciation</string>
-	<string name="tts_text_replace_dialog">Substitute text to be spoken, allowing you to customize how Text-To-Speech pronounces words or replace text for any other reason.\n\nText to replace is case insensitive and applies after the formatting set in TTS Message, including punctuation.</string>
+	<string name="tts_text_replace_dialog">Substitute text to be spoken, allowing you to customize how Text-To-Speech pronounces words or replace text for any other reason.\n\nText to replace is case insensitive and applies after TTS Message formatting and before emoji removal.</string>
 	<string name="text_replace_error_duplicate">Duplicate! Will not be saved.</string>
 	<string name="text_to_replace">Text to replace</string>
 	<string name="replacement_text">Replacement text</string>
 	<string name="remove">Remove</string>
 	<string name="error">Error</string>
-	<string name="max_length">Maximum Message</string>
-	<string name="max_length_summary">Maximum message length to speak. Larger messages will be truncated.</string>
-	<string name="max_length_dialog_msg">Maximum message length to speak\nLarger messages will be truncated.</string>
+	<string name="tts_speak_emojis">Speak Emojis</string>
+	<string name="tts_speak_emojis_summary_on">Emojis will be spoken</string>
+	<string name="tts_speak_emojis_summary_off">Emojis will not be spoken</string>
+	<string name="max_length">Max Length</string>
+	<string name="max_length_summary">Maximum message length to speak</string>
+	<string name="max_length_dialog_msg">Maximum message length to speak.\nLonger messages will be truncated.\n\nBlank or 0 for unlimited.\nAndroid TTS has a separate length limit (%d) that always applies.</string>
 	<string name="tts_stream">TTS Audio Stream</string>
 	<string name="tts_stream_summary">Choose the audio stream that Text-To-Speech plays through</string>
 	<string name="tts_delay">TTS Delay</string>
@@ -209,7 +222,7 @@
 	<string name="reason_headset_off">Headset off</string>
 	<string name="reason_headset_on">Headset on</string>
 	<string name="reason_shake">Silenced by shake</string>
-	<string name="reason_suspended">Voice Notify suspended by widget</string>
+	<string name="reason_suspended">Voice Notify suspended</string>
 	<string name="reason_service_stopped">Service stopped</string>
 	<string name="reason_tts_failed">TTS failed. Restart and retry attempted.\nThis text should be yellow if retry successful or red if not.\nPlease try restarting the Voice Notify service if notifications fail to be spoken.</string>
 	<string name="reason_tts_restarted">TTS restarted while message in queue or speaking. Re-queued.</string>

@@ -1,0 +1,35 @@
+name: Close issues on push to main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  close-issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Close Issues
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          COMMITS_JSON: ${{ toJson(github.event.commits) }}
+        run: |
+          shopt -s nocasematch
+          ISSUE_REGEX='.*((fix(e[sd])?|close[sd]?|resolve[sd]?) #([0-9]+)).*'
+          N_COMMITS=$(echo "$(echo $COMMITS_JSON | jq length)")
+          echo "Number of commits: $N_COMMITS"
+          for (( i=0; i<${N_COMMITS}; i++ )); do
+            COMMIT_HASH=$(echo $COMMITS_JSON | jq -r ".[$i].id" | cut -c1-7)
+            COMMIT_MSG=$(echo $COMMITS_JSON | jq -r ".[$i].message")
+            echo "Processing commit $COMMIT_HASH"
+            while [[ $COMMIT_MSG =~ $ISSUE_REGEX ]]; do
+              MATCH=${BASH_REMATCH[1]}
+              ISSUE_NUMBER=${BASH_REMATCH[4]}
+              echo "Closing issue #$ISSUE_NUMBER"
+              gh issue close $ISSUE_NUMBER --comment "Auto-closing issue from commit $COMMIT_HASH"
+              COMMIT_MSG=${COMMIT_MSG//"$MATCH"/}
+            done
+          done
+

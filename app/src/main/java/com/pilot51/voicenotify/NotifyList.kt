@@ -102,7 +102,7 @@ private fun ItemList(list: List<NotificationInfo>) {
 				onShowIgnore = { ignoreDialogApp = item.app }
 			)
 			if (index < list.lastIndex) {
-				Divider(
+				HorizontalDivider(
 					modifier = Modifier.padding(vertical = 16.dp),
 					color = Color.Gray,
 					thickness = 1.dp
@@ -203,7 +203,7 @@ private fun DetailDialog(
 			) {
 				Text(item.time)
 				item.app?.apply {
-					var isEnabled by remember(this) { mutableStateOf(enabled) }
+					var isEnabled by remember(this) { mutableStateOf(isEnabled) }
 					Text(text = label, fontSize = 24.sp)
 					Text(packageName)
 					Row(
@@ -325,7 +325,7 @@ private fun IgnoreDialog(
 		confirmButton = {
 			val context = LocalContext.current
 			TextButton(onClick = {
-				app.setEnabledWithToast(!app.enabled, context)
+				app.setEnabledWithToast(!app.isEnabled, context)
 				onDismiss()
 			}) {
 				Text(stringResource(R.string.yes))
@@ -339,7 +339,7 @@ private fun IgnoreDialog(
 		title = {
 			Text(
 				text = stringResource(
-					if (app.enabled) R.string.ignore_app else R.string.unignore_app,
+					if (app.isEnabled) R.string.ignore_app else R.string.unignore_app,
 					app.label
 				),
 				modifier = Modifier.fillMaxWidth(),

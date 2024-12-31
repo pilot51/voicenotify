@@ -20,8 +20,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.runInterruptible
+import kotlinx.coroutines.withTimeout
+import kotlin.time.Duration
 
 fun <T> T.isAny(vararg list: T) = list.any { this == it }
+
+/** Same as [withTimeout] except [block] is interrupted when it times out. */
+@Throws(TimeoutCancellationException::class)
+suspend fun <T> withTimeoutInterruptible(timeout: Duration, block: () -> T) =
+	withTimeout(timeout) { runInterruptible(block = block) }
+
+/**
+ * @return `false` if [text] is prefixed with [Constants.REGEX_PREFIX]
+ * and the regex format is invalid. `true` if format is valid or not prefixed.
+ */
+fun validateRegexOption(text: String) = !text.startsWith(Constants.REGEX_PREFIX) || runCatching {
+	Regex(text.removePrefix(Constants.REGEX_PREFIX))
+}.isSuccess
 
 val isPreview @Composable get() = LocalInspectionMode.current
 

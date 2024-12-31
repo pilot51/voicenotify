@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 2,
-    "identityHash": "ae7f6f1a5c600a07f3be1875546a6874",
+    "identityHash": "17d2b6035ddbc39718141ef47062f137",
     "entities": [
       {
         "tableName": "apps",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`package` TEXT NOT NULL, `name` TEXT NOT NULL COLLATE NOCASE, `is_enabled` INTEGER, PRIMARY KEY(`package`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`package` TEXT NOT NULL, `name` TEXT NOT NULL COLLATE NOCASE, `is_enabled` INTEGER NOT NULL, PRIMARY KEY(`package`))",
         "fields": [
           {
             "fieldPath": "packageName",
@@ -24,7 +24,7 @@
             "fieldPath": "isEnabled",
             "columnName": "is_enabled",
             "affinity": "INTEGER",
-            "notNull": false
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -38,7 +38,7 @@
       },
       {
         "tableName": "settings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_package` TEXT, `audio_focus` INTEGER, `require_strings` TEXT, `ignore_strings` TEXT, `ignore_empty` INTEGER, `ignore_groups` INTEGER, `ignore_repeat` INTEGER, `speak_screen_off` INTEGER, `speak_screen_on` INTEGER, `speak_headset_off` INTEGER, `speak_headset_on` INTEGER, `speak_silent_on` INTEGER, `quiet_start` INTEGER, `quiet_end` INTEGER, `tts_string` TEXT, `tts_text_replace` TEXT, `tts_max_length` INTEGER, `tts_stream` INTEGER, `tts_delay` INTEGER, `tts_repeat` REAL, FOREIGN KEY(`app_package`) REFERENCES `apps`(`package`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_package` TEXT, `audio_focus` INTEGER, `require_strings` TEXT, `ignore_strings` TEXT, `ignore_empty` INTEGER, `ignore_groups` INTEGER, `ignore_repeat` INTEGER, `speak_screen_off` INTEGER, `speak_screen_on` INTEGER, `speak_headset_off` INTEGER, `speak_headset_on` INTEGER, `speak_silent_on` INTEGER, `quiet_start` INTEGER, `quiet_end` INTEGER, `tts_string` TEXT, `tts_text_replace` TEXT, `tts_speak_emojis` INTEGER, `tts_max_length` INTEGER, `tts_stream` INTEGER, `tts_delay` INTEGER, `tts_repeat` REAL, FOREIGN KEY(`app_package`) REFERENCES `apps`(`package`) ON UPDATE NO ACTION ON DELETE NO ACTION )",
         "fields": [
           {
             "fieldPath": "id",
@@ -143,6 +143,12 @@
             "notNull": false
           },
           {
+            "fieldPath": "ttsSpeakEmojis",
+            "columnName": "tts_speak_emojis",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
             "fieldPath": "ttsMaxLength",
             "columnName": "tts_max_length",
             "affinity": "INTEGER",
@@ -202,7 +208,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'ae7f6f1a5c600a07f3be1875546a6874')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '17d2b6035ddbc39718141ef47062f137')"
     ]
   }
 }
