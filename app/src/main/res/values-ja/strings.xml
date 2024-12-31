@@ -186,4 +186,6 @@
     <string name="test_big_content_title">Big Content Title</string>
     <string name="big_content_title">Big Content Title</string>
     <string name="support_chat_subtext">ユーザーチャット, 開発者からの回答が最も早いです</string>
+    <string name="app_overrides">%s の個別設定</string>
+    <string name="debug_log">デバッグログ</string>
 </resources>
