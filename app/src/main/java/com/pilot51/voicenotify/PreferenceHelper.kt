@@ -70,12 +70,10 @@ object PreferenceHelper {
 
 	private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("prefs")
 	private val dataStore = appContext.dataStore
-	private val dataFiles get() = arrayOf(
+	val dataFiles get() = arrayOf(
 		appContext.getDatabasePath(AppDatabase.DB_NAME),
 		appContext.preferencesDataStoreFile("prefs")
 	)
-	private val backupDir get() = appContext.getExternalFilesDir(null)
-
 
 	init {
 		CoroutineScope(Dispatchers.IO).launch {
