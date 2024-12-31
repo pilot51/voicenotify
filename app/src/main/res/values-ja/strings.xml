@@ -188,4 +188,8 @@
     <string name="support_chat_subtext">ユーザーチャット, 開発者からの回答が最も早いです</string>
     <string name="app_overrides">%s の個別設定</string>
     <string name="debug_log">デバッグログ</string>
+    <string name="settings">設定</string>
+    <string name="autostart_message">Voice Notifyを正常に動作させるためには、自動起動もしくはバックグラウンドでの動作を許可する必要があります。</string>
+    <string name="autostart_message_manual">\n\nAndroidの設定で\'自動起動\' \'自動スタート\' \'スタートアップ\' バックグラウンド\' \'スリープにしない\'を検索しVoice Notifyを許可してください。\n\n設定の名称はOSにより異なります。もし見つけられない場合は開発者に連絡してください。\n\n\n %s を押すとAndroidの設定画面を開きます。</string>
+    <string name="autostart_message_direct">\n\n%s を押すと関連する設定画面を表示します、Voice Notifyを有効にしてください。</string>
 </resources>
