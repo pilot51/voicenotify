@@ -32,6 +32,14 @@ fun <T> T.isAny(vararg list: T) = list.any { this == it }
 suspend fun <T> withTimeoutInterruptible(timeout: Duration, block: () -> T) =
 	withTimeout(timeout) { runInterruptible(block = block) }
 
+/**
+ * @return `false` if [text] is prefixed with [Constants.REGEX_PREFIX]
+ * and the regex format is invalid. `true` if format is valid or not prefixed.
+ */
+fun validateRegexOption(text: String) = !text.startsWith(Constants.REGEX_PREFIX) || runCatching {
+	Regex(text.removePrefix(Constants.REGEX_PREFIX))
+}.isSuccess
+
 val isPreview @Composable get() = LocalInspectionMode.current
 
 @Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)

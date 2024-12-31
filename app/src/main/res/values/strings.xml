@@ -155,6 +155,8 @@
 	<string name="error_browser">Error: Unable to find an installed browser app.</string>
 	<string name="remove_override">Remove override</string>
 	<string name="remove_override_confirm">Remove %1$s override for %2$s?</string>
+	<string name="regex_message">\n\nTo use regex, prefix the text with \"$regex:\". Regex is case sensitive by default.\nFor example, to match a URL (ignoring case):\n$regex:(?i)https?:\\/\\/[^\s]+\n</string>
+	<string name="invalid_regex">Invalid regex</string>
 
 	<!-- AppListScreen -->
 	<string name="close">Close</string>
