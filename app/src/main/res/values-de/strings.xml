@@ -51,9 +51,7 @@
     <string name="ignore_empty_summary_off">Benachrichtigungen ohne Inhalt werden als \"Benachrichtigung von [App Name].\" vorgelesen</string>
     <string name="ignore_repeat">Ignoriere sich wiederholende Benachrichtigungen</string>
     <string name="ignore_repeat_summary">Ignoriere aufeinanderfolgende, identische Benachrichtigungen in einem bestimmten Zeitraum</string>
-    <string name="ignore_repeat_dialog_msg">Stelle den Zeitraum ein (in Sekunden), in dem wiederholte Benachrichtigungen ignoriert werden sollen.
-\nJede ignorierte Benachrichtigung in diesem Zeitraum lässt die Wartezeit von vorn beginnen. Bei neuen Benachrichtigungen entfällt die Wartezeit.
-\nleer = Wartezeit wird auf \'unendlich\' gesetzt.</string>
+    <string name="ignore_repeat_dialog_msg">Stelle den Zeitraum ein (in Sekunden), in dem wiederholte Benachrichtigungen ignoriert werden sollen. \nJede ignorierte Benachrichtigung in diesem Zeitraum lässt die Wartezeit von vorn beginnen. Bei neuen Benachrichtigungen entfällt die Wartezeit. \nleer = Wartezeit wird auf \'unendlich\' gesetzt.</string>
     <string name="max_length">Maximale Textlänge</string>
     <string name="max_length_summary">Anzahl der Zeichen die vorgelesen werden.</string>
     <string name="device_state">Gerätezustände</string>
