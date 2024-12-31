@@ -116,9 +116,7 @@
 \n Arvo on minuutteina. Tyhjä tai 0 poistaa käytöstä.</string>
     <string name="quiet_start_summary">Älä puhu tämän ajan jälkeen.
 \nJätä samaksi kuin lopetusaika poistaaksesi käytöstä.</string>
-    <string name="ignore_repeat_dialog_msg">Aseta sekuntien määrä, jonka on kuluttava edellisestä ilmoituksesta, ennen kuin toisto voidaan puhua.
-\nOhitetut toistot nollaavat määrän ja erilaiset ilmoitukset tyhjentävät sen.
-\nTyhjä = ääretön.</string>
+    <string name="ignore_repeat_dialog_msg">Aseta sekuntien määrä, jonka on kuluttava edellisestä ilmoituksesta, ennen kuin toisto voidaan puhua. \nOhitetut toistot nollaavat määrän ja erilaiset ilmoitukset tyhjentävät sen. \nTyhjä = ääretön.</string>
     <string name="text_to_replace">Korvattava teksti</string>
     <string name="status_summary_notification_access_enabled">Avaa Androidin ilmoitusten pääsyasetukset poistaaksesi Voice Notifyn käytöstä</string>
     <string name="permission_rationale_read_phone_state">Lupa puheluihin vaaditaan, jotta Voice Nofify ei pysty puhumaan puhelun aikana.</string>
