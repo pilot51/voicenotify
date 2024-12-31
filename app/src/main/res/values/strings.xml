@@ -63,7 +63,7 @@
 	<string name="ignore_groups_summary_off">Notifications containing multiple messages will be spoken</string>
 	<string name="ignore_repeat">Ignore Repeats</string>
 	<string name="ignore_repeat_summary">Ignore subsequent identical notifications within a set time</string>
-	<string name="ignore_repeat_dialog_msg">Set number of seconds that must pass since last notification before a repeat can be spoken.\nIgnored repeats reset the count and different notifications clear it.\nBlank = infinite.</string>
+	<string name="ignore_repeat_dialog_msg">Set the number of seconds that must pass for a repeated notification to be spoken.\nIgnored repeats reset the count.\n\nRepeat detection is limited to the memory of the Notification Log (%d notifications).\n\n0 = Disable\nBlank = Infinite</string>
 	<string name="device_state">Device States</string>
 	<string name="device_state_summary">Select whether to speak during certain device states</string>
 	<string name="device_state_dialog_title">Speak during these device states</string>

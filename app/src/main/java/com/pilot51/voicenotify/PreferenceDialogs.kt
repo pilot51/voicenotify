@@ -183,7 +183,7 @@ fun IgnoreRepeatsDialog(
 	val settingsCombo by vm.configuringSettingsComboState.collectAsState()
 	TextEditDialog(
 		titleRes = R.string.ignore_repeat,
-		messageRes = R.string.ignore_repeat_dialog_msg,
+		message = stringResource(R.string.ignore_repeat_dialog_msg, NotifyList.HISTORY_LIMIT),
 		initialText = (settingsCombo.ignoreRepeat ?: DEFAULT_IGNORE_REPEAT)
 			.takeIf { it != -1 }?.toString() ?: "",
 		keyboardType = KeyboardType.Number,

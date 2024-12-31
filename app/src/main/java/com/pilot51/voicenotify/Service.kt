@@ -68,6 +68,7 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import java.time.Duration
 import java.util.*
 import java.util.concurrent.Executors
 import java.util.regex.PatternSyntaxException
@@ -77,8 +78,6 @@ import kotlin.time.Duration.Companion.seconds
 class Service : NotificationListenerService() {
 	private val appContext by ::applicationContext
 	private val ioScope = CoroutineScope(Dispatchers.IO)
-	private val lastMsg = mutableMapOf<App?, String?>()
-	private val lastMsgTime = mutableMapOf<App?, Long>()
 	private var tts: TextToSpeech? = null
 	private var isAwaitingTtsInit = MutableStateFlow(false)
 	private var latestTtsStatus = TextToSpeech.STOPPED
@@ -280,7 +279,6 @@ class Service : NotificationListenerService() {
 				return@launch  // Completely ignore group summary notifications.
 			}
 			val info = NotificationInfo(app, sbn, settings)
-			val msgTime = info.instant.toEpochMilli()
 			val ttsMsg = info.ttsMessage
 			if (app != null && !app.isEnabled) {
 				info.addIgnoreReasons(IgnoreReason.APP)
@@ -317,10 +315,14 @@ class Service : NotificationListenerService() {
 					info.addIgnoreReasons(IgnoreReason.STRING_IGNORED)
 				}
 			}
-			val ignoreRepeat = settings.ignoreRepeat ?: -1
-			if (lastMsg.containsKey(app)) {
-				if (lastMsg[app] == ttsMsg && (ignoreRepeat == -1 || msgTime - lastMsgTime[app]!! < ignoreRepeat * 1000)) {
-					info.addIgnoreReasonIdentical(ignoreRepeat)
+			val ignoreRepeat = settings.ignoreRepeat?.takeIf { it > -1 }?.run { Duration.ofSeconds(toLong()) }
+			for (priorInfo in NotifyList.list) {
+				val elapsed = Duration.between(priorInfo.instant, info.instant)
+				if (ignoreRepeat != null && elapsed >= ignoreRepeat) break
+				if (priorInfo.app?.packageName != app?.packageName) continue
+				if (priorInfo.ttsMessage == ttsMsg) {
+					info.addIgnoreReasonIdentical(ignoreRepeat?.seconds?.toInt() ?: -1)
+					break
 				}
 			}
 			NotifyList.addNotification(info)
@@ -343,8 +345,6 @@ class Service : NotificationListenerService() {
 					}
 					speak(info)
 				}
-				lastMsg[app] = ttsMsg
-				lastMsgTime[app] = msgTime
 			} else {
 				Log.i(TAG, "Notification from ${app?.label} ignored for reason(s): ${info.getIgnoreReasonsAsText()}")
 			}

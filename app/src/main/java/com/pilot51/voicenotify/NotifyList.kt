@@ -43,21 +43,22 @@ import com.pilot51.voicenotify.db.Settings
 
 object NotifyList {
 	const val HISTORY_LIMIT = 100
-	private val list = mutableStateListOf<NotificationInfo>()
+	private val _list = mutableStateListOf<NotificationInfo>()
+	val list: List<NotificationInfo> = _list
 
 	fun addNotification(info: NotificationInfo) {
 		if (list.size == HISTORY_LIMIT) {
-			list.removeAt(list.size - 1)
+			_list.removeAt(list.lastIndex)
 		}
-		list.add(0, info)
+		_list.add(0, info)
 	}
 
 	fun updateInfo(info: NotificationInfo) {
 		val index = list.indexOf(info).takeUnless { it == -1 } ?: return
 		// Force update to list state by first setting copy
-		list[index] = info.copy()
+		_list[index] = info.copy()
 		// Set back to original to ensure future calls can find it again
-		list[index] = info
+		_list[index] = info
 	}
 
 	@Composable
