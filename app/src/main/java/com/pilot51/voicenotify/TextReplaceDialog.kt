@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,8 +37,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.DialogProperties
 import com.pilot51.voicenotify.PreferencesViewModel.Companion.isDuplicate
 import com.pilot51.voicenotify.PreferencesViewModel.Companion.updateListItem
+
+private val fieldSpacingArrangement = Arrangement.spacedBy(10.dp)
 
 /**
  * Dialog that provides a dynamic list with two
@@ -88,7 +91,8 @@ fun TextReplaceDialog(
 			TextReplaceList(
 				replaceList = replaceList
 			)
-		}
+		},
+		properties = DialogProperties(usePlatformDefaultWidth = false)
 	)
 }
 
@@ -107,7 +111,7 @@ private fun TextReplaceList(replaceList: MutableList<Pair<String, String>?>) {
 			modifier = Modifier
 				.fillMaxWidth()
 				.padding(bottom = 4.dp),
-			horizontalArrangement = Arrangement.spacedBy(10.dp)
+			horizontalArrangement = fieldSpacingArrangement
 		) {
 			Text(
 				text = stringResource(R.string.text_to_replace),
@@ -127,7 +131,7 @@ private fun TextReplaceList(replaceList: MutableList<Pair<String, String>?>) {
 		}
 		LazyColumn(
 			modifier = Modifier.fillMaxWidth(),
-			verticalArrangement = Arrangement.spacedBy(10.dp)
+			verticalArrangement = fieldSpacingArrangement
 		) {
 			itemsIndexed(replaceList) { index, item ->
 				TextReplaceListItem(
@@ -155,8 +159,10 @@ private fun TextReplaceListItem(
 	 * data with old row information after data has changed from onClick of the remove button.
 	 */
 	Row(
-		modifier = Modifier.fillMaxWidth(),
-		horizontalArrangement = Arrangement.spacedBy(10.dp)
+		modifier = Modifier
+			.fillMaxWidth()
+			.height(IntrinsicSize.Min),
+		horizontalArrangement = fieldSpacingArrangement
 	) {
 		TextField(
 			value = editFrom,
@@ -188,7 +194,7 @@ private fun TextReplaceListItem(
 		TextField(
 			value = editTo,
 			modifier = Modifier
-				.fillMaxWidth()
+				.fillMaxSize()
 				.weight(1f),
 			keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
 			keyboardActions = KeyboardActions(onDone = {
