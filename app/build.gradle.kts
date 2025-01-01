@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +48,8 @@ android {
 		applicationId = "com.pilot51.voicenotify"
 		minSdk = 21
 		targetSdk = 34
-		versionName = "1.4.0-beta"
-		versionCode = 29
+		versionName = "1.4.0"
+		versionCode = 30
 		vectorDrawables.useSupportLibrary = true
 		ksp {
 			arg("room.schemaLocation", "$projectDir/schemas")
