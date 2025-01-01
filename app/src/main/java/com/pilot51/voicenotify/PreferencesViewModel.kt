@@ -26,6 +26,7 @@ import androidx.compose.runtime.*
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.pilot51.voicenotify.Constants.DEV_EMAIL
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.PreferenceHelper.dataFiles
@@ -149,8 +150,6 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 	}
 
 	companion object {
-		private const val DEV_EMAIL = "pilota51@gmail.com"
-
 		fun updateListItem(
 			position: Int,
 			textFrom: String,

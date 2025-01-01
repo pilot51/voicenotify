@@ -64,8 +64,8 @@ fun MainScreen(
 	var statusSummary by remember { mutableStateOf("") }
 	val statusIntent = remember { Common.notificationListenerSettingsIntent }
 	if (isPreview) {
-		statusTitle = context.getString(R.string.service_running)
-		statusSummary = context.getString(R.string.status_summary_notification_access_enabled)
+		statusTitle = stringResource(R.string.service_running)
+		statusSummary = stringResource(R.string.status_summary_notification_access_enabled)
 	}
 	val isRunning by (if (isPreview) MutableStateFlow(false) else Service.isRunning).collectAsState()
 	val isSuspended by (if (isPreview) MutableStateFlow(false) else Service.isSuspended).collectAsState()
@@ -328,7 +328,7 @@ fun MainScreen(
 		) { showQuietTimeEnd = false }
 	}
 	if (showTestNotification) {
-		TestNotificationDialog(context) { showTestNotification = false }
+		TestNotificationDialog { showTestNotification = false }
 	}
 	if (showLog) {
 		NotificationLogDialog { showLog = false }

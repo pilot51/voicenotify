@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.NotificationCompat
 import androidx.core.text.isDigitsOnly
+import com.pilot51.voicenotify.Constants.DEV_EMAIL
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.PreferencesViewModel.Companion.readDebugLog
 import com.pilot51.voicenotify.PreferencesViewModel.Companion.sendEmail
@@ -68,6 +69,12 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STREAM
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
 import kotlinx.coroutines.*
 import kotlin.time.Duration.Companion.seconds
+
+private val debugLogPath @Composable get() = if (isPreview) {
+	"Android/data/${LocalContext.current.packageName}/files/debug.log"
+} else {
+	logFile?.relativeTo(Environment.getExternalStorageDirectory()).toString()
+}
 
 private fun openBrowser(context: Context, url: String) {
 	try {
@@ -538,16 +545,15 @@ private const val NOTIFICATION_CHANNEL_ID = "test"
 
 @Composable
 fun TestNotificationDialog(
-	context: Context,
 	onDismiss: () -> Unit
 ) {
+	val context = LocalContext.current
 	TextEditDialog(
 		titleRes = R.string.test,
 		messageRes = R.string.test_summary,
 		initialText = context.getString(R.string.test_content_text),
 		onDismiss = onDismiss
-	) {
-		val content = it
+	) { content ->
 		CoroutineScope(Dispatchers.IO).launch {
 			val vnApp = Common.findOrAddApp(context.packageName)!!
 			if (!vnApp.isEnabled) {
@@ -618,14 +624,19 @@ fun BackupDialog(onDismiss: () -> Unit) {
 		},
 		title = { Text(stringResource(R.string.backup_restore)) },
 		text = {
-			LazyColumn {
-				supportItem(title = R.string.backup_settings) {
+			Column(verticalArrangement = Arrangement.spacedBy(20.dp)) {
+				Text(stringResource(R.string.backup_restore_message))
+				TextButton(onClick = {
 					val version = BuildConfig.VERSION_NAME
 						.replace(" ", "-").replace(Regex("[\\[\\]]"), "")
 					exportBackupLauncher.launch("voice_notify_${version}_backup.zip")
+				}) {
+					Text(stringResource(R.string.backup_settings))
 				}
-				supportItem(title = R.string.restore_settings) {
+				TextButton(onClick = {
 					importBackupLauncher.launch(arrayOf("application/zip"))
+				}) {
+					Text(stringResource(R.string.restore_settings))
 				}
 			}
 		}
@@ -649,7 +660,10 @@ fun SupportDialog(onDismiss: () -> Unit) {
 		text = {
 			Column {
 				LazyColumn {
-					supportItem(title = R.string.support_rate) {
+					supportItem(
+						title = R.string.support_rate,
+						subtext = R.string.support_rate_subtext
+					) {
 						val iMarket = Intent(
 							Intent.ACTION_VIEW,
 							Uri.parse("market://details?id=com.pilot51.voicenotify")
@@ -681,7 +695,10 @@ fun SupportDialog(onDismiss: () -> Unit) {
 					) {
 						openBrowser(context, "https://matrix.to/#/#voicenotify:p51.me")
 					}
-					supportItem(title = R.string.support_translations) {
+					supportItem(
+						title = R.string.support_translations,
+						subtext = R.string.support_translations_subtext
+					) {
 						openBrowser(context, "https://hosted.weblate.org/projects/voice-notify")
 					}
 					supportItem(
@@ -709,22 +726,7 @@ fun SupportDialog(onDismiss: () -> Unit) {
 		EmailDialog { showEmailDialog = false }
 	}
 	if (showPrivacyDialog) {
-		AlertDialog(
-			onDismissRequest = { showPrivacyDialog = false },
-			confirmButton = { },
-			dismissButton = {
-				TextButton(onClick = { showPrivacyDialog = false }) {
-					Text(stringResource(android.R.string.ok))
-				}
-			},
-			title = { Text(stringResource(R.string.support_privacy)) },
-			text = {
-				Text(
-					text = stringResource(R.string.support_privacy_message),
-					modifier = Modifier.verticalScroll(rememberScrollState())
-				)
-			}
-		)
+		PrivacyDialog { showPrivacyDialog = false }
 	}
 }
 
@@ -778,8 +780,7 @@ fun EmailDialog(onDismiss: () -> Unit) {
 					}
 				}
 				Text(
-					text = stringResource(R.string.support_email_dialog_message_log,
-						logFile?.relativeTo(Environment.getExternalStorageDirectory()).toString()),
+					text = stringResource(R.string.support_email_dialog_message_log, debugLogPath),
 					modifier = Modifier.fillMaxWidth(),
 					fontSize = 20.sp
 				)
@@ -841,6 +842,27 @@ fun EmailDialog(onDismiss: () -> Unit) {
 			}
 		)
 	}
+}
+
+@Composable
+private fun PrivacyDialog(onDismiss: () -> Unit) {
+	AlertDialog(
+		onDismissRequest = onDismiss,
+		confirmButton = { },
+		dismissButton = {
+			TextButton(onClick = onDismiss) {
+				Text(stringResource(android.R.string.ok))
+			}
+		},
+		title = { Text(stringResource(R.string.support_privacy)) },
+		text = {
+			Text(
+				text = stringResource(R.string.support_privacy_message,
+					NotifyList.HISTORY_LIMIT, debugLogPath, DEV_EMAIL),
+				modifier = Modifier.verticalScroll(rememberScrollState())
+			)
+		}
+	)
 }
 
 @Composable
@@ -973,6 +995,14 @@ private fun QuietTimeDialogPreview() {
 
 @VNPreview
 @Composable
+private fun BackupDialogPreview() {
+	AppTheme {
+		BackupDialog {}
+	}
+}
+
+@VNPreview
+@Composable
 private fun SupportDialogPreview() {
 	AppTheme {
 		SupportDialog {}
@@ -984,5 +1014,13 @@ private fun SupportDialogPreview() {
 private fun EmailDialogPreview() {
 	AppTheme {
 		EmailDialog {}
+	}
+}
+
+@VNPreview
+@Composable
+private fun PrivacyDialogPreview() {
+	AppTheme {
+		PrivacyDialog {}
 	}
 }

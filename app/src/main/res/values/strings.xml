@@ -117,11 +117,13 @@
 	<string name="yes">Yes</string>
 	<string name="backup_restore">Backup / Restore</string>
 	<string name="backup_restore_summary">Backup or restore all Voice Notify settings</string>
+	<string name="backup_restore_message">Backup or restore a zip file containing all settings.\n\nBackups are only guaranteed to be compatible with the same version or later of Voice Notify.\nThere is no guarantee for backups from a beta or non-release build.</string>
 	<string name="backup_settings">Backup Settings</string>
 	<string name="restore_settings">Restore Settings</string>
 	<string name="support">Help &amp; Support</string>
 	<string name="support_summary">Rate &amp; review, email the developer, community chat, translations, source code, issue tracker, privacy policy</string>
 	<string name="support_rate">Rate &amp; Review</string>
+	<string name="support_rate_subtext">View the app on Play Store</string>
 	<string name="support_email">Email Developer</string>
 	<string name="support_email_subtext">General feedback</string>
 	<string name="support_email_dialog_title">Select attachments</string>
@@ -134,26 +136,31 @@
 	<string name="settings">Settings</string>
 	<string name="support_discord">Discord</string>
 	<string name="support_matrix">Matrix</string>
-	<string name="support_chat_subtext">User chat, fastest developer response</string>
+	<string name="support_chat_subtext">Community chat, fastest developer response</string>
 	<string name="support_translations">Translations</string>
+	<string name="support_translations_subtext">Crowd-sourced translations at Weblate.org</string>
 	<string name="support_github">GitHub</string>
-	<string name="support_github_subtext">Bug reports, feature requests, source code</string>
+	<string name="support_github_subtext">Bug reports, feature requests, release notes, beta releases, source code</string>
 	<string name="support_privacy">Privacy Policy</string>
 	<string name="support_privacy_message">Voice Notify does not collect or transmit data off of the device. However, it does use third party apps or services that may transmit data, as outlined below under \"Third party apps and services\".
-\n\nIn the unlikely event that sensitive or personal information is received by the developer, it will not be sold, shared, copied, or used without the express consent of who the information belongs to. In the absence of consent, the information will be deleted if possible.
-\n\nThe purpose of Voice Notify is to speak notifications, and as such it is likely that spoken notifications may be heard by people or microphones in the vicinity. It is recommended to configure Voice Notify and the device to prevent undesired spoken notifications. Use at your own risk.
-\n\nThe notifications received by Voice Notify are only held in memory to be displayed in the Notification Log (up to the most recent 20) and are not written to storage. This prevents other apps from accessing the data, especially if the device is rooted. As a result, if the Voice Notify process is terminated, the notification log is cleared.
-\n\nInstalled apps are read and listed to allow users to choose which apps have their notifications spoken. The app titles and package names are stored in a database in Voice Notify\'s internal private data storage on the device to save selections and act as a cache to improve performance of loading the app list.
+\n\nThe purpose of Voice Notify is to speak notifications, and as such it is likely that spoken notifications may be heard by nearby people or microphones. It is recommended to configure Voice Notify and the device to prevent undesired spoken notifications. Use at your own risk.
+\n\nIn the unlikely event that sensitive information is received by the developer, it will not be sold, shared, or used without the express consent of the rightful owner of the information. Any sensitive information that is knowingly received will be deleted if it is unrelated to a reported issue or once the issue is resolved.
+\n\nThe notifications received by Voice Notify are only held in memory to be displayed in the Notification Log (up to the most recent %1$d) and are not written to storage. This prevents other apps from accessing the data even if the device is rooted. As a result, if the Voice Notify process is terminated, the notification log is cleared.
+\n\nInstalled apps are read and listed to allow users to choose which apps have their notifications spoken and configure per-app settings. The app titles and package names are stored in a database in Voice Notify\'s internal private data storage on the device to save selections and act as a cache to improve performance of loading the app list.
+\n\nA debug log is saved to external storage at %2$s which is accessible from a computer via USB and optionally sent when using the Email Developer feature.\nIt could potentially contain sensitive information from a notification if there was an error. The Email Developer dialog provides a basic log viewer.
+\n\nThe backup feature saves a zip file containing all settings including installed apps to a location of the user\'s choice.
 \n\nThird party apps and services:
 \n• Text-To-Speech engine - Voice Notify passes notification text to be spoken to the default Text-To-Speech engine, which is outside the direct control of Voice Notify. Please read the privacy policy of the TTS engine for how it uses data.
-\n• Google Play Services may send anonymized crash and basic analytical data back to the developer to assist in improving the app.
-\n• Messaging app - The \"Contact Developer\" option opens the user\'s chosen or default messaging app, such as an email app, and pre-populates the message with the Voice Notify version, Android version, Android build number, and device name. For an email app, the \"To\" field is set to the developer\'s address (pilota51@gmail.com). By sending the message, the user understands and consents to their name and contact information being shared with the recipient(s), as determined by the messaging app.
-\n• Other options under \"Help &amp; Support\" open the relevant external apps or websites (Play Store, Weblate.org, GitHub.com), only sending a hard coded URL to the Voice Notify page.
+\n• Google Play Services may send anonymized data for analytics, crashes, and freezes back to the developer to assist in improving the app. This is the same for all apps distributed through the Play Store.
+\n• Messaging app - The \"Contact Developer\" option opens the user\'s chosen or default messaging app, such as an email app, and pre-populates the message with the Voice Notify version, Android version, Android build number, and device name. The user may choose to attach the debug log and settings files. When sending to an email app, the \"To\" field is set to the developer\'s address (%3$s). By sending the message, the user understands and consents to their name and contact information being shared with the recipient(s) as determined by the messaging app.
+\n• Other options under \"Help &amp; Support\" open the relevant external apps or websites (Play Store, Discord, Matrix, Weblate.org, GitHub.com) to the Voice Notify page or chat room.
 \n\nBelow are the permissions used by Voice Notify and why they\'re needed:
-\n• Bluetooth - Required to detect whether Bluetooth headset is connected.
-\n• Vibrate - Required for Test feature while phone is in vibrate mode.
+\n• Post Notifications - Required to post the test notification. This is typically the only permission that Android shows to the user.
+\n• Query All Packages - Required to fetch a list of all installed apps for the App List and allow for per-app settings.
+\n• Bluetooth - Required to detect whether a Bluetooth headset is connected.
 \n• Modify Audio Settings - Required for improved wired headset detection.
-\n• Read Phone State - Required to interrupt TTS if a phone call becomes active.</string>
+\n• Vibrate - Required for Test feature while device is in vibrate mode.
+\n• Read Phone State - Required in Android 11 and below to interrupt TTS if a phone call becomes active.</string>
 	<string name="error_market">Error: Unable to find Google Play Store installed.</string>
 	<string name="error_email">Error: Unable to find an installed email app.</string>
 	<string name="error_browser">Error: Unable to find an installed browser app.</string>
