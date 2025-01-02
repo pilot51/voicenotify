@@ -48,8 +48,8 @@ android {
 		applicationId = "com.pilot51.voicenotify"
 		minSdk = 21
 		targetSdk = 34
-		versionName = "1.4.0"
-		versionCode = 30
+		versionName = "1.4.1"
+		versionCode = 31
 		vectorDrawables.useSupportLibrary = true
 		ksp {
 			arg("room.schemaLocation", "$projectDir/schemas")
@@ -86,13 +86,6 @@ android {
 		getByName("release") {
 			signingConfig = signingConfigs.getByName("release")
 			versionNameSuffix = " [$gitCommitHash]"
-			@Suppress("UnstableApiUsage")
-			postprocessing {
-				isRemoveUnusedCode = true
-				isOptimizeCode = true
-				isShrinkResources = true
-				isObfuscate = false
-			}
 		}
 		getByName("debug") {
 			applicationIdSuffix = ".debug"
