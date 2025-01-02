@@ -17,9 +17,7 @@
     <string name="tts_message_summary">Dopasuj które części powiadomienia mają być wypowiedziane</string>
     <string name="tts_text_replace">Wymiana tekstu TTS</string>
     <string name="tts_text_replace_summary">Zamiana tekstu do poprawnej wymowy</string>
-    <string name="tts_text_replace_dialog">Zamiana tekstu do wypowiedzenia, pozwalający dostosować w jaki syntezator mowy TTS wymawia słowa lub zamienia tekst z dowolnego innego powodu.
-\n
-\nTekst do wymowy jest niewrażliwy na wielkość liter.</string>
+    <string name="tts_text_replace_dialog">Zamiana tekstu do wypowiedzenia, pozwalający dostosować w jaki syntezator mowy TTS wymawia słowa lub zamienia tekst z dowolnego innego powodu. \n \nTekst do wymowy jest niewrażliwy na wielkość liter.</string>
     <string name="tts_stream">Strumień dźwięku syntezatora TTS</string>
     <string name="tts_stream_summary">Wybierz strumień dźwięku z którego syntezator mowy TTS ma mówić</string>
     <string name="tts_delay">Opóźnienie TTS</string>
@@ -53,13 +51,10 @@
     <string name="ignore_empty_summary_off">Powiadomienia będą wymawiane jako \"powiadomienie od [app name].\"</string>
     <string name="ignore_repeat">Ignoruj powtórzenia</string>
     <string name="ignore_repeat_summary">Ignoruj następne identyczne powiadomienia w określonym czasie</string>
-    <string name="ignore_repeat_dialog_msg">Ustaw liczbę sekund które muszą przeminąć aby poprzednie powtórzone powiadomienie było wymówione.
-\nIgorowanie powtórzeń resetuje licznik oraz inne powiadomienie je czyści.
-\nPuste = nieskończoność.</string>
+    <string name="ignore_repeat_dialog_msg">Ustaw liczbę sekund które muszą przeminąć aby poprzednie powtórzone powiadomienie było wymówione. \nIgorowanie powtórzeń resetuje licznik oraz inne powiadomienie je czyści. \nPuste = nieskończoność.</string>
     <string name="max_length">Maksymalna wiadomość</string>
     <string name="max_length_summary">Maksymalna długość wiadomości do wypowiedzenia. Dłuższe wiadomości zostaną przycięte.</string>
-    <string name="max_length_dialog_msg">Maksymalna długość wiadomości do wypowiedzenia
-\nDłuższe wiadomości zostaną przycięte.</string>
+    <string name="max_length_dialog_msg">Maksymalna długość wiadomości do wypowiedzenia \nDłuższe wiadomości zostaną przycięte.</string>
     <string name="device_state">Stany urządzenia</string>
     <string name="device_state_summary">Wybierz w jakich statusach telefonu ma być mówione powiadomienie</string>
     <string name="device_state_dialog_title">Wypowiadaj w tych stanach urządzenia</string>

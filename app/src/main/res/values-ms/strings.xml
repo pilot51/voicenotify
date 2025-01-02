@@ -62,12 +62,10 @@
     <string name="ignore_empty_summary_off">Notifikasi tanpa mesej akan diucapkan sebagai \"Notifikasi dari [nama apl].\"</string>
     <string name="ignore_repeat">Abaikan Ulangan</string>
     <string name="ignore_repeat_summary">Abaikan pemberitahuan seterusnya yang serupa dalam masa yang ditetapkan</string>
-    <string name="ignore_repeat_dialog_msg">Tetapkan saat yang melepasi sejak notifikasi terakhir sebelum ulangan diucapkan.baikan ulangan semula kiraan dan pemberitahuan yang berbeza.
-\nKosong = tak terhingga.</string>
+    <string name="ignore_repeat_dialog_msg">Tetapkan saat yang melepasi sejak notifikasi terakhir sebelum ulangan diucapkan.baikan ulangan semula kiraan dan pemberitahuan yang berbeza. \nKosong = tak terhingga.</string>
     <string name="max_length">Mesej Maksima</string>
     <string name="max_length_summary">Panjang mesej maksima diucapkan. Mesej yang besar akan dipendekkan.</string>
-    <string name="max_length_dialog_msg">Panjang mesej maksima diucapkan
-\nMesej yang besar akan dipendekkan.</string>
+    <string name="max_length_dialog_msg">Panjang mesej maksima diucapkan \nMesej yang besar akan dipendekkan.</string>
     <string name="device_state">Status Peranti</string>
     <string name="device_state_summary">Pilih jika ingin diucapkan didalam status peranti tertentu</string>
     <string name="device_state_dialog_title">Ucapan semasa peranti distatus ini</string>

@@ -47,9 +47,7 @@
     <string name="ignore_empty_summary_off">Oznámení bez zprávy bude přečteno jako \"Oznámení z [název aplikace].\"</string>
     <string name="ignore_repeat">Ignorovat Opakování</string>
     <string name="ignore_repeat_summary">Ignorovat následné stejné oznámení ve stanoveném čase.</string>
-    <string name="ignore_repeat_dialog_msg">Nastavte počet sekund, které musí uplynout od posledního oznámení, než opakování může být přečteno.
-\nIgnorované opakování vynulujte a různá oznámení zrušte jeho zaškrtnutím.
-\nPrázdné = nekonečno.</string>
+    <string name="ignore_repeat_dialog_msg">Nastavte počet sekund, které musí uplynout od posledního oznámení, než opakování může být přečteno. \nIgnorované opakování vynulujte a různá oznámení zrušte jeho zaškrtnutím. \nPrázdné = nekonečno.</string>
     <string name="device_state">Stav zařízení</string>
     <string name="device_state_summary">Vyberte, zda chcete číst v určitých stavech zařízení.</string>
     <string name="device_state_dialog_title">Číst během těchto stavů zařízení</string>

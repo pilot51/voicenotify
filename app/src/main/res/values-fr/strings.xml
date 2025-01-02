@@ -34,9 +34,7 @@
     <string name="require_ignore_strings_dialog_msg">Séparer les entrées individuelles par une nouvelle ligne.</string>
     <string name="ignore_repeat">Ignorer les répétitions</string>
     <string name="ignore_repeat_summary">Ignorer les notifications identiques successives dans un temps donné</string>
-    <string name="ignore_repeat_dialog_msg">Définir le nombre de secondes qui doivent s\'écouler depuis la dernière notification avant une répétition.
-\nLes répétitions ignorées réinitialisent le compteur et les notifications différentes l’arrêtent.
-\nVide = infini.</string>
+    <string name="ignore_repeat_dialog_msg">Définir le nombre de secondes qui doivent s\'écouler depuis la dernière notification avant une répétition. \nLes répétitions ignorées réinitialisent le compteur et les notifications différentes l’arrêtent. \nVide = infini.</string>
     <string name="device_state">Etats de l\'appareil</string>
     <string name="device_state_summary">Choisir à quel moment utiliser l\'annonce vocale selon le statut de l\'appareil.</string>
     <string name="device_state_dialog_title">Utiliser l\'annonce vocale si :</string>

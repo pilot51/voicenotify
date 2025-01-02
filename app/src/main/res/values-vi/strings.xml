@@ -30,36 +30,13 @@
 \nMặc định cũ (v1.0.x):
 \n#A: #T</string>
     <string name="permission_rationale_read_phone_state">Đọc thông báo yêu cầu quyền kiểm soát cuộc gọi để không hoạt động trong khi gọi điện.</string>
-    <string name="support_privacy_message">Voice Notify không thu thập hoặc truyền dữ liệu ra khỏi thiết bị. Tuy nhiên, nó sử dụng các ứng dụng hoặc dịch vụ của bên thứ ba có thể truyền dữ liệu, như được nêu chi tiết bên dưới trong \"Ứng dụng và dịch vụ của bên thứ ba\".
-\n
-\nTrong trường hợp hiếm hoi nhận được thông tin nhạy cảm hoặc cá nhân bởi nhà phát triển, thông tin đó sẽ không được bán, chia sẻ, sao chép hoặc sử dụng mà không có sự đồng ý rõ ràng của chủ sở hữu thông tin. Nếu không có sự đồng ý, thông tin sẽ bị xóa nếu có thể.
-\n
-\nMục đích của Voice Notify là đọc thông báo bằng giọng nói, do đó, thông báo bằng giọng nói có thể bị người khác hoặc micrô ở gần nghe thấy. Bạn nên cấu hình Voice Notify và thiết bị để tránh thông báo bằng giọng nói không mong muốn. Sử dụng dưới trách nhiệm của bạn.
-\n
-\nCác thông báo nhận được bởi Voice Notify chỉ được lưu trong bộ nhớ để hiển thị trong Nhật ký thông báo (tối đa 20 thông báo gần nhất) và không được ghi vào bộ nhớ lưu trữ. Điều này ngăn các ứng dụng khác truy cập dữ liệu, đặc biệt là nếu thiết bị được root. Do đó, nếu tiến trình Voice Notify bị terminated (kết thúc), nhật ký thông báo sẽ bị xóa.
-\n
-\nỨng dụng được cài đặt sẽ được đọc và liệt kê để cho phép người dùng chọn ứng dụng nào có thông báo được đọc bằng giọng nói. Tiêu đề và tên gói của ứng dụng được lưu trữ trong cơ sở dữ liệu trong bộ lưu trữ dữ liệu riêng tư nội bộ của Voice Notify trên thiết bị để lưu các lựa chọn và hoạt động như một bộ nhớ cache để cải thiện hiệu suất tải danh sách ứng dụng.
-\n
-\nỨng dụng và dịch vụ của bên thứ ba:
-\n
-\nCông cụ Text-To-Speech (chuyển văn bản thành giọng nói) - Voice Notify chuyển văn bản thông báo để đọc thành giọng nói cho công cụ Text-To-Speech mặc định, nằm ngoài quyền kiểm soát trực tiếp của Voice Notify. Vui lòng đọc chính sách bảo mật của công cụ TTS để biết cách nó sử dụng dữ liệu.
-\nGoogle Play Services có thể gửi dữ liệu phân tích cơ bản và sự cố ứng dụng ẩn danh trở lại cho nhà phát triển để hỗ trợ cải thiện ứng dụng.
-\nỨng dụng nhắn tin - Tùy chọn \"Liên hệ với nhà phát triển\" sẽ mở ứng dụng nhắn tin hoặc ứng dụng email mặc định của người dùng, chẳng hạn như ứng dụng email, và điền sẵn nội dung tin nhắn với phiên bản Voice Notify, phiên bản Android, số bản dựng Android và tên thiết bị. Đối với ứng dụng email, trường \"Đến\" được đặt thành địa chỉ của nhà phát triển (pilota51@gmail.com). Bằng cách gửi tin nhắn, người dùng hiểu và đồng ý rằng tên và thông tin liên lạc của họ được chia sẻ với người nhận, theo quy định của ứng dụng nhắn tin.
-\nCác tùy chọn khác trong \"Trợ giúp &amp; Hỗ trợ\" sẽ mở các ứng dụng hoặc trang web bên ngoài liên quan (Play Store, Weblate.org, GitHub.com), chỉ gửi một URL được mã hóa cứng đến trang Voice Notify.
-\n
-\nDưới đây là các quyền được sử dụng bởi Voice Notify và lý do tại sao chúng cần thiết:
-\nBluetooth - Cần thiết để phát hiện tai nghe Bluetooth có được kết nối hay không.
-\nRung - Cần thiết cho tính năng Kiểm tra khi điện thoại ở chế độ rung.
-\nThay đổi Cài đặt Âm thanh - Cần thiết để cải thiện khả năng phát hiện tai nghe có dây.
-\nĐọc Trạng thái Điện thoại - Cần thiết để ngắt TTS nếu có cuộc gọi đến.</string>
+    <string name="support_privacy_message">Voice Notify không thu thập hoặc truyền dữ liệu ra khỏi thiết bị. Tuy nhiên, nó sử dụng các ứng dụng hoặc dịch vụ của bên thứ ba có thể truyền dữ liệu, như được nêu chi tiết bên dưới trong \"Ứng dụng và dịch vụ của bên thứ ba\". \n \nTrong trường hợp hiếm hoi nhận được thông tin nhạy cảm hoặc cá nhân bởi nhà phát triển, thông tin đó sẽ không được bán, chia sẻ, sao chép hoặc sử dụng mà không có sự đồng ý rõ ràng của chủ sở hữu thông tin. Nếu không có sự đồng ý, thông tin sẽ bị xóa nếu có thể. \n \nMục đích của Voice Notify là đọc thông báo bằng giọng nói, do đó, thông báo bằng giọng nói có thể bị người khác hoặc micrô ở gần nghe thấy. Bạn nên cấu hình Voice Notify và thiết bị để tránh thông báo bằng giọng nói không mong muốn. Sử dụng dưới trách nhiệm của bạn. \n \nCác thông báo nhận được bởi Voice Notify chỉ được lưu trong bộ nhớ để hiển thị trong Nhật ký thông báo (tối đa 20 thông báo gần nhất) và không được ghi vào bộ nhớ lưu trữ. Điều này ngăn các ứng dụng khác truy cập dữ liệu, đặc biệt là nếu thiết bị được root. Do đó, nếu tiến trình Voice Notify bị terminated (kết thúc), nhật ký thông báo sẽ bị xóa. \n \nỨng dụng được cài đặt sẽ được đọc và liệt kê để cho phép người dùng chọn ứng dụng nào có thông báo được đọc bằng giọng nói. Tiêu đề và tên gói của ứng dụng được lưu trữ trong cơ sở dữ liệu trong bộ lưu trữ dữ liệu riêng tư nội bộ của Voice Notify trên thiết bị để lưu các lựa chọn và hoạt động như một bộ nhớ cache để cải thiện hiệu suất tải danh sách ứng dụng. \n \nỨng dụng và dịch vụ của bên thứ ba: \n \nCông cụ Text-To-Speech (chuyển văn bản thành giọng nói) - Voice Notify chuyển văn bản thông báo để đọc thành giọng nói cho công cụ Text-To-Speech mặc định, nằm ngoài quyền kiểm soát trực tiếp của Voice Notify. Vui lòng đọc chính sách bảo mật của công cụ TTS để biết cách nó sử dụng dữ liệu. \nGoogle Play Services có thể gửi dữ liệu phân tích cơ bản và sự cố ứng dụng ẩn danh trở lại cho nhà phát triển để hỗ trợ cải thiện ứng dụng. \nỨng dụng nhắn tin - Tùy chọn \"Liên hệ với nhà phát triển\" sẽ mở ứng dụng nhắn tin hoặc ứng dụng email mặc định của người dùng, chẳng hạn như ứng dụng email, và điền sẵn nội dung tin nhắn với phiên bản Voice Notify, phiên bản Android, số bản dựng Android và tên thiết bị. Đối với ứng dụng email, trường \"Đến\" được đặt thành địa chỉ của nhà phát triển (pilota51@gmail.com). Bằng cách gửi tin nhắn, người dùng hiểu và đồng ý rằng tên và thông tin liên lạc của họ được chia sẻ với người nhận, theo quy định của ứng dụng nhắn tin. \nCác tùy chọn khác trong \"Trợ giúp &amp; Hỗ trợ\" sẽ mở các ứng dụng hoặc trang web bên ngoài liên quan (Play Store, Weblate.org, GitHub.com), chỉ gửi một URL được mã hóa cứng đến trang Voice Notify. \n \nDưới đây là các quyền được sử dụng bởi Voice Notify và lý do tại sao chúng cần thiết: \nBluetooth - Cần thiết để phát hiện tai nghe Bluetooth có được kết nối hay không. \nRung - Cần thiết cho tính năng Kiểm tra khi điện thoại ở chế độ rung. \nThay đổi Cài đặt Âm thanh - Cần thiết để cải thiện khả năng phát hiện tai nghe có dây. \nĐọc Trạng thái Điện thoại - Cần thiết để ngắt TTS nếu có cuộc gọi đến.</string>
     <string name="reason_tts_restarted">Chuyển văn bản thành giọng nói đang khởi động lại trong khi đợi thông điệp mới hoặc đang đọc.</string>
     <string name="reason_tts_length_limit">Thông điệp đã vượt quá giới hạn độ dài của Chuyển văn bản thành Giọng nói</string>
     <string name="tts_delay_dialog_msg">Số giây đợi sau khi thông báo trước được đọc.</string>
     <string name="reason_screen_off">Tắt màn hình</string>
     <string name="reason_screen_on">Mở màn hình</string>
-    <string name="tts_text_replace_dialog">Thay thế văn bản đọc thành giọng nói, cho phép bạn tùy chỉnh cách công cụ Text-To-Speech phát âm các từ hoặc thay thế văn bản vì những lý do khác.
-\n
-\nVăn bản cần thay thế không phân biệt chữ hoa chữ thường và được áp dụng sau định dạng được đặt trong Mensage TTS, bao gồm cả dấu câu.</string>
+    <string name="tts_text_replace_dialog">Thay thế văn bản đọc thành giọng nói, cho phép bạn tùy chỉnh cách công cụ Text-To-Speech phát âm các từ hoặc thay thế văn bản vì những lý do khác. \n \nVăn bản cần thay thế không phân biệt chữ hoa chữ thường và được áp dụng sau định dạng được đặt trong Mensage TTS, bao gồm cả dấu câu.</string>
     <string name="tts_repeat_dialog_msg">Thông báo được lặp lại trong khoảng thời gian nhất định cho đến khi màn hình được bật lên. Thông báo được tạo trong khi màn hình bật lên không được lặp lại.
 \n
 \nGiá trị được tính bằng phút. Để trống hoặc đặt giá trị bằng 0 để tắt đi.</string>
@@ -98,9 +75,7 @@
     <string name="audio_focus">Tạm dừng/ làm mờ Media</string>
     <string name="audio_focus_summary">Yêu cẩu các phương tiện khác tạm dừng hoặc mờ đi khi đang đọc thông báo</string>
     <string name="shake_to_silence">Lắc để im lặng</string>
-    <string name="ignore_repeat_dialog_msg">Thiết lập số giây để bỏ qua kể từ thông báo cuối cùng trước khi đọc lại.
-\nViệc lặp lại sẽ bị đặt lại khi bỏ qua và xuất hiện thông báo khác.
-\nĐể trống = Vô hạn.</string>
+    <string name="ignore_repeat_dialog_msg">Thiết lập số giây để bỏ qua kể từ thông báo cuối cùng trước khi đọc lại. \nViệc lặp lại sẽ bị đặt lại khi bỏ qua và xuất hiện thông báo khác. \nĐể trống = Vô hạn.</string>
     <string name="device_state">Trạng thái thiết bị</string>
     <string name="device_state_summary">Chọn có đọc thông báo trong các trạng thái của thiết bị hay không</string>
     <string name="device_state_dialog_title">Đọc thông báo trong các trạng thái này của thiết bị</string>
@@ -176,8 +151,7 @@
     <string name="error">Lỗi</string>
     <string name="max_length">Số ký tự tối đa</string>
     <string name="max_length_summary">Số ký tự tối đa được đọc. Thông điệp lớn hơn sẽ bị cắt bớt.</string>
-    <string name="max_length_dialog_msg">Số ký tự tối đa được đọc
-\nLớn hơn sẽ bị cắt bớt.</string>
+    <string name="max_length_dialog_msg">Số ký tự tối đa được đọc \nLớn hơn sẽ bị cắt bớt.</string>
     <string name="tts_stream">Luồng âm thanh Chuyển văn bản thành Giọng nói</string>
     <string name="tts_stream_summary">Chọn luồng âm thanh mà Chuyển văn bản thành giọng nói phát</string>
     <string name="tts_delay">Độ trễ của Chuyển văn bản thành Giọng nói</string>

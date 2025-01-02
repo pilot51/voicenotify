@@ -30,9 +30,7 @@
 \n#a: #t</string>
     <string name="tts_text_replace">Teks Pengganti TKU</string>
     <string name="tts_text_replace_summary">Teks pengganti yang diucapkan, semisal memperbaiki pengucapan</string>
-    <string name="tts_text_replace_dialog">Pecah teks yang diucapkan, memungkinkan Anda untuk menyesuaikan bagaimana Teks-Ke-Ucap mengeja kata atau mengubah teks untuk alasan apapun.
-\n
-\nTeks pengganti tidak peka kapitalisasi.</string>
+    <string name="tts_text_replace_dialog">Pecah teks yang diucapkan, memungkinkan Anda untuk menyesuaikan bagaimana Teks-Ke-Ucap mengeja kata atau mengubah teks untuk alasan apapun. \n \nTeks pengganti tidak peka kapitalisasi.</string>
     <string name="tts_stream">Aliran Audio TKU</string>
     <string name="tts_stream_summary">Pilih aliran audio yang memainkan Teks-Ke-Ucap</string>
     <string name="tts_delay">Tunda TKU</string>
@@ -70,13 +68,10 @@
     <string name="ignore_empty_summary_off">Pemberitahuan tanpa pesan akan diucapkan \"Pemberitahuan dari [nama aplikasi].\"</string>
     <string name="ignore_repeat">Abaikan Pengulangan</string>
     <string name="ignore_repeat_summary">Abaikan pemberitahuan sama yang berulang dalam rentang waktu yang ditentukan</string>
-    <string name="ignore_repeat_dialog_msg">Sejumlah detik yang harus ditunggu sejak pemberitahuan terakhir sebelum pengulangan dapat diucapkan.
-\nMengabaikan pengulangan mengatur ulang penghitungan dan dibersihkan oleh pemberitahuan yang lain.
-\nKosong= tak terhingga.</string>
+    <string name="ignore_repeat_dialog_msg">Sejumlah detik yang harus ditunggu sejak pemberitahuan terakhir sebelum pengulangan dapat diucapkan. \nMengabaikan pengulangan mengatur ulang penghitungan dan dibersihkan oleh pemberitahuan yang lain. \nKosong= tak terhingga.</string>
     <string name="max_length">Pesan Maksimum</string>
     <string name="max_length_summary">Panjang pesan diucapkan maksimum. Pesan panjang akan dipotong.</string>
-    <string name="max_length_dialog_msg">Panjang pesan diucapkan maksimum
-\nPesan panjang akan dipotong.</string>
+    <string name="max_length_dialog_msg">Panjang pesan diucapkan maksimum \nPesan panjang akan dipotong.</string>
     <string name="device_state">Keadaan Perangkat</string>
     <string name="device_state_summary">Pilih apakan akan berucap dalam keadaan perangkat tertentu</string>
     <string name="device_state_dialog_title">Berucap selama keadaan berikut</string>
@@ -157,27 +152,7 @@
     <string name="ignore_groups_summary_off">Pemberitahuan yang berisi beberapa pesan akan diucapkan</string>
     <string name="ignore_groups">Abaikan Pesan Grup</string>
     <string name="support_privacy">Kebijakan Privasi</string>
-    <string name="support_privacy_message">Voice Notify tidak mengumpulkan atau mengirimkan data dari perangkat. Namun, Voice Notify menggunakan aplikasi atau layanan pihak ketiga yang dapat mengirimkan data, seperti yang diuraikan di bawah ini di bawah \"Aplikasi dan layanan pihak ketiga\".
-\n
-\nJika informasi sensitif atau pribadi diterima oleh pengembang, informasi tersebut tidak akan dijual, dibagikan, disalin, atau digunakan tanpa persetujuan tertulis dari pemilik informasi tersebut. Jika tidak ada persetujuan, informasi tersebut akan dihapus jika memungkinkan.
-\n
-\nTujuan Voice Notify adalah untuk menyuarakan notifikasi, dan dengan demikian ada kemungkinan notifikasi yang diucapkan dapat didengar oleh orang atau mikrofon di sekitarnya. Disarankan untuk mengonfigurasi Pemberitahuan Suara dan perangkat untuk mencegah pemberitahuan yang diucapkan yang tidak diinginkan. Gunakan dengan risiko Anda sendiri.
-\n
-\nNotifikasi yang diterima oleh Voice Notify hanya disimpan di memori untuk ditampilkan di Log Notifikasi (hingga 20 notifikasi terbaru) dan tidak ditulis ke penyimpanan. Hal ini mencegah aplikasi lain mengakses data, terutama jika perangkat di-root. Akibatnya, jika proses Pemberitahuan Suara dihentikan, log pemberitahuan akan dihapus.
-\n
-\nAplikasi yang terinstal dibaca dan didaftar untuk memungkinkan pengguna memilih aplikasi mana yang akan diucapkan notifikasinya. Judul aplikasi dan nama paket disimpan dalam basis data di penyimpanan data pribadi internal Voice Notify pada perangkat untuk menyimpan pilihan dan bertindak sebagai cache untuk meningkatkan kinerja pemuatan daftar aplikasi.
-\n
-\nAplikasi dan layanan pihak ketiga:
-\n- Mesin Text-To-Speech - Voice Notify meneruskan teks notifikasi untuk diucapkan ke mesin Text-To-Speech, yang berada di luar kendali langsung Voice Notify. Harap baca kebijakan privasi mesin TTS untuk mengetahui cara mesin tersebut menggunakan data.
-\n- Layanan Google Play dapat mengirimkan kerusakan yang dianonimkan dan data analitik dasar kembali ke pengembang untuk membantu meningkatkan aplikasi.
-\n- Aplikasi perpesanan - Opsi \"Hubungi Pengembang\" membuka aplikasi perpesanan yang dipilih pengguna atau aplikasi perpesanan default, misalnya aplikasi email, dan mengisi pesan sebelumnya dengan versi Pemberitahuan Suara, versi Android, nomor versi Android, dan nama perangkat. Untuk aplikasi email, kolom \"Kepada\" diatur ke alamat pengembang (pilota51@gmail.com). Dengan mengirimkan pesan, pengguna memahami dan menyetujui nama dan informasi kontak mereka dibagikan dengan penerima, sebagaimana ditentukan oleh aplikasi perpesanan.
-\n- Pilihan lain di bawah \"Bantuan &amp; Dukungan\" membuka aplikasi atau situs web eksternal yang relevan (Play Store, Weblate.org, GitHub.com), hanya mengirimkan URL yang dikodekan ke halaman Pemberitahuan Suara.
-\n
-\nDi bawah ini adalah izin yang digunakan oleh Pemberitahuan Suara dan mengapa izin tersebut diperlukan:
-\n- Bluetooth - Diperlukan untuk mendeteksi apakah headset Bluetooth tersambung.
-\n- Getar - Diperlukan untuk fitur Uji saat ponsel dalam mode getar.
-\n- Ubah Pengaturan Audio - Diperlukan untuk meningkatkan deteksi headset berkabel.
-\n- Baca Status Telepon - Diperlukan untuk menginterupsi TTS jika ada panggilan telepon yang aktif.</string>
+    <string name="support_privacy_message">Voice Notify tidak mengumpulkan atau mengirimkan data dari perangkat. Namun, Voice Notify menggunakan aplikasi atau layanan pihak ketiga yang dapat mengirimkan data, seperti yang diuraikan di bawah ini di bawah \"Aplikasi dan layanan pihak ketiga\". \n \nJika informasi sensitif atau pribadi diterima oleh pengembang, informasi tersebut tidak akan dijual, dibagikan, disalin, atau digunakan tanpa persetujuan tertulis dari pemilik informasi tersebut. Jika tidak ada persetujuan, informasi tersebut akan dihapus jika memungkinkan. \n \nTujuan Voice Notify adalah untuk menyuarakan notifikasi, dan dengan demikian ada kemungkinan notifikasi yang diucapkan dapat didengar oleh orang atau mikrofon di sekitarnya. Disarankan untuk mengonfigurasi Pemberitahuan Suara dan perangkat untuk mencegah pemberitahuan yang diucapkan yang tidak diinginkan. Gunakan dengan risiko Anda sendiri. \n \nNotifikasi yang diterima oleh Voice Notify hanya disimpan di memori untuk ditampilkan di Log Notifikasi (hingga 20 notifikasi terbaru) dan tidak ditulis ke penyimpanan. Hal ini mencegah aplikasi lain mengakses data, terutama jika perangkat di-root. Akibatnya, jika proses Pemberitahuan Suara dihentikan, log pemberitahuan akan dihapus. \n \nAplikasi yang terinstal dibaca dan didaftar untuk memungkinkan pengguna memilih aplikasi mana yang akan diucapkan notifikasinya. Judul aplikasi dan nama paket disimpan dalam basis data di penyimpanan data pribadi internal Voice Notify pada perangkat untuk menyimpan pilihan dan bertindak sebagai cache untuk meningkatkan kinerja pemuatan daftar aplikasi. \n \nAplikasi dan layanan pihak ketiga: \n- Mesin Text-To-Speech - Voice Notify meneruskan teks notifikasi untuk diucapkan ke mesin Text-To-Speech, yang berada di luar kendali langsung Voice Notify. Harap baca kebijakan privasi mesin TTS untuk mengetahui cara mesin tersebut menggunakan data. \n- Layanan Google Play dapat mengirimkan kerusakan yang dianonimkan dan data analitik dasar kembali ke pengembang untuk membantu meningkatkan aplikasi. \n- Aplikasi perpesanan - Opsi \"Hubungi Pengembang\" membuka aplikasi perpesanan yang dipilih pengguna atau aplikasi perpesanan default, misalnya aplikasi email, dan mengisi pesan sebelumnya dengan versi Pemberitahuan Suara, versi Android, nomor versi Android, dan nama perangkat. Untuk aplikasi email, kolom \"Kepada\" diatur ke alamat pengembang (pilota51@gmail.com). Dengan mengirimkan pesan, pengguna memahami dan menyetujui nama dan informasi kontak mereka dibagikan dengan penerima, sebagaimana ditentukan oleh aplikasi perpesanan. \n- Pilihan lain di bawah \"Bantuan &amp; Dukungan\" membuka aplikasi atau situs web eksternal yang relevan (Play Store, Weblate.org, GitHub.com), hanya mengirimkan URL yang dikodekan ke halaman Pemberitahuan Suara. \n \nDi bawah ini adalah izin yang digunakan oleh Pemberitahuan Suara dan mengapa izin tersebut diperlukan: \n- Bluetooth - Diperlukan untuk mendeteksi apakah headset Bluetooth tersambung. \n- Getar - Diperlukan untuk fitur Uji saat ponsel dalam mode getar. \n- Ubah Pengaturan Audio - Diperlukan untuk meningkatkan deteksi headset berkabel. \n- Baca Status Telepon - Diperlukan untuk menginterupsi TTS jika ada panggilan telepon yang aktif.</string>
     <string name="permission_rationale_read_phone_state">Izin panggilan telepon diperlukan untuk mencegah Voice Notify berbicara selama panggilan berlangsung.</string>
     <string name="require_strings">Teks diperlukan</string>
     <string name="require_strings_summary">Hanya berbicara pemberitahuan yang berisi teks tertentu dalam pesan</string>
