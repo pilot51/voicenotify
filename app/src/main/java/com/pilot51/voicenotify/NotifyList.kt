@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,25 +40,32 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 
 object NotifyList {
 	const val HISTORY_LIMIT = 100
+	val notifyListMutex = Mutex()
 	private val _list = mutableStateListOf<NotificationInfo>()
 	val list: List<NotificationInfo> = _list
 
-	fun addNotification(info: NotificationInfo) {
-		if (list.size == HISTORY_LIMIT) {
-			_list.removeAt(list.lastIndex)
+	suspend fun addNotification(info: NotificationInfo) {
+		notifyListMutex.withLock {
+			if (list.size == HISTORY_LIMIT) {
+				_list.removeAt(list.lastIndex)
+			}
+			_list.add(0, info)
 		}
-		_list.add(0, info)
 	}
 
 	fun updateInfo(info: NotificationInfo) {
-		val index = list.indexOf(info).takeUnless { it == -1 } ?: return
-		// Force update to list state by first setting copy
-		_list[index] = info.copy()
-		// Set back to original to ensure future calls can find it again
-		_list[index] = info
+		notifyListMutex.launchWithLock {
+			val index = list.indexOf(info).takeUnless { it == -1 } ?: return@launchWithLock
+			// Force update to list state by first setting copy
+			_list[index] = info.copy()
+			// Set back to original to ensure future calls can find it again
+			_list[index] = info
+		}
 	}
 
 	@Composable

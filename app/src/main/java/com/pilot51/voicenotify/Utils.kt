@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import kotlinx.coroutines.TimeoutCancellationException
-import kotlinx.coroutines.runInterruptible
-import kotlinx.coroutines.withTimeout
+import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlin.time.Duration
 
 fun <T> T.isAny(vararg list: T) = list.any { this == it }
+
+/** Convenience for calling [withLock] inside a new coroutine in [scope]. */
+fun <T> Mutex.launchWithLock(
+	scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
+	action: suspend () -> T
+) = scope.launch { withLock { action() } }
 
 /** Same as [withTimeout] except [block] is interrupted when it times out. */
 @Throws(TimeoutCancellationException::class)

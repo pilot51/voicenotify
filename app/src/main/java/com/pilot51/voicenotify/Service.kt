@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ import android.util.Log
 import android.view.Display
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import com.pilot51.voicenotify.NotifyList.notifyListMutex
 import com.pilot51.voicenotify.PermissionHelper.isPermissionGranted
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IS_SUSPENDED
 import com.pilot51.voicenotify.PreferenceHelper.KEY_IS_SUSPENDED
@@ -170,15 +171,17 @@ class Service : NotificationListenerService() {
 				override fun onStop(utteranceId: String, interrupted: Boolean) {
 					Log.d(TAG, "Stopped utterance ID $utteranceId - interrupted? $interrupted")
 					if (interrupted) {
-						val info = ttsQueue[utteranceId.toLong()]
-						if (info != null) {
-							info.isInterrupted = true
-							if (info.ignoreReasons.isEmpty()) {
-								info.addIgnoreReasons(IgnoreReason.TTS_INTERRUPTED)
+						ttsQueueMutex.launchWithLock(ioScope) {
+							val info = ttsQueue[utteranceId.toLong()]
+							if (info != null) {
+								info.isInterrupted = true
+								if (info.ignoreReasons.isEmpty()) {
+									info.addIgnoreReasons(IgnoreReason.TTS_INTERRUPTED)
+								}
+								NotifyList.updateInfo(info)
 							}
-							NotifyList.updateInfo(info)
+							ttsQueue.clear()
 						}
-						ttsQueue.clear()
 					}
 					onDone(utteranceId)
 				}
@@ -219,7 +222,7 @@ class Service : NotificationListenerService() {
 		}
 		shutdownTts()
 		initTts { initSuccess ->
-			ttsQueueMutex.launchWithLock {
+			ttsQueueMutex.launchWithLock(ioScope) {
 				val queueIterator = ttsQueue.iterator()
 				queueIterator.forEach {
 					val info = it.value
@@ -316,13 +319,17 @@ class Service : NotificationListenerService() {
 				}
 			}
 			val ignoreRepeat = settings.ignoreRepeat?.takeIf { it > -1 }?.run { Duration.ofSeconds(toLong()) }
-			for (priorInfo in NotifyList.list) {
-				val elapsed = Duration.between(priorInfo.instant, info.instant)
-				if (ignoreRepeat != null && elapsed >= ignoreRepeat) break
-				if (priorInfo.app?.packageName != app?.packageName) continue
-				if (priorInfo.ttsMessage == ttsMsg) {
-					info.addIgnoreReasonIdentical(ignoreRepeat?.seconds?.toInt() ?: -1)
-					break
+			if (ignoreRepeat?.isZero != true) {
+				notifyListMutex.withLock {
+					for (priorInfo in NotifyList.list) {
+						val elapsed = Duration.between(priorInfo.instant, info.instant)
+						if (ignoreRepeat != null && elapsed >= ignoreRepeat) break
+						if (priorInfo.app?.packageName != app?.packageName) continue
+						if (priorInfo.ttsMessage == ttsMsg) {
+							info.addIgnoreReasonIdentical(ignoreRepeat?.seconds?.toInt() ?: -1)
+							break
+						}
+					}
 				}
 			}
 			NotifyList.addNotification(info)
@@ -503,7 +510,7 @@ class Service : NotificationListenerService() {
 		registerReceiver(stateReceiver, filter)
 		shake.onShake = {
 			Log.i(TAG, "TTS silenced by shake")
-			ttsQueueMutex.launchWithLock {
+			ttsQueueMutex.launchWithLock(ioScope) {
 				for (info in ttsQueue.values) {
 					info.addIgnoreReasons(IgnoreReason.SHAKE)
 					NotifyList.updateInfo(info)
@@ -597,7 +604,7 @@ class Service : NotificationListenerService() {
 					repeaterJob?.let {
 						repeaterJob = null
 						it.cancel()
-						repeatListMutex.launchWithLock { repeatList.clear() }
+						repeatListMutex.launchWithLock(ioScope) { repeatList.clear() }
 						Log.d(TAG, "Canceled repeater")
 					}
 					interruptIfIgnored = false
@@ -615,7 +622,7 @@ class Service : NotificationListenerService() {
 
 	private fun processIgnoreForQueue() {
 		tts?.run {
-			ttsQueueMutex.launchWithLock {
+			ttsQueueMutex.launchWithLock(ioScope) {
 				for (info in ttsQueue.values) {
 					val ignoreReasons = ignore(info.settings)
 					if (ignoreReasons.isNotEmpty()) {
@@ -635,9 +642,6 @@ class Service : NotificationListenerService() {
 			db.settingsDao.getAppSettings(packageName).firstOrNull()?.let { gs.merge(it) }
 		} ?: gs
 	}
-
-	/** Convenience for calling [withLock] inside a new [ioScope] coroutine. */
-	private fun <T> Mutex.launchWithLock(action: () -> T) = ioScope.launch { withLock(action = action) }
 
 	companion object {
 		private val TAG = Service::class.simpleName
