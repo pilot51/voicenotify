@@ -35,7 +35,7 @@
     <string name="app_list">アプリケーション一覧</string>
     <string name="ignore_repeat">同じメッセージを無視</string>
     <string name="tts_text_replace_summary">単語を置き換えるなど、読み上げるテキストの変換ルール</string>
-    <string name="app_list_summary">読み上げの対象外に設定できるインストール済みアプリの一覧を表示</string>
+    <string name="app_list_summary">読み上げ対象外に設定できるインストール済みアプリの一覧</string>
     <string name="audio_focus">一時停止/メディア音量を下げる</string>
     <string name="ignore_groups_summary_on">複数のメッセージを含む通知は読み上げられません</string>
     <string name="tts_repeat">音声読み上げの繰り返し</string>
