@@ -15,7 +15,6 @@
  */
 
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
-import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 import java.util.*
 
@@ -33,12 +32,9 @@ if (keystorePropertiesFile.exists()) {
 }
 
 val gitCommitHash by lazy {
-	val stdout = ByteArrayOutputStream()
-	exec {
+	providers.exec {
 		commandLine("git", "rev-parse", "--short", "HEAD")
-		standardOutput = stdout
-	}
-	stdout.toString().trim()
+	}.standardOutput.asText.get().trim()
 }
 
 android {
@@ -48,8 +44,8 @@ android {
 		applicationId = "com.pilot51.voicenotify"
 		minSdk = 21
 		targetSdk = 34
-		versionName = "1.4.1"
-		versionCode = 31
+		versionName = "1.4.2"
+		versionCode = 32
 		vectorDrawables.useSupportLibrary = true
 		ksp {
 			arg("room.schemaLocation", "$projectDir/schemas")
