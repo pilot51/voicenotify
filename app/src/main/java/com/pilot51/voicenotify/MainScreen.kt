@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,16 +20,21 @@ import android.content.Intent
 import android.os.Build
 import android.provider.Settings
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
@@ -40,6 +45,7 @@ import com.judemanutd.autostarter.AutoStartPermissionHelper
 import com.pilot51.voicenotify.NotifyList.NotificationLogDialog
 import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
 import com.pilot51.voicenotify.PermissionHelper.requestPermission
+import com.pilot51.voicenotify.PreferenceHelper.KEY_DISABLE_AUTOSTART_MSG
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
@@ -97,8 +103,10 @@ fun MainScreen(
 	var showLog by remember { mutableStateOf(false) }
 	var showBackupRestore by remember { mutableStateOf(false) }
 	var showSupport by remember { mutableStateOf(false) }
-	var showAutostartDialog by remember {
-		mutableStateOf(!Service.isRunning.value && autoStartHelper.isAutoStartPermissionAvailable(context))
+	val disableAutostartMsg by PreferenceHelper.getPrefFlow(KEY_DISABLE_AUTOSTART_MSG, false).collectAsState(null)
+	var showAutostartDialog by remember(disableAutostartMsg?.run { true }) {
+		mutableStateOf(disableAutostartMsg == false && !isRunning &&
+			autoStartHelper.isAutoStartPermissionAvailable(context))
 	}
 	var showReadPhoneStateRationale by remember { mutableStateOf(false) }
 	var showPostNotificationRationale by remember { mutableStateOf(false) }
@@ -365,13 +373,28 @@ fun MainScreen(
 				}
 			},
 			text = {
-				Text(stringResource(R.string.autostart_message) +
-					stringResource(
-						if (canOpenDirect) R.string.autostart_message_direct
-						else R.string.autostart_message_manual,
-						stringResource(android.R.string.ok)
+				Column {
+					Text(
+						stringResource(R.string.autostart_message) +
+							stringResource(
+								if (canOpenDirect) R.string.autostart_message_direct
+								else R.string.autostart_message_manual,
+								stringResource(android.R.string.ok)
+							)
 					)
-				)
+					Row(
+						modifier = Modifier.padding(top = 16.dp),
+						verticalAlignment = Alignment.CenterVertically
+					) {
+						Checkbox(
+							checked = disableAutostartMsg!!,
+							onCheckedChange = {
+								PreferenceHelper.setPref(KEY_DISABLE_AUTOSTART_MSG, it)
+							}
+						)
+						Text(stringResource(R.string.dont_show_again))
+					}
+				}
 			}
 		)
 	}

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2011-2024 Mark Injerd
+<!-- Copyright 2011-2025 Mark Injerd
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -28,8 +28,9 @@
 	<string name="permission_rationale_read_phone_state">The phone calls permission is required to prevent Voice Notify from speaking during a call.</string>
 	<string name="permission_rationale_post_notifications">The post notifications permission is required for Voice Notify to post a test notification.</string>
 	<string name="autostart_message">For Voice Notify to work reliably on this device, it must be allowed to autostart or run in the background.</string>
-	<string name="autostart_message_direct">\n\nPress %s to go to the relevant settings screen and enable Voice Notify.</string>
-	<string name="autostart_message_manual">\n\nSearch in Android Settings for \'autostart\', \'auto-launch\', \'startup\', \'background\', or \'never sleep\' and enable Voice Notify.\n\nThe setting has different names depending on the OS. If you are unable to find it, please contact the developer.\n\nPress %s to open Android Settings.</string>
+	<string name="autostart_message_direct">\n\nPress %s to go to the relevant settings screen and enable Voice Notify if it isn\'t already.</string>
+	<string name="autostart_message_manual">\n\nSearch in Android Settings for \'autostart\', \'auto-launch\', \'startup\', \'background\', or \'never sleep\' and enable Voice Notify if it isn\'t already.\n\nThe setting has different names depending on the OS. If you are unable to find it, please contact the developer.\n\nPress %s to open Android Settings.</string>
+	<string name="dont_show_again">Don\'t show again</string>
 	<string name="service_disabled">Voice Notify service is disabled</string>
 	<string name="status_summary_notification_access_enabled">Tap to suspend Voice Notify.\nLong press to open the Android notification access settings to disable the service.</string>
 	<string name="status_summary_notification_access_disabled">Tap to open the Android notification access settings to enable the service.</string>
