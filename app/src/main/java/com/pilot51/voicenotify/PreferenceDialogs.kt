@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -557,7 +557,9 @@ fun TestNotificationDialog(
 		CoroutineScope(Dispatchers.IO).launch {
 			val vnApp = Common.findOrAddApp(context.packageName)!!
 			if (!vnApp.isEnabled) {
-				Toast.makeText(context, context.getString(R.string.test_ignored), Toast.LENGTH_LONG).show()
+				launch(Dispatchers.Main) {
+					Toast.makeText(context, context.getString(R.string.test_ignored), Toast.LENGTH_LONG).show()
+				}
 			}
 			val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 			val intent = Intent(context, MainActivity::class.java)

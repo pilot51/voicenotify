@@ -160,7 +160,9 @@ class Service : NotificationListenerService() {
 				val errorMsg = getString(R.string.error_tts_init, status)
 				Log.w(TAG, errorMsg)
 				onInit(false)
-				Toast.makeText(appContext, errorMsg, Toast.LENGTH_LONG).show()
+				CoroutineScope(Dispatchers.Main).launch {
+					Toast.makeText(appContext, errorMsg, Toast.LENGTH_LONG).show()
+				}
 				return@OnInitListener
 			}
 			tts?.setOnUtteranceProgressListener(object : UtteranceProgressListener() {

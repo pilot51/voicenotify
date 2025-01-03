@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@ import android.content.Context
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
 import java.io.*
+import kotlin.time.Duration.Companion.seconds
 
 class VNApplication : Application() {
 	override fun onCreate() {
@@ -31,16 +33,16 @@ class VNApplication : Application() {
 
 	/** Writes logcat messages from our process to [LOG_FILE_NAME] in our external files directory. */
 	private fun startLoggingToFile() {
-		val dir = getExternalFilesDir(null) ?: return
-		try {
-			dir.mkdirs()
-			val logFile = File(dir, LOG_FILE_NAME)
-			val process = Runtime.getRuntime().run {
-				exec("logcat -c")
-				exec("logcat")
-			}
-			val reader = BufferedReader(InputStreamReader(process.inputStream))
-			CoroutineScope(Dispatchers.IO).launch {
+		CoroutineScope(Dispatchers.IO).launch {
+			val dir = withTimeoutOrNull(2.seconds) { getExternalFilesDir(null) } ?: return@launch
+			try {
+				dir.mkdirs()
+				val logFile = File(dir, LOG_FILE_NAME)
+				val process = Runtime.getRuntime().run {
+					exec("logcat -c")
+					exec("logcat")
+				}
+				val reader = BufferedReader(InputStreamReader(process.inputStream))
 				FileOutputStream(logFile, true).use { outStream ->
 					try {
 						reader.forEachLine {
@@ -51,9 +53,9 @@ class VNApplication : Application() {
 						e.printStackTrace()
 					}
 				}
+			} catch (e: Exception) {
+				e.printStackTrace()
 			}
-		} catch (e: Exception) {
-			e.printStackTrace()
 		}
 	}
 
