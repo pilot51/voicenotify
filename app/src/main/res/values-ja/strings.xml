@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="service_running">Voice Notify は動作中</string>
-    <string name="max_length_dialog_msg">読み上げるメッセージの最大長 \n最大長を超えるメッセージは切り捨てられます。</string>
+    <string name="max_length_dialog_msg">読み上げるメッセージの最大長 \n最大長を超えるメッセージは切り捨てられます。\n\n空白または0で無制限。\nAndroidの音声読み上げには常に適用される別の長さ制限（%d）があります。</string>
     <string name="ignore_groups">グループメッセージを無視</string>
     <string name="tts_delay">音声読み上げ遅延</string>
     <string name="shake_to_silence_summary">「振って停止」の感度を調整します</string>
@@ -16,14 +16,14 @@
     <string name="shake_to_silence_dialog_msg">値を低くするとより感度が高くなります。 \n \nデフォルト:%1$d\n空白または0の場合は無効。\n\n現在の振動値: %2$d\nピーク値 (5秒間): %3$d</string>
     <string name="tts">音声読み上げ</string>
     <string name="tts_message_dialog">#A = App title \n#T = Ticker \n#S = Subtext \n#C = Content title \n#M = Content message \n#I = Content info \n#H = Big content title\n#Y = Big content summary\n#B = Big content text\n#L = Text lines\n大文字小文字を区別します\n \nデフォルト: \n%1$s \n \n以前のデフォルト (v1.1.0 - v1.3.0):\n#A. #C. #M.\n\n以前のデフォルト (v1.0.x): \n#A: #T</string>
-    <string name="max_length_summary">読み上げる最大メッセージ長、これを超えるメッセージは切り捨てられます。</string>
+    <string name="max_length_summary">読み上げる最大メッセージ長</string>
     <string name="device_state_dialog_title">これらのデバイス状態で読み上げを行います</string>
     <string name="tts_repeat_dialog_msg">通知は、画面がオンになるまで指定された間隔で繰り返されます。画面がオンになっている間に作成された通知は繰り返されません。
 \n
 \n値の単位は分です。空白または0を指定すると無効になります。</string>
     <string name="tts_delay_summary">通知後に指定された秒数の間、音声読み上げを遅らせます</string>
     <string name="tts_delay_dialog_msg">通知後、読み上げるまでの待機秒数。</string>
-    <string name="ignore_repeat_dialog_msg">最後の通知から何秒経てば同じメッセージを読み上げられるかを設定します。 \n同じメッセージが無視された場合カウントはリセットされ、異なる通知が来た場合カウントはクリアされます。 \n空白 = 無限。</string>
+    <string name="ignore_repeat_dialog_msg">繰り返し通知を読み上げる秒数を設定します。\n 無視された繰り返しはカウントをリセットします。\n\n繰り返し検出は通知ログのメモリで制限されています (%d 通知)。\n\n0 = 無効\n空白 = 無限</string>
     <string name="require_strings">特定の文字がある場合のみ読み上げ</string>
     <string name="ignore_empty">空を無視</string>
     <string name="tts_stream_summary">音声読み上げに使用するオーディオストリームを選択します</string>
@@ -32,10 +32,10 @@
 \n個々のエントリーは改行で区切ります。
 \nメッセージはいずれかのエントリにマッチする必要があります、完全一致ではありません。
 \n大文字と小文字は区別されません。</string>
-    <string name="app_list">読み上げ対象アプリ</string>
+    <string name="app_list">アプリケーション一覧</string>
     <string name="ignore_repeat">同じメッセージを無視</string>
     <string name="tts_text_replace_summary">単語を置き換えるなど、読み上げるテキストの変換ルール</string>
-    <string name="app_list_summary">ここで指定したアプリケーションは読み上げの対象外になります</string>
+    <string name="app_list_summary">読み上げ対象外に設定できるインストール済みアプリの一覧</string>
     <string name="audio_focus">一時停止/メディア音量を下げる</string>
     <string name="ignore_groups_summary_on">複数のメッセージを含む通知は読み上げられません</string>
     <string name="tts_repeat">音声読み上げの繰り返し</string>
@@ -45,9 +45,9 @@
     <string name="ignore_strings">無視する文字列</string>
     <string name="tts_text_replace">音声読み上げテキスト置換</string>
     <string name="ignore_groups_summary_off">複数のメッセージを含む通知を読み上げます</string>
-    <string name="tts_text_replace_dialog">テキストを置き換えることで、音声読み上げがどのように単語を発音するかをカスタマイズしたり、その他の目的でテキストを置き換えたりできます。 \n \n置換するテキストは大文字小文字を区別せず、句読点を含め音声読み上げメッセージで設定された書式が適用されます。</string>
+    <string name="tts_text_replace_dialog">テキストを置き換えることで、音声読み上げがどのように単語を発音するかをカスタマイズしたり、その他の目的でテキストを置き換えたりできます。 \n \n置換するテキストは大文字小文字を区別せず、読み上げメッセージで設定された書式の適用後、絵文字の削除前に適用されます。</string>
     <string name="service_suspended">Voice Notify は停止中</string>
-    <string name="max_length">最大メッセージ長</string>
+    <string name="max_length">最大長</string>
     <string name="ignore_empty_summary_on">メッセージのない通知を読み上げません</string>
     <string name="tts_repeat_summary">画面がオンの間、音声読み上げによる通知を繰り返します</string>
     <string name="ignore_strings_summary">指定の文字列がメッセージに含まれている場合、通知を無視します</string>
@@ -62,7 +62,7 @@
     <string name="support_summary">評価＆レビュー、開発者にメール、コミュニティチャット、翻訳、ソースコード、イシュートラッカー、プライバシーポリシー</string>
     <string name="ignore_app">%sを無視しますか？</string>
     <string name="permission_rationale_post_notifications">テスト通知を送信するため、通知の権限が必要です。</string>
-    <string name="reason_suspended">ウィジェットによってVoice Notify停止</string>
+    <string name="reason_suspended">Voice Notify停止</string>
     <string name="error_market">エラー: Google Playストアが見つかりません。</string>
     <string name="filter">フィルター</string>
     <string name="error_tts_init">エラー: 音声読み上げを初期化できません！ [%d]</string>
@@ -75,7 +75,7 @@
     <string name="quiet_end">非通知終了時間</string>
     <string name="test_ticker">これはtickerメッセージです</string>
     <string name="support_matrix">Matrix</string>
-    <string name="test_content_text">これはコンテントメッセージです。</string>
+    <string name="test_content_text">これはコンテントメッセージです。🙂</string>
     <string name="status_summary_suspended">タップでVoice Notifyを有効化。
 \nサービスを無効化する場合は長押しでAndroidの通知設定を開きます。</string>
     <string name="ignore_all">すべて無視</string>
@@ -88,7 +88,7 @@
     <string name="ignore_none">すべて無視しない</string>
     <string name="yes">はい</string>
     <string name="reason_string_required">必要な文字列が不足しています</string>
-    <string name="support_privacy_message">Voice Notifyはデバイスからデータを収集したり送信したりしません。ただし、以下の「サードパーティのアプリとサービス」で説明するように、データを送信する可能性のあるサードパーティのアプリやサービスを使用しています。 \n \n万が一、機密情報や個人情報が開発者によって受信された場合、その情報が誰のものであるかの明示的な同意なしに、販売、共有、コピー、使用されることはありません。同意がない場合、情報は可能な限り削除されます。 \n \nVoice Notifyの目的は通知を話すことであるため、話した通知が周囲の人やマイクに聞こえる可能性があります。望ましくない音声通知を防ぐために、音声通知とデバイスを設定することをお勧めします。自己責任で使用してください。 \n \nVoice Notifyが受信した通知は、通知ログ（最新の20件まで）に表示されるためにのみメモリーに保持され、ストレージには書き込まれません。これにより、特にデバイスがroot化されている場合、他のアプリがデータにアクセスすることを防ぎます。その結果、Voice Notifyプロセスを終了すると、通知ログはクリアされます。 \n \nインストールされているアプリは読み込まれ、一覧表示されるため、ユーザーはどのアプリに通知を話させるかを選択できます。アプリのタイトルとパッケージ名は、デバイス上のVoice Notifyの内部プライベートデータストレージのデータベースに保存され、選択を保存し、アプリリストの読み込みのパフォーマンスを向上させるキャッシュとして機能します。 \n \nサードパーティのアプリやサービス \n- 音声合成エンジン - Voice Notifyは通知テキストをデフォルトの音声合成エンジンに渡します。音声合成エンジンがどのようにデータを使用するかについては、音声合成エンジンのプライバシーポリシーをお読みください。 \n- Google Playサービスでは、アプリの改善に役立てるため、匿名化されたクラッシュデータや基本的な分析データを開発者に送り返すことがあります。 \n- メッセージングアプリ - 「開発者に連絡」オプションは、ユーザーが選択した、またはメールアプリなどのデフォルトのメッセージングアプリを開き、メッセージにVoice Notifyのバージョン、Androidのバージョン、Androidのビルド番号、デバイス名を事前に入力します。メールアプリの場合、「宛先」フィールドには開発者のアドレス（pilota51@gmail.com）が設定されます。メッセージを送信することで、ユーザーは、メッセージングアプリが決定するように、自分の名前と連絡先情報が受信者と共有されることを理解し、同意します。 \n- Help &amp; Support \"の下にあるその他のオプションは、関連する外部アプリやウェブサイト（Play Store、Weblate.org、GitHub.com）を開き、Voice NotifyページへのハードコードされたURLのみを送信します。 \n \n以下は、Voice Notifyが使用するパーミッションと、それが必要な理由です： \n- Bluetooth - Bluetoothヘッドセットが接続されているかどうかを検出するために必要です。 \n- バイブレーション - 電話がバイブレーションモードになっている間のテスト機能に必要です。 \n- オーディオ設定の変更 - 有線ヘッドセットの検出を改善するために必要です。 \n- 電話状態の読み取り - 電話がアクティブになった場合にTTSを中断するために必要です。</string>
+    <string name="support_privacy_message">Voice Notifyはデバイスからデータを収集したり送信したりしません。ただし、以下の「サードパーティのアプリとサービス」で説明するように、データを送信する可能性のあるサードパーティのアプリやサービスを使用しています。 \n\nVoice Notifyの目的は通知を話すことであるため、話した通知が周囲の人やマイクに聞こえる可能性があります。望ましくない音声通知を防ぐために、音声通知とデバイスを設定することをお勧めします。自己責任で使用してください。 \n \n考えにくい状況ですが開発者が機密情報を受け取った場合、その情報は正当な所有者の明示的な同意なしに販売、共有、または使用されることはありません。意図的にに受け取った機密情報は、報告された問題に関連していない場合、または問題が解決された後に削除されます。\n\nVoice Notifyが受信した通知は、通知ログ（最新の%1$d件まで）に表示されるためにのみメモリーに保持され、ストレージには書き込まれません。これにより、特にデバイスがroot化されている場合、他のアプリがデータにアクセスすることを防ぎます。その結果、Voice Notifyプロセスを終了すると、通知ログはクリアされます。 \n \nインストールされているアプリは読み込まれ、一覧表示されるため、ユーザーはどのアプリに通知を話させるかを選択できるほか、アプリごとの設定を構成することができます。アプリのタイトルとパッケージ名は、デバイス上のVoice Notifyの内部プライベートデータストレージのデータベースに保存され、選択を保存し、アプリリストの読み込みのパフォーマンスを向上させるキャッシュとして機能します。 \n\nデバッグログは、%2$sの外部ストレージに保存され、USB経由でコンピュータからアクセス可能で、オプションで「開発者にメール」機能を使用する際に送信されます。\nエラーが発生した場合、通知に機密情報が含まれている可能性があります。「開発者にメール」ダイアログには、簡易的ななログビューア機能があります。\n\nバックアップ機能は、インストールされたアプリを含むすべての設定をユーザーが選択した場所に含むzipファイルとして保存します。\n \nサードパーティのアプリやサービス \n- 音声合成エンジン - Voice Notifyは通知テキストをデフォルトの音声合成エンジンに渡します。音声合成エンジンがどのようにデータを使用するかについては、音声合成エンジンのプライバシーポリシーをお読みください。 \n- Google Playサービスでは、アプリの改善に役立てるため、匿名化されたクラッシュや基本的な分析データを開発者に送信することがあります、これはPlayストアで配布されているすべてのアプリに共通です。 \n- メッセージングアプリ - 「開発者に連絡」オプションは、ユーザーが選択した、またはメールアプリなどのデフォルトのメッセージングアプリを開き、メッセージにVoice Notifyのバージョン、Androidのバージョン、Androidのビルド番号、デバイス名を事前に入力しますユーザーはデバッグログと設定ファイルを添付するか選択することができます。メールアプリの場合、「宛先」フィールドには開発者のアドレス（%3$s）が設定されます。メッセージを送信することで、ユーザーは、メッセージングアプリが決定するように、自分の名前と連絡先情報が受信者と共有されることを理解し、同意するものとします。 \n- Help &amp; Support \"の下にあるその他のオプションは、関連する外部アプリやウェブサイト（Play Store、Discord、Matrix、Weblate.org、GitHub.com）Voice Notifyページまたはチャットルームを開きます。 \n \n以下は、Voice Notifyが使用するパーミッションと、それが必要な理由です： \n-通知の送信 - テスト通知を送信するために必要です。これは通常、Androidがユーザーに表示する唯一の権限です。\n-すべてのパッケージを取得 - アプリリストのためにインストールされているすべてのアプリのリストを取得し、アプリごとの設定を可能にするために必要です。\n- Bluetooth - Bluetoothヘッドセットが接続されているかどうかを検出するために必要です。\n- オーディオ設定の変更 - 有線ヘッドセットの検出を改善するために必要です。 \n- バイブレーション - バイブレーションモードのテストに必要です。\n- 電話状態の読み取り - 電話がアクティブになった場合にTTSを中断するために必要です。</string>
     <string name="notify_log_summary">直近%dの通知一覧。
 \n表示時間,アプリケーション名,メッセージ及び無視された理由。</string>
     <string name="test_content_info">Content Info</string>
@@ -158,16 +158,35 @@
     <string name="title">Title</string>
     <string name="metadata_progress">進捗度: %1$d / %2$d</string>
     <string name="test_big_content_summary">これはbig content summaryです</string>
-    <string name="support_github_subtext">バグレポート, 機能リクエスト, ソースコード</string>
+    <string name="support_github_subtext">バグレポート, 機能リクエスト,リリースノート,ベータリリース, ソースコード</string>
     <string name="content_info_text">Content Info Text</string>
     <string name="metadata_category">Category: %s</string>
     <string name="test_big_content_title">Big Content Title</string>
     <string name="big_content_title">Big Content Title</string>
-    <string name="support_chat_subtext">ユーザーチャット, 開発者からの回答が最も早いです</string>
+    <string name="support_chat_subtext">チャットコミュニティ, 開発者からの回答が最も早いです</string>
     <string name="app_overrides">%s の個別設定</string>
     <string name="debug_log">デバッグログ</string>
     <string name="settings">設定</string>
     <string name="autostart_message">Voice Notifyを正常に動作させるためには、自動起動もしくはバックグラウンドでの動作を許可する必要があります。</string>
-    <string name="autostart_message_manual">\n\nAndroidの設定で\'自動起動\' \'自動スタート\' \'スタートアップ\' バックグラウンド\' \'スリープにしない\'を検索しVoice Notifyを許可してください。\n\n設定の名称はOSにより異なります。もし見つけられない場合は開発者に連絡してください。\n\n\n %s を押すとAndroidの設定画面を開きます。</string>
+    <string name="autostart_message_manual">\n\nAndroidの設定で\'自動起動\' \'自動スタート\' \'スタートアップ\' バックグラウンド\' \'スリープにしない\'を検索しVoice Notifyを許可してください。\n\n設定の名称はOSにより異なります。もし見つけられない場合は開発者に連絡してください。\n\n %s を押すとAndroidの設定画面を開きます。</string>
     <string name="autostart_message_direct">\n\n%s を押すと関連する設定画面を表示します、Voice Notifyを有効にしてください。</string>
+    <string name="remove_app_overrides">全てのアプリ優先設定を削除</string>
+    <string name="remove_app_overrides_confirm">%sの全ての優先設定を削除しますか?</string>
+    <string name="support_email_dialog_message_settings">• データベースファイル: インストールされている全てのアプリとアプリごとの全ての優先設定が含まれます。\n•プリファレンスファイル: アプリごとの優先設定以外の設定が含まれます。</string>
+    <string name="view">見る</string>
+    <string name="view_debug_log_failed">デバッグログが読み込ませんでした</string>
+    <string name="tts_speak_emojis">絵文字を読み上げる</string>
+    <string name="tts_speak_emojis_summary_on">絵文字を読み上げます</string>
+    <string name="flags">フラグ</string>
+    <string name="invalid_regex">不正な正規表現</string>
+    <string name="tts_speak_emojis_summary_off">絵文字を読み上げません</string>
+    <string name="backup_restore_message">バックアップもしくは全ての設定が含まれているzipファイルからレストア。\n\nバックアップは同じバージョンかそれ以降のVoice Notifyでのみ互換性が保証されます。\nベータバージョンや非リリースビルドからのバックアップは動作保証外です。</string>
+    <string name="support_rate_subtext">Play Storeでアプリを見る</string>
+    <string name="support_email_dialog_title">添付ファイルを選択</string>
+    <string name="support_email_dialog_message">バグもしくはクラッシュを報告する際にのみ推奨します。</string>
+    <string name="support_translations_subtext">Weblate.orgでクラウドソース翻訳</string>
+    <string name="remove_override">優先設定を削除</string>
+    <string name="remove_override_confirm">%2$sの優先設定から %1$s を削除しますか ?</string>
+    <string name="regex_message">\n\n正規表現を利用する場合は行頭に\"$regex:\"をつけてください。正規表現はデフォルトで大文字小文字を区別します。\n例えば、URLにマッチさせる場合(大文字小文字を無視):\n$regex:(?i)https?://[^]+\n</string>
+    <string name="support_email_dialog_message_log">意図的に機密情報を含めることはありませんが、ログにはインストールされたアプリの名前が含まれている可能性があり、イブのエラーには関連する通知内容は設定に関連する文字列が含まれている場合があります。サイズは1MBに制限されており、数日分にわたることがあります。コンピュータからUSB経由で %sにアクセスできます</string>
 </resources>
