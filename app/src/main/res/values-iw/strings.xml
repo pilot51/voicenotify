@@ -64,7 +64,6 @@
     <string name="error_tts_init">שגיאה: לא היה ניתן להקריא את ההתראה! קוד שגיאה %d</string>
     <string name="reason_string_ignored">הטקסט חסום</string>
     <string name="reason_empty_msg">התראה ריקה</string>
-    <string name="reason_identical">הודעה כפולה תוך {0,choice,-1#אין סוף שניות|1#{0} שנייה|1&lt;{0} שניות}</string>
     <string name="reason_quiet">בזמן שקט</string>
     <string name="reason_silent">מכשיר במצב שקט או רטט</string>
     <string name="reason_call">בזמן שיחת טלפון</string>

@@ -133,7 +133,7 @@
     <string name="status_summary_notification_access_disabled">Appuyez pour ouvrir les paramètres d\'accès aux notifications Android afin d\'activer le service.</string>
     <string name="support_privacy">Politique de confidentialité</string>
     <string name="permission_rationale_read_phone_state">L\'autorisation d\'appel est nécessaire pour éviter que Voice Notify parle pendant les appels.</string>
-    <string name="reason_identical">Message identique entre {0,choix,-1#infini secondes|1#{0} seconde|1&lt;{0} secondes}</string>
+    <string name="reason_identical">Message identique entre {0,choice,-1#infini secondes|1#{0} seconde|1&lt;{0} secondes}</string>
     <string name="test_big_content_title">Titre principal du contenu</string>
     <string name="test_big_content_summary">Ceci est le résumé principal du contenu</string>
     <string name="test_big_content_text">Ceci est le contenu principal du texte</string>
