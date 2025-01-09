@@ -44,7 +44,7 @@ android {
 		applicationId = "com.pilot51.voicenotify"
 		minSdk = 21
 		targetSdk = 34
-		versionName = "1.4.2"
+		versionName = "1.4.3-beta"
 		versionCode = 32
 		vectorDrawables.useSupportLibrary = true
 		ksp {

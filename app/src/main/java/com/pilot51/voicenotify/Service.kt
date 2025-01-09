@@ -515,10 +515,14 @@ class Service : NotificationListenerService() {
 			ttsQueueMutex.launchWithLock(ioScope) {
 				for (info in ttsQueue.values) {
 					info.addIgnoreReasons(IgnoreReason.SHAKE)
+					if (info == ttsQueue[speakingUtteranceId]) {
+						info.isInterrupted = true
+					}
 					NotifyList.updateInfo(info)
 				}
+				ttsQueue.clear()
 			}
-			shutdownTts()
+			onDoneSpeaking()
 		}
 		setInitialized(true)
 	}
