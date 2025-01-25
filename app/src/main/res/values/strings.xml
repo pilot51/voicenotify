@@ -36,7 +36,7 @@
 	<string name="status_summary_notification_access_disabled">Tap to open the Android notification access settings to enable the service.</string>
 	<string name="status_summary_suspended">Tap to activate Voice Notify.\nLong press to open the Android notification access settings to disable the service.</string>
 	<string name="app_list">App List</string>
-	<string name="app_list_summary">List installed apps which can be ignored</string>
+	<string name="app_list_summary">Select apps to enable and override settings per app</string>
 	<string name="tts">Text-To-Speech</string>
 	<string name="tts_summary">Configure Text-To-Speech behavior</string>
 	<string name="audio_focus">Pause/dim media</string>
@@ -126,7 +126,7 @@
 	<string name="support_rate">Rate &amp; Review</string>
 	<string name="support_rate_subtext">View the app on Play Store</string>
 	<string name="support_email">Email Developer</string>
-	<string name="support_email_subtext">General feedback</string>
+	<string name="support_email_subtext">General feedback or send debug files</string>
 	<string name="support_email_dialog_title">Select attachments</string>
 	<string name="support_email_dialog_message">These are only recommended when reporting bugs and crashes.</string>
 	<string name="support_email_dialog_message_log">While potentially sensitive information is not intentionally included, the log may include names of installed apps and some errors could contain relevant notification content or text-based settings. It is limited to 1MB, which may span days. It can be accessed from a computer through USB at %s</string>

@@ -34,10 +34,10 @@ fun TtsMessageDialog(
 	TextEditDialog(
 		titleRes = R.string.tts_message,
 		message = stringResource(R.string.tts_message_dialog, Settings.DEFAULT_TTS_STRING),
-		initialText = settingsCombo.ttsString ?: Settings.DEFAULT_TTS_STRING,
+		initialText = settingsCombo.ttsString ?: "",
 		onDismiss = onDismiss
 	) {
-		vm.save(settings.copy(ttsString = it.ifEmpty { null }))
+		vm.save(settings.copy(ttsString = it))
 		true
 	}
 }

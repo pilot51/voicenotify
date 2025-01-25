@@ -47,7 +47,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.ui.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,7 +58,7 @@ class MainActivity : ComponentActivity() {
 		lifecycleScope.launch(Dispatchers.IO) {
 			repeatOnLifecycle(Lifecycle.State.STARTED) {
 				vm.configuringSettingsComboState.collect {
-					volumeControlStream = it.ttsStream ?: Settings.DEFAULT_TTS_STREAM
+					volumeControlStream = it.ttsStream!!
 				}
 			}
 		}

@@ -48,9 +48,6 @@ import com.pilot51.voicenotify.PermissionHelper.requestPermission
 import com.pilot51.voicenotify.PreferenceHelper.KEY_DISABLE_AUTOSTART_MSG
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
 import com.pilot51.voicenotify.ui.dialog.main.*
 import com.pilot51.voicenotify.ui.dialog.main.log.NotificationLogDialog
 import com.pilot51.voicenotify.ui.dialog.main.support.SupportDialog
@@ -167,7 +164,7 @@ fun MainScreen(
 		PreferenceRowCheckbox(
 			titleRes = R.string.audio_focus,
 			summaryResOn = R.string.audio_focus_summary,
-			initialValue = settingsCombo.audioFocus ?: DEFAULT_AUDIO_FOCUS,
+			initialValue = settingsCombo.audioFocus!!,
 			app = configApp,
 			showRemove = !settings.isGlobal && settings.audioFocus != null,
 			onRemove = {
@@ -207,7 +204,7 @@ fun MainScreen(
 			titleRes = R.string.ignore_empty,
 			summaryResOn = R.string.ignore_empty_summary_on,
 			summaryResOff = R.string.ignore_empty_summary_off,
-			initialValue = settingsCombo.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY,
+			initialValue = settingsCombo.ignoreEmpty!!,
 			app = configApp,
 			showRemove = !settings.isGlobal && settings.ignoreEmpty != null,
 			onRemove = {
@@ -220,7 +217,7 @@ fun MainScreen(
 			titleRes = R.string.ignore_groups,
 			summaryResOn = R.string.ignore_groups_summary_on,
 			summaryResOff = R.string.ignore_groups_summary_off,
-			initialValue = settingsCombo.ignoreGroups ?: DEFAULT_IGNORE_GROUPS,
+			initialValue = settingsCombo.ignoreGroups!!,
 			app = configApp,
 			showRemove = !settings.isGlobal && settings.ignoreGroups != null,
 			onRemove = {

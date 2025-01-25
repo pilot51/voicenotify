@@ -33,11 +33,11 @@ fun TtsDelayDialog(
 	TextEditDialog(
 		titleRes = R.string.tts_delay,
 		messageRes = R.string.tts_delay_dialog_msg,
-		initialText = settingsCombo.ttsDelay.takeIf { it != 0 }?.toString() ?: "",
+		initialText = settingsCombo.ttsDelay?.takeIf { it > 0 }?.toString() ?: "",
 		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss
 	) {
-		vm.save(settings.copy(ttsDelay = it.toIntOrNull() ?: 0.takeIf { !settings.isGlobal }))
+		vm.save(settings.copy(ttsDelay = it.toIntOrNull() ?: 0.takeUnless { settings.isGlobal }))
 		true
 	}
 }

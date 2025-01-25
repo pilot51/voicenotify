@@ -33,11 +33,11 @@ fun TtsRepeatDialog(
 	TextEditDialog(
 		titleRes = R.string.tts_repeat,
 		messageRes = R.string.tts_repeat_dialog_msg,
-		initialText = settingsCombo.ttsRepeat.takeIf { it != 0.0 }?.toString() ?: "",
+		initialText = settingsCombo.ttsRepeat?.takeIf { it > 0.0 }?.toString() ?: "",
 		keyboardType = KeyboardType.Decimal,
 		onDismiss = onDismiss
 	) {
-		vm.save(settings.copy(ttsRepeat = it.toDoubleOrNull() ?: 0.0.takeIf { !settings.isGlobal }))
+		vm.save(settings.copy(ttsRepeat = it.toDoubleOrNull() ?: 0.0.takeUnless { settings.isGlobal }))
 		true
 	}
 }

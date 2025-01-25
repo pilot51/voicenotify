@@ -34,7 +34,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.ui.IPreferencesViewModel
 import com.pilot51.voicenotify.ui.PreferencesPreviewVM
 import com.pilot51.voicenotify.ui.VNPreview
@@ -55,9 +54,7 @@ fun TtsStreamDialog(
 		AudioManager.STREAM_ALARM
 	)
 	val savedValue = remember(settings) { settings.ttsStream }
-	var value by remember(settings) {
-		mutableIntStateOf(settingsCombo.ttsStream ?: Settings.DEFAULT_TTS_STREAM)
-	}
+	var value by remember(settings) { mutableIntStateOf(settingsCombo.ttsStream!!) }
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {

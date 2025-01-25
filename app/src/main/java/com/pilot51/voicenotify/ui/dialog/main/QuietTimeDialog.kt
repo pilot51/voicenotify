@@ -22,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.ui.IPreferencesViewModel
 import com.pilot51.voicenotify.ui.PreferencesPreviewVM
 import com.pilot51.voicenotify.ui.VNPreview
@@ -43,7 +42,7 @@ fun QuietTimeDialog(
 	val quietTime = when (mode) {
 		QuietTimeMode.START -> settingsCombo.quietStart
 		QuietTimeMode.END -> settingsCombo.quietEnd
-	} ?: Settings.DEFAULT_QUIET_TIME
+	}!!
 	val timePickerState = rememberTimePickerState(
 		initialHour = quietTime / 60,
 		initialMinute = quietTime % 60

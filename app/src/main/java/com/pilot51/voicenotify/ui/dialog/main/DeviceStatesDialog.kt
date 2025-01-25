@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.ui.IPreferencesViewModel
 import com.pilot51.voicenotify.ui.PreferencesPreviewVM
 import com.pilot51.voicenotify.ui.VNPreview
@@ -48,11 +47,11 @@ fun DeviceStatesDialog(
 	val items = stringArrayResource(R.array.device_states)
 	val values = remember(settings) {
 		mutableStateListOf(
-			settingsCombo.speakScreenOff ?: Settings.DEFAULT_SPEAK_SCREEN_OFF,
-			settingsCombo.speakScreenOn ?: Settings.DEFAULT_SPEAK_SCREEN_ON,
-			settingsCombo.speakHeadsetOff ?: Settings.DEFAULT_SPEAK_HEADSET_OFF,
-			settingsCombo.speakHeadsetOn ?: Settings.DEFAULT_SPEAK_HEADSET_ON,
-			settingsCombo.speakSilentOn ?: Settings.DEFAULT_SPEAK_SILENT_ON
+			settingsCombo.speakScreenOff!!,
+			settingsCombo.speakScreenOn!!,
+			settingsCombo.speakHeadsetOff!!,
+			settingsCombo.speakHeadsetOn!!,
+			settingsCombo.speakSilentOn!!
 		)
 	}
 	AlertDialog(

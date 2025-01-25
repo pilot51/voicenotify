@@ -22,7 +22,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.pilot51.voicenotify.NotifyList
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.ui.IPreferencesViewModel
 import com.pilot51.voicenotify.ui.dialog.TextEditDialog
 
@@ -36,12 +35,11 @@ fun IgnoreRepeatsDialog(
 	TextEditDialog(
 		titleRes = R.string.ignore_repeat,
 		message = stringResource(R.string.ignore_repeat_dialog_msg, NotifyList.HISTORY_LIMIT),
-		initialText = (settingsCombo.ignoreRepeat ?: Settings.DEFAULT_IGNORE_REPEAT)
-			.takeIf { it != -1 }?.toString() ?: "",
+		initialText = settingsCombo.ignoreRepeat?.takeIf { it > -1 }?.toString() ?: "",
 		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss
 	) {
-		vm.save(settings.copy(ignoreRepeat = it.toIntOrNull() ?: (-1).takeIf { !settings.isGlobal }))
+		vm.save(settings.copy(ignoreRepeat = it.toIntOrNull() ?: -1))
 		true
 	}
 }

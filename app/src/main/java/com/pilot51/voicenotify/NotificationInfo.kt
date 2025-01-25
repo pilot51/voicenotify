@@ -26,9 +26,7 @@ import androidx.core.app.NotificationCompat
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_MAX_LENGTH
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_EMOJIS
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
 import com.pilot51.voicenotify.ui.PreferencesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map
@@ -110,7 +108,7 @@ data class NotificationInfo(
 
 	/** Generates the string to be used for TTS. */
 	private fun buildTtsMessage() {
-		ttsStringPref = settings.ttsString ?: DEFAULT_TTS_STRING
+		ttsStringPref = settings.ttsString ?: ""
 		val ttsFormat = ttsStringPref
 			.replace(TTS_APP_LABEL, "%1\$s", true)
 			.replace(TTS_TICKER, "%2\$s", true)
@@ -177,9 +175,11 @@ data class NotificationInfo(
 		if (!speakEmojis) {
 			ttsMessage = ttsMessage!!.removeEmojis().trim()
 		}
-		val maxLength = settings.ttsMaxLength ?: DEFAULT_MAX_LENGTH
-		if (maxLength > 0 && maxLength < ttsMessage!!.length) {
-			ttsMessage = ttsMessage!!.substring(0, min(maxLength, ttsMessage!!.length))
+		settings.ttsMaxLength?.takeIf { it > 0 }?.let { maxLength ->
+			val msgLength = ttsMessage!!.length
+			if (maxLength < msgLength) {
+				ttsMessage = ttsMessage!!.substring(0, min(maxLength, msgLength))
+			}
 		}
 	}
 

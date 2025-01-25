@@ -22,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.ui.IPreferencesViewModel
 import com.pilot51.voicenotify.ui.dialog.TextEditDialog
 
@@ -36,11 +35,11 @@ fun TtsMaxLengthDialog(
 	TextEditDialog(
 		titleRes = R.string.max_length,
 		message = stringResource(R.string.max_length_dialog_msg, TextToSpeech.getMaxSpeechInputLength()),
-		initialText = (settingsCombo.ttsMaxLength ?: Settings.DEFAULT_MAX_LENGTH).toString(),
+		initialText = settingsCombo.ttsMaxLength?.takeIf { it > 0 }?.toString() ?: "",
 		keyboardType = KeyboardType.Number,
 		onDismiss = onDismiss
 	) {
-		vm.save(settings.copy(ttsMaxLength = it.toIntOrNull()))
+		vm.save(settings.copy(ttsMaxLength = it.toIntOrNull() ?: -1))
 		true
 	}
 }

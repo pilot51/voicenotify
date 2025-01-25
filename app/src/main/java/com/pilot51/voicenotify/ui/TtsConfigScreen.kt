@@ -24,7 +24,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_EMOJIS
 import com.pilot51.voicenotify.ui.dialog.tts.*
 
 @Composable
@@ -84,7 +83,7 @@ fun TtsConfigScreen(vm: IPreferencesViewModel) {
 			titleRes = R.string.tts_speak_emojis,
 			summaryResOn = R.string.tts_speak_emojis_summary_on,
 			summaryResOff = R.string.tts_speak_emojis_summary_off,
-			initialValue = settingsCombo.ttsSpeakEmojis ?: DEFAULT_SPEAK_EMOJIS,
+			initialValue = settingsCombo.ttsSpeakEmojis!!,
 			app = configApp,
 			showRemove = !settings.isGlobal && settings.ttsSpeakEmojis != null,
 			onRemove = {

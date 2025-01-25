@@ -52,16 +52,6 @@ import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
 import com.pilot51.voicenotify.db.Settings
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_QUIET_TIME
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_HEADSET_OFF
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_HEADSET_ON
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_OFF
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_ON
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SILENT_ON
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STREAM
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -279,7 +269,7 @@ class Service : NotificationListenerService() {
 			val notification = sbn.notification
 			val app = Common.findOrAddApp(sbn.packageName)
 			val settings = getCombinedSettings(app)
-			if (settings.ignoreGroups ?: DEFAULT_IGNORE_GROUPS
+			if (settings.ignoreGroups!!
 				&& notification.flags and Notification.FLAG_GROUP_SUMMARY != 0) {
 				return@launch  // Completely ignore group summary notifications.
 			}
@@ -288,7 +278,7 @@ class Service : NotificationListenerService() {
 			if (app != null && !app.isEnabled) {
 				info.addIgnoreReasons(IgnoreReason.APP)
 			}
-			if (info.isEmpty && settings.ignoreEmpty ?: DEFAULT_IGNORE_EMPTY) {
+			if (info.isEmpty && settings.ignoreEmpty!!) {
 				info.addIgnoreReasons(IgnoreReason.EMPTY_MSG)
 			}
 			if (ttsMsg != null) {
@@ -385,7 +375,7 @@ class Service : NotificationListenerService() {
 		ttsQueueMutex.withLock {
 			if (ttsQueue.isEmpty()) { //if there are no messages in the queue, start up shake detection and audio focus requesting
 				shake.enable()
-				shouldRequestFocus = info.settings.audioFocus ?: DEFAULT_AUDIO_FOCUS
+				shouldRequestFocus = info.settings.audioFocus!!
 				if (shouldRequestFocus) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 						audioMan.requestAudioFocus(audioFocusRequest)
@@ -442,29 +432,30 @@ class Service : NotificationListenerService() {
 		}
 		val c = Calendar.getInstance()
 		val calTime = c[Calendar.HOUR_OF_DAY] * 60 + c[Calendar.MINUTE]
-		val quietStart = settings.quietStart ?: DEFAULT_QUIET_TIME
-		val quietEnd = settings.quietEnd ?: DEFAULT_QUIET_TIME
+		val quietStart = settings.quietStart!!
+		val quietEnd = settings.quietEnd!!
 		if ((quietStart < quietEnd && quietStart <= calTime && calTime < quietEnd)
 			|| (quietEnd < quietStart && (quietStart <= calTime || calTime < quietEnd))
 		) ignoreReasons.add(IgnoreReason.QUIET)
 		if ((audioMan.ringerMode == AudioManager.RINGER_MODE_SILENT
 				|| audioMan.ringerMode == AudioManager.RINGER_MODE_VIBRATE)
-			&& !(settings.speakSilentOn ?: DEFAULT_SPEAK_SILENT_ON)) {
+			&& !settings.speakSilentOn!!
+		) {
 			ignoreReasons.add(IgnoreReason.SILENT)
 		}
 		if (isAudioModeInCall() || (usePhoneState && isPhoneStateInCall())) {
 			ignoreReasons.add(IgnoreReason.CALL)
 		}
-		if (!isScreenOn() && !(settings.speakScreenOff ?: DEFAULT_SPEAK_SCREEN_OFF)) {
+		if (!isScreenOn() && !(settings.speakScreenOff!!)) {
 			ignoreReasons.add(IgnoreReason.SCREEN_OFF)
 		}
-		if (isScreenOn() && !(settings.speakScreenOn ?: DEFAULT_SPEAK_SCREEN_ON)) {
+		if (isScreenOn() && !(settings.speakScreenOn!!)) {
 			ignoreReasons.add(IgnoreReason.SCREEN_ON)
 		}
-		if (!isHeadsetOn() && !(settings.speakHeadsetOff ?: DEFAULT_SPEAK_HEADSET_OFF)) {
+		if (!isHeadsetOn() && !(settings.speakHeadsetOff!!)) {
 			ignoreReasons.add(IgnoreReason.HEADSET_OFF)
 		}
-		if (isHeadsetOn() && !(settings.speakHeadsetOn ?: DEFAULT_SPEAK_HEADSET_ON)) {
+		if (isHeadsetOn() && !(settings.speakHeadsetOn!!)) {
 			ignoreReasons.add(IgnoreReason.HEADSET_ON)
 		}
 		return ignoreReasons
@@ -669,7 +660,7 @@ class Service : NotificationListenerService() {
 		}
 
 		private fun getTtsParams(settings: Settings) = Bundle().apply {
-			putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, settings.ttsStream ?: DEFAULT_TTS_STREAM)
+			putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, settings.ttsStream!!)
 		}
 
 		fun toggleSuspend(): Boolean {
