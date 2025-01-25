@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,10 +24,10 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
-import com.pilot51.voicenotify.AppListViewModel.Companion.appDefaultEnable
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.ui.AppListViewModel.Companion.appDefaultEnable
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock

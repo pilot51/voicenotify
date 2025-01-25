@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2023 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import androidx.glance.appwidget.provideContent
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.unit.ColorProvider
 
+// WARNING: Moving or renaming this will remove the widget from the home screen if added
 class AppWidget : GlanceAppWidget() {
 	override suspend fun provideGlance(context: Context, id: GlanceId) {
 		provideContent {

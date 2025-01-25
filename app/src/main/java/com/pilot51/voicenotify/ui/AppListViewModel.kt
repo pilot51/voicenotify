@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pilot51.voicenotify
+package com.pilot51.voicenotify.ui
 
 import android.app.Application
 import android.content.pm.PackageManager
@@ -23,13 +23,16 @@ import android.widget.Toast
 import androidx.compose.runtime.*
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.pilot51.voicenotify.AppListViewModel.IgnoreType.*
+import com.pilot51.voicenotify.Common
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_APP_DEFAULT_ENABLE
 import com.pilot51.voicenotify.PreferenceHelper.KEY_APP_DEFAULT_ENABLE
 import com.pilot51.voicenotify.PreferenceHelper.getPrefFlow
 import com.pilot51.voicenotify.PreferenceHelper.setPref
+import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.ui.AppListViewModel.IgnoreType.*
+import com.pilot51.voicenotify.withTimeoutInterruptible
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.sync.withLock

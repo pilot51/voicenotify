@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pilot51.voicenotify
+package com.pilot51.voicenotify.ui.dialog.tts
 
 import android.util.Pair
 import android.widget.Toast
@@ -38,8 +38,14 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogProperties
-import com.pilot51.voicenotify.PreferencesViewModel.Companion.isDuplicate
-import com.pilot51.voicenotify.PreferencesViewModel.Companion.updateListItem
+import com.pilot51.voicenotify.AppTheme
+import com.pilot51.voicenotify.R
+import com.pilot51.voicenotify.ui.IPreferencesViewModel
+import com.pilot51.voicenotify.ui.PreferencesPreviewVM
+import com.pilot51.voicenotify.ui.PreferencesViewModel.Companion.isDuplicate
+import com.pilot51.voicenotify.ui.PreferencesViewModel.Companion.updateListItem
+import com.pilot51.voicenotify.ui.VNPreview
+import com.pilot51.voicenotify.validateRegexOption
 
 private val fieldSpacingArrangement = Arrangement.spacedBy(10.dp)
 

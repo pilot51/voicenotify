@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2011-2023 Mark Injerd
+<!-- Copyright 2011-2025 Mark Injerd
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -57,8 +57,10 @@
 			android:exported="true"
 			android:label="@string/app_name"
 			android:icon="@drawable/widget"
-			android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-			<meta-data android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+			android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+			tools:targetApi="n">
+			<meta-data
+				android:name="android.service.quicksettings.TOGGLEABLE_TILE"
 				android:value="true" />
 			<intent-filter>
 				<action android:name="android.service.quicksettings.action.QS_TILE" />

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
 import com.google.accompanist.permissions.*
 import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
+import com.pilot51.voicenotify.ui.VNPreview
 
 object PermissionHelper {
 	fun Context.isPermissionGranted(permission: String) =

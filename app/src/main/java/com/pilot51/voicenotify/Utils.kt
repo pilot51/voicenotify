@@ -15,11 +15,6 @@
  */
 package com.pilot51.voicenotify
 
-import android.content.res.Configuration
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -46,12 +41,3 @@ fun validateRegexOption(text: String) = !text.startsWith(Constants.REGEX_PREFIX)
 	Regex(text.removePrefix(Constants.REGEX_PREFIX))
 }.isSuccess
 
-val isPreview @Composable get() = LocalInspectionMode.current
-
-@Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(name = "Light", uiMode = Configuration.UI_MODE_NIGHT_NO)
-annotation class VNPreview
-
-class BooleanProvider: PreviewParameterProvider<Boolean> {
-	override val values: Sequence<Boolean> = sequenceOf(false, true)
-}

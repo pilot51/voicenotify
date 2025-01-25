@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings
+import com.pilot51.voicenotify.ui.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

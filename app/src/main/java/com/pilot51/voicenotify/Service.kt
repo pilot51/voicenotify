@@ -323,7 +323,7 @@ class Service : NotificationListenerService() {
 			val ignoreRepeat = settings.ignoreRepeat?.takeIf { it > -1 }?.run { Duration.ofSeconds(toLong()) }
 			if (ignoreRepeat?.isZero != true) {
 				notifyListMutex.withLock {
-					for (priorInfo in NotifyList.list) {
+					for (priorInfo in NotifyList.notifyList) {
 						val elapsed = Duration.between(priorInfo.instant, info.instant)
 						if (ignoreRepeat != null && elapsed >= ignoreRepeat) break
 						if (priorInfo.app?.packageName != app?.packageName) continue

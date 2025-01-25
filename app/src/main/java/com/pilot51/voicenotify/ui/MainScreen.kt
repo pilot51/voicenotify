@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pilot51.voicenotify
+package com.pilot51.voicenotify.ui
 
 import android.Manifest
 import android.content.Intent
@@ -42,14 +42,18 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.judemanutd.autostarter.AutoStartPermissionHelper
-import com.pilot51.voicenotify.NotifyList.NotificationLogDialog
+import com.pilot51.voicenotify.*
 import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
 import com.pilot51.voicenotify.PermissionHelper.requestPermission
 import com.pilot51.voicenotify.PreferenceHelper.KEY_DISABLE_AUTOSTART_MSG
+import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
+import com.pilot51.voicenotify.ui.dialog.main.*
+import com.pilot51.voicenotify.ui.dialog.main.log.NotificationLogDialog
+import com.pilot51.voicenotify.ui.dialog.main.support.SupportDialog
 import kotlinx.coroutines.flow.MutableStateFlow
 
 @OptIn(ExperimentalPermissionsApi::class)
