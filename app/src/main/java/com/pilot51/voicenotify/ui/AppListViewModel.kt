@@ -31,6 +31,7 @@ import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.launchWithLock
 import com.pilot51.voicenotify.ui.AppListViewModel.IgnoreType.*
 import com.pilot51.voicenotify.withTimeoutInterruptible
 import kotlinx.coroutines.*
@@ -127,20 +128,21 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 	}
 
 	fun filterApps(search: String? = searchQuery) {
-		filteredApps.clear()
-		filteredApps.addAll(if (search.isNullOrEmpty()) {
-			apps.toList()
-		} else {
-			val prefixString = search.lowercase()
-			val newValues = mutableListOf<App>()
-			for (app in apps) {
-				if (app.label.lowercase().contains(prefixString)
-					|| app.packageName.lowercase().contains(prefixString)) {
-					newValues.add(app)
+		if (isUpdating) return
+		syncAppsMutex.launchWithLock {
+			filteredApps.clear()
+			filteredApps.addAll(
+				if (search.isNullOrEmpty()) {
+					apps.toList()
+				} else {
+					val prefixString = search.lowercase()
+					apps.filter {
+						it.label.lowercase().contains(prefixString)
+							|| it.packageName.lowercase().contains(prefixString)
+					}
 				}
-			}
-			newValues
-		})
+			)
+		}
 	}
 
 	fun massIgnore(ignoreType: IgnoreType) {
