@@ -19,6 +19,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -349,8 +350,9 @@ fun MainScreen(
 		SupportDialog { showSupport = false }
 	}
 	if (showAutostartDialog) {
-		val canOpenDirect = remember {
-			autoStartHelper.getAutoStartPermission(context, open = false)
+		var autoOpenError by remember { mutableStateOf(false) }
+		val canOpenDirect = remember(autoOpenError) {
+			!autoOpenError && autoStartHelper.getAutoStartPermission(context, open = false)
 				// Library opens wrong screen on Samsung (Sleeping Apps instead of Never Sleeping Apps)
 				&& Build.BRAND.lowercase() != "samsung"
 		}
@@ -360,7 +362,15 @@ fun MainScreen(
 				TextButton(
 					onClick = {
 						if (canOpenDirect) {
-							autoStartHelper.getAutoStartPermission(context)
+							try {
+								autoStartHelper.getAutoStartPermission(context)
+							} catch (e: SecurityException) {
+								e.printStackTrace()
+								autoOpenError = true
+								Toast.makeText(context, R.string.autostart_message_direct_failed,
+									Toast.LENGTH_SHORT).show()
+								return@TextButton
+							}
 						} else context.startActivity(Intent(Settings.ACTION_SETTINGS))
 						showAutostartDialog = false
 					}

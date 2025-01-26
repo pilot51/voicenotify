@@ -29,6 +29,7 @@
 	<string name="permission_rationale_post_notifications">The post notifications permission is required for Voice Notify to post a test notification.</string>
 	<string name="autostart_message">For Voice Notify to work reliably on this device, it must be allowed to autostart or run in the background.</string>
 	<string name="autostart_message_direct">\n\nPress %s to go to the relevant settings screen and enable Voice Notify if it isn\'t already.</string>
+	<string name="autostart_message_direct_failed">Failed to open the relevant settings screen</string>
 	<string name="autostart_message_manual">\n\nSearch in Android Settings for \'autostart\', \'auto-launch\', \'startup\', \'background\', or \'never sleep\' and enable Voice Notify if it isn\'t already.\n\nThe setting has different names depending on the OS. If you are unable to find it, please contact the developer.\n\nPress %s to open Android Settings.</string>
 	<string name="dont_show_again">Don\'t show again</string>
 	<string name="service_disabled">Voice Notify service is disabled</string>
