@@ -260,7 +260,11 @@ class Service : NotificationListenerService() {
 			tts = null
 			latestTtsStatus = TextToSpeech.STOPPED
 			isAwaitingTtsInit.value = false
-			shutdown()
+			try {
+				shutdown()
+			} catch (e: IllegalArgumentException) {
+				e.printStackTrace()
+			}
 		}
 	}
 
