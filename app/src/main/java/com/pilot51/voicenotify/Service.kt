@@ -363,9 +363,11 @@ class Service : NotificationListenerService() {
 			NotifyList.updateInfo(info)
 			return
 		}
-		if (ttsQueue.any { it.key != speakingUtteranceId && it.value == info }) {
-			Log.d(TAG, "Notification already waiting in TTS queue, not adding again")
-			return
+		ttsQueueMutex.withLock {
+			if (ttsQueue.any { it.key != speakingUtteranceId && it.value == info }) {
+				Log.d(TAG, "Notification already waiting in TTS queue, not adding again")
+				return
+			}
 		}
 		if ((info.ttsMessage?.length ?: 0) > TextToSpeech.getMaxSpeechInputLength()) {
 			info.addIgnoreReasons(IgnoreReason.TTS_LENGTH_LIMIT)
