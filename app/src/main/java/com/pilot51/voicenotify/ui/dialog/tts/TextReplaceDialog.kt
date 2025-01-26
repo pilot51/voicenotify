@@ -16,6 +16,8 @@
 package com.pilot51.voicenotify.ui.dialog.tts
 
 import android.widget.Toast
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -68,6 +70,7 @@ fun TextReplaceDialog(
 		}
 	}
 	AlertDialog(
+		modifier = Modifier.imePadding(),
 		onDismissRequest = onDismiss,
 		confirmButton = {
 			TextButton(
@@ -97,54 +100,60 @@ fun TextReplaceDialog(
 				replaceList = replaceList
 			)
 		},
-		properties = DialogProperties(usePlatformDefaultWidth = false)
+		properties = DialogProperties(
+			usePlatformDefaultWidth = false,
+			decorFitsSystemWindows = false
+		)
 	)
 }
 
 @Composable
 private fun TextReplaceList(replaceList: MutableList<Pair<String, String>?>) {
-	Column(modifier = Modifier.fillMaxWidth()) {
-		Text(
-			text = stringResource(R.string.tts_text_replace_dialog) + stringResource(R.string.regex_message),
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(bottom = 20.dp),
-			color = MaterialTheme.colorScheme.secondary,
-			style = MaterialTheme.typography.bodyMedium
-		)
-		Row(
-			modifier = Modifier
-				.fillMaxWidth()
-				.padding(bottom = 4.dp),
-			horizontalArrangement = fieldSpacingArrangement
-		) {
+	LazyColumn(
+		modifier = Modifier.fillMaxWidth(),
+		verticalArrangement = fieldSpacingArrangement
+	) {
+		item {
 			Text(
-				text = stringResource(R.string.text_to_replace),
-				modifier = Modifier
-					.fillMaxWidth()
-					.weight(1f),
-				textAlign = TextAlign.Center
+				text = stringResource(R.string.tts_text_replace_dialog)
+					+ stringResource(R.string.regex_message),
+				modifier = Modifier.fillMaxWidth(),
+				color = MaterialTheme.colorScheme.secondary,
+				style = MaterialTheme.typography.bodyMedium
 			)
-			Text(
-				text = stringResource(R.string.replacement_text),
-				modifier = Modifier
-					.fillMaxWidth()
-					.weight(1f),
-				textAlign = TextAlign.Center
-			)
-			Spacer(modifier = Modifier.width(48.dp))
 		}
-		LazyColumn(
-			modifier = Modifier.fillMaxWidth(),
-			verticalArrangement = fieldSpacingArrangement
-		) {
-			itemsIndexed(replaceList) { index, item ->
-				TextReplaceListItem(
-					pair = item,
-					index = index,
-					replaceList = replaceList
+		@OptIn(ExperimentalFoundationApi::class)
+		stickyHeader {
+			Row(
+				modifier = Modifier
+					.fillMaxWidth()
+					.background(MaterialTheme.colorScheme.surfaceContainerHigh)
+					.padding(bottom = 4.dp),
+				horizontalArrangement = fieldSpacingArrangement
+			) {
+				Text(
+					text = stringResource(R.string.text_to_replace),
+					modifier = Modifier
+						.fillMaxWidth()
+						.weight(1f),
+					textAlign = TextAlign.Center
 				)
+				Text(
+					text = stringResource(R.string.replacement_text),
+					modifier = Modifier
+						.fillMaxWidth()
+						.weight(1f),
+					textAlign = TextAlign.Center
+				)
+				Spacer(modifier = Modifier.width(48.dp))
 			}
+		}
+		itemsIndexed(replaceList) { index, item ->
+			TextReplaceListItem(
+				pair = item,
+				index = index,
+				replaceList = replaceList
+			)
 		}
 	}
 }
