@@ -20,7 +20,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.util.Pair
 import android.widget.Toast
 import androidx.compose.runtime.*
 import androidx.core.content.FileProvider
@@ -115,12 +114,12 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 
 	override fun saveTtsTextReplace(
 		settings: Settings,
-		list: List<Pair<String, String>?>
+		list: List<Pair<String, String>>
 	) {
 		viewModelScope.launch {
 			val trimmedList: MutableList<Pair<String, String>> = ArrayList(list.size)
 			copyLoop@ for (pair in list) {
-				if (pair != null && pair.first.isNotEmpty()) {
+				if (pair.first.isNotEmpty()) {
 					for (p in trimmedList) {
 						if (pair.first.equals(p.first, ignoreCase = true)) {
 							continue@copyLoop
@@ -195,39 +194,23 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 			return false
 		}
 
-		private fun convertTextReplaceListToString(list: List<Pair<String, String>?>): String? {
-			if (list.filterNotNull().isEmpty()) return null
-			val saveString = StringBuilder()
-			for (pair in list) {
-				if (pair == null) break
-				if (saveString.isNotEmpty()) {
-					saveString.append("\n")
-				}
-				saveString.append(pair.first)
-				saveString.append("\n")
-				saveString.append(pair.second)
-			}
-			return saveString.toString().ifEmpty { null }
-		}
+		private fun convertTextReplaceListToString(list: List<Pair<String, String>>) = list
+			.flatMap { listOf(it.first, it.second) }
+			.joinToString("\n")
+			.ifEmpty { null }
 
 		/**
 		 * Converts a string of paired substrings separated by newlines into a list of string pairs.
 		 * @param string The string to convert. Each string in and between pairs must be separated by a newline.
-		 * There should be an odd number of newlines for an even number of substrings (including zero-length),
-		 * otherwise the last substring will be discarded.
 		 * @return A List of string pairs.
 		 */
-		fun convertTextReplaceStringToList(string: String?): List<Pair<String, String>> {
-			val list = mutableListOf<Pair<String, String>>()
-			if (string.isNullOrEmpty()) return list
-			val array = string.split("\n").dropLastWhile { it.isEmpty() }.toTypedArray()
-			var i = 0
-			while (i + 1 < array.size) {
-				list.add(Pair(array[i], array[i + 1]))
-				i += 2
+		fun convertTextReplaceStringToList(string: String?) =
+			if (string.isNullOrEmpty()) {
+				listOf()
+			} else {
+				string.split("\n").dropLastWhile { it.isEmpty() }
+					.chunked(2) { it.first() to it.getOrElse(1) { "" } }
 			}
-			return list
-		}
 
 		fun readDebugLog(
 			scope: CoroutineScope,
@@ -337,5 +320,5 @@ interface IPreferencesViewModel {
 		Pair("this", "that")
 	)
 
-	fun saveTtsTextReplace(settings: Settings, list: List<Pair<String, String>?>) {}
+	fun saveTtsTextReplace(settings: Settings, list: List<Pair<String, String>>) {}
 }

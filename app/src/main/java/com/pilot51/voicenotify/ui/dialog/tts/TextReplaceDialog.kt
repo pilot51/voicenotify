@@ -15,7 +15,6 @@
  */
 package com.pilot51.voicenotify.ui.dialog.tts
 
-import android.util.Pair
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -77,7 +76,7 @@ fun TextReplaceDialog(
 						pair?.first?.let { validateRegexOption(it) } ?: true
 					}
 					if (isValid) {
-						vm.saveTtsTextReplace(settings, replaceList)
+						vm.saveTtsTextReplace(settings, replaceList.filterNotNull())
 						onDismiss()
 					} else {
 						Toast.makeText(context, R.string.invalid_regex, Toast.LENGTH_LONG).show()
