@@ -127,7 +127,7 @@ private fun Item(
 			textAlign = TextAlign.Center
 		)
 		Text(
-			text = item.app!!.label,
+			text = item.app?.label.toString(),
 			modifier = Modifier.fillMaxWidth(),
 			fontSize = 24.sp,
 			textAlign = TextAlign.Center
