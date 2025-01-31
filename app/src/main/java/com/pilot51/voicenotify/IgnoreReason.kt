@@ -38,6 +38,7 @@ enum class IgnoreReason(
 	TTS_FAILED(R.string.reason_tts_failed),
 	TTS_RESTARTED(R.string.reason_tts_restarted),
 	TTS_INTERRUPTED(R.string.reason_tts_interrupted),
+	TTS_ERROR(R.string.reason_tts_error),
 	TTS_LENGTH_LIMIT(R.string.reason_tts_length_limit);
 
 	/** @return The user-visible string for this ignore reason. */

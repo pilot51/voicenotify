@@ -160,22 +160,24 @@ class Service : NotificationListenerService() {
 					Log.d(TAG, "TTS starting utterance ID $utteranceId")
 					speakingUtteranceId = utteranceId.toLong()
 				}
+
 				override fun onStop(utteranceId: String, interrupted: Boolean) {
 					Log.d(TAG, "Stopped utterance ID $utteranceId - interrupted? $interrupted")
-					if (interrupted) {
-						ttsQueueMutex.launchWithLock(ioScope) {
-							val info = ttsQueue[utteranceId.toLong()]
-							if (info != null) {
+					speakingUtteranceId = null
+					ioScope.launch {
+						ttsQueueMutex.withLock {
+							ttsQueue.remove(utteranceId.toLong())
+						}?.let { info ->
+							if (interrupted) {
 								info.isInterrupted = true
 								if (info.ignoreReasons.isEmpty()) {
 									info.addIgnoreReasons(IgnoreReason.TTS_INTERRUPTED)
 								}
 								NotifyList.updateInfo(info)
 							}
-							ttsQueue.clear()
 						}
+						if (ttsQueue.isEmpty()) onDoneSpeaking()
 					}
-					onDone(utteranceId)
 				}
 
 				override fun onDone(utteranceId: String) {
@@ -192,7 +194,18 @@ class Service : NotificationListenerService() {
 				@Deprecated("Deprecated in Java")
 				override fun onError(utteranceId: String) {
 					Log.e(TAG, "Error on utterance ID $utteranceId")
+					val interrupted = speakingUtteranceId == utteranceId.toLong()
 					speakingUtteranceId = null
+					ioScope.launch {
+						ttsQueueMutex.withLock {
+							ttsQueue.remove(utteranceId.toLong())
+						}?.let { info ->
+							info.isInterrupted = interrupted
+							info.addIgnoreReasons(IgnoreReason.TTS_ERROR)
+							NotifyList.updateInfo(info)
+						}
+						if (ttsQueue.isEmpty()) onDoneSpeaking()
+					}
 				}
 			})
 		})
@@ -509,17 +522,15 @@ class Service : NotificationListenerService() {
 		registerReceiver(stateReceiver, filter)
 		shake.onShake = {
 			Log.i(TAG, "TTS silenced by shake")
-			ttsQueueMutex.launchWithLock(ioScope) {
-				for (info in ttsQueue.values) {
-					info.addIgnoreReasons(IgnoreReason.SHAKE)
-					if (info == ttsQueue[speakingUtteranceId]) {
-						info.isInterrupted = true
+			ioScope.launch {
+				ttsQueueMutex.withLock {
+					ttsQueue.values.forEach { info ->
+						info.addIgnoreReasons(IgnoreReason.SHAKE)
+						NotifyList.updateInfo(info)
 					}
-					NotifyList.updateInfo(info)
 				}
-				ttsQueue.clear()
+				tts?.stop()
 			}
-			onDoneSpeaking()
 		}
 		setInitialized(true)
 	}
@@ -624,9 +635,10 @@ class Service : NotificationListenerService() {
 	}
 
 	private fun processIgnoreForQueue() {
-		tts?.run {
-			ttsQueueMutex.launchWithLock(ioScope) {
-				for (info in ttsQueue.values) {
+		if (tts == null) return
+		ioScope.launch {
+			ttsQueueMutex.withLock {
+				ttsQueue.values.forEach { info ->
 					val ignoreReasons = ignore(info.settings)
 					if (ignoreReasons.isNotEmpty()) {
 						Log.i(TAG, "Notification from ${info.app?.label} silenced/ignored" +
@@ -635,7 +647,7 @@ class Service : NotificationListenerService() {
 					}
 				}
 			}
-			stop()
+			tts?.stop()
 		}
 	}
 
