@@ -197,8 +197,8 @@
     <string name="metadata_id">ID: %d</string>
     <string name="metadata_progress">Fortschritt: %1$d / %2$d</string>
     <string name="metadata_progress_indeterminate">Fortschritt: Unbestimmt</string>
-    <string name="support_email_subtext">Allgemeines Feedback</string>
-    <string name="support_chat_subtext">Benutzer-Chat, schnellste Entwicklerantwort</string>
+    <string name="support_email_subtext">Allgemeine Rückmeldung oder Debug-Dateien senden</string>
+    <string name="support_chat_subtext">Community-Chat, schnellste Entwicklerantwort</string>
     <string name="support_privacy">Datenschutzerklärung</string>
     <string name="error_browser">Fehler: Installierte Browser-App kann nicht gefunden werden.</string>
     <string name="tts_text_replace_dialog">Ersetzt vorzulesenden Text und erlaubt es dadurch anzupassen, wie Text-To-Speech Wörter ausspricht oder Text aus anderen Gründen zu ersetzen. \n \nDie Textersetzung ignoriert Groß- und Kleinschreibung und wird nach der Formatierung der TTS-Nachricht angewendet, inklusive Zeichensetzung.</string>
@@ -224,4 +224,5 @@
     <string name="autostart_message_manual">\n\nSuch in den Android-Einstellungen nach \"Autostart\", \"beim Start ausführen\", \"Hintergrund\" oder \"Standby\" und ändere die Einstellung für Voice Notify wenn nötig.\n\nDiese Einstellungen hat unterschiedliche Namen je nach Betriebssystem. Wenn du sie nicht finden kannst, kontatkiere bitte den Entwickler.\n\nDrücke %s, um die Android-Einstellungen zu öffnen.</string>
     <string name="autostart_message_direct">\n\nDrücke %s, um die passende Einstellungsseite aufzurufen. Füge dort Voice Notify hinzu wenn nötig.</string>
     <string name="backup_settings">Backup-Einstellungen</string>
+    <string name="reason_tts_error">TTS-Verarbeitungsfehler</string>
 </resources>
