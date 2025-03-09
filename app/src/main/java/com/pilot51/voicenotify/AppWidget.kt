@@ -66,7 +66,7 @@ class AppWidget : GlanceAppWidget() {
 						).show()
 					} else {
 						actionStartActivity(
-							Common.notificationListenerSettingsIntent,
+							PermissionHelper.notificationListenerSettingsIntent,
 							actionParametersOf()
 						)
 					}

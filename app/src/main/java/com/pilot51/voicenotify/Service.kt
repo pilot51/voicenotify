@@ -51,6 +51,7 @@ import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.db.AppRepository
 import com.pilot51.voicenotify.db.Settings
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -284,7 +285,7 @@ class Service : NotificationListenerService() {
 	override fun onNotificationPosted(sbn: StatusBarNotification) {
 		ioScope.launch {
 			val notification = sbn.notification
-			val app = Common.findOrAddApp(sbn.packageName)
+			val app = AppRepository.findOrAddApp(sbn.packageName)
 			val settings = getCombinedSettings(app)
 			if (settings.ignoreGroups!!
 				&& notification.flags and Notification.FLAG_GROUP_SUMMARY != 0) {

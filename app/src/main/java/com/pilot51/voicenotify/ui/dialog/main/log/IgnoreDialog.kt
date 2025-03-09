@@ -21,12 +21,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.db.AppRepository
 import com.pilot51.voicenotify.ui.VNPreview
 
 @Composable
@@ -37,9 +37,8 @@ fun IgnoreDialog(
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
-			val context = LocalContext.current
 			TextButton(onClick = {
-				app.setEnabledWithToast(!app.isEnabled, context)
+				AppRepository.toggleIgnore(app)
 				onDismiss()
 			}) {
 				Text(stringResource(R.string.yes))

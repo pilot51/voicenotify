@@ -25,9 +25,9 @@ import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
-import com.pilot51.voicenotify.Common
 import com.pilot51.voicenotify.MainActivity
 import com.pilot51.voicenotify.R
+import com.pilot51.voicenotify.db.AppRepository
 import com.pilot51.voicenotify.ui.dialog.TextEditDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -47,7 +47,7 @@ fun TestNotificationDialog(onDismiss: () -> Unit) {
 		onDismiss = onDismiss
 	) { content ->
 		CoroutineScope(Dispatchers.IO).launch {
-			val vnApp = Common.findOrAddApp(context.packageName)!!
+			val vnApp = AppRepository.findOrAddApp(context.packageName)!!
 			if (!vnApp.isEnabled) {
 				launch(Dispatchers.Main) {
 					Toast.makeText(context, context.getString(R.string.test_ignored), Toast.LENGTH_LONG).show()

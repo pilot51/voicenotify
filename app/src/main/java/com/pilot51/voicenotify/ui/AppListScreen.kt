@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.outlined.Cancel
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -41,7 +42,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.ui.AppListViewModel.IgnoreType
 import com.pilot51.voicenotify.ui.dialog.ConfirmDialog
 import kotlinx.coroutines.delay
 
@@ -55,10 +55,10 @@ fun AppListActions() {
 	if (showSearchBar) {
 		val focusRequester = remember { FocusRequester() }
 		val keyboard = LocalSoftwareKeyboardController.current
+		val searchQuery by vm.searchQuery.collectAsState()
 		TextField(
-			value = vm.searchQuery ?: "",
+			value = searchQuery ?: "",
 			onValueChange = {
-				vm.searchQuery = it
 				vm.filterApps(it)
 			},
 			modifier = Modifier
@@ -76,7 +76,6 @@ fun AppListActions() {
 			trailingIcon = {
 				IconButton(onClick = {
 					showSearchBar = false
-					vm.searchQuery = null
 					vm.filterApps(null)
 				}) {
 					Icon(
@@ -92,7 +91,8 @@ fun AppListActions() {
 			keyboard?.show()
 		}
 	} else {
-		var showConfirmDialog by remember { mutableStateOf<IgnoreType?>(null) }
+		/** `true` for enable all, `false` for ignore all, `null` to not show dialog. */
+		var confirmDialogEnableAll by remember { mutableStateOf<Boolean?>(null) }
 		IconButton(
 			onClick = { showSearchBar = true }
 		) {
@@ -102,7 +102,7 @@ fun AppListActions() {
 			)
 		}
 		IconButton(
-			onClick = { showConfirmDialog = IgnoreType.IGNORE_ALL }
+			onClick = { confirmDialogEnableAll = false }
 		) {
 			Icon(
 				imageVector = Icons.Filled.CheckBoxOutlineBlank,
@@ -110,22 +110,21 @@ fun AppListActions() {
 			)
 		}
 		IconButton(
-			onClick = { showConfirmDialog = IgnoreType.IGNORE_NONE }
+			onClick = { confirmDialogEnableAll = true }
 		) {
 			Icon(
 				imageVector = Icons.Filled.CheckBox,
 				contentDescription = stringResource(R.string.ignore_none)
 			)
 		}
-		showConfirmDialog?.let {
-			val isEnableAll = it == IgnoreType.IGNORE_NONE
+		confirmDialogEnableAll?.let {
 			ConfirmDialog(
 				text = stringResource(
 					R.string.ignore_enable_apps_confirm,
-					stringResource(if (isEnableAll) R.string.enable else R.string.ignore).lowercase()
+					stringResource(if (it) R.string.enable else R.string.ignore).lowercase()
 				),
 				onConfirm = { vm.massIgnore(it) },
-				onDismiss = { showConfirmDialog = null }
+				onDismiss = { confirmDialogEnableAll = null }
 			)
 		}
 	}
@@ -139,28 +138,32 @@ fun AppListScreen(
 	DisposableEffect(vmOwner) { onDispose { vmStoreOwner.value = null } }
 	val vm: AppListViewModel = viewModel(vmOwner)
 	val packagesWithOverride by vm.packagesWithOverride
-	AppList(
-		vm.filteredApps,
-		vm.showList,
-		packagesWithOverride,
-		toggleIgnore = { app ->
-			vm.setIgnore(app, IgnoreType.IGNORE_TOGGLE)
-		},
-		onConfigureApp = onConfigureApp,
-		onRemoveOverrides = vm::removeOverrides
-	)
+	val filteredApps by vm.filteredApps.collectAsState()
+	val isLoading by vm.isLoading.collectAsState()
+	Box {
+		AppList(
+			filteredApps,
+			packagesWithOverride,
+			toggleIgnore = { app ->
+				vm.toggleIgnore(app)
+			},
+			onConfigureApp = onConfigureApp,
+			onRemoveOverrides = vm::removeOverrides
+		)
+		if (isLoading) {
+			CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+		}
+	}
 }
 
 @Composable
 private fun AppList(
 	filteredApps: List<App>,
-	showList: Boolean,
 	packagesWithOverride: List<String>,
 	toggleIgnore: (app: App) -> Unit,
 	onConfigureApp: (app: App) -> Unit,
 	onRemoveOverrides: (app: App) -> Unit
 ) {
-	if (!showList) return
 	LazyColumn(modifier = Modifier.fillMaxSize()) {
 		items(filteredApps) {
 			val hasOverride = packagesWithOverride.contains(it.packageName)
@@ -227,6 +230,6 @@ private fun AppListPreview() {
 		App("package.name.two", "App Name 2", false)
 	)
 	AppTheme {
-		AppList(apps, true, listOf("package.name.one"), {}, {}, {})
+		AppList(apps, listOf("package.name.one"), {}, {}, {})
 	}
 }

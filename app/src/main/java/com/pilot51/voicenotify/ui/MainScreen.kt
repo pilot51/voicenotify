@@ -70,7 +70,7 @@ fun MainScreen(
 		else rememberPermissionState(Manifest.permission.READ_PHONE_STATE)
 	var statusTitle by remember { mutableStateOf("") }
 	var statusSummary by remember { mutableStateOf("") }
-	val statusIntent = remember { Common.notificationListenerSettingsIntent }
+	val statusIntent = remember { PermissionHelper.notificationListenerSettingsIntent }
 	if (isPreview) {
 		statusTitle = stringResource(R.string.service_running)
 		statusSummary = stringResource(R.string.status_summary_notification_access_enabled)

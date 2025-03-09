@@ -41,6 +41,7 @@ import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.NotificationInfo
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.App
+import com.pilot51.voicenotify.db.AppRepository
 import com.pilot51.voicenotify.db.Settings
 import com.pilot51.voicenotify.ui.VNPreview
 import com.pilot51.voicenotify.ui.previewNotification
@@ -84,7 +85,7 @@ fun NotificationDetailDialog(
 								role = Role.Checkbox
 							) {
 								isEnabled = !isEnabled
-								setEnabledWithToast(isEnabled, context)
+								AppRepository.toggleIgnore(this@apply)
 							}
 							.padding(10.dp),
 						horizontalArrangement = Arrangement.spacedBy(10.dp),

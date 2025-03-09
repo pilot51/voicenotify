@@ -115,7 +115,7 @@
 	<string name="metadata_progress">Progress: %1$d / %2$d</string>
 	<string name="metadata_progress_indeterminate">Progress: Indeterminate</string>
 	<string name="ignore_app">Ignore %s?</string>
-	<string name="unignore_app">Unignore %s?</string>
+	<string name="unignore_app">Enable %s?</string>
 	<string name="yes">Yes</string>
 	<string name="backup_restore">Backup / Restore</string>
 	<string name="backup_restore_summary">Backup or restore all Voice Notify settings</string>
@@ -213,7 +213,7 @@
 
 	<!-- AppListScreen and NotifyList -->
 	<string name="app_is_ignored">%s is ignored</string>
-	<string name="app_is_not_ignored">%s is not ignored</string>
+	<string name="app_is_not_ignored">%s is enabled</string>
 
 	<!-- NotificationInfo -->
 	<string name="notification_from">Notification from %s.</string>

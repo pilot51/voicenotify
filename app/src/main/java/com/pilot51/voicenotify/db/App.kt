@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,9 @@
  */
 package com.pilot51.voicenotify.db
 
-import android.content.Context
-import android.widget.Toast
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.AppDatabase.Companion.db
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @Entity(tableName = "apps")
 data class App(
@@ -32,41 +25,7 @@ data class App(
 	@ColumnInfo(name = "package")
 	val packageName: String,
 	@ColumnInfo(name = "name", collate = ColumnInfo.NOCASE)
-	var label: String,
+	val label: String,
 	@ColumnInfo(name = "is_enabled")
-	var isEnabled: Boolean
-) {
-	/**
-	 * Updates self in database.
-	 * @return This instance.
-	 */
-	suspend fun updateDb(): App {
-		db.appDao.update(this)
-		return this
-	}
-
-	fun setEnabled(enable: Boolean, updateDb: Boolean = true) {
-		isEnabled = enable
-		if (updateDb) CoroutineScope(Dispatchers.IO).launch {
-			db.appDao.updateAppEnable(this@App)
-		}
-	}
-
-	fun setEnabledWithToast(enable: Boolean, context: Context) {
-		setEnabled(enable)
-		Toast.makeText(context,
-			context.getString(
-				if (enable) R.string.app_is_not_ignored else R.string.app_is_ignored,
-				label
-			),
-			Toast.LENGTH_SHORT
-		).show()
-	}
-
-	/** Removes self from database. */
-	fun remove() {
-		CoroutineScope(Dispatchers.IO).launch {
-			db.appDao.delete(this@App)
-		}
-	}
-}
+	val isEnabled: Boolean
+)

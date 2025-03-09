@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,18 +61,14 @@ abstract class AppDatabase : RoomDatabase() {
 		@Query("SELECT * FROM apps WHERE package = :pkg")
 		suspend fun get(pkg: String): App
 
-		@Query("SELECT * FROM apps")
-		suspend fun getAll(): List<App>
+		@Query("SELECT * FROM apps ORDER BY name")
+		fun getAllFlow(): Flow<List<App>>
 
-		/**
-		 * Updates enabled value of app in database matching package name.
-		 * @param app The app to update in the database.
-		 */
-		@Transaction
-		suspend fun updateAppEnable(app: App) {
-			updateAppEnable(app.packageName, app.isEnabled)
-		}
+		/** Sets the enabled state of all apps. */
+		@Query("UPDATE apps SET is_enabled = :enabled")
+		suspend fun updateAllEnable(enabled: Boolean)
 
+		/** Updates the enabled state of an app by package name. */
 		@Query("UPDATE apps SET is_enabled = :enabled WHERE package = :pkg")
 		suspend fun updateAppEnable(pkg: String, enabled: Boolean)
 	}

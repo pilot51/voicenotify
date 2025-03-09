@@ -107,7 +107,7 @@ dependencies {
 	implementation(libs.androidx.activity.compose)
 	implementation(libs.androidx.compose.material.iconsExtended)
 	implementation(libs.androidx.compose.material3)
-	implementation(libs.androidx.compose.ui.tooling.preview)
+	implementation(libs.androidx.compose.ui.tooling)
 	implementation(libs.androidx.core.ktx)
 	implementation(libs.androidx.glance.appwidget)
 	implementation(libs.androidx.navigation.compose)
@@ -116,5 +116,4 @@ dependencies {
 	implementation(libs.kotlin.reflect)
 	implementation(libs.autostarter)
 	ksp(libs.androidx.room.compiler)
-	debugImplementation(libs.androidx.compose.ui.tooling)
 }
