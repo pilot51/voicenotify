@@ -168,8 +168,8 @@
     <string name="debug_log">デバッグログ</string>
     <string name="settings">設定</string>
     <string name="autostart_message">Voice Notifyを正常に動作させるためには、自動起動もしくはバックグラウンドでの動作を許可する必要があります。</string>
-    <string name="autostart_message_manual">\n\nAndroidの設定で\'自動起動\' \'自動スタート\' \'スタートアップ\' バックグラウンド\' \'スリープにしない\'を検索しVoice Notifyを許可してください。\n\n設定の名称はOSにより異なります。もし見つけられない場合は開発者に連絡してください。\n\n %s を押すとAndroidの設定画面を開きます。</string>
-    <string name="autostart_message_direct">\n\n%s を押すと関連する設定画面を表示します、Voice Notifyを有効にしてください。</string>
+    <string name="autostart_message_manual">\n\nAndroidの設定を\'オートスタート\' \'自動起動\' \'スタートアップ\' バックグラウンド\' \'スリープにしない\'で検索しVoice Notifyが許可されていない場合は許可してください。\n\n設定の名称はOSにより異なります。もし見つけられない場合は開発者に連絡してください。\n\n %s を押すとAndroidの設定画面を開きます。</string>
+    <string name="autostart_message_direct">\n\n%s を押すと関連する設定画面を表示します、Voice Notifyが有効になっていない場合は有効にしてください。</string>
     <string name="remove_app_overrides">全てのアプリ優先設定を削除</string>
     <string name="remove_app_overrides_confirm">%sの全ての優先設定を削除しますか?</string>
     <string name="support_email_dialog_message_settings">• データベースファイル: インストールされている全てのアプリとアプリごとの全ての優先設定が含まれます。\n•プリファレンスファイル: アプリごとの優先設定以外の設定が含まれます。</string>
@@ -189,4 +189,5 @@
     <string name="remove_override_confirm">%2$sの優先設定から %1$s を削除しますか ?</string>
     <string name="regex_message">\n\n正規表現を利用する場合は行頭に\"$regex:\"をつけてください。正規表現はデフォルトで大文字小文字を区別します。\n例えば、URLにマッチさせる場合(大文字小文字を無視):\n$regex:(?i)https?://[^]+\n</string>
     <string name="support_email_dialog_message_log">意図的に機密情報を含めることはありませんが、ログにはインストールされたアプリの名前が含まれている可能性があり、イブのエラーには関連する通知内容は設定に関連する文字列が含まれている場合があります。サイズは1MBに制限されており、数日分にわたることがあります。コンピュータからUSB経由で %sにアクセスできます</string>
+    <string name="dont_show_again">今後表示しない</string>
 </resources>
