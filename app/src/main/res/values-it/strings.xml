@@ -105,7 +105,7 @@
     <!-- NotifyList -->
     <string name="yes">Sì</string>
     <string name="ignore_app">Vuoi ignorare %s\?</string>
-    <string name="unignore_app">Vuoi considerare %s\?</string>
+    <string name="unignore_app">Vuoi considerare %s?</string>
     <!-- menu/app_list.xml-->
     <string name="ignore_all">Ignora Tutto</string>
     <string name="ignore_none">Ignora Nulla</string>
