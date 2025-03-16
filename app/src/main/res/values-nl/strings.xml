@@ -91,7 +91,7 @@
     <!-- NotifyList -->
     <string name="yes">Ja</string>
     <string name="ignore_app">Negeren %s\?</string>
-    <string name="unignore_app">Niet meer negeren %s\?</string>
+    <string name="unignore_app">Niet meer negeren %s?</string>
     <!-- menu/app_list.xml-->
     <string name="ignore_all">Alles Negeren</string>
     <string name="ignore_none">Niets Negeren</string>
