@@ -95,6 +95,13 @@
 	<string name="test_text_lines">This is a line of text.\nThis is another line of text.</string>
 	<string name="notify_log">Notification Log</string>
 	<string name="notify_log_summary">List last %d notifications.\nDisplays time, app name, message, and ignore reasons.</string>
+	<string name="notify_log_settings">Notification Log Settings</string>
+	<string name="log_ignored_desc"><![CDATA[<b>Hide</b> &ndash; Notifications are hidden in the log and can be shown later, but count against the log limit.<br><br><b>Do not log</b> &ndash; Notifications are not logged and do not count against the log limit, but cannot be shown later. Notifications logged prior to setting this are hidden.]]></string>
+	<string name="show_ignored">Show ignored %s</string>
+	<string name="hide_ignored">Hide ignored %s</string>
+	<string name="do_not_log_ignored">Do not log ignored %s</string>
+	<string name="notifications">notifications</string>
+	<string name="apps">apps</string>
 	<string name="notification_details">Notification Details</string>
 	<string name="enable">Enable</string>
 	<string name="ticker">Ticker</string>

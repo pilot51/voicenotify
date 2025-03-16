@@ -16,6 +16,7 @@
 package com.pilot51.voicenotify
 
 import androidx.compose.runtime.mutableStateListOf
+import com.pilot51.voicenotify.PreferenceHelper.LogIgnoredValue.NO_LOG
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -24,8 +25,13 @@ object NotifyList {
 	val notifyListMutex = Mutex()
 	private val _notifyList = mutableStateListOf<NotificationInfo>()
 	val notifyList: List<NotificationInfo> = _notifyList
+	private val logIgnored = PreferenceHelper.logIgnoredStateFlow
+	private val logIgnoredApps = PreferenceHelper.logIgnoredAppsStateFlow
 
 	suspend fun addNotification(info: NotificationInfo) {
+		if (logIgnored.value == NO_LOG ||
+			(logIgnoredApps.value == NO_LOG && info.ignoreReasons.contains(IgnoreReason.APP))
+		) return
 		notifyListMutex.withLock {
 			if (notifyList.size == HISTORY_LIMIT) {
 				_notifyList.removeAt(notifyList.lastIndex)

@@ -46,7 +46,7 @@ import com.pilot51.voicenotify.NotifyList.notifyListMutex
 import com.pilot51.voicenotify.PermissionHelper.isPermissionGranted
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IS_SUSPENDED
 import com.pilot51.voicenotify.PreferenceHelper.KEY_IS_SUSPENDED
-import com.pilot51.voicenotify.PreferenceHelper.getPrefFlow
+import com.pilot51.voicenotify.PreferenceHelper.getPrefStateFlow
 import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase
@@ -113,7 +113,7 @@ class Service : NotificationListenerService() {
 
 	override fun onCreate() {
 		ioScope.launch {
-			isSuspended.collect {
+			isSuspendedFlow.collect {
 				if (!it) return@collect
 				tts?.run {
 					ttsQueueMutex.withLock {
@@ -272,6 +272,7 @@ class Service : NotificationListenerService() {
 	private fun shutdownTts() {
 		tts?.run {
 			tts = null
+			stop()
 			latestTtsStatus = TextToSpeech.STOPPED
 			isAwaitingTtsInit.value = false
 			try {
@@ -293,7 +294,7 @@ class Service : NotificationListenerService() {
 			}
 			val info = NotificationInfo(app, sbn, settings)
 			val ttsMsg = info.ttsMessage
-			if (app != null && !app.isEnabled) {
+			if (app?.isEnabled == false) {
 				info.addIgnoreReasons(IgnoreReason.APP)
 			}
 			if (info.isEmpty && settings.ignoreEmpty!!) {
@@ -447,7 +448,7 @@ class Service : NotificationListenerService() {
 	 */
 	private fun ignore(settings: Settings): Set<IgnoreReason> {
 		val ignoreReasons = mutableSetOf<IgnoreReason>()
-		if (isSuspended.value) {
+		if (isSuspended) {
 			ignoreReasons.add(IgnoreReason.SUSPENDED)
 		}
 		val c = Calendar.getInstance()
@@ -668,22 +669,15 @@ class Service : NotificationListenerService() {
 		private var lastQueuedUtteranceId = 0L
 		private var speakingUtteranceId: Long? = null
 		val isRunning: StateFlow<Boolean> = isInitialized
-		var isSuspended = MutableStateFlow(false)
-
-		init {
-			CoroutineScope(Dispatchers.IO).launch {
-				getPrefFlow(KEY_IS_SUSPENDED, DEFAULT_IS_SUSPENDED).collect {
-					isSuspended.value = it
-				}
-			}
-		}
+		val isSuspendedFlow = getPrefStateFlow(KEY_IS_SUSPENDED, DEFAULT_IS_SUSPENDED)
+		val isSuspended get() = isSuspendedFlow.value
 
 		private fun getTtsParams(settings: Settings) = Bundle().apply {
 			putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, settings.ttsStream!!)
 		}
 
 		fun toggleSuspend(): Boolean {
-			val suspended = isSuspended.value xor true
+			val suspended = isSuspended xor true
 			setPref(KEY_IS_SUSPENDED, suspended)
 			return suspended
 		}

@@ -30,11 +30,18 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.VNApplication
 
+/**
+ * Opacity of disabled components as defined in
+ * [Material Design 2](https://m2.material.io/design/interaction/states.html#disabled).
+ */
+const val disabledAlpha = 0.38f
+
 val debugLogPath @Composable get() = if (isPreview) {
 	"Android/data/${LocalContext.current.packageName}/files/debug.log"
 } else {
 	VNApplication.logFile?.relativeTo(Environment.getExternalStorageDirectory()).toString()
 }
+
 val isPreview @Composable get() = LocalInspectionMode.current
 
 @Preview(name = "Dark", uiMode = Configuration.UI_MODE_NIGHT_YES)

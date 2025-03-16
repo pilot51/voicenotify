@@ -22,27 +22,28 @@ import android.util.Log
 import android.widget.Toast
 import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_APP_DEFAULT_ENABLE
 import com.pilot51.voicenotify.PreferenceHelper.KEY_APP_DEFAULT_ENABLE
-import com.pilot51.voicenotify.PreferenceHelper.getPrefFlow
+import com.pilot51.voicenotify.PreferenceHelper.getPrefStateFlow
 import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
 import com.pilot51.voicenotify.withTimeoutInterruptible
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
 object AppRepository {
 	private val TAG = AppRepository::class.simpleName
 	private val ioScope = CoroutineScope(Dispatchers.IO)
+	private val _appDefaultEnable = getPrefStateFlow(KEY_APP_DEFAULT_ENABLE, DEFAULT_APP_DEFAULT_ENABLE)
 	/** The default enabled value for new apps. */
-	private var appDefaultEnable =
-		runBlocking(Dispatchers.IO) {
-			getPrefFlow(KEY_APP_DEFAULT_ENABLE, DEFAULT_APP_DEFAULT_ENABLE).first()
-		}
+	private var appDefaultEnable
+		get() = _appDefaultEnable.value
 		set(value) {
-			field = value
 			setPref(KEY_APP_DEFAULT_ENABLE, value)
 		}
 	val appsFlow = db.appDao.getAllFlow()
@@ -142,19 +143,18 @@ object AppRepository {
 		}
 	}
 
-	/** Sets the enabled state of [app] in the database. */
-	private fun updateAppEnable(app: App, enable: Boolean) {
-		ioScope.launch {
-			db.appDao.updateAppEnable(app.packageName, enable)
-		}
-	}
-
 	/** Removes [app] from the database. */
 	private fun delete(app: App) {
 		ioScope.launch {
 			db.appDao.delete(app)
 		}
 	}
+
+	/**
+	 * @return A flow of the enabled state of [app] in the database,
+	 * useful in case [App.isEnabled] is stale.
+	 */
+	fun isEnabledFlow(app: App) = db.appDao.isEnabled(app.packageName)
 
 	/**
 	 * Sets the enabled state of all apps as well as [appDefaultEnable].
@@ -168,14 +168,19 @@ object AppRepository {
 	}
 
 	fun toggleIgnore(app: App) {
-		updateAppEnable(app, !app.isEnabled)
-		Toast.makeText(
-			appContext,
-			appContext.getString(
-				if (app.isEnabled) R.string.app_is_ignored else R.string.app_is_not_ignored,
-				app.label
-			),
-			Toast.LENGTH_SHORT
-		).show()
+		ioScope.launch {
+			db.appDao.toggleEnable(app.packageName)
+			val enabled = isEnabledFlow(app).first()
+			launch(Dispatchers.Main) {
+				Toast.makeText(
+					appContext,
+					appContext.getString(
+						if (enabled) R.string.app_is_not_ignored else R.string.app_is_ignored,
+						app.label
+					),
+					Toast.LENGTH_SHORT
+				).show()
+			}
+		}
 	}
 }

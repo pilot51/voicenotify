@@ -28,7 +28,7 @@ class VoiceNotifyTileService : TileService() {
 	// Called when the tile can be updated
 	override fun onStartListening() {
 		super.onStartListening()
-		updateTile(Service.isSuspended.value)
+		updateTile(Service.isSuspended)
 	}
 
 	// Called when the user taps on the tile in an active or inactive state.

@@ -18,6 +18,7 @@ package com.pilot51.voicenotify
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import androidx.annotation.StringRes
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
@@ -45,7 +46,9 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STREAM
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.*
 import java.util.zip.ZipEntry
@@ -58,6 +61,8 @@ object PreferenceHelper {
 
 	// Main
 	val KEY_SHAKE_THRESHOLD = intPreferencesKey("shake_threshold")
+	val KEY_LOG_IGNORED = intPreferencesKey("log_ignored")
+	val KEY_LOG_IGNORED_APPS = intPreferencesKey("log_ignored_apps")
 
 	// App List
 	val KEY_APP_DEFAULT_ENABLE = booleanPreferencesKey("defEnable")
@@ -69,13 +74,32 @@ object PreferenceHelper {
 	const val DEFAULT_SHAKE_THRESHOLD = 100
 	const val DEFAULT_APP_DEFAULT_ENABLE = true
 	const val DEFAULT_IS_SUSPENDED = false
+	private val DEFAULT_LOG_IGNORED = LogIgnoredValue.SHOW
+	private val DEFAULT_LOG_IGNORED_APPS = LogIgnoredValue.SHOW
 
-	private val Context.dataStore: DataStore<Preferences> by preferencesDataStore("prefs")
+	private const val DS_NAME = "prefs"
+	private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(DS_NAME)
 	private val dataStore = appContext.dataStore
 	val dataFiles get() = arrayOf(
 		appContext.getDatabasePath(AppDatabase.DB_NAME),
-		appContext.preferencesDataStoreFile("prefs")
+		appContext.preferencesDataStoreFile(DS_NAME)
 	)
+
+	val logIgnoredStateFlow = getPrefFlow(KEY_LOG_IGNORED, DEFAULT_LOG_IGNORED.prefValue)
+		.map { LogIgnoredValue.fromPrefValue(it) }
+		.stateIn(
+			scope = CoroutineScope(Dispatchers.IO),
+			started = SharingStarted.Eagerly,
+			initialValue = null
+		)
+
+	val logIgnoredAppsStateFlow = getPrefFlow(KEY_LOG_IGNORED_APPS, DEFAULT_LOG_IGNORED_APPS.prefValue)
+		.map { LogIgnoredValue.fromPrefValue(it) }
+		.stateIn(
+			scope = CoroutineScope(Dispatchers.IO),
+			started = SharingStarted.Eagerly,
+			initialValue = null
+		)
 
 	init {
 		CoroutineScope(Dispatchers.IO).launch {
@@ -86,11 +110,36 @@ object PreferenceHelper {
 	fun <T> getPrefFlow(key: Preferences.Key<T>, default: T) =
 		dataStore.data.map { it[key] ?: default }
 
+	fun <T> getPrefStateFlow(key: Preferences.Key<T>, default: T) =
+		getPrefFlow(key, default).stateIn(
+			scope = CoroutineScope(Dispatchers.IO),
+			started = SharingStarted.Eagerly,
+			initialValue = default
+		)
+
 	/** Sets the value of the preference for [key], or removes it if [newValue] is `null`. */
 	fun <T> setPref(key: Preferences.Key<T>, newValue: T?) {
 		CoroutineScope(Dispatchers.IO).launch {
 			dataStore.edit { pref ->
 				newValue?.let { pref[key] = it } ?: pref.remove(key)
+			}
+		}
+	}
+
+	fun setLogIgnored(setting: LogIgnoredSetting, value: LogIgnoredValue) {
+		val currentAllValue = logIgnoredStateFlow.value!!
+		val currentAppsValue = logIgnoredAppsStateFlow.value!!
+		when (setting.prefKey) {
+			KEY_LOG_IGNORED -> {
+				if (value < currentAppsValue || currentAllValue == currentAppsValue) {
+					setPref(KEY_LOG_IGNORED_APPS, value.prefValue)
+				}
+				setPref(setting.prefKey, value.prefValue)
+			}
+			KEY_LOG_IGNORED_APPS -> {
+				if (value <= currentAllValue) {
+					setPref(setting.prefKey, value.prefValue)
+				}
 			}
 		}
 	}
@@ -101,7 +150,14 @@ object PreferenceHelper {
 	 */
 	private suspend fun initSettings() {
 		val settingsDao = db.settingsDao
-		if (settingsDao.hasGlobalSettings()) return
+		if (settingsDao.hasGlobalSettings()) {
+			dataStore.edit {
+				if (!it.contains(this.KEY_LOG_IGNORED)) {
+					it[this.KEY_LOG_IGNORED] = DEFAULT_LOG_IGNORED_APPS.prefValue
+				}
+			}
+			return
+		}
 		val spDir = File(appContext.applicationInfo.dataDir, "shared_prefs")
 		val spName = "${BuildConfig.APPLICATION_ID}_preferences"
 		val spFile = File(spDir, "$spName.xml")
@@ -153,6 +209,7 @@ object PreferenceHelper {
 				prefs[KEY_IS_SUSPENDED] = DEFAULT_IS_SUSPENDED
 			}
 		}
+		dataStore.edit { it[this.KEY_LOG_IGNORED] = DEFAULT_LOG_IGNORED_APPS.prefValue }
 	}
 
 	fun exportBackup(uri: Uri) {
@@ -199,6 +256,34 @@ object PreferenceHelper {
 				}
 			}
 			AppDatabase.resetInstance()
+		}
+	}
+
+	enum class LogIgnoredSetting(
+		@StringRes val textRes: Int
+	) {
+		NOTIFICATIONS(R.string.notifications),
+		APPS(R.string.apps);
+
+		val prefKey by lazy {
+			when (this) {
+				NOTIFICATIONS -> KEY_LOG_IGNORED
+				APPS -> KEY_LOG_IGNORED_APPS
+			}
+		}
+	}
+
+	enum class LogIgnoredValue(
+		val prefValue: Int,
+		@StringRes val textRes: Int
+	) {
+		NO_LOG(-1, R.string.do_not_log_ignored),
+		HIDE(0, R.string.hide_ignored),
+		SHOW(1, R.string.show_ignored);
+
+		companion object {
+			val dropdownList = entries.asReversed()
+			fun fromPrefValue(value: Int) = entries.single { it.prefValue == value }
 		}
 	}
 }

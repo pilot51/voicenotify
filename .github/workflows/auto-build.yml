@@ -66,7 +66,15 @@ jobs:
           prerelease: true
           body: |
             Use at your own risk!
-            These builds may be broken and some changes may lose settings or require clearing app data.
-            If you have a final release installed and want to preserve its settings while testing this, you can install the debug build alongside it.
+
+            These builds may be broken and could lose settings if installed over an existing installation. If you don't want to lose the settings in your current installation, be sure to export a backup before installing beta over it.
+
+            Changes to the database schema during beta may cause the app to crash at launch after updating. If that happens, the workaround is to clear app data or uninstall and reinstall. Migrations are only guaranteed to work between final releases. Final -> beta should work, but beta -> beta/final may not.
+
+            The `release` build would install over any existing release installed from GitHub or Play Store. It will fail to install over a release from F-Droid since they sign and build the APK with their own key.
+
+            The `debug` build can be installed alongside release, leaving your settings in the release installation unaffected.
+
+            If you have both builds installed, be sure to suspend or disable one of them to prevent notifications from being spoken twice.
           generate_release_notes: true
           files: 'app/build/outputs/apk/**/*.apk'

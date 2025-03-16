@@ -25,11 +25,12 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
@@ -51,7 +52,6 @@ fun NotificationDetailDialog(
 	item: NotificationInfo,
 	onDismiss: () -> Unit
 ) {
-	val context = LocalContext.current
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = { },
@@ -74,18 +74,17 @@ fun NotificationDetailDialog(
 				horizontalAlignment = Alignment.CenterHorizontally
 			) {
 				Text(item.dateTime)
-				item.app?.apply {
-					var isEnabled by remember(this) { mutableStateOf(isEnabled) }
-					Text(text = label, fontSize = 24.sp)
-					Text(packageName)
+				item.app?.also { app ->
+					val isEnabled by AppRepository.isEnabledFlow(app).collectAsState(app.isEnabled)
+					Text(text = app.label, fontSize = 24.sp)
+					Text(app.packageName)
 					Row(
 						modifier = Modifier
 							.toggleable(
 								value = isEnabled,
 								role = Role.Checkbox
 							) {
-								isEnabled = !isEnabled
-								AppRepository.toggleIgnore(this@apply)
+								AppRepository.toggleIgnore(app)
 							}
 							.padding(10.dp),
 						horizontalArrangement = Arrangement.spacedBy(10.dp),

@@ -22,6 +22,12 @@ import kotlin.time.Duration
 
 fun <T> T.isAny(vararg list: T) = list.any { this == it }
 
+/**
+ * If [condition] is `true`, executes [block] with `this` as its receiver
+ * and returns its result (must be the same type), otherwise returns `this`.
+ */
+fun <T> T.runIf(condition: Boolean, block: T.() -> T): T = if (condition) block() else this
+
 /** Convenience for calling [withLock] inside a new coroutine in [scope]. */
 fun <T> Mutex.launchWithLock(
 	scope: CoroutineScope = CoroutineScope(Dispatchers.IO),
@@ -40,4 +46,3 @@ suspend fun <T> withTimeoutInterruptible(timeout: Duration, block: () -> T) =
 fun validateRegexOption(text: String) = !text.startsWith(Constants.REGEX_PREFIX) || runCatching {
 	Regex(text.removePrefix(Constants.REGEX_PREFIX))
 }.isSuccess
-

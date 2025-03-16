@@ -36,7 +36,7 @@ class AppWidget : GlanceAppWidget() {
 	override suspend fun provideGlance(context: Context, id: GlanceId) {
 		provideContent {
 			val isRunning by Service.isRunning.collectAsState()
-			val isSuspended by Service.isSuspended.collectAsState()
+			val isSuspended by Service.isSuspendedFlow.collectAsState()
 			Widget(context, isRunning, isSuspended)
 		}
 	}

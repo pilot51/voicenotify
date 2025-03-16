@@ -76,7 +76,7 @@ fun MainScreen(
 		statusSummary = stringResource(R.string.status_summary_notification_access_enabled)
 	}
 	val isRunning by (if (isPreview) MutableStateFlow(false) else Service.isRunning).collectAsState()
-	val isSuspended by (if (isPreview) MutableStateFlow(false) else Service.isSuspended).collectAsState()
+	val isSuspended by (if (isPreview) MutableStateFlow(false) else Service.isSuspendedFlow).collectAsState()
 	if (isSuspended && isRunning) {
 		statusTitle = stringResource(R.string.service_suspended)
 		statusSummary = stringResource(R.string.status_summary_suspended)

@@ -20,6 +20,8 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -34,6 +36,7 @@ fun IgnoreDialog(
 	app: App,
 	onDismiss: () -> Unit
 ) {
+	val isEnabled by AppRepository.isEnabledFlow(app).collectAsState(app.isEnabled)
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = {
@@ -52,7 +55,7 @@ fun IgnoreDialog(
 		title = {
 			Text(
 				text = stringResource(
-					if (app.isEnabled) R.string.ignore_app else R.string.unignore_app,
+					if (isEnabled) R.string.ignore_app else R.string.unignore_app,
 					app.label
 				),
 				modifier = Modifier.fillMaxWidth(),

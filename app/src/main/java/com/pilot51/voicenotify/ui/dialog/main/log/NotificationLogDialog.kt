@@ -16,28 +16,28 @@
 package com.pilot51.voicenotify.ui.dialog.main.log
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.pilot51.voicenotify.AppTheme
-import com.pilot51.voicenotify.NotificationInfo
-import com.pilot51.voicenotify.NotifyList
+import com.pilot51.voicenotify.*
+import com.pilot51.voicenotify.PreferenceHelper.LogIgnoredValue
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.Settings
@@ -49,6 +49,7 @@ fun NotificationLogDialog(
 	list: List<NotificationInfo> = NotifyList.notifyList,
 	onDismiss: () -> Unit
 ) {
+	var showConfigDialog by remember { mutableStateOf(false) }
 	AlertDialog(
 		onDismissRequest = onDismiss,
 		confirmButton = { },
@@ -58,15 +59,46 @@ fun NotificationLogDialog(
 			}
 		},
 		title = {
-			Text(
-				text = stringResource(R.string.notify_log),
-				modifier = Modifier.fillMaxWidth(),
-				fontWeight = FontWeight.Medium,
-				textAlign = TextAlign.Center
-			)
+			Box(
+				modifier = Modifier.height(IntrinsicSize.Min),
+				contentAlignment = Alignment.Center
+			) {
+				IconButton(
+					modifier = Modifier.align(Alignment.TopEnd),
+					onClick = { showConfigDialog = true }
+				) {
+					Image(
+						imageVector = Icons.Default.Settings,
+						contentScale = ContentScale.Fit,
+						contentDescription = stringResource(R.string.notify_log_settings),
+						colorFilter = ColorFilter.tint(Color.Gray)
+					)
+				}
+				Text(
+					text = stringResource(R.string.notify_log),
+					modifier = Modifier.fillMaxWidth(),
+					fontWeight = FontWeight.Medium,
+					textAlign = TextAlign.Center
+				)
+			}
 		},
-		text = { ItemList(list) }
+		text = {
+			val logIgnored by PreferenceHelper.logIgnoredStateFlow.collectAsState()
+			val logIgnoredApps by PreferenceHelper.logIgnoredAppsStateFlow.collectAsState()
+			ItemList(
+				when {
+					logIgnored != LogIgnoredValue.SHOW ->
+						list.filter { it.ignoreReasons.isEmpty() || it.isInterrupted }
+					logIgnoredApps != LogIgnoredValue.SHOW ->
+						list.filterNot { it.ignoreReasons.contains(IgnoreReason.APP) }
+					else -> list
+				}
+			)
+		}
 	)
+	if (showConfigDialog) {
+		NotificationLogConfigDialog { showConfigDialog = false }
+	}
 }
 
 @Composable
@@ -156,7 +188,7 @@ private fun Item(
 
 @VNPreview
 @Composable
-private fun LogDialogPreview() {
+private fun NotificationLogDialogPreview() {
 	val list = listOf(
 		NotificationInfo(
 			app = App("package.name.one", "App Name 1", true),

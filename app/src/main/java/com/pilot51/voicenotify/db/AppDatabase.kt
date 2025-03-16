@@ -64,13 +64,17 @@ abstract class AppDatabase : RoomDatabase() {
 		@Query("SELECT * FROM apps ORDER BY name")
 		fun getAllFlow(): Flow<List<App>>
 
+		/** @return The enabled state of an app by package name. */
+		@Query("SELECT is_enabled FROM apps WHERE package = :pkg")
+		fun isEnabled(pkg: String): Flow<Boolean>
+
+		/** Toggles the enabled state of an app by package name. */
+		@Query("UPDATE apps SET is_enabled = NOT is_enabled WHERE package = :pkg")
+		suspend fun toggleEnable(pkg: String)
+
 		/** Sets the enabled state of all apps. */
 		@Query("UPDATE apps SET is_enabled = :enabled")
 		suspend fun updateAllEnable(enabled: Boolean)
-
-		/** Updates the enabled state of an app by package name. */
-		@Query("UPDATE apps SET is_enabled = :enabled WHERE package = :pkg")
-		suspend fun updateAppEnable(pkg: String, enabled: Boolean)
 	}
 
 	@Dao
