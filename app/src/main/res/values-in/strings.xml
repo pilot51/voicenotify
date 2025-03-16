@@ -128,7 +128,7 @@
     <!-- NotifyList -->
     <string name="yes">Ya</string>
     <string name="ignore_app">Abaikan %s\?</string>
-    <string name="unignore_app">Tak abaikan %s\?</string>
+    <string name="unignore_app">Tak abaikan %s?</string>
     <!-- menu/app_list.xml-->
     <string name="ignore_all">Abaikan Semua</string>
     <string name="ignore_none">Tak Abaikan Semua</string>
