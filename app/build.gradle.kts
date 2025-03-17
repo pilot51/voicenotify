@@ -82,6 +82,16 @@ android {
 		getByName("release") {
 			signingConfig = signingConfigs.getByName("release")
 			versionNameSuffix = " [$gitCommitHash]"
+			@Suppress("UnstableApiUsage")
+			postprocessing {
+				isRemoveUnusedCode = true
+				isOptimizeCode = true
+				isShrinkResources = true
+				isObfuscate = false
+			}
+			proguardFiles(
+				getDefaultProguardFile("proguard-android-optimize.txt")
+			)
 		}
 		getByName("debug") {
 			applicationIdSuffix = ".debug"

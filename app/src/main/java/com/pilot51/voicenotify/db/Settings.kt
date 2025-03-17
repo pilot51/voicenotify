@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2024 Mark Injerd
+ * Copyright 2011-2025 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,9 @@ import androidx.room.*
 import com.pilot51.voicenotify.NotificationInfo.Companion.TTS_APP_LABEL
 import com.pilot51.voicenotify.NotificationInfo.Companion.TTS_CONTENT_TEXT
 import com.pilot51.voicenotify.NotificationInfo.Companion.TTS_CONTENT_TITLE
+import com.pilot51.voicenotify.isNone
 import kotlin.reflect.KProperty1
-import kotlin.reflect.full.memberProperties
+import kotlin.reflect.full.declaredMemberProperties
 
 @Entity(
 	tableName = "settings",
@@ -40,47 +41,47 @@ data class Settings(
 	@ColumnInfo(name = "app_package")
 	val appPackage: String? = null,
 	@ColumnInfo(name = "audio_focus")
-	var audioFocus: Boolean? = null,
+	val audioFocus: Boolean? = null,
 	@ColumnInfo(name = "require_strings")
-	var requireStrings: String? = null,
+	val requireStrings: String? = null,
 	@ColumnInfo(name = "ignore_strings")
-	var ignoreStrings: String? = null,
+	val ignoreStrings: String? = null,
 	@ColumnInfo(name = "ignore_empty")
-	var ignoreEmpty: Boolean? = null,
+	val ignoreEmpty: Boolean? = null,
 	@ColumnInfo(name = "ignore_groups")
-	var ignoreGroups: Boolean? = null,
+	val ignoreGroups: Boolean? = null,
 	/** Number of minutes to ignore repeats. -1 is infinite. */
 	@ColumnInfo(name = "ignore_repeat")
-	var ignoreRepeat: Int? = null,
+	val ignoreRepeat: Int? = null,
 	@ColumnInfo(name = "speak_screen_off")
-	var speakScreenOff: Boolean? = null,
+	val speakScreenOff: Boolean? = null,
 	@ColumnInfo(name = "speak_screen_on")
-	var speakScreenOn: Boolean? = null,
+	val speakScreenOn: Boolean? = null,
 	@ColumnInfo(name = "speak_headset_off")
-	var speakHeadsetOff: Boolean? = null,
+	val speakHeadsetOff: Boolean? = null,
 	@ColumnInfo(name = "speak_headset_on")
-	var speakHeadsetOn: Boolean? = null,
+	val speakHeadsetOn: Boolean? = null,
 	@ColumnInfo(name = "speak_silent_on")
-	var speakSilentOn: Boolean? = null,
+	val speakSilentOn: Boolean? = null,
 	@ColumnInfo(name = "quiet_start")
-	var quietStart: Int? = null,
+	val quietStart: Int? = null,
 	@ColumnInfo(name = "quiet_end")
-	var quietEnd: Int? = null,
+	val quietEnd: Int? = null,
 	@ColumnInfo(name = "tts_string")
-	var ttsString: String? = null,
+	val ttsString: String? = null,
 	@ColumnInfo(name = "tts_text_replace")
-	var ttsTextReplace: String? = null,
+	val ttsTextReplace: String? = null,
 	@ColumnInfo(name = "tts_speak_emojis")
-	var ttsSpeakEmojis: Boolean? = null,
+	val ttsSpeakEmojis: Boolean? = null,
 	@ColumnInfo(name = "tts_max_length")
-	var ttsMaxLength: Int? = null,
+	val ttsMaxLength: Int? = null,
 	/** The selected audio stream matching the `STREAM_` constant from [AudioManager]. */
 	@ColumnInfo(name = "tts_stream")
-	var ttsStream: Int? = null,
+	val ttsStream: Int? = null,
 	@ColumnInfo(name = "tts_delay")
-	var ttsDelay: Int? = null,
+	val ttsDelay: Int? = null,
 	@ColumnInfo(name = "tts_repeat")
-	var ttsRepeat: Double? = null
+	val ttsRepeat: Double? = null
 ) {
 	@Ignore
 	val isGlobal = appPackage == null
@@ -123,8 +124,8 @@ data class Settings(
 	}
 
 	@Suppress("UNCHECKED_CAST")
-	fun areAllSettingsNull() = this::class.memberProperties.filter {
-		it.returnType.isMarkedNullable && it.name != "appPackage"
+	fun areAllSettingsNull() = this::class.declaredMemberProperties.filter {
+		it.name.isNone(::id.name, ::appPackage.name, ::isGlobal.name)
 	}.all {
 		(it as KProperty1<Settings, *>).get(this) == null
 	}

@@ -22,6 +22,8 @@ import kotlin.time.Duration
 
 fun <T> T.isAny(vararg list: T) = list.any { this == it }
 
+fun <T> T.isNone(vararg list: T) = list.none { this == it }
+
 /**
  * If [condition] is `true`, executes [block] with `this` as its receiver
  * and returns its result (must be the same type), otherwise returns `this`.

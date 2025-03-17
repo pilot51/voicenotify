@@ -103,10 +103,11 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 
 	override fun save(settings: Settings) {
 		viewModelScope.launch(Dispatchers.IO) {
-			val settingsDao = db.settingsDao
-			if (settings.areAllSettingsNull()) {
-				settingsDao.delete(settings)
-			} else settingsDao.upsert(settings)
+			db.settingsDao.run {
+				if (!settings.isGlobal && settings.areAllSettingsNull()) {
+					delete(settings)
+				} else upsert(settings)
+			}
 		}
 	}
 
