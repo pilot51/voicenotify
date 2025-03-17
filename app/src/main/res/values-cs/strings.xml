@@ -91,7 +91,7 @@
     <!-- NotifyList -->
     <string name="yes">Ano</string>
     <string name="ignore_app">Ignorovat %s\?</string>
-    <string name="unignore_app">Neignorovat %s\?</string>
+    <string name="unignore_app">Neignorovat %s?</string>
     <!-- menu/app_list.xml-->
     <string name="ignore_all">Ignorovat vše</string>
     <string name="ignore_none">Neignorovat nic</string>

@@ -99,7 +99,7 @@
     <string name="reason_empty_msg">Tyhjä viesti</string>
     <string name="ignore_none">Älä ohita mitään</string>
     <string name="reason_app">Ohitettu sovellus</string>
-    <string name="unignore_app">Älä ohita %s\?</string>
+    <string name="unignore_app">Älä ohita %s?</string>
     <string name="reason_quiet">Hiljainen aika</string>
     <string name="reason_silent">Hiljainen tai värinätila</string>
     <string name="reason_service_stopped">Palvelu pysäytetty</string>

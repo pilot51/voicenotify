@@ -95,7 +95,7 @@
     <!-- NotifyList -->
     <string name="yes">Да</string>
     <string name="ignore_app">Игнорировать %s\?</string>
-    <string name="unignore_app">Не игнорировать %s\?</string>
+    <string name="unignore_app">Не игнорировать %s?</string>
     <!-- menu/app_list.xml-->
     <string name="ignore_all">Игнорировать всё</string>
     <string name="ignore_none">Ничего не игнорировать</string>
@@ -149,4 +149,29 @@
 \nЭтот текст должен быть желтым, если повторная попытка успешна, или красным, если нет.
 \nПопробуйте перезапустить службу Приложения, если уведомления не будут произнесены.</string>
     <string name="reason_tts_restarted">TTS перезапущена в то время, как сообщение было в очереди или произносилось. Поставлено в очередь повторно.</string>
+    <string name="dont_show_again">Не показывать снова</string>
+    <string name="notification_details">Подробности уведомления</string>
+    <string name="tts_speak_emojis">Произносить Емоджи</string>
+    <string name="test_content_info">Информация о содержании</string>
+    <string name="backup_restore">Резервное восстановление</string>
+    <string name="ignore">игнорировать</string>
+    <string name="ignore_enable_apps_confirm">Вы уверены, что хотите %s все приложения?</string>
+    <string name="tts">Синтез речи</string>
+    <string name="test_ticker">Это сообщение тикера</string>
+    <string name="test_content_text">Это сообщение уведомления. 🙂</string>
+    <string name="test_subtext">Подтекст</string>
+    <string name="test_content_title">Название</string>
+    <string name="test_big_content_title">Название большого содержимого</string>
+    <string name="metadata_category">Категория: %s</string>
+    <string name="metadata_progress">Прогресс: %1$d / %2$d</string>
+    <string name="metadata_progress_indeterminate">Прогресс: Средний</string>
+    <string name="autostart_message">Для надежной работы Голосовых Уведомлений на этом устройстве необходимо разрешить их автозапуск или работу в фоновом режиме.</string>
+    <string name="enable">Включить</string>
+    <string name="ticker">Тикер</string>
+    <string name="subtext">Подтекст</string>
+    <string name="title">Название</string>
+    <string name="flags">Флаги</string>
+    <string name="metadata">Метаданные</string>
+    <string name="view">Просмотр</string>
+    <string name="settings">Настройки</string>
 </resources>

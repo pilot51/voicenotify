@@ -120,7 +120,7 @@
     <!-- NotifyList -->
     <string name="yes">Ya</string>
     <string name="ignore_app">Abai %s\?</string>
-    <string name="unignore_app">Jgn Abaikan %s\?</string>
+    <string name="unignore_app">Jgn Abaikan %s?</string>
     <!-- menu/app_list.xml-->
     <string name="ignore_all">Abai Semua</string>
     <string name="ignore_none">Tiada Abai</string>
