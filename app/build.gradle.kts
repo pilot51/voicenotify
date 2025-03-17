@@ -44,8 +44,8 @@ android {
 		applicationId = "com.pilot51.voicenotify"
 		minSdk = 21
 		targetSdk = 34
-		versionName = "1.4.3-beta"
-		versionCode = 32
+		versionName = "1.4.3"
+		versionCode = 33
 		vectorDrawables.useSupportLibrary = true
 		ksp {
 			arg("room.schemaLocation", "$projectDir/schemas")
@@ -100,6 +100,7 @@ android {
 	}
 
 	androidResources {
+		@Suppress("UnstableApiUsage")
 		generateLocaleConfig = true
 	}
 

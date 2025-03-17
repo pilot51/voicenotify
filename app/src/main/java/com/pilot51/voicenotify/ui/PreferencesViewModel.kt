@@ -79,8 +79,7 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 		return if (isPreview) {
 			remember { mutableIntStateOf(DEFAULT_SHAKE_THRESHOLD) }
 		} else {
-			PreferenceHelper.getPrefFlow(KEY_SHAKE_THRESHOLD, 0)
-				.collectAsState(initial = 0)
+			PreferenceHelper.getPrefStateFlow(KEY_SHAKE_THRESHOLD, 0).collectAsState()
 		}
 	}
 
@@ -304,6 +303,8 @@ interface IPreferencesViewModel {
 	fun getShakeThreshold(): State<Int> =
 		remember { mutableIntStateOf(DEFAULT_SHAKE_THRESHOLD) }
 
+	fun setShakeThreshold(threshold: Int?) {}
+
 	fun getApp(appPkg: String): App = App("app.package", "App Label", true)
 
 	fun setCurrentConfigApp(app: App?) {}
@@ -313,8 +314,6 @@ interface IPreferencesViewModel {
 		remember { mutableStateOf(Settings.defaults) }
 
 	fun save(settings: Settings) {}
-
-	fun setShakeThreshold(threshold: Int?) {}
 
 	fun getTtsTextReplace(settings: Settings): List<Pair<String, String>> = listOf(
 		Pair("first", "second"),

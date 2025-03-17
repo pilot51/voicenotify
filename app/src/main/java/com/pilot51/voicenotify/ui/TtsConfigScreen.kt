@@ -83,7 +83,7 @@ fun TtsConfigScreen(vm: IPreferencesViewModel) {
 			titleRes = R.string.tts_speak_emojis,
 			summaryResOn = R.string.tts_speak_emojis_summary_on,
 			summaryResOff = R.string.tts_speak_emojis_summary_off,
-			initialValue = settingsCombo.ttsSpeakEmojis!!,
+			value = settingsCombo.ttsSpeakEmojis!!,
 			app = configApp,
 			showRemove = !settings.isGlobal && settings.ttsSpeakEmojis != null,
 			onRemove = {

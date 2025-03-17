@@ -20,13 +20,11 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.booleanPreferencesKey
-import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.intPreferencesKey
+import androidx.datastore.preferences.core.*
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.preference.PreferenceManager
+import com.pilot51.voicenotify.PreferenceHelper.LogIgnoredValue.entries
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.db.AppDatabase
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
@@ -47,6 +45,7 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -55,6 +54,7 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 import kotlin.math.roundToInt
+import kotlin.time.Duration.Companion.seconds
 
 object PreferenceHelper {
 	val KEY_DISABLE_AUTOSTART_MSG = booleanPreferencesKey("disable_autostart_msg")
@@ -89,7 +89,7 @@ object PreferenceHelper {
 		.map { LogIgnoredValue.fromPrefValue(it) }
 		.stateIn(
 			scope = CoroutineScope(Dispatchers.IO),
-			started = SharingStarted.Eagerly,
+			started = SharingStarted.WhileSubscribed(5.seconds),
 			initialValue = null
 		)
 
@@ -97,7 +97,7 @@ object PreferenceHelper {
 		.map { LogIgnoredValue.fromPrefValue(it) }
 		.stateIn(
 			scope = CoroutineScope(Dispatchers.IO),
-			started = SharingStarted.Eagerly,
+			started = SharingStarted.WhileSubscribed(5.seconds),
 			initialValue = null
 		)
 
@@ -113,7 +113,7 @@ object PreferenceHelper {
 	fun <T> getPrefStateFlow(key: Preferences.Key<T>, default: T) =
 		getPrefFlow(key, default).stateIn(
 			scope = CoroutineScope(Dispatchers.IO),
-			started = SharingStarted.Eagerly,
+			started = SharingStarted.WhileSubscribed(5.seconds),
 			initialValue = default
 		)
 
@@ -152,9 +152,8 @@ object PreferenceHelper {
 		val settingsDao = db.settingsDao
 		if (settingsDao.hasGlobalSettings()) {
 			dataStore.edit {
-				if (!it.contains(this.KEY_LOG_IGNORED)) {
-					it[this.KEY_LOG_IGNORED] = DEFAULT_LOG_IGNORED_APPS.prefValue
-				}
+				it.initPref(KEY_LOG_IGNORED, DEFAULT_LOG_IGNORED.prefValue)
+				it.initPref(KEY_LOG_IGNORED_APPS, DEFAULT_LOG_IGNORED_APPS.prefValue)
 			}
 			return
 		}
@@ -210,6 +209,11 @@ object PreferenceHelper {
 			}
 		}
 		dataStore.edit { it[this.KEY_LOG_IGNORED] = DEFAULT_LOG_IGNORED_APPS.prefValue }
+	}
+
+	/** Initializes a preference with [default] if it hasn't been set yet. */
+	private fun <T> MutablePreferences.initPref(key: Preferences.Key<T>, default: T) {
+		if (!contains(key)) this[key] = default
 	}
 
 	fun exportBackup(uri: Uri) {

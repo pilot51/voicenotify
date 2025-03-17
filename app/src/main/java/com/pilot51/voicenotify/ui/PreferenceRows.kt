@@ -86,24 +86,22 @@ fun PreferenceRowCheckbox(
 	@StringRes titleRes: Int,
 	@StringRes summaryResOn: Int,
 	@StringRes summaryResOff: Int = summaryResOn,
-	initialValue: Boolean,
+	value: Boolean,
 	app: App? = null,
 	showRemove: Boolean = false,
 	onRemove: (() -> Unit)? = null,
 	onChange: (Boolean) -> Unit
 ) {
-	var prefValue by remember(initialValue) { mutableStateOf(initialValue) }
-	val summaryRes = if (prefValue) summaryResOn else summaryResOff
+	val summaryRes = if (value) summaryResOn else summaryResOff
 	Row(
 		modifier = Modifier
 			.fillMaxWidth()
 			.height(IntrinsicSize.Min)
 			.toggleable(
-				value = prefValue,
+				value = value,
 				role = Role.Checkbox,
 				onValueChange = {
-					prefValue = !prefValue
-					onChange(prefValue)
+					onChange(it)
 				}
 			),
 		verticalAlignment = Alignment.CenterVertically
@@ -116,9 +114,8 @@ fun PreferenceRowCheckbox(
 			onRemove = onRemove,
 			action = {
 				Checkbox(
-					checked = prefValue,
+					checked = value,
 					onCheckedChange = {
-						prefValue = it
 						onChange(it)
 					}
 				)
@@ -215,7 +212,7 @@ private fun PreferenceRowCheckboxPreview(
 			titleRes = R.string.ignore_groups,
 			summaryResOn = R.string.ignore_groups_summary_on,
 			summaryResOff = R.string.ignore_groups_summary_off,
-			initialValue = value,
+			value = value,
 			showRemove = value,
 			onChange = {}
 		)

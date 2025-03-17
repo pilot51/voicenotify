@@ -165,7 +165,7 @@ fun MainScreen(
 		PreferenceRowCheckbox(
 			titleRes = R.string.audio_focus,
 			summaryResOn = R.string.audio_focus_summary,
-			initialValue = settingsCombo.audioFocus!!,
+			value = settingsCombo.audioFocus!!,
 			app = configApp,
 			showRemove = !settings.isGlobal && settings.audioFocus != null,
 			onRemove = {
@@ -205,7 +205,7 @@ fun MainScreen(
 			titleRes = R.string.ignore_empty,
 			summaryResOn = R.string.ignore_empty_summary_on,
 			summaryResOff = R.string.ignore_empty_summary_off,
-			initialValue = settingsCombo.ignoreEmpty!!,
+			value = settingsCombo.ignoreEmpty!!,
 			app = configApp,
 			showRemove = !settings.isGlobal && settings.ignoreEmpty != null,
 			onRemove = {
@@ -218,7 +218,7 @@ fun MainScreen(
 			titleRes = R.string.ignore_groups,
 			summaryResOn = R.string.ignore_groups_summary_on,
 			summaryResOff = R.string.ignore_groups_summary_off,
-			initialValue = settingsCombo.ignoreGroups!!,
+			value = settingsCombo.ignoreGroups!!,
 			app = configApp,
 			showRemove = !settings.isGlobal && settings.ignoreGroups != null,
 			onRemove = {
