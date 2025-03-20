@@ -20,7 +20,11 @@ import android.net.Uri
 import android.os.Build
 import androidx.annotation.StringRes
 import androidx.datastore.core.DataStore
-import androidx.datastore.preferences.core.*
+import androidx.datastore.preferences.core.MutablePreferences
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.preference.PreferenceManager
@@ -35,6 +39,7 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_REPEAT
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_MAX_LENGTH
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_QUIET_TIME
+import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_EMOJIS
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_HEADSET_OFF
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_HEADSET_ON
 import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_OFF
@@ -46,10 +51,15 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.WhileSubscribed
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.io.*
+import java.io.BufferedInputStream
+import java.io.BufferedOutputStream
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
@@ -150,10 +160,13 @@ object PreferenceHelper {
 	 */
 	private suspend fun initSettings() {
 		val settingsDao = db.settingsDao
-		if (settingsDao.hasGlobalSettings()) {
+		settingsDao.getGlobalSettings().first()?.let {
 			dataStore.edit {
 				it.initPref(KEY_LOG_IGNORED, DEFAULT_LOG_IGNORED.prefValue)
 				it.initPref(KEY_LOG_IGNORED_APPS, DEFAULT_LOG_IGNORED_APPS.prefValue)
+			}
+			if (it.ttsSpeakEmojis == null) {
+				settingsDao.update(it.copy(ttsSpeakEmojis = DEFAULT_SPEAK_EMOJIS))
 			}
 			return
 		}
@@ -162,7 +175,7 @@ object PreferenceHelper {
 		val spFile = File(spDir, "$spName.xml")
 		if (spFile.exists()) {
 			val sp = PreferenceManager.getDefaultSharedPreferences(appContext)
-			settingsDao.insert(Settings(
+			settingsDao.insert(Settings.defaults.copy(
 				audioFocus = sp.getBoolean("audio_focus", DEFAULT_AUDIO_FOCUS),
 				requireStrings = sp.getString("require_strings", null),
 				ignoreStrings = sp.getString("ignore_strings", null),
@@ -208,7 +221,10 @@ object PreferenceHelper {
 				prefs[KEY_IS_SUSPENDED] = DEFAULT_IS_SUSPENDED
 			}
 		}
-		dataStore.edit { it[this.KEY_LOG_IGNORED] = DEFAULT_LOG_IGNORED_APPS.prefValue }
+		dataStore.edit {
+			it[KEY_LOG_IGNORED] = DEFAULT_LOG_IGNORED.prefValue
+			it[KEY_LOG_IGNORED_APPS] = DEFAULT_LOG_IGNORED_APPS.prefValue
+		}
 	}
 
 	/** Initializes a preference with [default] if it hasn't been set yet. */

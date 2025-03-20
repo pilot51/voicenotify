@@ -15,11 +15,26 @@
  */
 package com.pilot51.voicenotify.db
 
-import androidx.room.*
+import androidx.room.AutoMigration
+import androidx.room.Dao
+import androidx.room.Database
+import androidx.room.Delete
+import androidx.room.DeleteColumn
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.RewriteQueriesToDropUnusedColumns
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.Update
+import androidx.room.Upsert
 import androidx.room.migration.AutoMigrationSpec
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.map
 
 @Database(
 	version = 2,
@@ -84,9 +99,6 @@ abstract class AppDatabase : RoomDatabase() {
 
 		@Query("SELECT * FROM settings WHERE app_package = :pkg")
 		fun getAppSettings(pkg: String): Flow<Settings?>
-
-		@Query("SELECT EXISTS (SELECT * FROM settings WHERE app_package IS NULL)")
-		suspend fun hasGlobalSettings(): Boolean
 
 		@Query("SELECT app_package FROM settings WHERE app_package IS NOT NULL")
 		fun packagesWithOverride(): Flow<List<String>>
