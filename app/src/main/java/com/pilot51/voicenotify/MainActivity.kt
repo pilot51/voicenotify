@@ -24,7 +24,16 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.*
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -46,8 +55,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.ui.*
+import com.pilot51.voicenotify.prefs.db.App
+import com.pilot51.voicenotify.ui.AppListActions
+import com.pilot51.voicenotify.ui.AppListScreen
+import com.pilot51.voicenotify.ui.IPreferencesViewModel
+import com.pilot51.voicenotify.ui.MainScreen
+import com.pilot51.voicenotify.ui.PreferencesPreviewVM
+import com.pilot51.voicenotify.ui.PreferencesViewModel
+import com.pilot51.voicenotify.ui.TtsConfigScreen
+import com.pilot51.voicenotify.ui.VNPreview
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 

@@ -22,9 +22,9 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
-import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
-import com.pilot51.voicenotify.PreferenceHelper.getPrefStateFlow
+import com.pilot51.voicenotify.prefs.DataStoreManager.getPrefStateFlow
+import com.pilot51.voicenotify.prefs.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
+import com.pilot51.voicenotify.prefs.PreferenceHelper.KEY_SHAKE_THRESHOLD
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlin.math.abs

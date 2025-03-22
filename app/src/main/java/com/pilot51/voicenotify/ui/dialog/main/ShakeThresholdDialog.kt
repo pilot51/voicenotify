@@ -15,13 +15,19 @@
  */
 package com.pilot51.voicenotify.ui.dialog.main
 
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
-import com.pilot51.voicenotify.PreferenceHelper
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.Shake
+import com.pilot51.voicenotify.prefs.PreferenceHelper
 import com.pilot51.voicenotify.ui.IPreferencesViewModel
 import com.pilot51.voicenotify.ui.dialog.TextEditDialog
 import kotlinx.coroutines.Job

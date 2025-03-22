@@ -13,46 +13,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pilot51.voicenotify
+package com.pilot51.voicenotify.prefs
 
-import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.util.Log
 import androidx.annotation.StringRes
-import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
 import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.preference.PreferenceManager
-import com.pilot51.voicenotify.PreferenceHelper.LogIgnoredValue.entries
-import com.pilot51.voicenotify.VNApplication.Companion.appContext
-import com.pilot51.voicenotify.db.AppDatabase
-import com.pilot51.voicenotify.db.AppDatabase.Companion.db
-import com.pilot51.voicenotify.db.Settings
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_AUDIO_FOCUS
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_EMPTY
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_GROUPS
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_IGNORE_REPEAT
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_MAX_LENGTH
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_QUIET_TIME
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_EMOJIS
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_HEADSET_OFF
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_HEADSET_ON
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_OFF
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SCREEN_ON
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_SILENT_ON
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STREAM
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
+import com.pilot51.voicenotify.BuildConfig
+import com.pilot51.voicenotify.R
+import com.pilot51.voicenotify.VNApplication
+import com.pilot51.voicenotify.prefs.PreferenceHelper.LogIgnoredValue.entries
+import com.pilot51.voicenotify.prefs.db.AppDatabase
+import com.pilot51.voicenotify.prefs.db.Settings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import java.io.BufferedInputStream
@@ -65,6 +50,7 @@ import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 import kotlin.math.roundToInt
 
+@OptIn(ExperimentalCoroutinesApi::class)
 object PreferenceHelper {
 	private val TAG = PreferenceHelper::class.simpleName
 
@@ -88,12 +74,9 @@ object PreferenceHelper {
 	private val DEFAULT_LOG_IGNORED = LogIgnoredValue.SHOW
 	private val DEFAULT_LOG_IGNORED_APPS = LogIgnoredValue.SHOW
 
-	private const val DS_NAME = "prefs"
-	private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(DS_NAME)
-	private val dataStore = appContext.dataStore
 	val dataFiles get() = arrayOf(
-		appContext.getDatabasePath(AppDatabase.DB_NAME),
-		appContext.preferencesDataStoreFile(DS_NAME)
+		VNApplication.Companion.appContext.getDatabasePath(AppDatabase.Companion.DB_NAME),
+		VNApplication.Companion.appContext.preferencesDataStoreFile(DataStoreManager.DS_NAME)
 	)
 
 	val logIgnoredStateFlow = getLogIgnoredStateFlow(
@@ -112,33 +95,14 @@ object PreferenceHelper {
 		}
 	}
 
-	fun <T> getPrefFlow(key: Preferences.Key<T>, default: T) =
-		dataStore.data.map { it[key] ?: default }
-
-	fun <T> getPrefStateFlow(key: Preferences.Key<T>, default: T) =
-		getPrefFlow(key, default).stateIn(
-			scope = CoroutineScope(Dispatchers.IO),
-			started = SharingStarted.Eagerly,
-			initialValue = default
-		)
-
-	/** Sets the value of the preference for [key], or removes it if [newValue] is `null`. */
-	fun <T> setPref(key: Preferences.Key<T>, newValue: T?) {
-		CoroutineScope(Dispatchers.IO).launch {
-			dataStore.edit { pref ->
-				newValue?.let { pref[key] = it } ?: pref.remove(key)
-			}
-		}
-	}
-
 	private fun getLogIgnoredStateFlow(
 		key: Preferences.Key<Int>,
 		default: LogIgnoredValue
-	) = getPrefFlow(key, default.prefValue).map {
+	) = DataStoreManager.getPrefFlow(key, default.prefValue).mapLatest {
 		LogIgnoredValue.fromPrefValue(it)
 	}.stateIn(
 		scope = CoroutineScope(Dispatchers.IO),
-		started = SharingStarted.Eagerly,
+		started = SharingStarted.Companion.Eagerly,
 		initialValue = null
 	)
 
@@ -148,13 +112,13 @@ object PreferenceHelper {
 		when (setting.prefKey) {
 			KEY_LOG_IGNORED -> {
 				if (value < currentAppsValue || currentAllValue == currentAppsValue) {
-					setPref(KEY_LOG_IGNORED_APPS, value.prefValue)
+					DataStoreManager.setPref(KEY_LOG_IGNORED_APPS, value.prefValue)
 				}
-				setPref(setting.prefKey, value.prefValue)
+				DataStoreManager.setPref(setting.prefKey, value.prefValue)
 			}
 			KEY_LOG_IGNORED_APPS -> {
 				if (value <= currentAllValue) {
-					setPref(setting.prefKey, value.prefValue)
+					DataStoreManager.setPref(setting.prefKey, value.prefValue)
 				}
 			}
 		}
@@ -165,49 +129,50 @@ object PreferenceHelper {
 	 * with default values or migrated from shared preferences.
 	 */
 	private suspend fun initSettings() {
-		val settingsDao = db.settingsDao
+		val settingsDao = AppDatabase.Companion.db.settingsDao
 		settingsDao.getGlobalSettings().first()?.let {
-			dataStore.edit {
+			DataStoreManager.dataStore.edit {
 				it.initPref(KEY_LOG_IGNORED, DEFAULT_LOG_IGNORED.prefValue)
 				it.initPref(KEY_LOG_IGNORED_APPS, DEFAULT_LOG_IGNORED_APPS.prefValue)
 			}
 			if (it.ttsSpeakEmojis == null) {
-				settingsDao.update(it.copy(ttsSpeakEmojis = DEFAULT_SPEAK_EMOJIS))
+				settingsDao.update(it.copy(ttsSpeakEmojis = Settings.Companion.DEFAULT_SPEAK_EMOJIS))
 			}
 			return
 		}
-		val spDir = File(appContext.applicationInfo.dataDir, "shared_prefs")
+		val spDir = File(VNApplication.Companion.appContext.applicationInfo.dataDir, "shared_prefs")
 		val spName = "${BuildConfig.APPLICATION_ID}_preferences"
 		val spFile = File(spDir, "$spName.xml")
 		if (spFile.exists()) {
-			val sp = PreferenceManager.getDefaultSharedPreferences(appContext)
-			settingsDao.insert(Settings.defaults.copy(
-				audioFocus = sp.getBoolean("audio_focus", DEFAULT_AUDIO_FOCUS),
+			val sp = PreferenceManager.getDefaultSharedPreferences(VNApplication.Companion.appContext)
+			settingsDao.insert(
+				Settings.Companion.defaults.copy(
+				audioFocus = sp.getBoolean("audio_focus", Settings.Companion.DEFAULT_AUDIO_FOCUS),
 				requireStrings = sp.getString("require_strings", null),
 				ignoreStrings = sp.getString("ignore_strings", null),
-				ignoreEmpty = sp.getBoolean("ignore_empty", DEFAULT_IGNORE_EMPTY),
-				ignoreGroups = sp.getBoolean("ignore_groups", DEFAULT_IGNORE_GROUPS),
-				ignoreRepeat = sp.getString("ignore_repeat", DEFAULT_IGNORE_REPEAT.toString())
+				ignoreEmpty = sp.getBoolean("ignore_empty", Settings.Companion.DEFAULT_IGNORE_EMPTY),
+				ignoreGroups = sp.getBoolean("ignore_groups", Settings.Companion.DEFAULT_IGNORE_GROUPS),
+				ignoreRepeat = sp.getString("ignore_repeat", Settings.Companion.DEFAULT_IGNORE_REPEAT.toString())
 					?.toIntOrNull() ?: -1,
-				speakScreenOff = sp.getBoolean("speakScreenOff", DEFAULT_SPEAK_SCREEN_OFF),
-				speakScreenOn = sp.getBoolean("speakScreenOn", DEFAULT_SPEAK_SCREEN_ON),
-				speakHeadsetOff = sp.getBoolean("speakHeadsetOff", DEFAULT_SPEAK_HEADSET_OFF),
-				speakHeadsetOn = sp.getBoolean("speakHeadsetOn", DEFAULT_SPEAK_HEADSET_ON),
-				speakSilentOn = sp.getBoolean("speakSilentOn", DEFAULT_SPEAK_SILENT_ON),
-				quietStart = sp.getInt("quietStart", DEFAULT_QUIET_TIME),
-				quietEnd = sp.getInt("quietEnd", DEFAULT_QUIET_TIME),
-				ttsString = sp.getString("ttsString", DEFAULT_TTS_STRING),
+				speakScreenOff = sp.getBoolean("speakScreenOff", Settings.Companion.DEFAULT_SPEAK_SCREEN_OFF),
+				speakScreenOn = sp.getBoolean("speakScreenOn", Settings.Companion.DEFAULT_SPEAK_SCREEN_ON),
+				speakHeadsetOff = sp.getBoolean("speakHeadsetOff", Settings.Companion.DEFAULT_SPEAK_HEADSET_OFF),
+				speakHeadsetOn = sp.getBoolean("speakHeadsetOn", Settings.Companion.DEFAULT_SPEAK_HEADSET_ON),
+				speakSilentOn = sp.getBoolean("speakSilentOn", Settings.Companion.DEFAULT_SPEAK_SILENT_ON),
+				quietStart = sp.getInt("quietStart", Settings.Companion.DEFAULT_QUIET_TIME),
+				quietEnd = sp.getInt("quietEnd", Settings.Companion.DEFAULT_QUIET_TIME),
+				ttsString = sp.getString("ttsString", Settings.Companion.DEFAULT_TTS_STRING),
 				ttsTextReplace = sp.getString("ttsTextReplace", null),
 				ttsMaxLength = sp.getString("key_max_length", null)
-					?.toIntOrNull() ?: DEFAULT_MAX_LENGTH,
+					?.toIntOrNull() ?: Settings.Companion.DEFAULT_MAX_LENGTH,
 				ttsStream = sp.getString("ttsStream", null)
-					?.toIntOrNull() ?: DEFAULT_TTS_STREAM,
+					?.toIntOrNull() ?: Settings.Companion.DEFAULT_TTS_STREAM,
 				ttsDelay = sp.getString("ttsDelay", null)
 					?.toDoubleOrNull()?.roundToInt(),
 				ttsRepeat = sp.getString("tts_repeat", null)
 					?.toDoubleOrNull() ?: 0.0
 			))
-			dataStore.edit { prefs ->
+			DataStoreManager.dataStore.edit { prefs ->
 				sp.getString("shake_threshold", null)?.toDoubleOrNull()?.roundToInt()?.let {
 					prefs[KEY_SHAKE_THRESHOLD] = it
 				}
@@ -215,19 +180,19 @@ object PreferenceHelper {
 				prefs[KEY_IS_SUSPENDED] = sp.getBoolean("isSuspended", DEFAULT_IS_SUSPENDED)
 			}
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-				appContext.deleteSharedPreferences(spName)
+				VNApplication.Companion.appContext.deleteSharedPreferences(spName)
 			} else {
 				spFile.delete()
 			}
 		} else {
-			settingsDao.insert(Settings.defaults)
-			dataStore.edit { prefs ->
+			settingsDao.insert(Settings.Companion.defaults)
+			DataStoreManager.dataStore.edit { prefs ->
 				prefs[KEY_SHAKE_THRESHOLD] = DEFAULT_SHAKE_THRESHOLD
 				prefs[KEY_APP_DEFAULT_ENABLE] = DEFAULT_APP_DEFAULT_ENABLE
 				prefs[KEY_IS_SUSPENDED] = DEFAULT_IS_SUSPENDED
 			}
 		}
-		dataStore.edit {
+		DataStoreManager.dataStore.edit {
 			it[KEY_LOG_IGNORED] = DEFAULT_LOG_IGNORED.prefValue
 			it[KEY_LOG_IGNORED_APPS] = DEFAULT_LOG_IGNORED_APPS.prefValue
 		}
@@ -240,8 +205,9 @@ object PreferenceHelper {
 
 	fun exportBackup(uri: Uri) {
 		CoroutineScope(Dispatchers.IO).launch {
-			AppDatabase.closeDB()
-			appContext.contentResolver.openOutputStream(uri)?.use { outStream ->
+			AppDatabase.Companion.closeDB()
+			DataStoreManager.closeDataStore()
+			VNApplication.Companion.appContext.contentResolver.openOutputStream(uri)?.use { outStream ->
 				ZipOutputStream(BufferedOutputStream(outStream)).use { zipOut ->
 					dataFiles.forEach { file ->
 						BufferedInputStream(FileInputStream(file)).use { origin ->
@@ -257,14 +223,16 @@ object PreferenceHelper {
 					}
 				}
 			}
-			AppDatabase.openDB()
+			DataStoreManager.openDataStore()
+			AppDatabase.Companion.openDB()
 		}
 	}
 
 	fun importBackup(uri: Uri) {
 		CoroutineScope(Dispatchers.IO).launch {
-			AppDatabase.closeDB()
-			appContext.contentResolver.openInputStream(uri)?.use { inStream ->
+			AppDatabase.Companion.closeDB()
+			DataStoreManager.closeDataStore()
+			VNApplication.Companion.appContext.contentResolver.openInputStream(uri)?.use { inStream ->
 				ZipInputStream(BufferedInputStream(inStream)).use { zipIn ->
 					var entry = zipIn.nextEntry
 					while (entry != null) {
@@ -284,7 +252,8 @@ object PreferenceHelper {
 					}
 				}
 			}
-			AppDatabase.openDB()
+			DataStoreManager.openDataStore()
+			AppDatabase.Companion.openDB()
 		}
 	}
 

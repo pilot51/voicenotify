@@ -27,8 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.AppRepository
+import com.pilot51.voicenotify.prefs.db.App
+import com.pilot51.voicenotify.prefs.db.AppRepository
 import com.pilot51.voicenotify.ui.VNPreview
 
 @Composable

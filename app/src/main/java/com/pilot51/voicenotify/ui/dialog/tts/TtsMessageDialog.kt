@@ -20,7 +20,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.Settings
+import com.pilot51.voicenotify.prefs.db.Settings
 import com.pilot51.voicenotify.ui.IPreferencesViewModel
 import com.pilot51.voicenotify.ui.dialog.TextEditDialog
 

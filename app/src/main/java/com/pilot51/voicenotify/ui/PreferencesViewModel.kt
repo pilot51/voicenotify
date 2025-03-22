@@ -32,18 +32,19 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.pilot51.voicenotify.BuildConfig
 import com.pilot51.voicenotify.Constants.DEV_EMAIL
-import com.pilot51.voicenotify.PreferenceHelper
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
-import com.pilot51.voicenotify.PreferenceHelper.KEY_SHAKE_THRESHOLD
-import com.pilot51.voicenotify.PreferenceHelper.dataFiles
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.VNApplication.Companion.logFile
-import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.AppDatabase
-import com.pilot51.voicenotify.db.AppDatabase.Companion.db
-import com.pilot51.voicenotify.db.AppDatabase.Companion.getAppSettingsFlow
-import com.pilot51.voicenotify.db.AppDatabase.Companion.globalSettingsFlow
-import com.pilot51.voicenotify.db.Settings
+import com.pilot51.voicenotify.prefs.DataStoreManager.getPrefStateFlow
+import com.pilot51.voicenotify.prefs.DataStoreManager.setPref
+import com.pilot51.voicenotify.prefs.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
+import com.pilot51.voicenotify.prefs.PreferenceHelper.KEY_SHAKE_THRESHOLD
+import com.pilot51.voicenotify.prefs.PreferenceHelper.dataFiles
+import com.pilot51.voicenotify.prefs.db.App
+import com.pilot51.voicenotify.prefs.db.AppDatabase
+import com.pilot51.voicenotify.prefs.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.prefs.db.AppDatabase.Companion.getAppSettingsFlow
+import com.pilot51.voicenotify.prefs.db.AppDatabase.Companion.globalSettingsFlow
+import com.pilot51.voicenotify.prefs.db.Settings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -88,12 +89,12 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 		return if (isPreview) {
 			remember { mutableIntStateOf(DEFAULT_SHAKE_THRESHOLD) }
 		} else {
-			PreferenceHelper.getPrefStateFlow(KEY_SHAKE_THRESHOLD, 0).collectAsState()
+			getPrefStateFlow(KEY_SHAKE_THRESHOLD, 0).collectAsState()
 		}
 	}
 
 	override fun setShakeThreshold(threshold: Int?) {
-		PreferenceHelper.setPref(KEY_SHAKE_THRESHOLD, threshold)
+		setPref(KEY_SHAKE_THRESHOLD, threshold)
 	}
 
 	override fun getApp(appPkg: String) = runBlocking(Dispatchers.IO) {

@@ -13,22 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pilot51.voicenotify.db
+package com.pilot51.voicenotify.prefs.db
 
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.NameNotFoundException
 import android.os.Build
 import android.util.Log
 import android.widget.Toast
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_APP_DEFAULT_ENABLE
-import com.pilot51.voicenotify.PreferenceHelper.KEY_APP_DEFAULT_ENABLE
-import com.pilot51.voicenotify.PreferenceHelper.getPrefStateFlow
-import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
-import com.pilot51.voicenotify.db.AppDatabase.Companion.appDaoFlow
-import com.pilot51.voicenotify.db.AppDatabase.Companion.db
-import com.pilot51.voicenotify.db.AppRepository.appDefaultEnable
+import com.pilot51.voicenotify.prefs.DataStoreManager.getPrefStateFlow
+import com.pilot51.voicenotify.prefs.DataStoreManager.setPref
+import com.pilot51.voicenotify.prefs.PreferenceHelper.DEFAULT_APP_DEFAULT_ENABLE
+import com.pilot51.voicenotify.prefs.PreferenceHelper.KEY_APP_DEFAULT_ENABLE
+import com.pilot51.voicenotify.prefs.db.AppDatabase.Companion.appDaoFlow
+import com.pilot51.voicenotify.prefs.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.prefs.db.AppRepository.appDefaultEnable
 import com.pilot51.voicenotify.withTimeoutInterruptible
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

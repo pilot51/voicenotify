@@ -17,7 +17,11 @@ package com.pilot51.voicenotify.ui.dialog.main.log
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
@@ -41,9 +45,9 @@ import androidx.compose.ui.unit.sp
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.NotificationInfo
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.AppRepository
-import com.pilot51.voicenotify.db.Settings
+import com.pilot51.voicenotify.prefs.db.App
+import com.pilot51.voicenotify.prefs.db.AppRepository
+import com.pilot51.voicenotify.prefs.db.Settings
 import com.pilot51.voicenotify.ui.VNPreview
 import com.pilot51.voicenotify.ui.previewNotification
 

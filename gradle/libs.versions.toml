@@ -10,8 +10,8 @@ androidxGlance = "1.1.1"
 androidxNavigation = "2.8.9"
 androidxPreference = "1.2.1"
 autostarter = "1.1.0"
-kotlin = "2.1.10"
-ksp = "2.1.0-1.0.29"
+kotlin = "2.1.20"
+ksp = "2.1.20-1.0.31"
 room = "2.6.1"
 
 [libraries]

@@ -24,9 +24,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.core.app.NotificationCompat
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
-import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.Settings
-import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_SPEAK_EMOJIS
+import com.pilot51.voicenotify.prefs.db.App
+import com.pilot51.voicenotify.prefs.db.Settings
+import com.pilot51.voicenotify.prefs.db.Settings.Companion.DEFAULT_SPEAK_EMOJIS
 import com.pilot51.voicenotify.ui.PreferencesViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.map

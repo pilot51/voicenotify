@@ -44,22 +44,30 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import com.pilot51.voicenotify.NotifyList.notifyListMutex
 import com.pilot51.voicenotify.PermissionHelper.isPermissionGranted
-import com.pilot51.voicenotify.PreferenceHelper.DEFAULT_IS_SUSPENDED
-import com.pilot51.voicenotify.PreferenceHelper.KEY_IS_SUSPENDED
-import com.pilot51.voicenotify.PreferenceHelper.getPrefStateFlow
-import com.pilot51.voicenotify.PreferenceHelper.setPref
-import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.AppDatabase
-import com.pilot51.voicenotify.db.AppDatabase.Companion.db
-import com.pilot51.voicenotify.db.AppRepository
-import com.pilot51.voicenotify.db.Settings
-import kotlinx.coroutines.*
+import com.pilot51.voicenotify.prefs.DataStoreManager.getPrefStateFlow
+import com.pilot51.voicenotify.prefs.DataStoreManager.setPref
+import com.pilot51.voicenotify.prefs.PreferenceHelper.DEFAULT_IS_SUSPENDED
+import com.pilot51.voicenotify.prefs.PreferenceHelper.KEY_IS_SUSPENDED
+import com.pilot51.voicenotify.prefs.db.App
+import com.pilot51.voicenotify.prefs.db.AppDatabase
+import com.pilot51.voicenotify.prefs.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.prefs.db.AppRepository
+import com.pilot51.voicenotify.prefs.db.Settings
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.TimeoutCancellationException
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.withTimeout
 import java.time.Duration
 import java.util.*
 import java.util.concurrent.Executors
@@ -134,7 +142,7 @@ class Service : NotificationListenerService() {
 				withTimeout(2.seconds) {
 					isAwaitingTtsInit.first { !it }
 				}
-			} catch (e: TimeoutCancellationException) {
+			} catch (_: TimeoutCancellationException) {
 				Log.w(TAG, "Timed out waiting for prior TTS init to complete")
 			}
 			onInit(latestTtsStatus == TextToSpeech.SUCCESS)

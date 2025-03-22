@@ -20,10 +20,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.db.AppDatabase.Companion.db
-import com.pilot51.voicenotify.db.AppDatabase.Companion.settingsDaoFlow
-import com.pilot51.voicenotify.db.AppRepository
+import com.pilot51.voicenotify.prefs.db.App
+import com.pilot51.voicenotify.prefs.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.prefs.db.AppDatabase.Companion.settingsDaoFlow
+import com.pilot51.voicenotify.prefs.db.AppRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -30,7 +30,13 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -43,13 +49,26 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberPermissionState
 import com.judemanutd.autostarter.AutoStartPermissionHelper
-import com.pilot51.voicenotify.*
+import com.pilot51.voicenotify.AppTheme
+import com.pilot51.voicenotify.NotifyList
+import com.pilot51.voicenotify.PermissionHelper
 import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
 import com.pilot51.voicenotify.PermissionHelper.requestPermission
-import com.pilot51.voicenotify.PreferenceHelper.KEY_DISABLE_AUTOSTART_MSG
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.App
-import com.pilot51.voicenotify.ui.dialog.main.*
+import com.pilot51.voicenotify.Service
+import com.pilot51.voicenotify.prefs.DataStoreManager.getPrefFlow
+import com.pilot51.voicenotify.prefs.DataStoreManager.setPref
+import com.pilot51.voicenotify.prefs.PreferenceHelper.KEY_DISABLE_AUTOSTART_MSG
+import com.pilot51.voicenotify.prefs.db.App
+import com.pilot51.voicenotify.ui.dialog.main.BackupDialog
+import com.pilot51.voicenotify.ui.dialog.main.DeviceStatesDialog
+import com.pilot51.voicenotify.ui.dialog.main.IgnoreRepeatsDialog
+import com.pilot51.voicenotify.ui.dialog.main.IgnoreTextDialog
+import com.pilot51.voicenotify.ui.dialog.main.QuietTimeDialog
+import com.pilot51.voicenotify.ui.dialog.main.QuietTimeMode
+import com.pilot51.voicenotify.ui.dialog.main.RequireTextDialog
+import com.pilot51.voicenotify.ui.dialog.main.ShakeThresholdDialog
+import com.pilot51.voicenotify.ui.dialog.main.TestNotificationDialog
 import com.pilot51.voicenotify.ui.dialog.main.log.NotificationLogDialog
 import com.pilot51.voicenotify.ui.dialog.main.support.SupportDialog
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -105,7 +124,7 @@ fun MainScreen(
 	var showLog by remember { mutableStateOf(false) }
 	var showBackupRestore by remember { mutableStateOf(false) }
 	var showSupport by remember { mutableStateOf(false) }
-	val disableAutostartMsg by PreferenceHelper.getPrefFlow(KEY_DISABLE_AUTOSTART_MSG, false).collectAsState(null)
+	val disableAutostartMsg by getPrefFlow(KEY_DISABLE_AUTOSTART_MSG, false).collectAsState(null)
 	var showAutostartDialog by remember(disableAutostartMsg?.run { true }) {
 		mutableStateOf(disableAutostartMsg == false && !isRunning &&
 			autoStartHelper.isAutoStartPermissionAvailable(context))
@@ -400,7 +419,7 @@ fun MainScreen(
 						Checkbox(
 							checked = disableAutostartMsg!!,
 							onCheckedChange = {
-								PreferenceHelper.setPref(KEY_DISABLE_AUTOSTART_MSG, it)
+								setPref(KEY_DISABLE_AUTOSTART_MSG, it)
 							}
 						)
 						Text(stringResource(R.string.dont_show_again))

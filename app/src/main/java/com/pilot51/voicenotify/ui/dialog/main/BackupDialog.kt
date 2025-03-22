@@ -27,8 +27,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.BuildConfig
-import com.pilot51.voicenotify.PreferenceHelper
 import com.pilot51.voicenotify.R
+import com.pilot51.voicenotify.prefs.PreferenceHelper
 import com.pilot51.voicenotify.ui.VNPreview
 
 @Composable

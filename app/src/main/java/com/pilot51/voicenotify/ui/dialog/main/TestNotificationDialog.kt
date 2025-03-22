@@ -27,7 +27,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationCompat
 import com.pilot51.voicenotify.MainActivity
 import com.pilot51.voicenotify.R
-import com.pilot51.voicenotify.db.AppRepository
+import com.pilot51.voicenotify.prefs.db.AppRepository
 import com.pilot51.voicenotify.ui.dialog.TextEditDialog
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

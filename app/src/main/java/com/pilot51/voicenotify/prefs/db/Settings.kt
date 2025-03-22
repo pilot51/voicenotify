@@ -13,10 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pilot51.voicenotify.db
+package com.pilot51.voicenotify.prefs.db
 
 import android.media.AudioManager
-import androidx.room.*
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.ForeignKey
+import androidx.room.Ignore
+import androidx.room.Index
+import androidx.room.PrimaryKey
 import com.pilot51.voicenotify.NotificationInfo.Companion.TTS_APP_LABEL
 import com.pilot51.voicenotify.NotificationInfo.Companion.TTS_CONTENT_TEXT
 import com.pilot51.voicenotify.NotificationInfo.Companion.TTS_CONTENT_TITLE

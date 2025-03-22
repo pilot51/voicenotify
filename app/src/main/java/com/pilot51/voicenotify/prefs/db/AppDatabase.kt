@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.pilot51.voicenotify.db
+package com.pilot51.voicenotify.prefs.db
 
 import androidx.room.AutoMigration
 import androidx.room.Dao

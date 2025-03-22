@@ -16,7 +16,8 @@
 package com.pilot51.voicenotify
 
 import androidx.compose.runtime.mutableStateListOf
-import com.pilot51.voicenotify.PreferenceHelper.LogIgnoredValue.NO_LOG
+import com.pilot51.voicenotify.prefs.PreferenceHelper
+import com.pilot51.voicenotify.prefs.PreferenceHelper.LogIgnoredValue.NO_LOG
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
