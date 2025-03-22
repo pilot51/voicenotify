@@ -50,7 +50,6 @@ import com.pilot51.voicenotify.db.Settings.Companion.DEFAULT_TTS_STRING
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.WhileSubscribed
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -64,7 +63,6 @@ import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 import kotlin.math.roundToInt
-import kotlin.time.Duration.Companion.seconds
 
 object PreferenceHelper {
 	val KEY_DISABLE_AUTOSTART_MSG = booleanPreferencesKey("disable_autostart_msg")
@@ -95,21 +93,15 @@ object PreferenceHelper {
 		appContext.preferencesDataStoreFile(DS_NAME)
 	)
 
-	val logIgnoredStateFlow = getPrefFlow(KEY_LOG_IGNORED, DEFAULT_LOG_IGNORED.prefValue)
-		.map { LogIgnoredValue.fromPrefValue(it) }
-		.stateIn(
-			scope = CoroutineScope(Dispatchers.IO),
-			started = SharingStarted.WhileSubscribed(5.seconds),
-			initialValue = null
-		)
+	val logIgnoredStateFlow = getLogIgnoredStateFlow(
+		key = KEY_LOG_IGNORED,
+		default = DEFAULT_LOG_IGNORED
+	)
 
-	val logIgnoredAppsStateFlow = getPrefFlow(KEY_LOG_IGNORED_APPS, DEFAULT_LOG_IGNORED_APPS.prefValue)
-		.map { LogIgnoredValue.fromPrefValue(it) }
-		.stateIn(
-			scope = CoroutineScope(Dispatchers.IO),
-			started = SharingStarted.WhileSubscribed(5.seconds),
-			initialValue = null
-		)
+	val logIgnoredAppsStateFlow = getLogIgnoredStateFlow(
+		key = KEY_LOG_IGNORED_APPS,
+		default = DEFAULT_LOG_IGNORED_APPS
+	)
 
 	init {
 		CoroutineScope(Dispatchers.IO).launch {
@@ -123,7 +115,7 @@ object PreferenceHelper {
 	fun <T> getPrefStateFlow(key: Preferences.Key<T>, default: T) =
 		getPrefFlow(key, default).stateIn(
 			scope = CoroutineScope(Dispatchers.IO),
-			started = SharingStarted.WhileSubscribed(5.seconds),
+			started = SharingStarted.Eagerly,
 			initialValue = default
 		)
 
@@ -135,6 +127,17 @@ object PreferenceHelper {
 			}
 		}
 	}
+
+	private fun getLogIgnoredStateFlow(
+		key: Preferences.Key<Int>,
+		default: LogIgnoredValue
+	) = getPrefFlow(key, default.prefValue).map {
+		LogIgnoredValue.fromPrefValue(it)
+	}.stateIn(
+		scope = CoroutineScope(Dispatchers.IO),
+		started = SharingStarted.Eagerly,
+		initialValue = null
+	)
 
 	fun setLogIgnored(setting: LogIgnoredSetting, value: LogIgnoredValue) {
 		val currentAllValue = logIgnoredStateFlow.value!!
