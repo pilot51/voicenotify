@@ -18,6 +18,7 @@ package com.pilot51.voicenotify
 import android.content.Context
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import androidx.annotation.StringRes
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.MutablePreferences
@@ -65,6 +66,8 @@ import java.util.zip.ZipOutputStream
 import kotlin.math.roundToInt
 
 object PreferenceHelper {
+	private val TAG = PreferenceHelper::class.simpleName
+
 	val KEY_DISABLE_AUTOSTART_MSG = booleanPreferencesKey("disable_autostart_msg")
 
 	// Main
@@ -237,7 +240,7 @@ object PreferenceHelper {
 
 	fun exportBackup(uri: Uri) {
 		CoroutineScope(Dispatchers.IO).launch {
-			db.close()
+			AppDatabase.closeDB()
 			appContext.contentResolver.openOutputStream(uri)?.use { outStream ->
 				ZipOutputStream(BufferedOutputStream(outStream)).use { zipOut ->
 					dataFiles.forEach { file ->
@@ -250,35 +253,38 @@ object PreferenceHelper {
 								zipOut.write(buffer, 0, length)
 							}
 						}
+						Log.d(TAG, "Backed up file: ${file.name}")
 					}
 				}
 			}
-			AppDatabase.resetInstance()
+			AppDatabase.openDB()
 		}
 	}
 
 	fun importBackup(uri: Uri) {
 		CoroutineScope(Dispatchers.IO).launch {
-			db.close()
+			AppDatabase.closeDB()
 			appContext.contentResolver.openInputStream(uri)?.use { inStream ->
 				ZipInputStream(BufferedInputStream(inStream)).use { zipIn ->
 					var entry = zipIn.nextEntry
 					while (entry != null) {
-						val outFile = dataFiles.find { it.name == entry.name } ?: continue
-						FileOutputStream(outFile).use { fos ->
-							val buffer = ByteArray(1024)
-							var length: Int
-							while (zipIn.read(buffer).also { length = it } > 0) {
-								fos.write(buffer, 0, length)
+						dataFiles.find { it.name == entry.name }?.let { outFile ->
+							FileOutputStream(outFile).use { fos ->
+								val buffer = ByteArray(1024)
+								var length: Int
+								while (zipIn.read(buffer).also { length = it } > 0) {
+									fos.write(buffer, 0, length)
+								}
+								fos.flush()
 							}
-							fos.flush()
-						}
+							Log.d(TAG, "Restored file: ${entry.name}")
+						} ?: Log.w(TAG, "Skipping unexpected file in backup archive: ${entry.name}")
 						zipIn.closeEntry()
 						entry = zipIn.nextEntry
 					}
 				}
 			}
-			AppDatabase.resetInstance()
+			AppDatabase.openDB()
 		}
 	}
 

@@ -33,8 +33,13 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapMerge
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.seconds
 
 @Database(
 	version = 2,
@@ -110,20 +115,29 @@ abstract class AppDatabase : RoomDatabase() {
 	@DeleteColumn(tableName = "apps", columnName = "_id")
 	class Migration1To2 : AutoMigrationSpec
 
+	@OptIn(ExperimentalCoroutinesApi::class)
 	companion object {
 		const val DB_NAME = "apps.db"
-		private val _db = MutableStateFlow(buildDB())
-		val db: AppDatabase get() = _db.value
-		@OptIn(ExperimentalCoroutinesApi::class)
-		val globalSettingsFlow = _db.flatMapMerge { it.settingsDao.getGlobalSettings().filterNotNull() }
+		private val _db = MutableStateFlow<AppDatabase?>(buildDB())
+		private val dbFlow = _db.filterNotNull()
+		val db get() = _db.value ?: runBlocking { withTimeoutOrNull(1.seconds) { dbFlow.first() } }!!
+		val appDaoFlow = dbFlow.mapLatest { it.appDao }
+		val settingsDaoFlow = dbFlow.mapLatest { it.settingsDao }
+		val globalSettingsFlow = settingsDaoFlow.flatMapLatest { it.getGlobalSettings().filterNotNull() }
 
 		private fun buildDB() = Room.databaseBuilder(appContext, AppDatabase::class.java, DB_NAME).build()
 
-		fun resetInstance() { _db.value = buildDB() }
+		fun openDB() { _db.value = buildDB() }
 
-		@OptIn(ExperimentalCoroutinesApi::class)
-		fun getAppSettingsFlow(app: App) = _db.flatMapMerge { db ->
-			db.settingsDao.getAppSettings(app.packageName).map {
+		fun closeDB() {
+			db.run {
+				_db.value = null
+				close()
+			}
+		}
+
+		fun getAppSettingsFlow(app: App) = settingsDaoFlow.flatMapLatest { dao ->
+			dao.getAppSettings(app.packageName).map {
 				it ?: Settings(appPackage = app.packageName)
 			}
 		}

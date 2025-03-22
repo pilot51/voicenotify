@@ -21,7 +21,12 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -39,9 +44,13 @@ import com.pilot51.voicenotify.db.AppDatabase.Companion.db
 import com.pilot51.voicenotify.db.AppDatabase.Companion.getAppSettingsFlow
 import com.pilot51.voicenotify.db.AppDatabase.Companion.globalSettingsFlow
 import com.pilot51.voicenotify.db.Settings
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 	override val configuringAppState = MutableStateFlow<App?>(null)
@@ -268,7 +277,7 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 						} catch (e: IllegalArgumentException) {
 							e.printStackTrace()
 						}
-						AppDatabase.resetInstance()
+						AppDatabase.openDB()
 						try {
 							uris.add(FileProvider.getUriForFile(context, auth, dsFile))
 						} catch (e: IllegalArgumentException) {

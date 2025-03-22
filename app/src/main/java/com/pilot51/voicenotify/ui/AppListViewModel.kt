@@ -22,14 +22,20 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.pilot51.voicenotify.db.App
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.db.AppDatabase.Companion.settingsDaoFlow
 import com.pilot51.voicenotify.db.AppRepository
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.WhileSubscribed
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
 class AppListViewModel(application: Application) : AndroidViewModel(application) {
-	private val settingsDao = db.settingsDao
 	val searchQuery = MutableStateFlow<String?>(null)
 	val filteredApps = combine(AppRepository.appsFlow, searchQuery) { apps, search ->
 		if (search.isNullOrEmpty()) apps else {
@@ -44,8 +50,9 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 		started = SharingStarted.WhileSubscribed(5.seconds),
 		initialValue = emptyList()
 	)
+	@OptIn(ExperimentalCoroutinesApi::class)
 	val packagesWithOverride @Composable get() =
-		settingsDao.packagesWithOverride().collectAsState(listOf())
+		settingsDaoFlow.flatMapLatest { it.packagesWithOverride() }.collectAsState(listOf())
 	val isLoading = AppRepository.isUpdating
 
 	init {
@@ -58,7 +65,7 @@ class AppListViewModel(application: Application) : AndroidViewModel(application)
 
 	fun removeOverrides(app: App) {
 		viewModelScope.launch(Dispatchers.IO) {
-			settingsDao.deleteByPackage(app.packageName)
+			db.settingsDao.deleteByPackage(app.packageName)
 		}
 	}
 

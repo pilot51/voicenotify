@@ -26,16 +26,21 @@ import com.pilot51.voicenotify.PreferenceHelper.getPrefStateFlow
 import com.pilot51.voicenotify.PreferenceHelper.setPref
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
+import com.pilot51.voicenotify.db.AppDatabase.Companion.appDaoFlow
 import com.pilot51.voicenotify.db.AppDatabase.Companion.db
+import com.pilot51.voicenotify.db.AppRepository.appDefaultEnable
 import com.pilot51.voicenotify.withTimeoutInterruptible
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.seconds
 
+@OptIn(ExperimentalCoroutinesApi::class)
 object AppRepository {
 	private val TAG = AppRepository::class.simpleName
 	private val ioScope = CoroutineScope(Dispatchers.IO)
@@ -46,7 +51,7 @@ object AppRepository {
 		set(value) {
 			setPref(KEY_APP_DEFAULT_ENABLE, value)
 		}
-	val appsFlow = db.appDao.getAllFlow()
+	val appsFlow = appDaoFlow.flatMapLatest { it.getAllFlow() }
 	val isUpdating = MutableStateFlow(false)
 
 	/** Updates the app list from the system. */
@@ -64,7 +69,7 @@ object AppRepository {
 						packMan.getInstalledApplications(0)
 					}
 				}
-			} catch (e: TimeoutCancellationException) {
+			} catch (_: TimeoutCancellationException) {
 				Log.e(TAG, "Timed out fetching list of installed apps")
 				return@launch
 			}
@@ -85,7 +90,7 @@ object AppRepository {
 					withTimeoutInterruptible(1.seconds) {
 						appInfo.loadLabel(packMan)
 					}.toString()
-				} catch (e: TimeoutCancellationException) {
+				} catch (_: TimeoutCancellationException) {
 					Log.e(TAG, "Timed out fetching app label for package ${appInfo.packageName}")
 					continue
 				}
@@ -120,10 +125,10 @@ object AppRepository {
 					loadLabel(packMan).toString()
 				}
 			}
-		} catch (e: NameNotFoundException) {
+		} catch (_: NameNotFoundException) {
 			Log.w(TAG, "App not found for package $pkg")
 			return null
-		} catch (e: TimeoutCancellationException) {
+		} catch (_: TimeoutCancellationException) {
 			Log.e(TAG, "Timed out fetching app info/label for package $pkg")
 			return null
 		}
@@ -154,7 +159,7 @@ object AppRepository {
 	 * @return A flow of the enabled state of [app] in the database,
 	 * useful in case [App.isEnabled] is stale.
 	 */
-	fun isEnabledFlow(app: App) = db.appDao.isEnabled(app.packageName)
+	fun isEnabledFlow(app: App) = appDaoFlow.flatMapLatest { it.isEnabled(app.packageName) }
 
 	/**
 	 * Sets the enabled state of all apps as well as [appDefaultEnable].
