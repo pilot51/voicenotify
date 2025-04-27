@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Уведомления голосом</string>
+    <string name="app_name">Голосовые уведомления</string>
     <!-- Used by multiple files -->
     <string name="app_is_ignored">%s игнорировано</string>
     <string name="app_is_not_ignored">%s не игнорированно</string>
-    <string name="service_running">Служба Уведомлений Голосом работает</string>
-    <string name="service_suspended">Служба Уведомлений Голосом приостановлена</string>
+    <string name="service_running">Служба Голосовых уведомлений работает</string>
+    <string name="service_suspended">Служба Голосовых уведомлений приостановлена</string>
     <!-- xml/preferences.xml -->
     <string name="app_list">Список приложений</string>
     <string name="app_list_summary">Выберете приложения чтобы включить и переопределить настройки по приложению</string>
@@ -66,8 +66,7 @@
     <string name="quiet_end_summary">Не читать уведомления до заданного времени.
 \nДля отключения опции введите время начала.</string>
     <string name="test_summary">Произнести тестовое уведомление (с задержкой 5 сек), чтобы проверить настройки</string>
-    <string name="test_ignored">\'Уведомления голосом\' игнорируется в Списке приложений.
-\nТест будет запущен, но уведомление не будет прочитано.</string>
+    <string name="test_ignored">Голосовые уведомления игнорируется в списке приложений.\nТест будет запущен, но уведомление не будет озвучено.</string>
     <string name="notify_log_summary">Показать %d последних уведомлений.
 \nОтображает время, имя приложения и причины игнорирования.</string>
     <string name="support_summary">Оценить/оставить комментарий, написать разработчику, чаты сообщества, переводы, исходный код, сервис отслеживания ошибок, политика конфиденциальности</string>
@@ -78,9 +77,8 @@
     <string name="notify_log">Лог уведомлений</string>
     <string name="support">Помощь. Поддержать приложение</string>
     <!-- MainActivity -->
-    <string name="service_disabled">Служба Уведомлений Голосом отключена</string>
-    <string name="status_summary_suspended">Нажмите для включения Уведомлений Голосом.
-\nНажмите и удерживайте, чтобы открыть настройки доступа к уведомлениям Андроид и отключить сервис.</string>
+    <string name="service_disabled">Служба Голосовых уведомлений отключена</string>
+    <string name="status_summary_suspended">Нажмите для включения «Голосовых уведомлений».\nНажмите и удерживайте, чтобы открыть настройки доступа к уведомлениям Андроид и отключить службу.</string>
     <string name="support_rate">Оценить, оставить отзыв</string>
     <string name="support_email">Написать разработчику</string>
     <string name="support_translations">Переводы</string>
@@ -109,7 +107,7 @@
     <string name="reason_headset_off">Гарнитура выключена</string>
     <string name="reason_headset_on">Гарнитура включена</string>
     <string name="reason_shake">Чтение приостановлено встряской</string>
-    <string name="reason_suspended">Уведомления Голосом приостановлены</string>
+    <string name="reason_suspended">Голосовые уведомления приостановлены</string>
     <string name="back">Назад</string>
     <string name="close">Закрыть</string>
     <string name="tts_text_replace_summary">Текст для замены. Например, для исправления произношения</string>
@@ -133,18 +131,15 @@
     <string name="ignore_groups">Игнорировать Групповые Сообщения</string>
     <string name="support_privacy">Политика конфиденциальности</string>
     <string name="error_market">Ошибка: не установлен Google Play Store.</string>
-    <string name="permission_rationale_read_phone_state">Разрешение на Телефонные звонки требуется, чтобы Приложение не разговаривало во время звонка.</string>
+    <string name="permission_rationale_read_phone_state">Разрешение на Телефонные звонки требуется, чтобы Приложение не говарило во время звонка.</string>
     <string name="reason_service_stopped">Служба остановлена</string>
-    <string name="tts_text_replace_dialog">Замените текст, который будет произноситься, что позволит вам настроить способ произнесения слов Text-To-Speech или заменить текст по любой другой причине. \n \nТекст для замены нечувствителен к регистру и применяется после форматирования, установленного в сообщении TTS, включая пунктуацию.</string>
+    <string name="tts_text_replace_dialog">Замена текста для произношения, что позволит вам изменить способ произнесения слов синтеза речи или заменить текст на любой другой. \n \nТекст для замены нечувствителен к регистру и применяется последовательно сверху вниз, после форматирования и перед удалением эмоджей.</string>
     <string name="replacement_text">Заменить на</string>
     <string name="reason_string_required">Отсутствует обязательный текст</string>
     <string name="max_length_dialog_msg">Максимальная длина сообщения для произнесения. \nСообщения большего размера будут обрезаны.\n\nBlank or 0 for unlimited.\nAndroid TTS has a separate length limit (%d) that always applies.</string>
-    <string name="status_summary_notification_access_enabled">Нажмите, чтобы приостановить Уведомления голосом.
-\nНажмите и удерживайте, чтобы открыть настройки доступа к уведомлениям Андроид и отключить сервис.</string>
+    <string name="status_summary_notification_access_enabled">Нажмите, чтобы приостановить Голосовые уведомления.\nНажмите и удерживайте, чтобы открыть настройки доступа к уведомлениям Андроид и отключить службу.</string>
     <string name="reason_call">Активный телефонный вызов</string>
-    <string name="reason_tts_failed">Сбой TTS. Попытка перезапуска и повтора.
-\nЭтот текст должен быть желтым, если повторная попытка успешна, или красным, если нет.
-\nПопробуйте перезапустить службу Приложения, если уведомления не будут произнесены.</string>
+    <string name="reason_tts_failed">Сбой синтеза речи. Попытка перезапуска и повтора.\nЭтот текст должен быть жёлтым, если повторная попытка успешна, или красным, если нет. \nПопробуйте перезапустить службу приложения «Голосовые уведомления», если уведомления не будут произнесены.</string>
     <string name="reason_tts_restarted">TTS перезапущена в то время, как сообщение было в очереди или произносилось. Поставлено в очередь повторно.</string>
     <string name="dont_show_again">Не показывать снова</string>
     <string name="notification_details">Подробности уведомления</string>
@@ -175,4 +170,43 @@
     <string name="remove_override">Удалить переопределение</string>
     <string name="remove_app_overrides">Удалить все переопределения приложений</string>
     <string name="remove_app_overrides_confirm">Удалить все переопределения для %s?</string>
+    <string name="notify_log_settings">Настройки журнала уведомлений</string>
+    <string name="show_ignored">Показать игнорированные %s</string>
+    <string name="hide_ignored">Скрыть игнорированные %s</string>
+    <string name="do_not_log_ignored">Не журналировать игнорированные %s</string>
+    <string name="support_email_subtext">Общие отзывы или отправка отладочных файлов</string>
+    <string name="support_email_dialog_title">Выберите вложения</string>
+    <string name="debug_log">Журнал отладки</string>
+    <string name="backup_settings">Настройки резервного копирования</string>
+    <string name="restore_settings">Восстановить настройки</string>
+    <string name="backup_restore_summary">Резервное копирование или восстановление настроек Голосовых уведомлений</string>
+    <string name="test_big_content_summary">Это большая сводка содержимого</string>
+    <string name="test_text_lines">Это строка текста.\nЭто еще одна строка текста.</string>
+    <string name="test_big_content_text">Это большой текст содержимого.</string>
+    <string name="big_content_title">Название большого содержимого</string>
+    <string name="big_content_text">Текст большого содержимого</string>
+    <string name="big_content_summary">Сводка большого содержимого</string>
+    <string name="remove_override_confirm">Убрать %1$s переопределение для %2$s?</string>
+    <string name="autostart_message_direct_failed">Не удалось открыть соответствующую страницу настроек</string>
+    <string name="support_rate_subtext">Просмотр приложения в Play Store</string>
+    <string name="support_discord">Discord</string>
+    <string name="support_matrix">Matrix</string>
+    <string name="support_chat_subtext">Чат обсуждения, можно быстрее получить ответ от разработчиков</string>
+    <string name="view_debug_log_failed">Невозможно прочитать журнал отладки</string>
+    <string name="support_translations_subtext">Переводы на Weblate.org</string>
+    <string name="invalid_regex">Неправильное регулярное выражение</string>
+    <string name="tts_speak_emojis_summary_off">Эмоджи не будут произнесены</string>
+    <string name="reason_tts_error">Ошибка синтеза речи</string>
+    <string name="notifications">уведомления</string>
+    <string name="backup_restore_message">Сделайте резервное копирование или восстановление всех настроек.\n\nРезервные копии гарантировано совместимы с той же версией или поздней.\nНет никакой гарантии для резервного копирования из бета-версии или сборки которая ещё не была выпущена.</string>
+    <string name="apps">приложения</string>
+    <string name="autostart_message_direct">\n\nНажмите %s чтобы перейти на соответствующие настройки и включите приложение «Голосовые уведомления» если его ещё нет.</string>
+    <string name="autostart_message_manual">\n\nНайдите в настройках Android «автозапуск», «работа в фоне» и включите приложение «Голосовые уведомления», если оно еще не включено.\n\nЭти настройки имеет различные названия в зависимости от ОС. Если вы не можете их найти, свяжитесь с разработчиками.\n\nНажмите %s, чтобы открыть настройки Android.</string>
+    <string name="content_text">Текст содержимого</string>
+    <string name="content_info_text">Информация текста содержимого</string>
+    <string name="text_lines">Строки текста</string>
+    <string name="ignored_reasons">Причины игнорирования</string>
+    <string name="interrupted_reason">Причина прерывания</string>
+    <string name="metadata_id">Идентификатор: %d</string>
+    <string name="tts_speak_emojis_summary_on">Эмоджи будут произнесены</string>
 </resources>
