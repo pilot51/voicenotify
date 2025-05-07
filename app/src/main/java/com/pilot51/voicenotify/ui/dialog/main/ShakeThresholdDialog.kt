@@ -49,7 +49,7 @@ fun ShakeThresholdDialog(
 		val shake = Shake(context)
 		scope.launch {
 			var peakTimeoutJob: Job? = null
-			shake.enable()
+			shake.enable(force = true)
 			shake.jerk.collect {
 				realtimeShake = it.toInt()
 				if (realtimeShake > peak) {

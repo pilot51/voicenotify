@@ -23,7 +23,6 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.util.Log
 import com.pilot51.voicenotify.prefs.DataStoreManager.getPrefStateFlow
-import com.pilot51.voicenotify.prefs.PreferenceHelper.DEFAULT_SHAKE_THRESHOLD
 import com.pilot51.voicenotify.prefs.PreferenceHelper.KEY_SHAKE_THRESHOLD
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,23 +33,28 @@ class Shake(context: Context) : SensorEventListener {
 	private val manager = context.getSystemService(SENSOR_SERVICE) as SensorManager
 	private val sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 	var onShake: (() -> Unit)? = null
-	private val _threshold = getPrefStateFlow(KEY_SHAKE_THRESHOLD, DEFAULT_SHAKE_THRESHOLD)
+	private val _threshold = getPrefStateFlow(KEY_SHAKE_THRESHOLD, 0)
 	private val threshold get() = _threshold.value
+	private var isListening = false
 	private var accelCurrent = 0f
 	private var accelLast = 0f
 	private val _jerk = MutableStateFlow(0f)
 	val jerk: StateFlow<Float> = _jerk
 
-	fun enable() {
-		Log.i(TAG, "Shake listener enabled")
-		manager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+	/** @param force `true` to enable the shake listener even if shake-to-silence is disabled in settings. */
+	fun enable(force: Boolean = false) {
+		if (!force && threshold == 0) return
+		isListening = manager.registerListener(this, sensor, SensorManager.SENSOR_DELAY_NORMAL)
+		Log.i(TAG, "Shake listener ${if (isListening) "enabled" else "failed to enable"}")
 	}
 
 	fun disable() {
-		Log.i(TAG, "Shake listener disabled")
+		if (!isListening) return
 		manager.unregisterListener(this)
+		isListening = false
 		accelCurrent = 0f
 		accelLast = 0f
+		Log.i(TAG, "Shake listener disabled")
 	}
 
 	override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {}
