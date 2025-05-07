@@ -325,21 +325,21 @@ class Service : NotificationListenerService() {
 				val requireStrings = settings.requireStrings?.split("\n")
 				val stringRequired = requireStrings?.all {
 					it.isNotEmpty() && !containsOrMatchesRegex(it)
-				} ?: false
+				} == true
 				if (stringRequired) {
 					info.addIgnoreReasons(IgnoreReason.STRING_REQUIRED)
 				}
 				val ignoreStrings = settings.ignoreStrings?.split("\n")
 				val stringIgnored = ignoreStrings?.any {
 					it.isNotEmpty() && containsOrMatchesRegex(it)
-				} ?: false
+				} == true
 				if (stringIgnored) {
 					info.addIgnoreReasons(IgnoreReason.STRING_IGNORED)
 				}
 			}
 			val ignoreRepeat = settings.ignoreRepeat?.takeIf { it > -1 }?.run { Duration.ofSeconds(toLong()) }
-			if (ignoreRepeat?.isZero != true) {
-				notifyListMutex.withLock {
+			notifyListMutex.withLock {
+				if (ignoreRepeat?.isZero != true) {
 					for (priorInfo in NotifyList.notifyList) {
 						val elapsed = Duration.between(priorInfo.instant, info.instant)
 						if (ignoreRepeat != null && elapsed >= ignoreRepeat) break
@@ -350,8 +350,8 @@ class Service : NotificationListenerService() {
 						}
 					}
 				}
+				NotifyList.addNotification(info)
 			}
-			NotifyList.addNotification(info)
 			if (info.ignoreReasons.isEmpty()) {
 				val delay = settings.ttsDelay ?: 0
 				if (!isScreenOn()) {
