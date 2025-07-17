@@ -112,5 +112,7 @@
     <string name="back">Voltar</string>
     <string name="app_overrides">%s substitui</string>
     <string name="permission_rationale_read_phone_state">Permita acesso a chamadas para que o Voice Notify não anuncie notificações durante ligações.</string>
-    <string name="permission_rationale_post_notifications">A permissão de notificações é necessária para que o Voice Notify envie uma notificação de teste</string>
+    <string name="permission_rationale_post_notifications">A permissão de notificações é necessária para que o Voice Notify envie uma notificação de teste.</string>
+    <string name="autostart_message">Para que o Voice Notify funcione corretamente neste dispositivo, é necessário permitir a inicialização automática ou a execução em segundo plano.</string>
+    <string name="autostart_message_direct">\n\nPressione %s para abrir a tela de configurações relevantes e ativar o Voice Notify, caso ainda não esteja habilitado</string>
 </resources>
