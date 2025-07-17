@@ -8,7 +8,7 @@
     <string name="service_suspended">Serviço de Notificação por Voz está suspenso.</string>
     <!-- xml/preferences.xml -->
     <string name="app_list">Lista de aplicativos</string>
-    <string name="app_list_summary">Lista de aplicativos ignoráveis.</string>
+    <string name="app_list_summary">Selecione os aplicativos para ativar e personalizar as configurações individuais</string>
     <string name="tts_settings">Conversão de texto em voz</string>
     <string name="tts_settings_summary">Abre as configurações de conversão de texto em voz do Android</string>
     <string name="tts_settings_summary_fail">Incapaz de encontrar as configurações de conversão de texto em voz! Se ele existe no seu dispositivo (como deveria), por favor, entre em contato com o desenvolvedor.</string>
@@ -78,7 +78,7 @@
     <string name="support">Ajude o Voice Notify</string>
     <!-- MainActivity -->
     <string name="service_disabled">Serviço VN está desligado.</string>
-    <string name="status_summary_suspended">Selecione para ativar o VN.</string>
+    <string name="status_summary_suspended">Toque para ativar o Voice Notify.\nMantenha pressionado para abrir as configurações de acesso a notificações do Android e desativar o serviço.</string>
     <string name="support_rate">Avaliar/Comentar</string>
     <string name="support_email">Contactar desenvolvedor</string>
     <string name="support_translations">Traduzir</string>
@@ -114,5 +114,9 @@
     <string name="permission_rationale_read_phone_state">Permita acesso a chamadas para que o Voice Notify não anuncie notificações durante ligações.</string>
     <string name="permission_rationale_post_notifications">A permissão de notificações é necessária para que o Voice Notify envie uma notificação de teste.</string>
     <string name="autostart_message">Para que o Voice Notify funcione corretamente neste dispositivo, é necessário permitir a inicialização automática ou a execução em segundo plano.</string>
-    <string name="autostart_message_direct">\n\nPressione %s para abrir a tela de configurações relevantes e ativar o Voice Notify, caso ainda não esteja habilitado</string>
+    <string name="autostart_message_direct">\n\nPressione %s para abrir a tela de configurações relevantes e ativar o Voice Notify, caso ainda não esteja habilitado.</string>
+    <string name="status_summary_notification_access_enabled">Toque para suspender o Voice Notify.\nMantenha pressionado para abrir as configurações de acesso a notificações do Android e desativar o serviço.</string>
+    <string name="status_summary_notification_access_disabled">Toque para abrir as configurações de acesso a notificações do Android e ativar o serviço.</string>
+    <string name="tts">Conversão de texto em voz</string>
+    <string name="tts_summary">Configuração do comportamento de texto em voz</string>
 </resources>
