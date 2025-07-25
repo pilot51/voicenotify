@@ -17,11 +17,19 @@ package com.pilot51.voicenotify
 
 import android.app.Application
 import android.content.Context
+import android.util.Log
+import com.pilot51.voicenotify.VNApplication.Companion.LOG_FILE_NAME
+import com.pilot51.voicenotify.VNApplication.Companion.MAX_LOG_BYTES
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withTimeoutOrNull
-import java.io.*
+import java.io.BufferedReader
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStreamReader
+import java.io.RandomAccessFile
 import kotlin.time.Duration.Companion.seconds
 
 class VNApplication : Application() {
@@ -50,11 +58,11 @@ class VNApplication : Application() {
 							limitFileSize(logFile)
 						}
 					} catch (e: IOException) {
-						e.printStackTrace()
+						Log.w(TAG, e)
 					}
 				}
 			} catch (e: Exception) {
-				e.printStackTrace()
+				Log.w(TAG, e)
 			}
 		}
 	}
@@ -81,6 +89,7 @@ class VNApplication : Application() {
 	}
 
 	companion object {
+		private val TAG = VNApplication::class.simpleName
 		private const val MAX_LOG_BYTES = 1_000_000L
 		private const val LOG_FILE_NAME = "debug.log"
 		lateinit var appContext: Context

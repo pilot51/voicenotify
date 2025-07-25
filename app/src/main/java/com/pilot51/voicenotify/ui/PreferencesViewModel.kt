@@ -20,6 +20,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -162,6 +163,8 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 	}
 
 	companion object {
+		private val TAG = PreferencesViewModel::class.simpleName
+
 		fun updateListItem(
 			position: Int,
 			textFrom: String,
@@ -265,7 +268,7 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 								try {
 									uris.add(FileProvider.getUriForFile(context, auth, it))
 								} catch (e: IllegalArgumentException) {
-									e.printStackTrace()
+									Log.w(TAG, e)
 								}
 							}
 						}
@@ -276,13 +279,13 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 						try {
 							uris.add(FileProvider.getUriForFile(context, auth, dbFile))
 						} catch (e: IllegalArgumentException) {
-							e.printStackTrace()
+							Log.w(TAG, e)
 						}
 						AppDatabase.openDB()
 						try {
 							uris.add(FileProvider.getUriForFile(context, auth, dsFile))
 						} catch (e: IllegalArgumentException) {
-							e.printStackTrace()
+							Log.w(TAG, e)
 						}
 					}
 					putParcelableArrayListExtra(Intent.EXTRA_STREAM, uris)
@@ -292,7 +295,7 @@ class PreferencesViewModel : ViewModel(), IPreferencesViewModel {
 			try {
 				context.startActivity(Intent.createChooser(iEmail, context.getString(R.string.support_email)))
 			} catch (e: ActivityNotFoundException) {
-				e.printStackTrace()
+				Log.w(TAG, e)
 				Toast.makeText(context, R.string.error_email, Toast.LENGTH_LONG).show()
 			}
 		}

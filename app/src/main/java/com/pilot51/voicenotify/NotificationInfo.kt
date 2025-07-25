@@ -136,8 +136,7 @@ data class NotificationInfo(
 				textLines?.joinToString("\n") ?: ""
 			).trim()
 		} catch (e: IllegalFormatException) {
-			Log.w(TAG, "Error formatting custom TTS string!")
-			e.printStackTrace()
+			Log.w(TAG, "Error formatting custom TTS string!\n$e")
 		}
 		isEmpty = isUnusedOrBlank(TTS_TICKER, ticker) &&
 			isUnusedOrBlank(TTS_SUBTEXT, subtext) &&
@@ -165,11 +164,14 @@ data class NotificationInfo(
 				else
 					null
 			} catch (e: PatternSyntaxException) {
-				e.printStackTrace()
+				Log.w(TAG, e)
 				null
 			} ?: "(?i)${Pattern.quote(pair.first)}".toRegex()
-
-			ttsMessage = ttsMessage!!.replace(pattern, pair.second)
+			try {
+				ttsMessage = ttsMessage!!.replace(pattern, pair.second)
+			} catch (e: IndexOutOfBoundsException) { // Catches "no group" regex error
+				Log.w(TAG, e)
+			}
 		}
 		val speakEmojis = settings.ttsSpeakEmojis ?: DEFAULT_SPEAK_EMOJIS
 		if (!speakEmojis) {

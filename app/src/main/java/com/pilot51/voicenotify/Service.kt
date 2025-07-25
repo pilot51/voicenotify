@@ -286,7 +286,7 @@ class Service : NotificationListenerService() {
 			try {
 				shutdown()
 			} catch (e: IllegalArgumentException) {
-				e.printStackTrace()
+				Log.w(TAG, e)
 			}
 		}
 	}
@@ -315,7 +315,7 @@ class Service : NotificationListenerService() {
 							val pattern = it.removePrefix(Constants.REGEX_PREFIX)
 							Regex(pattern).containsMatchIn(ttsMsg)
 						} catch (e: PatternSyntaxException) {
-							e.printStackTrace()
+							Log.w(TAG, e)
 							false
 						}
 					else

@@ -19,16 +19,25 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -40,11 +49,13 @@ import com.pilot51.voicenotify.BuildConfig
 import com.pilot51.voicenotify.R
 import com.pilot51.voicenotify.ui.VNPreview
 
+private const val TAG = "SupportDialog"
+
 private fun openBrowser(context: Context, url: String) {
 	try {
 		context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
 	} catch (e: ActivityNotFoundException) {
-		e.printStackTrace()
+		Log.w(TAG, e)
 		Toast.makeText(context, R.string.error_browser, Toast.LENGTH_LONG).show()
 	}
 }
@@ -79,7 +90,7 @@ fun SupportDialog(onDismiss: () -> Unit) {
 						try {
 							context.startActivity(iMarket)
 						} catch (e: ActivityNotFoundException) {
-							e.printStackTrace()
+							Log.w(TAG, e)
 							Toast.makeText(context, R.string.error_market, Toast.LENGTH_LONG)
 								.show()
 						}

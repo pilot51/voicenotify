@@ -19,6 +19,7 @@ import android.Manifest
 import android.content.Intent
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -72,6 +73,8 @@ import com.pilot51.voicenotify.ui.dialog.main.TestNotificationDialog
 import com.pilot51.voicenotify.ui.dialog.main.log.NotificationLogDialog
 import com.pilot51.voicenotify.ui.dialog.main.support.SupportDialog
 import kotlinx.coroutines.flow.MutableStateFlow
+
+private const val TAG = "MainScreen"
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -384,7 +387,7 @@ fun MainScreen(
 							try {
 								autoStartHelper.getAutoStartPermission(context)
 							} catch (e: SecurityException) {
-								e.printStackTrace()
+								Log.w(TAG, e)
 								autoOpenError = true
 								Toast.makeText(context, R.string.autostart_message_direct_failed,
 									Toast.LENGTH_SHORT).show()
