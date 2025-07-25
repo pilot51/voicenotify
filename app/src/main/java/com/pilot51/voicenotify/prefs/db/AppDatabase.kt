@@ -42,13 +42,14 @@ import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.time.Duration.Companion.seconds
 
 @Database(
-	version = 2,
+	version = 3,
 	entities = [
 		App::class,
 		Settings::class
 	],
 	autoMigrations = [
-		AutoMigration (from = 1, to = 2, spec = AppDatabase.Migration1To2::class)
+		AutoMigration(from = 1, to = 2, spec = AppDatabase.Migration1To2::class),
+		AutoMigration(from = 2, to = 3)
 	]
 )
 @RewriteQueriesToDropUnusedColumns

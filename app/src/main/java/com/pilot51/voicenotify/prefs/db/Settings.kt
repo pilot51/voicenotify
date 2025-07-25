@@ -19,6 +19,7 @@ import android.media.AudioManager
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.ForeignKey.Companion.CASCADE
 import androidx.room.Ignore
 import androidx.room.Index
 import androidx.room.PrimaryKey
@@ -35,7 +36,8 @@ import kotlin.reflect.full.declaredMemberProperties
 	foreignKeys = [ ForeignKey(
 		App::class,
 		parentColumns = ["package"],
-		childColumns = ["app_package"]
+		childColumns = ["app_package"],
+		onDelete = CASCADE
 	) ]
 )
 data class Settings(

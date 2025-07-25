@@ -53,24 +53,17 @@ object DataStoreManager {
 	val dataFlow = dataStoreFlow.flatMapLatest { it.data }
 
 	fun openDataStore() {
-		println("openDataStore")
 		_dataStoreFlow.value = VNApplication.Companion.appContext.createDataStore()
-		println("datastore created")
 	}
 
 	fun closeDataStore() {
-		println("closeDataStore")
 		_dataStoreFlow.value = null
 		scope.cancel()
-		println("datastore closed")
 	}
 
 	private fun Context.createDataStore(): DataStore<Preferences> {
 		if (!scope.isActive) {
-			println("scope not active, recreating")
 			scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
-		} else {
-			println("scope is active")
 		}
 		return PreferenceDataStoreFactory.create(
 			scope = scope,
@@ -79,10 +72,7 @@ object DataStoreManager {
 	}
 
 	fun <T> getPrefFlow(key: Preferences.Key<T>, default: T) =
-		dataFlow.mapLatest {
-			println("getPrefFlow mapLatest")
-			it[key] ?: default
-		}
+		dataFlow.mapLatest { it[key] ?: default }
 
 	fun <T> getPrefStateFlow(key: Preferences.Key<T>, default: T) =
 		getPrefFlow(key, default).stateIn(

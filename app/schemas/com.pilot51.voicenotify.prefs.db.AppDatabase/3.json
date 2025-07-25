@@ -1,0 +1,214 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "093fbaf5602c1d309d6725a719c52f5f",
+    "entities": [
+      {
+        "tableName": "apps",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`package` TEXT NOT NULL, `name` TEXT NOT NULL COLLATE NOCASE, `is_enabled` INTEGER NOT NULL, PRIMARY KEY(`package`))",
+        "fields": [
+          {
+            "fieldPath": "packageName",
+            "columnName": "package",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "label",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isEnabled",
+            "columnName": "is_enabled",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "package"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "settings",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_package` TEXT, `audio_focus` INTEGER, `require_strings` TEXT, `ignore_strings` TEXT, `ignore_empty` INTEGER, `ignore_groups` INTEGER, `ignore_repeat` INTEGER, `speak_screen_off` INTEGER, `speak_screen_on` INTEGER, `speak_headset_off` INTEGER, `speak_headset_on` INTEGER, `speak_silent_on` INTEGER, `quiet_start` INTEGER, `quiet_end` INTEGER, `tts_string` TEXT, `tts_text_replace` TEXT, `tts_speak_emojis` INTEGER, `tts_max_length` INTEGER, `tts_stream` INTEGER, `tts_delay` INTEGER, `tts_repeat` REAL, FOREIGN KEY(`app_package`) REFERENCES `apps`(`package`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "appPackage",
+            "columnName": "app_package",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "audioFocus",
+            "columnName": "audio_focus",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "requireStrings",
+            "columnName": "require_strings",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ignoreStrings",
+            "columnName": "ignore_strings",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ignoreEmpty",
+            "columnName": "ignore_empty",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ignoreGroups",
+            "columnName": "ignore_groups",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ignoreRepeat",
+            "columnName": "ignore_repeat",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "speakScreenOff",
+            "columnName": "speak_screen_off",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "speakScreenOn",
+            "columnName": "speak_screen_on",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "speakHeadsetOff",
+            "columnName": "speak_headset_off",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "speakHeadsetOn",
+            "columnName": "speak_headset_on",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "speakSilentOn",
+            "columnName": "speak_silent_on",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quietStart",
+            "columnName": "quiet_start",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "quietEnd",
+            "columnName": "quiet_end",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ttsString",
+            "columnName": "tts_string",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ttsTextReplace",
+            "columnName": "tts_text_replace",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ttsSpeakEmojis",
+            "columnName": "tts_speak_emojis",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ttsMaxLength",
+            "columnName": "tts_max_length",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ttsStream",
+            "columnName": "tts_stream",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ttsDelay",
+            "columnName": "tts_delay",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "ttsRepeat",
+            "columnName": "tts_repeat",
+            "affinity": "REAL",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_settings_app_package",
+            "unique": true,
+            "columnNames": [
+              "app_package"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_settings_app_package` ON `${TABLE_NAME}` (`app_package`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "apps",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "app_package"
+            ],
+            "referencedColumns": [
+              "package"
+            ]
+          }
+        ]
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '093fbaf5602c1d309d6725a719c52f5f')"
+    ]
+  }
+}
