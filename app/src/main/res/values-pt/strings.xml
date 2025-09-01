@@ -119,4 +119,6 @@
     <string name="status_summary_notification_access_disabled">Toque para abrir as configurações de acesso a notificações do Android e ativar o serviço.</string>
     <string name="tts">Conversão de texto em voz</string>
     <string name="tts_summary">Configuração do comportamento de texto em voz</string>
+    <string name="reason_tts_length_limit">Mensagem excedeu o limite de tamanho do TTS</string>
+    <string name="reason_tts_error">Erro de processamento do TTS</string>
 </resources>
