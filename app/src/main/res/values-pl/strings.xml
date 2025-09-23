@@ -8,14 +8,14 @@
     <!-- xml/preferences.xml -->
     <string name="app_list">Lista aplikacji</string>
     <string name="app_list_summary">Wybierz aplikacje, aby ją włączyć i nadpisać ustawienia dla każdej z nich</string>
-    <string name="tts">Synteza mowy TTS</string>
+    <string name="tts">Tekst Na Mowę</string>
     <string name="tts_summary">Skonfiguruj zachowanie syntezatora mowy TTS</string>
-    <string name="tts_settings">Ustawienia funkcji tekst-na-mowę</string>
+    <string name="tts_settings">Ustawienia funkcji Tekst-na-Mowę</string>
     <string name="tts_settings_summary">Otwórz ustawienia syntezatora mowy w systemie Android</string>
     <string name="tts_settings_summary_fail">Nie można odnaleźć ustawień syntezatora mowy TTS na urządzeniu! jeżeli istniej (a powinien) skontaktuj się z developerem.</string>
     <string name="tts_message">Wiadomość TTS</string>
     <string name="tts_message_summary">Dostosuj, które elementy powiadomień mają być odczytywane na głos</string>
-    <string name="tts_text_replace">Wymiana tekstu TTS</string>
+    <string name="tts_text_replace">Zastępowanie Tekstu w TTS</string>
     <string name="tts_text_replace_summary">Zastąp tekst do odczytania, np. aby poprawić wymowę</string>
     <string name="tts_text_replace_dialog">Zamień tekst do wypowiedzenia, umożliwia dostosowanie sposobu, w jaki funkcja Text-To-Speech wymawia słowa lub zastępuje tekst dowolnym innym tekstem.\n\nZamiany są niezależne od wielkości liter i każda z nich jest stosowana kolejno od góry do dołu, po formatowaniu komunikatu TTS, ale przed usunięciem emoji.</string>
     <string name="tts_stream">Strumień Dźwięku Syntezatora TTS</string>
@@ -38,19 +38,19 @@
         <item>Dzwonek</item>
         <item>Alarm</item>
     </string-array>
-    <string name="ignore_strings">Ignoruj tekst</string>
+    <string name="ignore_strings">Ignoruj Tekst</string>
     <string name="ignore_strings_summary">Ignorowanie powiadomień zawierających określony tekst w wiadomości</string>
     <string name="require_ignore_strings_dialog_msg">Dopasowanie odbywa się względem wiadomości wysyłanej do TTS, po sformatowaniu wiadomości TTS i zastąpieniu tekstu, łącznie z interpunkcją. \n\nOddziel poszczególne wpisy nową linią. \nWiadomość musi zawierać dowolny wpis, a nie wszystkie, aby uznać ją za dopasowaną. \nBez rozróżniania wielkości liter.</string>
-    <string name="ignore_empty">Ignoruj puste</string>
+    <string name="ignore_empty">Ignoruj Puste</string>
     <string name="ignore_empty_summary_on">Powiadomienia bez wiadomości nie będę wymawiane</string>
     <string name="ignore_empty_summary_off">Powiadomienia bez wiadomości będą wyświetlane jako \"Powiadomienie od [app name].\"</string>
-    <string name="ignore_repeat">Ignoruj powtórzenia</string>
+    <string name="ignore_repeat">Ignoruj Powtórzenia</string>
     <string name="ignore_repeat_summary">Ignorowanie kolejnych takich samych powiadomień w określonym czasie</string>
     <string name="ignore_repeat_dialog_msg">Ustaw liczbę sekund, jaka musi upłynąć, aby powtórzone powiadomienie zostało wypowiedziane. \nZignorowane powtórzenia resetują licznik.\n\nWykrywanie powtórzeń jest ograniczone do pamięci dziennika powiadomień (%d powiadomień).\n\n0 = Wyłączone \nPuste pole = Bez limitu</string>
     <string name="max_length">Maksymalna długość</string>
     <string name="max_length_summary">Maksymalna długość wiadomości do wypowiedzenia. Dłuższe wiadomości zostaną przycięte</string>
     <string name="max_length_dialog_msg">Maksymalna długość wiadomości do wypowiedzenia.\nDłuższe wiadomości będą obcinane.\n\nPuste lub 0 dla nieograniczonej długości.\nAndroid TTS ma oddzielny limit długości (%d), który zawsze ma zastosowanie.</string>
-    <string name="device_state">Stany urządzenia</string>
+    <string name="device_state">Stany Urządzenia</string>
     <string name="device_state_summary">Wybierz w jakich statusach telefonu ma być mówione powiadomienie</string>
     <string name="device_state_dialog_title">Mów w tych stanach urządzenia</string>
     <string-array name="device_states">
@@ -60,9 +60,9 @@
         <item>Z zestawem słuchawkowym</item>
         <item>Wyciszony/tryb wibracji</item>
     </string-array>
-    <string name="quiet_start">Rozpoczęcie czasu ciszy</string>
+    <string name="quiet_start">Rozpoczęcie Czasu Ciszy</string>
     <string name="quiet_start_summary">Nie mów po upływie tego czasu. \nUstaw to samo, co w \"Zakończ czas ciszy\" aby wyłączyć.</string>
-    <string name="quiet_end">Zakończ czas ciszy</string>
+    <string name="quiet_end">Zakończenie Czasu Ciszy</string>
     <string name="quiet_end_summary">Nie mów przed upływem tego czasu. \nUstaw to samo, co w \"Rozpocznij czas ciszy\" aby wyłączyć.</string>
     <string name="test_summary">Opublikuj powiadomienie (z opóźnieniem 5 sekund), aby przetestować bieżące ustawienia</string>
     <string name="test_ignored">Voice Notify jest ignorowane na liście aplikacji.\nTest zostanie uruchomiony, ale powiadomienie nie zostanie wypowiedziane.</string>
@@ -74,7 +74,7 @@
     <string name="text_to_replace">Tekst do zastąpienia</string>
     <string name="replacement_text">Tekst zamieniony</string>
     <!-- MainActivity and xml/preferences.xml -->
-    <string name="test">Test mówienia</string>
+    <string name="test">Test Mówienia</string>
     <string name="notify_log">Rejestr Powiadomień</string>
     <string name="support">Pomoc i Wsparcie</string>
     <!-- MainActivity -->
@@ -101,20 +101,20 @@
     <string name="ignore_app">Ignorować %s\?</string>
     <string name="unignore_app">Włączyć %s?</string>
     <!-- menu/app_list.xml-->
-    <string name="ignore_all">Ignoruj wszystko</string>
-    <string name="ignore_none">Nic nie ignoruj</string>
+    <string name="ignore_all">Ignoruj Wszystko</string>
+    <string name="ignore_none">Nic Nie Ignoruj</string>
     <string name="filter">Filtr</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">Ignorowane aplikacje</string>
     <string name="reason_string_ignored">Pominięty tekst</string>
     <string name="reason_empty_msg">Pusta wiadomość</string>
-    <string name="reason_identical">Identyczna powiadomienie w ciągu {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+    <string name="reason_identical">Identyczna powiadomienie w ciągu {0,choice,-1#nieskończone sekundy|1#{0} sekunda|1&lt;{0} sekundy}</string>
     <string name="reason_quiet">Czas ciszy</string>
     <string name="reason_silent">Tryb cichy lub tryb wibracji</string>
     <string name="reason_call">Aktywne połączenie telefoniczne</string>
     <string name="reason_screen_off">Ekran wyłaczony</string>
     <string name="reason_screen_on">Ekran właczony</string>
-    <string name="reason_headset_off">Bez zestawy słuchawkowego</string>
+    <string name="reason_headset_off">Bez zestawu słuchawkowego</string>
     <string name="reason_headset_on">Z zestawem słuchawkowym</string>
     <string name="reason_shake">Wyciszenie po potrząśnięciu urządzeniem</string>
     <string name="reason_suspended">🔕 Voice Notify wstrzymany</string>
@@ -123,7 +123,7 @@
     <string name="support_discord">Discord</string>
     <string name="support_matrix">Matrix</string>
     <string name="app_name">Voice Notify</string>
-    <string name="support_privacy">Polityka prywatności</string>
+    <string name="support_privacy">Polityka Prywatności</string>
     <string name="close">Zamknij</string>
     <string name="error">Błąd</string>
     <string name="notification_details">Szczegóły Powiadomienia</string>
@@ -144,7 +144,7 @@
     <string name="ignore_groups">Ignoruj Wiadomości Grupowe</string>
     <string name="ignore_groups_summary_on">Powiadomienia zawierające wiele wiadomości nie będą odczytywane</string>
     <string name="ignore_groups_summary_off">Powiadomienia zawierające wiele wiadomości będą odczytywane</string>
-    <string name="test_ticker">To jest komunikat w pasku przewijanym</string>
+    <string name="test_ticker">To jest wiadomość z paska</string>
     <string name="test_big_content_title">Główny Tytuł Treści</string>
     <string name="test_big_content_summary">To jest podsumowanie głównej treści</string>
     <string name="test_big_content_text">To jest rozszerzona treść powiadomienia.</string>
@@ -162,7 +162,7 @@
     <string name="content_info_text">Tekst Informacyjny Treści</string>
     <string name="big_content_summary">Obszerne Streszczenie Zawartości</string>
     <string name="big_content_title">Główny Tytuł Powiadomienia</string>
-    <string name="big_content_text">Rozszona Treść Powiadomienia</string>
+    <string name="big_content_text">Rozszerzona Treść Powiadomienia</string>
     <string name="text_lines">Linie Tekstu</string>
     <string name="flags">Flaga</string>
     <string name="ignored_reasons">Powody Pominięcia</string>
