@@ -1,7 +1,8 @@
 name: "Auto Build"
 
 env:
-  tag: auto-build
+  TAG: auto-build
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 on:
   workflow_dispatch:
@@ -33,15 +34,10 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Cache debug keystore
-        id: debug-keystore-cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.config/.android/debug.keystore
-          key: ${{ runner.os }}-debug-keystore
-
-      - name: Create release keystore files
+      - name: Create keystore files
         run: |
+          mkdir -p ~/.config/.android
+          echo "${{ secrets.DEBUG_KEYSTORE_BASE64 }}" | base64 -di > ~/.config/.android/debug.keystore
           echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -di > release.keystore
           echo "${{ secrets.KEYSTORE_PROPERTIES }}" > keystore.properties
 
@@ -49,20 +45,16 @@ jobs:
         id: build
         run: ./gradlew assemble
 
-      - name: Update tag
-        run: |
-          git tag -d ${{ env.tag }} || true
-          git push origin :refs/tags/${{ env.tag }} || true
-          git tag ${{ env.tag }}
-          git push origin ${{ env.tag }}
+      - name: Delete previous pre-release
+        run: gh release delete ${{ env.TAG }} --yes --cleanup-tag
 
       - name: Release
         uses: softprops/action-gh-release@v2
         if: ${{ steps.build.outcome == 'success' }}
         with:
           name: "Auto build"
-          token: "${{ secrets.GITHUB_TOKEN }}"
-          tag_name: ${{ env.tag }}
+          token: ${{ env.GH_TOKEN }}
+          tag_name: ${{ env.TAG }}
           prerelease: true
           body: |
             Use at your own risk!
