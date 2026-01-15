@@ -3,48 +3,42 @@
     <string name="app_name">Voice Notify</string>
     <!-- Used by multiple files -->
     <string name="app_is_ignored">%s est ignoré</string>
-    <string name="app_is_not_ignored">%s n\'est pas ignoré</string>
+    <string name="app_is_not_ignored">%s est activé</string>
     <string name="service_running">Le service Voice Notify est en cours d\'exécution</string>
     <string name="service_suspended">Le service Voice Notify est suspendu</string>
     <!-- xml/preferences.xml -->
     <string name="app_list">Liste des applications</string>
-    <string name="app_list_summary">Liste d\'applications installées qui peuvent être ignorées</string>
-    <string name="tts_settings">Paramètres de synthèse vocale.</string>
-    <string name="tts_settings_summary">Ouvrir les paramètres de synthèse vocale d\'Android.</string>
+    <string name="app_list_summary">Sélectionner des applications pour les activer et modifier les préférences spécifiques par application</string>
+    <string name="tts_settings">Paramètres de synthèse vocale</string>
+    <string name="tts_settings_summary">Ouvrir les paramètres de synthèse vocale d\'Android</string>
     <string name="tts_settings_summary_fail">Paramètres de synthèse vocale introuvables ! S\'ils existent sur votre appareil (ce qui devrait être le cas), veuillez s\'il vous plaît contacter le développeur.</string>
-    <string name="tts_message">Message de la synthèse vocale.</string>
-    <string name="tts_message_summary">Personnaliser la façon dont la synthèse vocale énonce les notifications.</string>
+    <string name="tts_message">Message de la synthèse vocale</string>
+    <string name="tts_message_summary">Personnaliser la façon dont la synthèse vocale énonce les notifications</string>
     <string name="tts_stream">Flux audio de la synthèse vocale</string>
-    <string name="tts_stream_summary">Choisir le flux audio que la synthèse vocale doit utiliser.</string>
+    <string name="tts_stream_summary">Choisir le flux audio que la synthèse vocale doit utiliser</string>
     <string name="tts_delay">Délai avant que l\'annonce vocale démarre</string>
-    <string name="tts_delay_summary">Choisir la durée (en seconde) du délai de l\'annonce vocale après la réception de la notification.</string>
+    <string name="tts_delay_summary">Retarder le TTS d\'un certain nombre de secondes après la notification</string>
     <string name="tts_delay_dialog_msg">Nombre de seconde à attendre après la réception de la notification avant le démarrage de l\'annonce vocale.</string>
-    <string name="tts_repeat">Répétition de la synthèse vocale.</string>
-    <string name="tts_repeat_summary">Répéter continuellement les notifications par la synthèse vocale jusqu\'à ce que l\'écran s\'allume.</string>
-    <string name="tts_repeat_dialog_msg">Les notifications seront répétées après l\'intervalle de temps défini jusqu\'à ce que l\'écran s\'allume. Les notifications créés pendant que l\'écran est allumé ne seront pas répétées.
-\nLes valeurs sont en minutes. Vide ou 0 le désactive.</string>
+    <string name="tts_repeat">Répétition de la synthèse vocale</string>
+    <string name="tts_repeat_summary">Répéter continuellement les notifications par la synthèse vocale jusqu\'à ce que l\'écran s\'allume</string>
+    <string name="tts_repeat_dialog_msg">Les notifications seront répétées après l\'intervalle de temps défini jusqu\'à ce que l\'écran s\'allume. Les notifications créés pendant que l\'écran est allumé ne seront pas répétées.\n\nLes valeurs sont en minutes. Vide ou 0 le désactive.</string>
     <string name="shake_to_silence">Secouer pour faire taire</string>
     <string name="shake_to_silence_summary">Ajuster le seuil de sensibilité de la secousse pour faire taire</string>
-    <string name="shake_to_silence_dialog_msg">Les valeurs les plus faibles sont plus sensibles.
-\n
-\nPar défaut: %d
-\nVide pour désactiver.</string>
+    <string name="shake_to_silence_dialog_msg">Les valeurs plus faibles sont plus sensibles.\n\nValeur par défaut : %1$d\nVide ou 0 pour désactiver.\n\nValeur des secousses en temps réel :%2$d\nPic (5 secondes) : %3$d</string>
     <string name="ignore_strings">Ignorer le text</string>
     <string name="ignore_strings_summary">Ignorer les notifications qui contiennent un certain texte dans le message</string>
-    <string name="require_ignore_strings_dialog_msg">Séparer les entrées individuelles par une nouvelle ligne.</string>
+    <string name="require_ignore_strings_dialog_msg">Cela doit coïncider avec le message envoyé au TTS, après le formatage du message TTS et le remplacement du texte, en incluant la ponctuation.\n\nSéparer les entrées individuelles par une nouvelle ligne.\nLe message doit contenir n\'importe quelle entrée, pas toutes, pour correspondre.\nInsensible à la case.</string>
     <string name="ignore_repeat">Ignorer les répétitions</string>
     <string name="ignore_repeat_summary">Ignorer les notifications identiques successives dans un temps donné</string>
-    <string name="ignore_repeat_dialog_msg">Définir le nombre de secondes qui doivent s\'écouler depuis la dernière notification avant une répétition. \nLes répétitions ignorées réinitialisent le compteur et les notifications différentes l’arrêtent. \nVide = infini.</string>
+    <string name="ignore_repeat_dialog_msg">Définir le nombre de secondes qui doivent s\'écouler depuis la dernière notification avant qu\'une répétition ne soit prononcée.\nLes répétitions ignorées redémarrent le compteur.\n\nLa détection de répétition est limitée à la mémoire du Journal de Notification (%d notifications).\n\n0 = Désactivé\nVide = Infini</string>
     <string name="device_state">Etats de l\'appareil</string>
-    <string name="device_state_summary">Choisir à quel moment utiliser l\'annonce vocale selon le statut de l\'appareil.</string>
-    <string name="device_state_dialog_title">Utiliser l\'annonce vocale si :</string>
+    <string name="device_state_summary">Choisir à quel moment utiliser l\'annonce vocale selon le statut de l\'appareil</string>
+    <string name="device_state_dialog_title">Prononcer durant ces états de l\'appareil</string>
     <string name="quiet_start">Début du mode silencieux</string>
-    <string name="quiet_start_summary">Ne pas utiliser les annonces vocales après cette heure.
-\nMettre la même heure que celle de fin pour désactiver.</string>
+    <string name="quiet_start_summary">Ne pas utiliser les annonces vocales après cette heure.\nMettre la même heure que celle de fin pour désactiver.</string>
     <string name="quiet_end">Fin du mode silencieux</string>
-    <string name="quiet_end_summary">Ne pas utiliser les annonces vocales avant cette heure.
-\nMettre la même heure que celle de début pour désactiver.</string>
-    <string name="test_summary">Envoyer une notification (débute après 5 secondes) pour tester les paramètres actuels.</string>
+    <string name="quiet_end_summary">Ne pas utiliser les annonces vocales avant cette heure.\nMettre la même heure que celle de début pour désactiver.</string>
+    <string name="test_summary">Envoyer une notification (débute après 5 secondes) pour tester les paramètres actuels</string>
     <string name="test_ignored">Voice Notify est ignoré dans la liste des applications.
 \nLe test va s’effectuer mais la notification ne sera pas lue.</string>
     <string name="notify_log_summary">Liste des %d dernières notifications.
@@ -57,17 +51,17 @@
     <string name="support">Aide et support de Voice Notify</string>
     <!-- MainActivity -->
     <string name="service_disabled">Le service Voice Notify est désactivé</string>
-    <string name="status_summary_suspended">Appuyer pour activer Voice Notify.</string>
-    <string name="support_rate">Noter/Commenter</string>
-    <string name="support_email">Contacter le développeur</string>
+    <string name="status_summary_suspended">Appuyer pour activer Voice Notify.\nAppuyer longuement pour ouvrir les paramètres d\'accès aux notifications Android afin de désactiver le service.</string>
+    <string name="support_rate">Noter &amp; Critiquer</string>
+    <string name="support_email">Email aux Développeurs</string>
     <string name="support_translations">Traductions</string>
     <string name="support_github">Code source</string>
-    <string name="error_email">Erreur: impossible de trouver un client de messagerie installé.</string>
+    <string name="error_email">Erreur : Impossible de trouver un client de messagerie installé.</string>
     <!-- Service -->
     <!-- NotifyList -->
     <string name="yes">Oui</string>
     <string name="ignore_app">Ignorer %s\?</string>
-    <string name="unignore_app">Ne pas ignorer %s?</string>
+    <string name="unignore_app">Activer %s ?</string>
     <!-- menu/app_list.xml-->
     <string name="ignore_all">Tout ignorer</string>
     <string name="ignore_none">Ne rien ignorer</string>
@@ -82,27 +76,16 @@
     <string name="reason_headset_off">Ecouteurs éteints</string>
     <string name="reason_headset_on">Ecouteurs allumés</string>
     <string name="reason_shake">Silencieux par secousse</string>
-    <string name="reason_suspended">Voice Notify suspendu par le widget</string>
+    <string name="reason_suspended">Voice Notify suspendu</string>
     <string name="tts">Synthèse vocale</string>
     <string name="tts_summary">Configurer le comportement de la synthèse vocale</string>
     <string name="test_content_title">Titre du contenu</string>
-    <string name="test_content_text">Ceci est le message de contenu.</string>
+    <string name="test_content_text">Ceci est le message de contenu. 🙂</string>
     <string name="test_content_info">Informations sur le contenu</string>
-    <string name="error_market">Erreur: impossible de trouver le Google Play Store installé.</string>
+    <string name="error_market">Erreur : Impossible de trouver le Google Play Store installé.</string>
     <string name="notification_from">Notification de %s.</string>
-    <string name="error_tts_init">Erreur: impossible d\'initialiser la synthèse vocale! [%d]</string>
-    <string name="tts_message_dialog">#a = Titre de l\'application
-\n#t = Ticker
-\n#s = Sous-texte
-\n#C = Titre du contenu
-\n#M = Message du contenu
-\n#i = Info sur le contenu
-\n
-\nPar défaut :
-\n#a. #c. #m.
-\n
-\nAncien défaut (v1.0.x) :
-\n#a : #t</string>
+    <string name="error_tts_init">Erreur : Impossible d\'initialiser la synthèse vocale ! Code de status %d</string>
+    <string name="tts_message_dialog">#A = Titre de l\'application\n#T = Bandeau déroulant\n#S = Sous-texte\n#C = Titre du contenu\n#M = Message du contenu\n#I = Info sur le contenu\n#H = Titre du contenu volumineux\n#Y = Résumé du contenu volumineux\n#B = Texte du contenu volumineux\n#L = Ligne de texte\nInsensible à la casse.\n\nPar défaut :\n%1$s\n\nAncien défaut (v1.1.0 - v1.3.0) :\n#A. #C. #M.\n\nAncien défaut (v1.0.x) :\n#A: #T</string>
     <string name="tts_text_replace_summary">Substituer le texte à prononcer, par exemple pour corriger la prononciation</string>
     <string name="tts_text_replace">Remplacement de texte de synthèse vocale</string>
     <string name="back">Retour</string>
@@ -112,7 +95,7 @@
     <string name="ignore_groups_summary_on">Les notifications contenant plusieurs messages ne seront pas énoncées</string>
     <string name="ignore_groups_summary_off">Les notifications contenant plusieurs messages seront énoncées</string>
     <string name="test_ticker">Ceci est le message coché</string>
-    <string name="support_matrix">Matrice</string>
+    <string name="support_matrix">Matrix</string>
     <string name="close">Fermer</string>
     <string name="error">Erreur</string>
     <string name="reason_tts_length_limit">Le message excède la limite de longueur de la synthèse vocale</string>
@@ -121,36 +104,36 @@
     <string name="status_summary_notification_access_enabled">Appuyez pour arrêter Voice Notify.
 \nAppuyez longuement pour ouvrir les paramètres d\'accès aux notifications Android afin de désactiver le service.</string>
     <string name="test_subtext">Le sous-texte</string>
-    <string name="support_discord">Désaccord</string>
+    <string name="support_discord">Discord</string>
     <string name="permission_rationale_post_notifications">L\'autorisation de notification est nécessaire pour que Voice Notify puisse faire un test de notification.</string>
     <string name="reason_string_required">Texte requis manquant</string>
-    <string name="max_length">Message maximum</string>
+    <string name="max_length">Longueur maximale</string>
     <string name="notification_channel_desc">Utilisé pour le test de notification</string>
     <string name="text_to_replace">Texte à remplacer</string>
     <string name="ignore_empty">Ignorer si vide</string>
     <string name="ignore_empty_summary_on">Les notifications sans message ne seront pas énoncées</string>
-    <string name="max_length_dialog_msg">Longueur maximum de messages à énoncer. Les messages plus longs seront tronqués.</string>
+    <string name="max_length_dialog_msg">Longueur maximale de messages à énoncer.\nLes messages plus longs seront tronqués.\n\nVide ou 0 pour illimité.\nLa synthèse vocale Android possède une longueur limite (%d) qui sera toujours appliquée.</string>
     <string name="status_summary_notification_access_disabled">Appuyez pour ouvrir les paramètres d\'accès aux notifications Android afin d\'activer le service.</string>
     <string name="support_privacy">Politique de confidentialité</string>
     <string name="permission_rationale_read_phone_state">L\'autorisation d\'appel est nécessaire pour éviter que Voice Notify parle pendant les appels.</string>
     <string name="reason_identical">Message identique entre {0,choice,-1#infini secondes|1#{0} seconde|1&lt;{0} secondes}</string>
-    <string name="test_big_content_title">Titre principal du contenu</string>
-    <string name="test_big_content_summary">Ceci est le résumé principal du contenu</string>
-    <string name="test_big_content_text">Ceci est le contenu principal du texte</string>
-    <string name="big_content_text">Texte du contenu principal</string>
+    <string name="test_big_content_title">Titre du contenu volumineux</string>
+    <string name="test_big_content_summary">Ceci est le résumé du contenu volumineux</string>
+    <string name="test_big_content_text">Ceci est le texte de contenu volumineux.</string>
+    <string name="big_content_text">Texte du contenu volumineux</string>
     <string name="notification_details">Détails des notifications</string>
     <string name="enable">Activer</string>
     <string name="ticker">Symbole</string>
     <string name="subtext">Sous-texte</string>
-    <string name="metadata_id">ID:%d</string>
-    <string name="metadata_category">Catégorie:%s</string>
+    <string name="metadata_id">ID : %d</string>
+    <string name="metadata_category">Catégorie : %s</string>
     <string name="metadata_progress">Progression :%1$d / %2$d</string>
     <string name="metadata_progress_indeterminate">Progression : indéterminée</string>
-    <string name="support_email_subtext">Commentaires généraux</string>
-    <string name="support_github_subtext">Rapports d\'erreurs, demandes de fonctionnalités, code source</string>
-    <string name="text_replace_error_duplicate">Dupliqué! Ne sera pas sauvegardé.</string>
-    <string name="tts_text_replace_dialog">Remplacez le texte à prononcer, vous permettant de personnaliser la façon dont la synthèse vocale prononce les mots ou remplacez le texte pour toute autre raison.</string>
-    <string name="error_browser">Erreur: impossible de trouver un explorateur de fichier installé.</string>
+    <string name="support_email_subtext">Commentaires généraux ou envoyer des fichiers de débogage</string>
+    <string name="support_github_subtext">Rapports d\'erreurs, demandes de fonctionnalités, notes de version, versions beta, code source</string>
+    <string name="text_replace_error_duplicate">Dupliqué ! Ne sera pas sauvegardé.</string>
+    <string name="tts_text_replace_dialog">Remplace le texte à prononcer, vous permettant de personnaliser la façon dont la synthèse vocale prononce les mots ou remplace le texte avec n\'importe quel texte.\n\nCeci est insensible à la case et chaque remplacement s\'applique séquentiellement de haut en bas, après le formatage du message TTS et avant le retrait des emojis.</string>
+    <string name="error_browser">Erreur : Impossible de trouver un navigateur installé.</string>
     <string name="reason_quiet">Temps de pause</string>
     <string name="reason_call">Appel téléphonique actif</string>
     <string name="reason_service_stopped">Service arrêté</string>
@@ -165,15 +148,57 @@
     <string name="title">Titre</string>
     <string name="content_text">Texte du contenu</string>
     <string name="content_info_text">Texte du contenu de l\'information</string>
-    <string name="big_content_summary">Résumé du contenu principal</string>
-    <string name="big_content_title">Titre du contenu principal</string>
+    <string name="big_content_summary">Résumé du contenu volumineux</string>
+    <string name="big_content_title">Titre du contenu volumineux</string>
     <string name="text_lines">Lignes de texte</string>
     <string name="ignored_reasons">Raisons d\'ignorer</string>
     <string name="interrupted_reason">Raisons d\'interrompre</string>
     <string name="metadata">Métadonnées</string>
-    <string name="support_chat_subtext">Chat utilisateur, réponse la plus rapide du développeur</string>
+    <string name="support_chat_subtext">Chat communautaire, réponse la plus rapide du développeur</string>
     <string name="replacement_text">Remplacement de texte</string>
     <string name="remove">Supprimer</string>
-    <string name="max_length_summary">Longueur maximum de message à énoncer. Les messages plus longs seront tronqués.</string>
+    <string name="max_length_summary">Longueur maximum de message à prononcer</string>
     <string name="reason_tts_interrupted">La synthèse vocale est interrompue pour une raison inconnue</string>
+    <string name="app_overrides">%s Préférences Spécifiques</string>
+    <string name="autostart_message">Pour que Voice Notify fonctionne correctement sur cet appareil, il doit être autorisé à démarrer automatiquement et s\'exécuter en fond.</string>
+    <string name="autostart_message_direct">\n\nAppuyer sur %s pour aller sur l\'écran de paramètres correspondants et activer Voice Notify si ce n\'est pas déjà le cas.</string>
+    <string name="autostart_message_direct_failed">Échec lors de l\'ouverture de l\'écran de paramètres correspondant</string>
+    <string name="dont_show_again">Ne plus afficher</string>
+    <string name="notify_log_settings">Paramètre de journalisation des notifications</string>
+    <string name="notifications">notifications</string>
+    <string name="apps">applications</string>
+    <string name="backup_restore">Sauvegarde / Restauration</string>
+    <string name="backup_restore_summary">Sauvegarder ou restaurer l\'ensemble des paramètres de Voice Notify</string>
+    <string name="backup_settings">Paramètres de sauvegarde</string>
+    <string name="restore_settings">Paramètre de restauration</string>
+    <string name="support_rate_subtext">Afficher l\'application sur le Play Store</string>
+    <string name="support_email_dialog_message_log">Bien que des informations potentiellement sensibles ne soient pas intentionnellement incluses, les journaux peut inclure des noms d\'applications installées et certaines erreurs peuvent contenir des notifications pertinentes ou des paramètres textuels. La taille limite est de 1MB, ce qui peut correspondre à plusieurs journées. Vous pouvez y accéder depuis à l\'ordinateur avec une connexion USB à %s</string>
+    <string name="debug_log">Journaux de débogage</string>
+    <string name="view">Afficher</string>
+    <string name="view_debug_log_failed">Incapable de lire le journal de débogage</string>
+    <string name="settings">Paramètres</string>
+    <string name="regex_message">\n\nPour utiliser les regex, démarrez le texte avec \"$regex:\". Les regex sont par défaut insensible à la case.\nPar exemple, pour correspondre aux URL (case ignoré) :\n$regex:(?i)https?:\\/\\/[^\\s]+\n</string>
+    <string name="invalid_regex">regex invalide</string>
+    <string name="ignore_enable_apps_confirm">Êtes-vous certains de vouloir %s toutes les applications ?</string>
+    <string name="tts_speak_emojis_summary_on">Les emojis seront prononcés</string>
+    <string name="tts_speak_emojis_summary_off">Les emojis ne seront pas prononcés</string>
+    <string name="reason_tts_error">Erreur de traitement du TTS</string>
+    <string name="show_ignored">Afficher les %s ignorés</string>
+    <string name="hide_ignored">Masquer les %s ignorées</string>
+    <string name="do_not_log_ignored">Ne pas journaliser les %s ignorées</string>
+    <string name="flags">Drapeaux</string>
+    <string name="backup_restore_message">Sauvegarder ou restaurer un fichier zip contenant l\'ensemble des paramètres.\n\nLa compatibilité de la sauvegarde n\'est garantie que pour les mêmes versions ou une version ultérieure de Voice Notify.\nIl n\'y a aucun garantie pour les sauvegardes provenant d\'une version beta ou un build non publiée.</string>
+    <string name="support_email_dialog_title">Sélectionner les pièces jointes</string>
+    <string name="support_email_dialog_message">Ceci est uniquement recommandé lors du signalement de bugs ou de craches.</string>
+    <string name="tts_speak_emojis">Prononcer les émojis</string>
+    <string name="support_translations_subtext">Traductions collaboratives sur Weblate.orgorg</string>
+    <string name="remove_override">Retirer les préférences spécifiques</string>
+    <string name="remove_override_confirm">Retirer la préférence spécifique %1$s pour %2$s ?</string>
+    <string name="ignore">ignorer</string>
+    <string name="remove_app_overrides">Retirer l\'ensemble des préférences spécifiques</string>
+    <string name="remove_app_overrides_confirm">Retirer l\'ensemble des préférences spécifiques pour %s ?</string>
+    <string name="log_ignored_desc"><![CDATA[<b>Masquer</b> &ndash; Les notifications sont masquées dans les journaux et peuvent affichées plus tard, mais comptent dans la limite des journaux.<br><br><b>Ne pas journaliser</b> &ndash; Les notifications ne sont pas journalisées et ne comptent pas dans la limite des journaux, mais ne peuvent être affiché plus tard. Les notifications journalisées avant ce paramètre sont masqués.]]></string>
+    <string name="autostart_message_manual">\n\nRechercher dans les paramètres Android pour \'démarrage automatique\', \'lancement automatique\', \'démarrage\', \'en arrière-plan\' ou \'ne jamais hiberner\' et activer Voice Notify si ce n\'est pas déjà le cas.\n\nCe paramètre possède différents noms dépendant de votre OS. Si vous ne trouvez pas, veuillez contacter le développeur.\n\nAppuyez sur %s pour ouvrir les paramètres Android.</string>
+    <string name="support_email_dialog_message_settings">• Fichier de base de donnée : Contient la liste de toutes les applications installées et tous les paramètres disponibles dans les préférences spécifiques par application.\n• Fichier de préférence : Contient les paramètres non disponible dans les préférences spécifiques par application.</string>
+    <string name="support_privacy_message">Voice Notify ne collecte ni ne transmet aucune donnée hors de l\'appareil. Cependant, il utilise des applications ou des services tiers qui peuvent transmettre des données, comme indiqué ci-dessous dans la section « Applications et services tiers ».\n\nL\'objectif de Voice Notify est de lire les notifications à voix haute. Il est donc probable que les notifications vocales soient entendues par les personnes à proximité ou par des microphones. Il est recommandé de configurer Voice Notify et l\'appareil afin d\'éviter les notifications vocales non désirées. Vous l\'utiliser à vos propres risques !\n\nDans le cas improbable où des informations sensibles seraient reçues par le développeur, celles-ci ne seront ni vendues, ni partagées, ni utilisées sans le consentement explicite du propriétaire légitime de ces informations. Toute information sensible reçue sciemment sera supprimée si elle n\'est pas liée à un problème signalé ou une fois le problème résolu.\n\nLes notifications reçues par Voice Notify sont uniquement conservées en mémoire pour être affichées dans le journal des notifications (jusqu\'aux %1$d plus récentes) et ne sont pas enregistrées dans la mémoire. Cela empêche d\'autres applications d\'accéder aux données, même si l\'appareil est rooté. Par conséquent, si le processus Voice Notify est arrêté, le journal des notifications est effacé.\n\nLes applications installées sont lues et répertoriées afin de permettre aux utilisateurs de choisir les applications dont les notifications seront prononcées et de configurer les paramètres spécifiques à chaque application. Le titre des applications et le nom des paquets sont stockés dans une base de données dans le stockage privé interne de Voice Notify sur l\'appareil afin d\'enregistrer les sélections et de servir de cache pour améliorer les performances de chargement de la liste des applications.\n\nUn journal de débogage est enregistré dans le stockage externe à %2$s, qui est accessible depuis un ordinateur via USB et éventuellement envoyé lors de l\'utilisation de la fonctionnalité Email aux Développeurs.\nIl pourrait potentiellement contenir des informations sensibles d\'une notification si une erreur s\'est produite. La boîte de dialogue Email aux Développeurs fournit un visualiseur de journal de base.\n\nLa fonctionnalité de sauvegarde enregistre un fichier zip contenant l\'ensemble des paramètre, incluant les applications installées, à une localisation choisie par l’utilisateur. \n\nApplication et services tiers :\n• Moteur de synthèse vocale - Voice Notify transmet le texte des notifications à lire au moteur de synthèse vocale par défaut, qui n\'est pas sous le contrôle direct de Voice Notify. Veuillez consulter la politique de confidentialité du moteur TTS pour savoir comment il utilise les données.\n• Google Play Services peut envoyer des données anonymisées relatives à l\'analyse, aux plantages et aux blocages au développeur afin d\'améliorer l\'application. Cela s\'applique à toutes les applications distribuées via le Play Store.\n• Application de messagerie - L\'option « Contacter le développeur » ouvre l\'application de messagerie choisie ou par défaut de l\'utilisateur, telle qu\'une application de messagerie électronique, et pré-remplit le message avec la version de Voice Notify, la version d\'Android, le numéro de build d\'Android et le nom de l\'appareil. L\'utilisateur peut choisir de joindre le journal de débogage et les fichiers de paramètres. Lors de l\'envoi à une application de messagerie électronique, le champ « À » est défini sur l\'adresse du développeur (%3$s). En envoyant le message, l\'utilisateur comprend et consent que son nom et ses informations de contact soient partagés avec le ou les destinataires, tels que déterminés par l\'application de messagerie. \n• D\'autres options sous \"Aide &amp; Support\" ouvrent les applications ou sites web correspondants (Play Store, Discord, Matrix, Weblate.org, GitHub.com) vers la page ou la salle de discussion de Voice Notify.\n\nVoici les autorisations requises par Voice Notify ainsi que les raisons pour lesquelles elles sont nécessaires :\n• Afficher des notifications - Requis pour envoyer la notification de test. Il s\'agit généralement de la seule autorisation qu\'Android montre à l\'utilisateur.\n• Interroger tous les packages - Requis pour obtenir la liste de toutes les applications installées et permettre les réglages par application.\n• Bluetooth - Requis pour détecter si un casque bluetooth est connecté\n• Modifier vos paramètres audio - Requis pour améliorer la détection des casques filaires.\n• Vibreur - Nécessaire pour la fonction de teste lorsque l\'appareil est en mode vibreur.\n• Lire l\'état du téléphone - Requis pour Android 11 et antérieur afin d\'interrompre la synthèse vocale si un appel téléphonique survient.</string>
 </resources>

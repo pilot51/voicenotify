@@ -30,10 +30,7 @@
     <string name="audio_focus_summary">Abbassa o toglie il volume della traccia in esecuzione durante la notifica</string>
     <string name="shake_to_silence">Scuoti-Per-Zittire</string>
     <string name="shake_to_silence_summary">Regola la soglia di sensibilità dello Scuoti-Per-Zittire.</string>
-    <string name="shake_to_silence_dialog_msg">La sensibilità aumenta alzando i valori.
-\n
-\nDefault: %d
-\nLascia vuoto per disabilitare.</string>
+    <string name="shake_to_silence_dialog_msg">Valori più bassi sono più sensibili.\n\nDefault: %1$d\nVuoto o 0 per disabilitare.\n\nValore di scuotimento in tempo reale: %2$d\nPicco (5 secondi): %3$d</string>
     <string-array name="stream_name">
         <item>Media</item>
         <item>Notifica</item>

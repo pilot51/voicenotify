@@ -1,41 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Used by multiple files -->
-    <string name="app_is_ignored">%s jest ignorowane</string>
-    <string name="app_is_not_ignored">%s nie jest ignorowane</string>
-    <string name="service_running">Serwis VN jest uruchomiony</string>
-    <string name="service_suspended">Serwis VN jest wstrzymany</string>
+    <string name="app_is_ignored">%s zostanie pominięte</string>
+    <string name="app_is_not_ignored">%s jest włączone</string>
+    <string name="service_running">Usługa Voice Notify jest uruchomiona</string>
+    <string name="service_suspended">Usługa Voice Notify jest wstrzymana</string>
     <!-- xml/preferences.xml -->
     <string name="app_list">Lista aplikacji</string>
-    <string name="app_list_summary">Lista zainstalowanych aplikacji które mogą być ignorowane</string>
-    <string name="tts">Synteza mowy TTS</string>
+    <string name="app_list_summary">Wybierz aplikacje, aby ją włączyć i nadpisać ustawienia dla każdej z nich</string>
+    <string name="tts">Tekst Na Mowę</string>
     <string name="tts_summary">Skonfiguruj zachowanie syntezatora mowy TTS</string>
-    <string name="tts_settings">Ustawienia TTS</string>
-    <string name="tts_settings_summary">Otwórz ustawienia syntezatora mowy TTS androida</string>
-    <string name="tts_settings_summary_fail">Nie można odnaleźć ustawień syntezatora mowy TTS na urządzeniu! jeżeli istniej (a powinien) skontaktuj się z developerem</string>
+    <string name="tts_settings">Ustawienia funkcji Tekst-na-Mowę</string>
+    <string name="tts_settings_summary">Otwórz ustawienia syntezatora mowy w systemie Android</string>
+    <string name="tts_settings_summary_fail">Nie można odnaleźć ustawień syntezatora mowy TTS na urządzeniu! jeżeli istniej (a powinien) skontaktuj się z developerem.</string>
     <string name="tts_message">Wiadomość TTS</string>
-    <string name="tts_message_summary">Dopasuj które części powiadomienia mają być wypowiedziane</string>
-    <string name="tts_text_replace">Wymiana tekstu TTS</string>
-    <string name="tts_text_replace_summary">Zamiana tekstu do poprawnej wymowy</string>
-    <string name="tts_text_replace_dialog">Zamiana tekstu do wypowiedzenia, pozwalający dostosować w jaki syntezator mowy TTS wymawia słowa lub zamienia tekst z dowolnego innego powodu. \n \nTekst do wymowy jest niewrażliwy na wielkość liter.</string>
-    <string name="tts_stream">Strumień dźwięku syntezatora TTS</string>
-    <string name="tts_stream_summary">Wybierz strumień dźwięku z którego syntezator mowy TTS ma mówić</string>
+    <string name="tts_message_summary">Dostosuj, które elementy powiadomień mają być odczytywane na głos</string>
+    <string name="tts_text_replace">Zastępowanie Tekstu w TTS</string>
+    <string name="tts_text_replace_summary">Zastąp tekst do odczytania, np. aby poprawić wymowę</string>
+    <string name="tts_text_replace_dialog">Zamień tekst do wypowiedzenia, umożliwia dostosowanie sposobu, w jaki funkcja Text-To-Speech wymawia słowa lub zastępuje tekst dowolnym innym tekstem.\n\nZamiany są niezależne od wielkości liter i każda z nich jest stosowana kolejno od góry do dołu, po formatowaniu komunikatu TTS, ale przed usunięciem emoji.</string>
+    <string name="tts_stream">Strumień Dźwięku Syntezatora TTS</string>
+    <string name="tts_stream_summary">Wybierz strumień audio, przez który będzie odtwarzana funkcja Tekst-Na-Mowę</string>
     <string name="tts_delay">Opóźnienie TTS</string>
-    <string name="tts_delay_summary">Opóźnia syntezator mowy TTS o wybraną liczbę sekund po pojawienia się powiadomienia</string>
-    <string name="tts_delay_dialog_msg">Liczba sekund do odczekania po otrzymaniu powiadomienia</string>
-    <string name="tts_repeat">Powtórzenia TTS</string>
-    <string name="tts_repeat_summary">Ciągle powtarzaj wymowę powiadomienia do czasu włączenia ekranu</string>
-    <string name="tts_repeat_dialog_msg">Powiadomienia są powtarzane przez zdefiniowany interwał do czasu włączenia ekranu. Powiadomienia otrzymane w czasie włączonego ekranu nie są powtarzane.
-\n
-\nWartość w minutach. Pusto albo 0 to wyłączone.</string>
+    <string name="tts_delay_summary">Opóźnij odczyt tekstu na mowę o określoną liczbę sekund po otrzymaniu powiadomienia</string>
+    <string name="tts_delay_dialog_msg">Liczba sekund oczekiwania po powiadomieniu przed rozpoczęciem odczytu.</string>
+    <string name="tts_repeat">Powtórz odczyt TTS</string>
+    <string name="tts_repeat_summary">Powtarzaj powiadomienia przez syntezator mowy (TTS), dopóki ekran nie zostanie włączony</string>
+    <string name="tts_repeat_dialog_msg">Powiadomienia są powtarzane w określonych odstępach czasu, dopóki ekran nie zostanie włączony. Powiadomienia utworzone, gdy ekran jest aktywny, nie są powtarzane. \n\nWartość w minutach. Pozostaw puste lub ustaw 0, aby wyłączyć.</string>
     <string name="audio_focus">Zapałzuj/przycisz media</string>
-    <string name="audio_focus_summary">Zażądaj inne media do zapałzowania/przyciszenia w czasie mówienia</string>
+    <string name="audio_focus_summary">Poproś inne media o wstrzymanie/wyciszenie dźwięku podczas mówienia</string>
     <string name="shake_to_silence">Potrząśnij aby wyciszyć</string>
-    <string name="shake_to_silence_summary">Dostosuj wrażliwość progu wstrząśnięcia do wyciszenia</string>
-    <string name="shake_to_silence_dialog_msg">Niższe wartości oznaczają większą wrażliwość.
-\n
-\nDomyślnie: %d
-\nPuste aby wyłączyć</string>
+    <string name="shake_to_silence_summary">Dostosuj próg czułości funkcji \"Potrząśnij, aby wyciszyć\"</string>
+    <string name="shake_to_silence_dialog_msg">Niższe wartości są bardziej czułe.\n\nDomyślnie: %1$d\nPuste lub 0, aby wyłączyć.\n\nWartość drgań w czasie rzeczywistym: %2$d\nWartość szczytowa (5 sekund): %3$d</string>
     <string-array name="stream_name">
         <item>Media</item>
         <item>Powiadomienia</item>
@@ -43,21 +38,21 @@
         <item>Dzwonek</item>
         <item>Alarm</item>
     </string-array>
-    <string name="ignore_strings">Ignoruj tekst</string>
-    <string name="ignore_strings_summary">Ignoruj powiadomienie które posiadają konkretną litere</string>
-    <string name="require_ignore_strings_dialog_msg">Oddziel indywidualne wpisy nową linią</string>
-    <string name="ignore_empty">Ignoruj puste</string>
+    <string name="ignore_strings">Ignoruj Tekst</string>
+    <string name="ignore_strings_summary">Ignorowanie powiadomień zawierających określony tekst w wiadomości</string>
+    <string name="require_ignore_strings_dialog_msg">Dopasowanie odbywa się względem wiadomości wysyłanej do TTS, po sformatowaniu wiadomości TTS i zastąpieniu tekstu, łącznie z interpunkcją. \n\nOddziel poszczególne wpisy nową linią. \nWiadomość musi zawierać dowolny wpis, a nie wszystkie, aby uznać ją za dopasowaną. \nBez rozróżniania wielkości liter.</string>
+    <string name="ignore_empty">Ignoruj Puste</string>
     <string name="ignore_empty_summary_on">Powiadomienia bez wiadomości nie będę wymawiane</string>
-    <string name="ignore_empty_summary_off">Powiadomienia będą wymawiane jako \"powiadomienie od [app name].\"</string>
-    <string name="ignore_repeat">Ignoruj powtórzenia</string>
-    <string name="ignore_repeat_summary">Ignoruj następne identyczne powiadomienia w określonym czasie</string>
-    <string name="ignore_repeat_dialog_msg">Ustaw liczbę sekund które muszą przeminąć aby poprzednie powtórzone powiadomienie było wymówione. \nIgorowanie powtórzeń resetuje licznik oraz inne powiadomienie je czyści. \nPuste = nieskończoność.</string>
-    <string name="max_length">Maksymalna wiadomość</string>
-    <string name="max_length_summary">Maksymalna długość wiadomości do wypowiedzenia. Dłuższe wiadomości zostaną przycięte.</string>
-    <string name="max_length_dialog_msg">Maksymalna długość wiadomości do wypowiedzenia \nDłuższe wiadomości zostaną przycięte.</string>
-    <string name="device_state">Stany urządzenia</string>
+    <string name="ignore_empty_summary_off">Powiadomienia bez wiadomości będą wyświetlane jako \"Powiadomienie od [app name].\"</string>
+    <string name="ignore_repeat">Ignoruj Powtórzenia</string>
+    <string name="ignore_repeat_summary">Ignorowanie kolejnych takich samych powiadomień w określonym czasie</string>
+    <string name="ignore_repeat_dialog_msg">Ustaw liczbę sekund, jaka musi upłynąć, aby powtórzone powiadomienie zostało wypowiedziane. \nZignorowane powtórzenia resetują licznik.\n\nWykrywanie powtórzeń jest ograniczone do pamięci dziennika powiadomień (%d powiadomień).\n\n0 = Wyłączone \nPuste pole = Bez limitu</string>
+    <string name="max_length">Maksymalna długość</string>
+    <string name="max_length_summary">Maksymalna długość wiadomości do wypowiedzenia. Dłuższe wiadomości zostaną przycięte</string>
+    <string name="max_length_dialog_msg">Maksymalna długość wiadomości do wypowiedzenia.\nDłuższe wiadomości będą obcinane.\n\nPuste lub 0 dla nieograniczonej długości.\nAndroid TTS ma oddzielny limit długości (%d), który zawsze ma zastosowanie.</string>
+    <string name="device_state">Stany Urządzenia</string>
     <string name="device_state_summary">Wybierz w jakich statusach telefonu ma być mówione powiadomienie</string>
-    <string name="device_state_dialog_title">Wypowiadaj w tych stanach urządzenia</string>
+    <string name="device_state_dialog_title">Mów w tych stanach urządzenia</string>
     <string-array name="device_states">
         <item>Ekran wyłączony</item>
         <item>Ekran włączony</item>
@@ -65,79 +60,153 @@
         <item>Z zestawem słuchawkowym</item>
         <item>Wyciszony/tryb wibracji</item>
     </string-array>
-    <string name="quiet_start">Rozpocznij cichy czas</string>
-    <string name="quiet_start_summary">Nie mów po tym czasie.
-\nPozostaw te same aby wyłączyć.</string>
-    <string name="quiet_end">Zakończ cichy czas</string>
-    <string name="quiet_end_summary">Nie mów przed tym czasem.
-\nPozostaw te same aby wyłączyć.</string>
-    <string name="test_summary">Wyzwól powiadomienie (opóźnione 5 sekund) aby wypróbować aktualne ustawienia</string>
-    <string name="test_ignored">Voice Notify jest ignorowane w liście aplikacji.
-\n Test się obędzie, ale powiadomienie nie będzie wypowiedziane.</string>
-    <string name="notify_log_summary">Lista ostatnich %d powiadomień.
-\nWyświetl czas, nazwę aplikacji, wiadomość oraz powód zignorowania</string>
-    <string name="support_summary">Darowizna, ocena/komentarz, tłumaczenie, kod źródłowy oraz kontakt z deweloperem</string>
+    <string name="quiet_start">Rozpoczęcie Czasu Ciszy</string>
+    <string name="quiet_start_summary">Nie mów po upływie tego czasu. \nUstaw to samo, co w \"Zakończ czas ciszy\" aby wyłączyć.</string>
+    <string name="quiet_end">Zakończenie Czasu Ciszy</string>
+    <string name="quiet_end_summary">Nie mów przed upływem tego czasu. \nUstaw to samo, co w \"Rozpocznij czas ciszy\" aby wyłączyć.</string>
+    <string name="test_summary">Opublikuj powiadomienie (z opóźnieniem 5 sekund), aby przetestować bieżące ustawienia</string>
+    <string name="test_ignored">Voice Notify jest ignorowane na liście aplikacji.\nTest zostanie uruchomiony, ale powiadomienie nie zostanie wypowiedziane.</string>
+    <string name="notify_log_summary">Wyświetl ostatnie %d powiadomień. \nPokazuje czas, nazwę aplikacji, treść wiadomości oraz powody zignorowania.</string>
+    <string name="support_summary">Oceń i napisz recenzję, wyślij wiadomość e-mail do dewelopera, dołącz do czatu społeczności, sprawdź dostępne tłumaczenia, przejrzyj kod źródłowy, zgłoś problem w systemie śledzenia błędów, zapoznaj się z polityką prywatności</string>
     <!-- TextReplacePreference -->
-    <string name="text_replace_error_duplicate">Duplikat! Nie zostanie zapisane</string>
+    <string name="text_replace_error_duplicate">Duplikat! Nie zostanie zapisany.</string>
     <!-- text_replace_row.xml -->
-    <string name="text_to_replace">Tekst to zamienienia</string>
-    <string name="replacement_text">Zastąpiony tekst</string>
+    <string name="text_to_replace">Tekst do zastąpienia</string>
+    <string name="replacement_text">Tekst zamieniony</string>
     <!-- MainActivity and xml/preferences.xml -->
-    <string name="test">Test</string>
-    <string name="notify_log">Dziennik powiadomień</string>
-    <string name="support">Wesprzyj Voice Notify</string>
+    <string name="test">Test Mówienia</string>
+    <string name="notify_log">Rejestr Powiadomień</string>
+    <string name="support">Pomoc i Wsparcie</string>
     <!-- MainActivity -->
-    <string name="service_disabled">Serwis VN jest wyłączony</string>
-    <string name="status_summary_notification_access_enabled">Otwórz ostawienia dostępu do powiadomień aby wyłaczyć VN</string>
-    <string name="status_summary_notification_access_disabled">Otwórz ostawienia dostępu do powiadomień aby włączyć VN</string>
-    <string name="status_summary_suspended">Wybierz aby aktywować VN.</string>
-    <string name="notification_channel_desc">Używane do testowania powiadomień</string>
+    <string name="service_disabled">Usługa Voice Notify jest wyłączona</string>
+    <string name="status_summary_notification_access_enabled">Stuknij, aby wstrzymać Voice Notify.\nNaciśnij i przytrzymaj, aby otworzyć ustawienia dostępu do powiadomień w systemie Android w celu wyłączenia usługi.</string>
+    <string name="status_summary_notification_access_disabled">Stuknij, aby otworzyć ustawienia dostępu do powiadomień w systemie Android i włączyć usługę.</string>
+    <string name="status_summary_suspended">Stuknij, aby aktywować Voice Notify.\nNaciśnij i przytrzymaj, aby otworzyć ustawienia dostępu do powiadomień w systemie Android w celu wyłączenia usługi.</string>
+    <string name="notification_channel_desc">Służy do testowego powiadomienia</string>
     <string name="test_subtext">Podtekst</string>
-    <string name="test_content_title">Tytuł</string>
-    <string name="test_content_text">To jest kontent wiadomości</string>
-    <string name="test_content_info">Informacja kontentu</string>
-    <string name="support_rate">Oceń/skomentuj </string>
+    <string name="test_content_title">Nagłówek Powiadomienia</string>
+    <string name="test_content_text">To jest treść wiadomości. 🙂</string>
+    <string name="test_content_info">Informacja Dodatkowa</string>
+    <string name="support_rate">Oceń i napisz recenzję</string>
     <string name="support_email">Kontakt z deweloperem</string>
     <string name="support_translations">Tłumaczenie</string>
     <string name="support_github">Kod źródłowy</string>
-    <string name="error_market">Error: nie można odnaleźć Sklepu Google Play</string>
+    <string name="error_market">Error: nie można odnaleźć Sklepu Google Play.</string>
     <string name="error_email">Error: Nie można znaleźć zainstalowanej aplikacji Email.</string>
     <!-- Service -->
     <string name="notification_from">Powiadomienie od %s.</string>
-    <string name="error_tts_init">Error: Nie można było zainicjalizować TTS. [%d]</string>
+    <string name="error_tts_init">Błąd: Nie można zainicjować funkcji tekst‑na‑mowę (TTS)! Kod statusu: %d</string>
     <!-- NotifyList -->
     <string name="yes">Tak</string>
     <string name="ignore_app">Ignorować %s\?</string>
-    <string name="unignore_app">Od ignorować %s?</string>
+    <string name="unignore_app">Włączyć %s?</string>
     <!-- menu/app_list.xml-->
-    <string name="ignore_all">Ignoruj wszystko</string>
-    <string name="ignore_none">Nic nie ignoruj</string>
-    <string name="filter">Filter</string>
+    <string name="ignore_all">Ignoruj Wszystko</string>
+    <string name="ignore_none">Nic Nie Ignoruj</string>
+    <string name="filter">Filtr</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">Ignorowane aplikacje</string>
-    <string name="reason_string_ignored">Ignorowany tekst</string>
+    <string name="reason_string_ignored">Pominięty tekst</string>
     <string name="reason_empty_msg">Pusta wiadomość</string>
-    <string name="reason_identical">Identyczna wiadomość w ostatnich {0,choice,-1#infinite seconds|1#{0} second|1&lt;{0} seconds}</string>
+    <string name="reason_identical">Identyczna powiadomienie w ciągu {0,choice,-1#nieskończone sekundy|1#{0} sekunda|1&lt;{0} sekundy}</string>
     <string name="reason_quiet">Czas ciszy</string>
-    <string name="reason_silent">Wyciszony lub tryb wibracji</string>
-    <string name="reason_call">Aktywna rozmowa telefoniczna</string>
+    <string name="reason_silent">Tryb cichy lub tryb wibracji</string>
+    <string name="reason_call">Aktywne połączenie telefoniczne</string>
     <string name="reason_screen_off">Ekran wyłaczony</string>
     <string name="reason_screen_on">Ekran właczony</string>
-    <string name="reason_headset_off">Bez zestawy słuchawkowego</string>
+    <string name="reason_headset_off">Bez zestawu słuchawkowego</string>
     <string name="reason_headset_on">Z zestawem słuchawkowym</string>
-    <string name="reason_shake">Wyciszony poprzez potrząśnięcie</string>
-    <string name="reason_suspended">VN wstrzymany przez widget</string>
-    <string name="reason_service_stopped">Serwis zastopowany</string>
+    <string name="reason_shake">Wyciszenie po potrząśnięciu urządzeniem</string>
+    <string name="reason_suspended">🔕 Voice Notify wstrzymany</string>
+    <string name="reason_service_stopped">Usługa została zatrzymana</string>
     <string name="back">Wstecz</string>
     <string name="support_discord">Discord</string>
     <string name="support_matrix">Matrix</string>
     <string name="app_name">Voice Notify</string>
-    <string name="support_privacy">Polityka prywatności</string>
+    <string name="support_privacy">Polityka Prywatności</string>
     <string name="close">Zamknij</string>
     <string name="error">Błąd</string>
-    <string name="notification_details">Szczegóły powiadomienia</string>
+    <string name="notification_details">Szczegóły Powiadomienia</string>
     <string name="enable">Włącz</string>
     <string name="title">Tytuł</string>
     <string name="metadata">Metadane</string>
     <string name="remove">Usuń</string>
+    <string name="app_overrides">%s Nadpisania</string>
+    <string name="permission_rationale_read_phone_state">Wymagane jest uprawnienie do połączeń telefonicznych, aby zapobiec odczytywaniu powiadomień przez Voice Notify w trakcie rozmowy.</string>
+    <string name="permission_rationale_post_notifications">Wymagane jest uprawnienie do wysyłania powiadomień, aby Voice Notify mógł opublikować powiadomienie testowe.</string>
+    <string name="autostart_message">Aby Voice Notify działał niezawodnie na tym urządzeniu, musi mieć pozwolenie na automatyczne uruchamianie lub działanie w tle.</string>
+    <string name="autostart_message_direct">\n\nNaciśnij %s, aby przejść do odpowiedniego ekranu ustawień i włączyć Voice Notify, jeśli nie jest już włączony.</string>
+    <string name="autostart_message_direct_failed">Nie można otworzyć ekranu ustawień</string>
+    <string name="autostart_message_manual">\n\nWyszukaj w ustawieniach Androida hasła „autostart”, „auto-launch”, „startup”, „background” lub „never sleep” i włącz Voice Notify, jeśli nie jest już włączony. \n\nUstawienie ma różne nazwy w zależności od systemu operacyjnego. Jeśli nie możesz go znaleźć, skontaktuj się z deweloperem. \n\nNaciśnij %s, aby otworzyć ustawienia Androida.</string>
+    <string name="dont_show_again">Nie pokazuj ponownie</string>
+    <string name="require_strings">Wymagany Tekst</string>
+    <string name="require_strings_summary">Odczytuj tylko powiadomienia, które w treści zawierają określony tekst</string>
+    <string name="ignore_groups">Ignoruj Wiadomości Grupowe</string>
+    <string name="ignore_groups_summary_on">Powiadomienia zawierające wiele wiadomości nie będą odczytywane</string>
+    <string name="ignore_groups_summary_off">Powiadomienia zawierające wiele wiadomości będą odczytywane</string>
+    <string name="test_ticker">To jest wiadomość z paska</string>
+    <string name="test_big_content_title">Główny Tytuł Treści</string>
+    <string name="test_big_content_summary">To jest podsumowanie głównej treści</string>
+    <string name="test_big_content_text">To jest rozszerzona treść powiadomienia.</string>
+    <string name="test_text_lines">To jest linia tekstu.\nTo jest kolejna linijka tekstu.</string>
+    <string name="notify_log_settings">Ustawienia Dziennika Powiadomień</string>
+    <string name="log_ignored_desc"><![CDATA[<b>Ukryj</b> &ndash; Powiadomienia są ukryte w dzienniku i mogą zostać wyświetlone później, ale wliczają się do limitu dziennika.<br><br><b>Nie zapisuj w dzienniku</b> &ndash; Powiadomienia nie są zapisywane w dzienniku i nie wliczają się do limitu dziennika, ale nie można ich później wyświetlić. Powiadomienia zapisane w dzienniku przed włączeniem tej opcji zostają ukryte.]]></string>
+    <string name="show_ignored">Pokaż zignorowane %s</string>
+    <string name="hide_ignored">Ukryj ignorowane %s</string>
+    <string name="do_not_log_ignored">Nie zapisuj zignorowanych %s</string>
+    <string name="notifications">powiadomienia</string>
+    <string name="apps">aplikacje</string>
+    <string name="ticker">Tekst powiadomienia</string>
+    <string name="subtext">Opis</string>
+    <string name="content_text">Treść Tekstu</string>
+    <string name="content_info_text">Tekst Informacyjny Treści</string>
+    <string name="big_content_summary">Obszerne Streszczenie Zawartości</string>
+    <string name="big_content_title">Główny Tytuł Powiadomienia</string>
+    <string name="big_content_text">Rozszerzona Treść Powiadomienia</string>
+    <string name="text_lines">Linie Tekstu</string>
+    <string name="flags">Flaga</string>
+    <string name="ignored_reasons">Powody Pominięcia</string>
+    <string name="interrupted_reason">Powód Przerwania</string>
+    <string name="metadata_id">ID: %d</string>
+    <string name="metadata_category">Kategoria: %s</string>
+    <string name="metadata_progress">Postęp: %1$d / %2$d</string>
+    <string name="metadata_progress_indeterminate">Postęp: Nieokreślony</string>
+    <string name="backup_restore">Kopia Zapasowa / Przywracanie</string>
+    <string name="backup_restore_summary">Tworzenie kopii zapasowych lub przywracanie wszystkich ustawień Voice Notify</string>
+    <string name="backup_restore_message">Utwórz kopię zapasową lub przywróć plik ZIP zawierający wszystkie ustawienia.\n\nKopie zapasowe są gwarantowane jako zgodne wyłącznie z tą samą wersją lub nowszą aplikacji Voice Notify. \nNie ma gwarancji zgodności dla kopii zapasowych utworzonych w wersji beta lub w wersji niepublicznej.</string>
+    <string name="backup_settings">Ustawienia Kopii Zapasowej</string>
+    <string name="restore_settings">Przywróć Ustawienia</string>
+    <string name="support_rate_subtext">Wyświetl aplikację w Sklepie Play</string>
+    <string name="support_email_subtext">Przekaż ogólną opinię lub wyślij pliki diagnostyczne</string>
+    <string name="support_email_dialog_title">Wybierz załączniki</string>
+    <string name="support_email_dialog_message">Są one zalecane tylko w przypadku zgłaszania błędów i awarii.</string>
+    <string name="support_email_dialog_message_log">Chociaż potencjalnie wrażliwe informacje nie są celowo uwzględniane, log może zawierać nazwy zainstalowanych aplikacji, a niektóre błędy mogą obejmować treść powiadomień lub ustawienia tekstowe. Plik jest ograniczony do 1 MB, co może obejmować dane z kilku dni. Można uzyskać do niego dostęp z komputera przez USB pod adresem %s</string>
+    <string name="support_email_dialog_message_settings">• Plik bazy danych: Zawiera listę wszystkich zainstalowanych aplikacji oraz wszystkie ustawienia dostępne w nadpisaniach dla poszczególnych aplikacji. \n• Plik preferencji: Zawiera ustawienia, które nie są dostępne w nadpisaniach dla poszczególnych aplikacji.</string>
+    <string name="debug_log">Log Diagnostyczny</string>
+    <string name="view">Widok</string>
+    <string name="view_debug_log_failed">Nie można odczytać dziennika debugowania</string>
+    <string name="settings">Ustawienia</string>
+    <string name="support_chat_subtext">Czat społeczności — najszybsza odpowiedź od dewelopera</string>
+    <string name="support_translations_subtext">Tłumaczenia społecznościowe dostępne na Weblate.org</string>
+    <string name="support_github_subtext">Zgłaszanie błędów, propozycje nowych funkcji, informacje o wydaniach, wersje beta, kod źródłowy</string>
+    <string name="support_privacy_message">Voice Notify nie gromadzi ani nie przesyła danych poza urządzenie. Jednak korzysta z aplikacji lub usług firm trzecich, które mogą przesyłać dane, jak opisano poniżej w sekcji „Aplikacje i usługi firm trzecich”.\n\nCelem Voice Notify jest wypowiadanie powiadomień, dlatego istnieje możliwość, że wypowiedziane powiadomienia mogą zostać usłyszane przez osoby w pobliżu lub mikrofony. Zaleca się skonfigurowanie Voice Notify oraz urządzenia w taki sposób, aby zapobiec niepożądanym wypowiadanym powiadomieniom. Używaj na własne ryzyko.\n\nW mało prawdopodobnym przypadku, gdy programista otrzyma poufne informacje, nie zostaną one sprzedane, udostępnione ani wykorzystane bez wyraźnej zgody prawowitego właściciela tych informacji. Wszelkie poufne informacje, które zostaną świadomie odebrane, zostaną usunięte, jeśli nie są związane ze zgłoszonym problemem lub gdy problem zostanie rozwiązany.\n\nPowiadomienia odebrane przez Voice Notify są przechowywane wyłącznie w pamięci w celu wyświetlenia w dzienniku powiadomień (do %1$d najnowszych) i nie są zapisywane w pamięci trwałej. Zapobiega to dostępowi innych aplikacji do danych, nawet jeśli urządzenie jest zrootowane. W rezultacie, jeśli proces Voice Notify zostanie zakończony, dziennik powiadomień zostanie wyczyszczony.\n\nZainstalowane aplikacje są odczytywane i wyświetlane, aby umożliwić użytkownikowi wybór, które aplikacje mają wypowiadane powiadomienia oraz skonfigurowanie ustawień dla każdej z nich. Nazwy aplikacji i pakietów są przechowywane w bazie danych w wewnętrznej, prywatnej pamięci Voice Notify na urządzeniu, aby zapisać wybory i działać jako pamięć podręczna przyspieszająca ładowanie listy aplikacji.\n\nDziennik debugowania jest zapisywany w pamięci zewnętrznej pod adresem %2$s, który jest dostępny z poziomu komputera przez USB i może być opcjonalnie wysłany przy użyciu funkcji „Wyślij e-mail do programisty”.\nMoże potencjalnie zawierać poufne informacje z powiadomienia, jeśli wystąpił błąd. Okno dialogowe „Wyślij e-mail do programisty” zawiera podstawowy podgląd dziennika.\n\nFunkcja kopii zapasowej zapisuje plik ZIP zawierający wszystkie ustawienia, w tym zainstalowane aplikacje, w lokalizacji wybranej przez użytkownika.\n\nAplikacje i usługi firm trzecich:  \n• Silnik Text-To-Speech – Voice Notify przekazuje tekst powiadomienia do wypowiedzenia domyślnemu silnikowi TTS, który znajduje się poza bezpośrednią kontrolą Voice Notify. Prosimy zapoznać się z polityką prywatności silnika TTS, aby dowiedzieć się, jak wykorzystuje dane.  \n• Usługi Google Play mogą przesyłać anonimowe dane dotyczące analityki, awarii i zawieszeń do programisty w celu ulepszenia aplikacji. Dotyczy to wszystkich aplikacji dystrybuowanych przez Sklep Play.  \n• Aplikacja do wiadomości – Opcja „Skontaktuj się z programistą” otwiera wybraną lub domyślną aplikację do wiadomości użytkownika, np. aplikację e-mail, i wstępnie wypełnia wiadomość wersją Voice Notify, wersją Androida, numerem kompilacji Androida oraz nazwą urządzenia. Użytkownik może dołączyć dziennik debugowania i pliki ustawień. Podczas wysyłania do aplikacji e-mail pole „Do” jest ustawiane na adres programisty (%3$s). Wysyłając wiadomość, użytkownik rozumie i wyraża zgodę na udostępnienie swojego imienia i danych kontaktowych odbiorcy/odbiorcom zgodnie z działaniem aplikacji do wiadomości.  \n• Inne opcje w sekcji „Pomoc i wsparcie” otwierają odpowiednie aplikacje zewnętrzne lub strony internetowe (Sklep Play, Discord, Matrix, Weblate.org, GitHub.com) prowadzące do strony Voice Notify lub pokoju rozmów.\n\nPoniżej znajdują się uprawnienia używane przez Voice Notify oraz ich uzasadnienie:  \n• Wyświetlanie powiadomień – Wymagane do wyświetlenia testowego powiadomienia. Zazwyczaj jest to jedyne uprawnienie widoczne dla użytkownika w Androidzie.  \n• Zapytanie o wszystkie pakiety – Wymagane do pobrania listy wszystkich zainstalowanych aplikacji na potrzeby listy aplikacji i ustawień per-aplikacja.  \n• Bluetooth – Wymagane do wykrycia, czy zestaw słuchawkowy Bluetooth jest podłączony.  \n• Modyfikacja ustawień audio – Wymagane do poprawionego wykrywania zestawu słuchawkowego przewodowego.  \n• Wibracje – Wymagane dla funkcji testowej, gdy urządzenie jest w trybie wibracji.  \n• Odczyt stanu telefonu – Wymagane w Androidzie 11 i starszych, aby przerwać TTS, gdy rozpocznie się połączenie telefoniczne.</string>
+    <string name="error_browser">Błąd: Nie można znaleźć zainstalowanej aplikacji przeglądarki.</string>
+    <string name="remove_override">Usuń nadpisanie</string>
+    <string name="remove_override_confirm">Usunąć nadpisania %1$s z %2$s?</string>
+    <string name="regex_message">\n\nAby użyć wyrażenia regularnego (regex), poprzedź tekst prefiksem „$regex:”. Domyślnie regex rozróżnia wielkość liter. \nNa przykład, aby dopasować adres URL (ignorując wielkość liter): \n$regex:(?i)https?:\\/\\/[^\\s]+.\n</string>
+    <string name="invalid_regex">Nieprawidłowe wyrażenie regularne</string>
+    <string name="ignore_enable_apps_confirm">Czy na pewno chcesz %s wszystkie aplikacje?</string>
+    <string name="ignore">ignorować</string>
+    <string name="remove_app_overrides">Usuń wszystkie nadpisania aplikacji</string>
+    <string name="remove_app_overrides_confirm">Usunąć wszystkie nadpisania dla %s?</string>
+    <string name="tts_message_dialog">#A = Tytuł aplikacji\n#T = Ticker\n#S = Podtekst\n#C = Tytuł treści\n#M = Wiadomość treści\n#I = Informacje o treści\n#H = Duży tytuł treści\n#Y = Duże podsumowanie treści\n#B = Duży tekst treści\n#L = Linie tekstu\nWielkość liter nie ma znaczenia.\n\nDomyślnie:\n%1$s\n\nStare ustawienia domyślne (v1.1.0 - v1.3.0):\n#A. #C. #M.\n\nStare ustawienia domyślne (v1.0.x):\n#A: #T</string>
+    <string name="tts_speak_emojis">Mów emotikony</string>
+    <string name="tts_speak_emojis_summary_on">Emoji będą wypowiadane</string>
+    <string name="tts_speak_emojis_summary_off">Emoji nie będą wypowiadane</string>
+    <string name="reason_string_required">Brak wymaganego tekstu</string>
+    <string name="reason_tts_failed">TTS nie powiodło się. Podjęto próbę ponownego uruchomienia i ponownego odtworzenia. \nTen tekst powinien być żółty, jeśli ponowna próba zakończyła się sukcesem, lub czerwony, jeśli nie. \nSpróbuj ponownie uruchomić usługę Voice Notify, jeśli powiadomienia nie są wypowiadane.</string>
+    <string name="reason_tts_restarted">TTS został ponownie uruchomiony, gdy wiadomość była w kolejce lub była wypowiadana. Dodano ponownie do kolejki.</string>
+    <string name="reason_tts_interrupted">TTS zostało przerwane z nieznanego powodu</string>
+    <string name="reason_tts_error">Błąd przetwarzania TTS</string>
+    <string name="reason_tts_length_limit">Wiadomość przekroczyła limit długości TTS</string>
 </resources>
