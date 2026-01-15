@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2025 Mark Injerd
+ * Copyright 2011-2026 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import androidx.annotation.StringRes
@@ -30,16 +29,18 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.core.app.ActivityCompat
-import com.google.accompanist.permissions.*
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.shouldShowRationale
 import com.pilot51.voicenotify.PermissionHelper.RationaleDialog
 import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.ui.VNPreview
 
 object PermissionHelper {
 	val notificationListenerSettingsIntent get() = Intent(
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
-			Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
-		} else "android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"
+		Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS
 	).apply {
 		// Highlight Voice Notify when settings opens
 		val serviceId = ComponentName(appContext, Service::class.java).flattenToShortString()

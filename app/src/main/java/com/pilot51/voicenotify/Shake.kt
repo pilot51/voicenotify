@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2025 Mark Injerd
+ * Copyright 2011-2026 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package com.pilot51.voicenotify
 
 import android.content.Context
-import android.content.Context.SENSOR_SERVICE
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -30,7 +29,7 @@ import kotlin.math.abs
 import kotlin.math.sqrt
 
 class Shake(context: Context) : SensorEventListener {
-	private val manager = context.getSystemService(SENSOR_SERVICE) as SensorManager
+	private val manager = context.getSystemService(SensorManager::class.java)
 	private val sensor = manager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
 	var onShake: (() -> Unit)? = null
 	private val _threshold = getPrefStateFlow(KEY_SHAKE_THRESHOLD, 0)

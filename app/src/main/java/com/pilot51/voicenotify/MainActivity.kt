@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2025 Mark Injerd
+ * Copyright 2011-2026 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,7 +86,7 @@ class MainActivity : ComponentActivity() {
 	}
 }
 
-private enum class Screen(@StringRes val title: Int) {
+private enum class Screen(@param:StringRes val title: Int) {
 	MAIN(R.string.app_name),
 	APP_LIST(R.string.app_list),
 	TTS(R.string.tts)
@@ -145,7 +145,7 @@ private fun AppBar(
 				AppListActions()
 			}
 		},
-		colors = TopAppBarDefaults.mediumTopAppBarColors(
+		colors = TopAppBarDefaults.topAppBarColors(
 			containerColor = MaterialTheme.colorScheme.primaryContainer
 		)
 	)

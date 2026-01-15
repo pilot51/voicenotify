@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2025 Mark Injerd
+ * Copyright 2011-2026 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ plugins {
 	alias(libs.plugins.android.application)
 	alias(libs.plugins.compose)
 	alias(libs.plugins.ksp)
+	alias(libs.plugins.room)
 }
 
 val keystorePropertiesFile: File = rootProject.file("keystore.properties")
@@ -39,21 +40,18 @@ val gitCommitHash by lazy {
 
 android {
 	namespace = "com.pilot51.voicenotify"
-	compileSdk = 34
+	compileSdk = 36
 	defaultConfig {
 		applicationId = "com.pilot51.voicenotify"
-		minSdk = 21
-		targetSdk = 34
-		versionName = "1.4.4"
+		minSdk = 23
+		targetSdk = 36
+		versionName = "1.4.5-beta"
 		versionCode = 34
 		vectorDrawables.useSupportLibrary = true
-		ksp {
-			arg("room.schemaLocation", "$projectDir/schemas")
-		}
 	}
 
-	buildFeatures {
-		viewBinding = true
+	room {
+		schemaDirectory("$projectDir/schemas")
 	}
 
 	buildFeatures {
@@ -82,13 +80,8 @@ android {
 		getByName("release") {
 			signingConfig = signingConfigs.getByName("release")
 			versionNameSuffix = " [$gitCommitHash]"
-			@Suppress("UnstableApiUsage")
-			postprocessing {
-				isRemoveUnusedCode = true
-				isOptimizeCode = true
-				isShrinkResources = true
-				isObfuscate = false
-			}
+			isMinifyEnabled = true
+			isShrinkResources = true
 			proguardFiles(
 				getDefaultProguardFile("proguard-android-optimize.txt")
 			)

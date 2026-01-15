@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2025 Mark Injerd
+ * Copyright 2011-2026 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,15 @@ package com.pilot51.voicenotify.ui.dialog.main
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.widget.Toast
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.core.app.NotificationCompat
 import com.pilot51.voicenotify.MainActivity
 import com.pilot51.voicenotify.R
+import com.pilot51.voicenotify.VNApplication.Companion.appContext
 import com.pilot51.voicenotify.prefs.db.AppRepository
 import com.pilot51.voicenotify.ui.dialog.TextEditDialog
 import kotlinx.coroutines.CoroutineScope
@@ -39,22 +39,21 @@ private const val NOTIFICATION_CHANNEL_ID = "test"
 
 @Composable
 fun TestNotificationDialog(onDismiss: () -> Unit) {
-	val context = LocalContext.current
 	TextEditDialog(
 		titleRes = R.string.test,
 		messageRes = R.string.test_summary,
-		initialText = context.getString(R.string.test_content_text),
+		initialText = stringResource(R.string.test_content_text),
 		onDismiss = onDismiss
 	) { content ->
 		CoroutineScope(Dispatchers.IO).launch {
-			val vnApp = AppRepository.findOrAddApp(context.packageName)!!
+			val vnApp = AppRepository.findOrAddApp(appContext.packageName)!!
 			if (!vnApp.isEnabled) {
 				launch(Dispatchers.Main) {
-					Toast.makeText(context, context.getString(R.string.test_ignored), Toast.LENGTH_LONG).show()
+					Toast.makeText(appContext, appContext.getString(R.string.test_ignored), Toast.LENGTH_LONG).show()
 				}
 			}
-			val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-			val intent = Intent(context, MainActivity::class.java)
+			val notificationManager = appContext.getSystemService(NotificationManager::class.java)
+			val intent = Intent(appContext, MainActivity::class.java)
 			delay(5.seconds)
 			val id = NOTIFICATION_CHANNEL_ID
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -62,30 +61,28 @@ fun TestNotificationDialog(onDismiss: () -> Unit) {
 				if (channel == null) {
 					channel = NotificationChannel(
 						id,
-						context.getString(R.string.test),
+						appContext.getString(R.string.test),
 						NotificationManager.IMPORTANCE_LOW
 					)
-					channel.description = context.getString(R.string.notification_channel_desc)
+					channel.description = appContext.getString(R.string.notification_channel_desc)
 					notificationManager.createNotificationChannel(channel)
 				}
 			}
-			val flags = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-				PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
-			} else PendingIntent.FLAG_UPDATE_CURRENT
-			val pi = PendingIntent.getActivity(context, 0, intent, flags)
-			val builder = NotificationCompat.Builder(context, id)
+			val flags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+			val pi = PendingIntent.getActivity(appContext, 0, intent, flags)
+			val builder = NotificationCompat.Builder(appContext, id)
 				.setAutoCancel(true)
 				.setContentIntent(pi)
 				.setSmallIcon(R.drawable.ic_notification)
-				.setTicker(context.getString(R.string.test_ticker))
-				.setSubText(context.getString(R.string.test_subtext))
-				.setContentTitle(context.getString(R.string.test_content_title))
+				.setTicker(appContext.getString(R.string.test_ticker))
+				.setSubText(appContext.getString(R.string.test_subtext))
+				.setContentTitle(appContext.getString(R.string.test_content_title))
 				.setContentText(content)
-				.setContentInfo(context.getString(R.string.test_content_info))
+				.setContentInfo(appContext.getString(R.string.test_content_info))
 				.setStyle(
 					NotificationCompat.BigTextStyle()
-						.setBigContentTitle(context.getString(R.string.test_big_content_title))
-						.setSummaryText(context.getString(R.string.test_big_content_summary))
+						.setBigContentTitle(appContext.getString(R.string.test_big_content_title))
+						.setSummaryText(appContext.getString(R.string.test_big_content_summary))
 						.bigText(content)
 				)
 			notificationManager.notify(0, builder.build())

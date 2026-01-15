@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2025 Mark Injerd
+ * Copyright 2011-2026 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,7 +92,7 @@ fun MainScreen(
 		else rememberPermissionState(Manifest.permission.READ_PHONE_STATE)
 	var statusTitle by remember { mutableStateOf("") }
 	var statusSummary by remember { mutableStateOf("") }
-	val statusIntent = remember { PermissionHelper.notificationListenerSettingsIntent }
+	val statusIntent = if (isPreview) Intent() else remember { PermissionHelper.notificationListenerSettingsIntent }
 	if (isPreview) {
 		statusTitle = stringResource(R.string.service_running)
 		statusSummary = stringResource(R.string.status_summary_notification_access_enabled)
@@ -127,7 +127,11 @@ fun MainScreen(
 	var showLog by remember { mutableStateOf(false) }
 	var showBackupRestore by remember { mutableStateOf(false) }
 	var showSupport by remember { mutableStateOf(false) }
-	val disableAutostartMsg by getPrefFlow(KEY_DISABLE_AUTOSTART_MSG, false).collectAsState(null)
+	val disableAutostartMsg by if (isPreview) {
+		remember { mutableStateOf(true) }
+	} else {
+		getPrefFlow(KEY_DISABLE_AUTOSTART_MSG, false).collectAsState(null)
+	}
 	var showAutostartDialog by remember(disableAutostartMsg?.run { true }) {
 		mutableStateOf(disableAutostartMsg == false && !isRunning &&
 			autoStartHelper.isAutoStartPermissionAvailable(context))

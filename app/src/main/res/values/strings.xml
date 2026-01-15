@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright 2011-2025 Mark Injerd
+<!-- Copyright 2011-2026 Mark Injerd
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -227,6 +227,9 @@
 
 	<!-- Service -->
 	<string name="error_tts_init">Error: Could not initialize TTS! Status code %d</string>
+	<string name="fg_notification_chan_name">Audio focus</string>
+	<string name="fg_notification_chan_desc">Required for pause/dim media to work in the background on Android 15+</string>
+	<string name="fg_notification_title">Reading notification</string>
 
 	<!-- IgnoreReason -->
 	<string name="reason_app">Ignored app</string>

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2025 Mark Injerd
+ * Copyright 2011-2026 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,11 +17,15 @@ package com.pilot51.voicenotify
 
 import android.Manifest
 import android.app.Notification
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.bluetooth.BluetoothDevice
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.ServiceInfo
 import android.hardware.display.DisplayManager
 import android.media.AudioAttributes
 import android.media.AudioDeviceInfo
@@ -42,6 +46,7 @@ import android.util.Log
 import android.view.Display
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.NotificationCompat
 import com.pilot51.voicenotify.NotifyList.notifyListMutex
 import com.pilot51.voicenotify.PermissionHelper.isPermissionGranted
 import com.pilot51.voicenotify.prefs.DataStoreManager.getPrefStateFlow
@@ -93,7 +98,10 @@ class Service : NotificationListenerService() {
 	private val audioFocusRequest by lazy {
 		AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)
 			.setAudioAttributes(AudioAttributes.Builder()
-				.setLegacyStreamType(AudioManager.STREAM_MUSIC).build())
+				.setUsage(AudioAttributes.USAGE_MEDIA)
+				.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+				.setLegacyStreamType(AudioManager.STREAM_MUSIC)
+				.build())
 			.build()
 	}
 	private val phoneStateListener by lazy {
@@ -267,7 +275,10 @@ class Service : NotificationListenerService() {
 		if (shouldRequestFocus) {
 			Log.d(TAG, "Abandoning audio focus")
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-				audioMan.abandonAudioFocusRequest(audioFocusRequest!!)
+				audioMan.abandonAudioFocusRequest(audioFocusRequest)
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+					stopForeground(STOP_FOREGROUND_REMOVE)
+				}
 			} else {
 				@Suppress("DEPRECATION")
 				audioMan.abandonAudioFocus(null)
@@ -407,6 +418,10 @@ class Service : NotificationListenerService() {
 				shouldRequestFocus = info.settings.audioFocus!!
 				if (shouldRequestFocus) {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+						if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+							startForeground(1, createForegroundNotification(),
+								ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+						}
 						audioMan.requestAudioFocus(audioFocusRequest)
 					} else {
 						@Suppress("DEPRECATION")
@@ -448,6 +463,30 @@ class Service : NotificationListenerService() {
 				}
 			}
 		}
+	}
+
+	@RequiresApi(26)
+	private fun createForegroundNotification(): Notification {
+		val id = FOREGROUND_NOTIFICATION_CHANNEL_ID
+		val notificationManager = getSystemService(NotificationManager::class.java)
+		val intent = Intent(this, MainActivity::class.java)
+		if (notificationManager.getNotificationChannel(id) == null) {
+			val channel = NotificationChannel(
+				id,
+				appContext.getString(R.string.fg_notification_chan_name),
+				NotificationManager.IMPORTANCE_MIN
+			)
+			channel.description = appContext.getString(R.string.fg_notification_chan_desc)
+			notificationManager.createNotificationChannel(channel)
+		}
+		val flags = PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+		val pi = PendingIntent.getActivity(this, 0, intent, flags)
+		return NotificationCompat.Builder(this, id)
+			.setAutoCancel(true)
+			.setContentIntent(pi)
+			.setSmallIcon(R.drawable.ic_notification)
+			.setContentTitle(appContext.getString(R.string.fg_notification_title))
+			.build()
 	}
 
 	/**
@@ -513,9 +552,9 @@ class Service : NotificationListenerService() {
 	override fun onListenerConnected() {
 		Log.i(TAG, "Notification listener connected")
 		if (isRunning.value) return
-		audioMan = getSystemService(AUDIO_SERVICE) as AudioManager
+		audioMan = getSystemService(AudioManager::class.java)
 		if (usePhoneState) {
-			telephonyMan = getSystemService(TELEPHONY_SERVICE) as TelephonyManager
+			telephonyMan = getSystemService(TelephonyManager::class.java)
 			@Suppress("DEPRECATION")
 			telephonyMan.listen(phoneStateListener, PhoneStateListener.LISTEN_CALL_STATE)
 		} else {
@@ -542,12 +581,18 @@ class Service : NotificationListenerService() {
 				tts?.stop()
 			}
 		}
+//		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+//			startForeground(1, createForegroundNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK)
+//		}
 		setInitialized(true)
 	}
 
 	override fun onListenerDisconnected() {
 		Log.i(TAG, "Notification listener disconnected")
 		if (isRunning.value) {
+//			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+//				stopForeground(STOP_FOREGROUND_REMOVE)
+//			}
 			if (usePhoneState) {
 				@Suppress("DEPRECATION")
 				telephonyMan.listen(phoneStateListener, PhoneStateListener.LISTEN_NONE)
@@ -564,12 +609,10 @@ class Service : NotificationListenerService() {
 	}
 
 	private fun isScreenOn() =
-		(appContext.getSystemService(POWER_SERVICE) as PowerManager).isInteractive &&
-			(appContext.getSystemService(DISPLAY_SERVICE) as DisplayManager)
+		appContext.getSystemService(PowerManager::class.java).isInteractive &&
+			appContext.getSystemService(DisplayManager::class.java)
 				.getDisplay(Display.DEFAULT_DISPLAY).state == Display.STATE_ON
 
-	@get:RequiresApi(Build.VERSION_CODES.M)
-	@delegate:RequiresApi(Build.VERSION_CODES.M)
 	private val audioDeviceTypes by lazy {
 		mutableListOf(
 			AudioDeviceInfo.TYPE_BLUETOOTH_A2DP,
@@ -670,6 +713,7 @@ class Service : NotificationListenerService() {
 
 	companion object {
 		private val TAG = Service::class.simpleName
+		private const val FOREGROUND_NOTIFICATION_CHANNEL_ID = "foreground"
 		private val ttsQueueMutex = Mutex()
 		private val repeatListMutex = Mutex()
 		private val usePhoneState = Build.VERSION.SDK_INT < Build.VERSION_CODES.S

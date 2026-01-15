@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2025 Mark Injerd
+ * Copyright 2011-2026 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.pilot51.voicenotify.ui.dialog.main.support
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -44,6 +43,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import com.pilot51.voicenotify.AppTheme
 import com.pilot51.voicenotify.BuildConfig
 import com.pilot51.voicenotify.R
@@ -53,7 +53,7 @@ private const val TAG = "SupportDialog"
 
 private fun openBrowser(context: Context, url: String) {
 	try {
-		context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)))
+		context.startActivity(Intent(Intent.ACTION_VIEW, url.toUri()))
 	} catch (e: ActivityNotFoundException) {
 		Log.w(TAG, e)
 		Toast.makeText(context, R.string.error_browser, Toast.LENGTH_LONG).show()
@@ -83,7 +83,7 @@ fun SupportDialog(onDismiss: () -> Unit) {
 					) {
 						val iMarket = Intent(
 							Intent.ACTION_VIEW,
-							Uri.parse("market://details?id=com.pilot51.voicenotify")
+							"market://details?id=com.pilot51.voicenotify".toUri()
 						).apply {
 							addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 						}

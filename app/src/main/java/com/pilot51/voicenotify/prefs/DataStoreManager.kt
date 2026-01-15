@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2025 Mark Injerd
+ * Copyright 2011-2026 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ object DataStoreManager {
 	const val DS_NAME = "prefs"
 	private var scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 	private val _dataStoreFlow =
-		MutableStateFlow<DataStore<Preferences>?>(VNApplication.Companion.appContext.createDataStore())
+		MutableStateFlow<DataStore<Preferences>?>(VNApplication.appContext.createDataStore())
 	private val dataStoreFlow = _dataStoreFlow.filterNotNull()
 	val dataStore get() = _dataStoreFlow.value ?: runBlocking(Dispatchers.IO) {
 		withTimeoutOrNull(1.seconds) { dataStoreFlow.first() }
@@ -53,7 +53,7 @@ object DataStoreManager {
 	val dataFlow = dataStoreFlow.flatMapLatest { it.data }
 
 	fun openDataStore() {
-		_dataStoreFlow.value = VNApplication.Companion.appContext.createDataStore()
+		_dataStoreFlow.value = VNApplication.appContext.createDataStore()
 	}
 
 	fun closeDataStore() {
@@ -77,7 +77,7 @@ object DataStoreManager {
 	fun <T> getPrefStateFlow(key: Preferences.Key<T>, default: T) =
 		getPrefFlow(key, default).stateIn(
 			scope = CoroutineScope(Dispatchers.IO),
-			started = SharingStarted.Companion.Eagerly,
+			started = SharingStarted.Eagerly,
 			initialValue = default
 		)
 
