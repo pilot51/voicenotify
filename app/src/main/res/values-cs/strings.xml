@@ -32,13 +32,11 @@
 \n
 \nVýchozí: %d
 \nPrázdné zakázat.</string>
-    <string-array name="stream_name">
-        <item>Média</item>
-        <item>Oznámení</item>
-        <item>Čtení</item>
-        <item>Vyzvánění</item>
-        <item>Budík</item>
-    </string-array>
+    <string name="stream_media">Média</string>
+    <string name="stream_notification">Oznámení</string>
+    <string name="stream_voice">Čtení</string>
+    <string name="stream_ring">Vyzvánění</string>
+    <string name="stream_alarm">Budík</string>
     <string name="ignore_strings">Ignorovat Text</string>
     <string name="ignore_strings_summary">Ignorovat oznámení, které obsahují určitý text ve zprávě.</string>
     <string name="require_ignore_strings_dialog_msg">Oddělte jednotlivé položky novým řádkem.</string>
@@ -51,13 +49,11 @@
     <string name="device_state">Stav zařízení</string>
     <string name="device_state_summary">Vyberte, zda chcete číst v určitých stavech zařízení.</string>
     <string name="device_state_dialog_title">Číst během těchto stavů zařízení</string>
-    <string-array name="device_states">
-        <item>Obrazovka vypnuta</item>
-        <item>Obrazovka zapnuta</item>
-        <item>Sluchátka vypnuta</item>
-        <item>Sluchátka zapnuta</item>
-        <item>Tichý/Vibrace</item>
-    </string-array>
+    <string name="device_state_screen_off">Obrazovka vypnuta</string>
+    <string name="device_state_screen_on">Obrazovka zapnuta</string>
+    <string name="device_state_headset_off">Sluchátka vypnuta</string>
+    <string name="device_state_headset_on">Sluchátka zapnuta</string>
+    <string name="device_state_silent_vibrate">Tichý/Vibrace</string>
     <string name="quiet_start">Začátek Tichý režim</string>
     <string name="quiet_start_summary">Nečte oznámení po uplynutí předem stanovené doby.
 \nChcete-li zakázat možnost, zadejte čas ukončení.</string>

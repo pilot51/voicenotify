@@ -45,13 +45,11 @@
 	<string name="shake_to_silence">Shake-To-Silence</string>
 	<string name="shake_to_silence_summary">Adjust the sensitivity threshold of Shake-To-Silence</string>
 	<string name="shake_to_silence_dialog_msg">Lower values are more sensitive.\n\nDefault: %1$d\nBlank or 0 to disable.\n\nRealtime shake value: %2$d\nPeak (5 seconds): %3$d</string>
-	<string-array name="stream_name">
-		<item>Media</item>
-		<item>Notification</item>
-		<item>Voice</item>
-		<item>Ring</item>
-		<item>Alarm</item>
-	</string-array>
+	<string name="stream_media">Media</string>
+	<string name="stream_notification">Notification</string>
+	<string name="stream_voice">Voice</string>
+	<string name="stream_ring">Ring</string>
+	<string name="stream_alarm">Alarm</string>
 	<string name="require_strings">Require Text</string>
 	<string name="require_strings_summary">Only speak notifications that contain certain text in the message</string>
 	<string name="ignore_strings">Ignore Text</string>
@@ -69,13 +67,12 @@
 	<string name="device_state">Device States</string>
 	<string name="device_state_summary">Select whether to speak during certain device states</string>
 	<string name="device_state_dialog_title">Speak during these device states</string>
-	<string-array name="device_states">
-		<item>Screen Off</item>
-		<item>Screen On</item>
-		<item>Headset Off</item>
-		<item>Headset On</item>
-		<item>Silent/Vibrate</item>
-	</string-array>
+	<string name="device_state_screen_off">Screen Off</string>
+	<string name="device_state_screen_on">Screen On</string>
+	<string name="device_state_headset_off">Headset Off</string>
+	<string name="device_state_headset_on">Headset On</string>
+	<string name="device_state_silent_vibrate">Silent/Vibrate</string>
+	<string name="device_state_in_call">In Call</string>
 	<string name="quiet_start">Quiet Time Start</string>
 	<string name="quiet_start_summary">Don\'t speak after this time.\nLeave the same as end to disable.</string>
 	<string name="quiet_end">Quiet Time End</string>

@@ -47,6 +47,7 @@ jobs:
 
       - name: Delete previous pre-release
         run: gh release delete ${{ env.TAG }} --yes --cleanup-tag
+        continue-on-error: true
 
       - name: Release
         uses: softprops/action-gh-release@v2

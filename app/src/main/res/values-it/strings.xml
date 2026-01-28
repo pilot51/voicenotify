@@ -31,13 +31,11 @@
     <string name="shake_to_silence">Scuoti-Per-Zittire</string>
     <string name="shake_to_silence_summary">Regola la soglia di sensibilità dello Scuoti-Per-Zittire.</string>
     <string name="shake_to_silence_dialog_msg">Valori più bassi sono più sensibili.\n\nDefault: %1$d\nVuoto o 0 per disabilitare.\n\nValore di scuotimento in tempo reale: %2$d\nPicco (5 secondi): %3$d</string>
-    <string-array name="stream_name">
-        <item>Media</item>
-        <item>Notifica</item>
-        <item>Voce</item>
-        <item>Suoneria</item>
-        <item>Sveglia</item>
-    </string-array>
+    <string name="stream_media">Media</string>
+    <string name="stream_notification">Notifica</string>
+    <string name="stream_voice">Voce</string>
+    <string name="stream_ring">Suoneria</string>
+    <string name="stream_alarm">Sveglia</string>
     <string name="ignore_strings">Messaggi Da Ignorare</string>
     <string name="ignore_strings_summary">Ignora le notifiche che contengono determinate parole nel messaggio</string>
     <string name="require_ignore_strings_dialog_msg">Separa le varie immissioni iniziando una nuova riga.</string>
@@ -53,13 +51,11 @@
     <string name="device_state">Stati Dispositivo</string>
     <string name="device_state_summary">Scegli se annunciare durante determinati stati.</string>
     <string name="device_state_dialog_title">Annuncia con questi stati del dispositivo</string>
-    <string-array name="device_states">
-        <item>Schermo Spento</item>
-        <item>Schermo Acceso</item>
-        <item>Cuffie Non Collegate</item>
-        <item>Cuffie Collegate</item>
-        <item>Silenzioso/Vibrazione</item>
-    </string-array>
+    <string name="device_state_screen_off">Schermo Spento</string>
+    <string name="device_state_screen_on">Schermo Acceso</string>
+    <string name="device_state_headset_off">Cuffie Non Collegate</string>
+    <string name="device_state_headset_on">Cuffie Collegate</string>
+    <string name="device_state_silent_vibrate">Silenzioso/Vibrazione</string>
     <string name="quiet_start">Inizio Ora del Silenzio</string>
     <string name="quiet_start_summary">Non annunciare dopo l\'ora indicata.
 \nImposta inizio e fine alla stessa ora per disabilitarlo.</string>

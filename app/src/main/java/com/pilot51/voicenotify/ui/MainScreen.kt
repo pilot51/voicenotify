@@ -272,7 +272,8 @@ fun MainScreen(
 					speakScreenOn != null ||
 					speakHeadsetOff != null ||
 					speakHeadsetOn != null ||
-					speakSilentOn != null
+					speakSilentOn != null ||
+					speakInCall != null
 			},
 			onRemove = {
 				vm.save(settings.copy(
@@ -280,7 +281,8 @@ fun MainScreen(
 					speakScreenOn = null,
 					speakHeadsetOff = null,
 					speakHeadsetOn = null,
-					speakSilentOn = null
+					speakSilentOn = null,
+					speakInCall = null
 				))
 			},
 			onClick = { showDeviceStates = true }

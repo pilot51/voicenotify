@@ -29,13 +29,11 @@
     <string name="shake_to_silence">Потрясти-для-тишины</string>
     <string name="shake_to_silence_summary">Настроить порог чувствительности функции Потрясти-для-тишины</string>
     <string name="shake_to_silence_dialog_msg">Низкие значения - более высокая чувствительность. \n \nПо умолчанию: %1$d \nОставьте поле пустым или 0 для отключения.\n\nЗначение realtime shake: %2$d\nПик (5 секунд): %3$d</string>
-    <string-array name="stream_name">
-        <item>Мультимедиа</item>
-        <item>Уведомления</item>
-        <item>Голосовой</item>
-        <item>Звонок</item>
-        <item>Будильник</item>
-    </string-array>
+    <string name="stream_media">Мультимедиа</string>
+    <string name="stream_notification">Уведомления</string>
+    <string name="stream_voice">Голосовой</string>
+    <string name="stream_ring">Звонок</string>
+    <string name="stream_alarm">Будильник</string>
     <string name="ignore_strings">Игнорирование текста</string>
     <string name="ignore_strings_summary">Игнорировать уведомления, содержащие определенный текст</string>
     <string name="require_ignore_strings_dialog_msg">Это сопоставляется с сообщением, отправленным в TTS, после форматирования сообщения TTS и замены текста, включая знаки препинания.
@@ -52,13 +50,11 @@
     <string name="device_state">Состояния устройства</string>
     <string name="device_state_summary">Выберите можно ли говорить при определённых состояниях устройства</string>
     <string name="device_state_dialog_title">Читать уведомления при следующих состояниях</string>
-    <string-array name="device_states">
-        <item>Экран выкл.</item>
-        <item>Экран вкл.</item>
-        <item>Гарнитура выкл.</item>
-        <item>Гарнитура вкл.</item>
-        <item>Без звука / Вибрация</item>
-    </string-array>
+    <string name="device_state_screen_off">Экран выкл.</string>
+    <string name="device_state_screen_on">Экран вкл.</string>
+    <string name="device_state_headset_off">Гарнитура выкл.</string>
+    <string name="device_state_headset_on">Гарнитура вкл.</string>
+    <string name="device_state_silent_vibrate">Без звука / Вибрация</string>
     <string name="quiet_start">Начало \'Тихого времени\'</string>
     <string name="quiet_start_summary">Не читать уведомления после заданного времени.
 \nДля отключения опции введите время окончания.</string>

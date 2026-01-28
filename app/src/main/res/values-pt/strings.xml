@@ -32,13 +32,11 @@
 \n
 \nPadrão: %d
 \nValor vazio para desabilitar.</string>
-    <string-array name="stream_name">
-        <item>Mídia</item>
-        <item>Notificação</item>
-        <item>Voz</item>
-        <item>Toque</item>
-        <item>Alarme</item>
-    </string-array>
+    <string name="stream_media">Mídia</string>
+    <string name="stream_notification">Notificação</string>
+    <string name="stream_voice">Voz</string>
+    <string name="stream_ring">Toque</string>
+    <string name="stream_alarm">Alarme</string>
     <string name="ignore_strings">Ignorar texto</string>
     <string name="ignore_strings_summary">Ignorar as notificações que contêm determinado texto na mensagem.</string>
     <string name="require_ignore_strings_dialog_msg">Separar entradas individuais com uma nova linha.</string>
@@ -51,13 +49,11 @@
     <string name="device_state">Estados do aparelho</string>
     <string name="device_state_summary">Selecionar quanto falar durante determinados estados do aparelho.</string>
     <string name="device_state_dialog_title">Falar durante esses estados do aparelho</string>
-    <string-array name="device_states">
-        <item>Tela apagada</item>
-        <item>Tela ligada</item>
-        <item>Fone de ouvido desconectado</item>
-        <item>Fone de ouvido conectado</item>
-        <item>Silencioso/Vibração</item>
-    </string-array>
+    <string name="device_state_screen_off">Tela apagada</string>
+    <string name="device_state_screen_on">Tela ligada</string>
+    <string name="device_state_headset_off">Fone de ouvido desconectado</string>
+    <string name="device_state_headset_on">Fone de ouvido conectado</string>
+    <string name="device_state_silent_vibrate">Silencioso/Vibração</string>
     <string name="quiet_start">Início do horário de silêncio</string>
     <string name="quiet_start_summary">Não falar após este horário.
 \nIgual ao final para desabilitar.</string>

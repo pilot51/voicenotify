@@ -511,19 +511,19 @@ class Service : NotificationListenerService() {
 		) {
 			ignoreReasons.add(IgnoreReason.SILENT)
 		}
-		if (isAudioModeInCall() || (usePhoneState && isPhoneStateInCall())) {
+		if (!settings.speakInCall!! && (isAudioModeInCall() || (usePhoneState && isPhoneStateInCall()))) {
 			ignoreReasons.add(IgnoreReason.CALL)
 		}
-		if (!isScreenOn() && !(settings.speakScreenOff!!)) {
+		if (!settings.speakScreenOff!! && !isScreenOn()) {
 			ignoreReasons.add(IgnoreReason.SCREEN_OFF)
 		}
-		if (isScreenOn() && !(settings.speakScreenOn!!)) {
+		if (!settings.speakScreenOn!! && isScreenOn()) {
 			ignoreReasons.add(IgnoreReason.SCREEN_ON)
 		}
-		if (!isHeadsetOn() && !(settings.speakHeadsetOff!!)) {
+		if (!settings.speakHeadsetOff!! && !isHeadsetOn()) {
 			ignoreReasons.add(IgnoreReason.HEADSET_OFF)
 		}
-		if (isHeadsetOn() && !(settings.speakHeadsetOn!!)) {
+		if (!settings.speakHeadsetOn!! && isHeadsetOn()) {
 			ignoreReasons.add(IgnoreReason.HEADSET_ON)
 		}
 		return ignoreReasons

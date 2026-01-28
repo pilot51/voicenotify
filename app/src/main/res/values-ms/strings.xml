@@ -47,13 +47,11 @@
 \n
 \nAsal: %d
 \nKosongkan untuk nyahaktif.</string>
-    <string-array name="stream_name">
-        <item>Media</item>
-        <item>Notifikasi</item>
-        <item>Suara</item>
-        <item>Dering</item>
-        <item>Penggera</item>
-    </string-array>
+    <string name="stream_media">Media</string>
+    <string name="stream_notification">Notifikasi</string>
+    <string name="stream_voice">Suara</string>
+    <string name="stream_ring">Dering</string>
+    <string name="stream_alarm">Penggera</string>
     <string name="ignore_strings">Abaikan Teks</string>
     <string name="ignore_strings_summary">Abaikan notifikasi yang mengandungi teks didalam mesej</string>
     <string name="require_ignore_strings_dialog_msg">Asingkan entri individu dengan perenggan baru.</string>
@@ -69,13 +67,11 @@
     <string name="device_state">Status Peranti</string>
     <string name="device_state_summary">Pilih jika ingin diucapkan didalam status peranti tertentu</string>
     <string name="device_state_dialog_title">Ucapan semasa peranti distatus ini</string>
-    <string-array name="device_states">
-        <item>Tutup skrin</item>
-        <item>Skrin buka</item>
-        <item>Fon kepala tutup</item>
-        <item>Fon kepala buka</item>
-        <item>Senyap/Getar</item>
-    </string-array>
+    <string name="device_state_screen_off">Tutup skrin</string>
+    <string name="device_state_screen_on">Skrin buka</string>
+    <string name="device_state_headset_off">Fon kepala tutup</string>
+    <string name="device_state_headset_on">Fon kepala buka</string>
+    <string name="device_state_silent_vibrate">Senyap/Getar</string>
     <string name="quiet_start">Masa Senyap Mula</string>
     <string name="quiet_start_summary">Tiada ucapan selepas masa ini.
 \nBiarkan sama untuk nyahaktif.</string>

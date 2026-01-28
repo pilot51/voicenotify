@@ -32,13 +32,11 @@
 \n
 \nStandaard: %d
 \nLeeg is uitgeschakeld.</string>
-    <string-array name="stream_name">
-        <item>Media</item>
-        <item>Notificatie</item>
-        <item>Spraak</item>
-        <item>Beltoon</item>
-        <item>Alarm</item>
-    </string-array>
+    <string name="stream_media">Media</string>
+    <string name="stream_notification">Notificatie</string>
+    <string name="stream_voice">Spraak</string>
+    <string name="stream_ring">Beltoon</string>
+    <string name="stream_alarm">Alarm</string>
     <string name="ignore_strings">Negeer Tekst</string>
     <string name="ignore_strings_summary">Negeer notificaties die bepaalde tekst in het bericht bevatten.</string>
     <string name="require_ignore_strings_dialog_msg">Gebruik voor elk item een nieuwe regel.</string>
@@ -51,13 +49,11 @@
     <string name="device_state">Apparaat Status</string>
     <string name="device_state_summary">Selecteer wanneer je het apparaat wilt laten spreken.</string>
     <string name="device_state_dialog_title">Selecteer wanneer het apparaat moet spreken.</string>
-    <string-array name="device_states">
-        <item>Scherm Uit</item>
-        <item>Scherm Aan</item>
-        <item>Koptelefoon Uit</item>
-        <item>Koptelefoon Aan</item>
-        <item>Stil/Tril</item>
-    </string-array>
+    <string name="device_state_screen_off">Scherm Uit</string>
+    <string name="device_state_screen_on">Scherm Aan</string>
+    <string name="device_state_headset_off">Koptelefoon Uit</string>
+    <string name="device_state_headset_on">Koptelefoon Aan</string>
+    <string name="device_state_silent_vibrate">Stil/Tril</string>
     <string name="quiet_start">Begin Stilte Modus</string>
     <string name="quiet_start_summary">Spreek niet na deze tijd.
 \nGelijk aan \"Begin Stilte Modus\" om uit te schakelen.</string>

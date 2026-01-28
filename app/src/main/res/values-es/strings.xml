@@ -35,13 +35,11 @@
 \n
 \nValor de agitación en tiempo real: %2$d
 \nPico (5 segundos): %3$d</string>
-    <string-array name="stream_name">
-        <item>Medios</item>
-        <item>Notificación</item>
-        <item>Voz</item>
-        <item>Timbre</item>
-        <item>Alarma</item>
-    </string-array>
+    <string name="stream_media">Medios</string>
+    <string name="stream_notification">Notificación</string>
+    <string name="stream_voice">Voz</string>
+    <string name="stream_ring">Timbre</string>
+    <string name="stream_alarm">Alarma</string>
     <string name="ignore_strings">Ignorar texto</string>
     <string name="ignore_strings_summary">Ignorar las notificaciones que contienen cierto texto en el mensaje</string>
     <string name="require_ignore_strings_dialog_msg">Se coteja con el mensaje enviado a TTS, después de formatear el mensaje TTS y sustituir el texto, incluida la puntuación.
@@ -58,13 +56,11 @@
     <string name="device_state">Estado del dispositivo</string>
     <string name="device_state_summary">Selecciona si se debe hablar durante según el estado en el que se encuentra el dispositivo</string>
     <string name="device_state_dialog_title">Hablar durante los siguientes estados del dispositivo</string>
-    <string-array name="device_states">
-        <item>Pantalla apagada</item>
-        <item>Pantalla encendida</item>
-        <item>Auriculares apagados</item>
-        <item>Auriculares encendidos</item>
-        <item>Silencio/Vibración</item>
-    </string-array>
+    <string name="device_state_screen_off">Pantalla apagada</string>
+    <string name="device_state_screen_on">Pantalla encendida</string>
+    <string name="device_state_headset_off">Auriculares apagados</string>
+    <string name="device_state_headset_on">Auriculares encendidos</string>
+    <string name="device_state_silent_vibrate">Silencio/Vibración</string>
     <string name="quiet_start">Inicio de Hora Silenciosa</string>
     <string name="quiet_start_summary">No se habla pasada esta hora.
 \nDejar igual que la última para desactivar.</string>

@@ -49,13 +49,11 @@
 \n
 \nΠροκαθορισμένο: %d
 \nΚενό για απενεργοποίηση.</string>
-    <string-array name="stream_name">
-        <item>Αναπαραγωγή</item>
-        <item>Ανακοίνωση</item>
-        <item>Φωνή</item>
-        <item>Ηχός</item>
-        <item>Ξυπνητήρι</item>
-    </string-array>
+    <string name="stream_media">Αναπαραγωγή</string>
+    <string name="stream_notification">Ανακοίνωση</string>
+    <string name="stream_voice">Φωνή</string>
+    <string name="stream_ring">Ηχός</string>
+    <string name="stream_alarm">Ξυπνητήρι</string>
     <string name="ignore_strings">Αγνόηση κειμένου</string>
     <string name="ignore_strings_summary">Αγνόηση ανακοινώσεων που περιέχουν συγκεκριμένο κείμενο στο μήνυμα.</string>
     <string name="require_ignore_strings_dialog_msg">Διαχωρίστε τις μεμονωμένες εγγραφές με μια νέα γραμμή.</string>
@@ -71,13 +69,11 @@
     <string name="device_state">Κατάσταση Συσκευής</string>
     <string name="device_state_summary">Επιλέξτε αν θέλετε να εκφωνούνται κατά τη διάρκεια ορισμένων καταστάσεων της συσκευής.</string>
     <string name="device_state_dialog_title">Εκφώνηση κατα τη διάρκεια αυτών των καταστάσεων συσκευής</string>
-    <string-array name="device_states">
-        <item>Οθόνη κλειστή</item>
-        <item>Οθόνη ενεργή</item>
-        <item>Χωρίς ακουστικά</item>
-        <item>Ακουστικά ενεργά</item>
-        <item>Σίγαση/Δόνηση</item>
-    </string-array>
+    <string name="device_state_screen_off">Οθόνη κλειστή</string>
+    <string name="device_state_screen_on">Οθόνη ενεργή</string>
+    <string name="device_state_headset_off">Χωρίς ακουστικά</string>
+    <string name="device_state_headset_on">Ακουστικά ενεργά</string>
+    <string name="device_state_silent_vibrate">Σίγαση/Δόνηση</string>
     <string name="quiet_start">Ωρα Εναρξης Σίγασης</string>
     <string name="quiet_start_summary">Χωρίς εκφωνήσεις μετά απο αυτή την ώρα.
 \nΑφήστε ίδια την ώρα εδώ όπως και στην ώρα λήξης για απενεργοποιήση.</string>

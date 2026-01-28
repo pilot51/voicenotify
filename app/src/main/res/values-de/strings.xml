@@ -32,13 +32,11 @@
 \n
 \nStandard: %d
 \nEin leeres Feld deaktiviert diese Funktion.</string>
-    <string-array name="stream_name">
-        <item>Medien</item>
-        <item>Benachrichtigung</item>
-        <item>Stimme</item>
-        <item>Klingeln</item>
-        <item>Alarm</item>
-    </string-array>
+    <string name="stream_media">Medien</string>
+    <string name="stream_notification">Benachrichtigung</string>
+    <string name="stream_voice">Stimme</string>
+    <string name="stream_ring">Klingeln</string>
+    <string name="stream_alarm">Alarm</string>
     <string name="ignore_strings">Ignorierter Text</string>
     <string name="ignore_strings_summary">Benachrichtigungen mit bestimmtem Inhalt ignorieren</string>
     <string name="require_ignore_strings_dialog_msg">Übereinstimmungen werden anhand der Nachricht überprüft, die an TTS gesendet wird, nach TTS-Nachrichtenformatierung und Textersetzung, einschließlich Zeichensetzung.
@@ -57,13 +55,11 @@
     <string name="device_state">Gerätezustände</string>
     <string name="device_state_summary">Wähle aus, in welchen Gerätezuständen Benachrichtigungen vorgelesen werden sollen</string>
     <string name="device_state_dialog_title">Vorlesen in diesen Geräte-Zuständen aktivieren</string>
-    <string-array name="device_states">
-        <item>Bildschirm ausschalten</item>
-        <item>Bildschirm einschalten</item>
-        <item>Headset ausgeschaltet</item>
-        <item>Headset eingeschaltet</item>
-        <item>Stumm/Vibration</item>
-    </string-array>
+    <string name="device_state_screen_off">Bildschirm ausschalten</string>
+    <string name="device_state_screen_on">Bildschirm einschalten</string>
+    <string name="device_state_headset_off">Headset ausgeschaltet</string>
+    <string name="device_state_headset_on">Headset eingeschaltet</string>
+    <string name="device_state_silent_vibrate">Stumm/Vibration</string>
     <string name="quiet_start">Beginn der Ruhezeit</string>
     <string name="quiet_start_summary">Keine Sprachausgabe nach dieser Uhrzeit.
 \nStell den gleichen Wert wie bei \'Ende der Ruhezeit\' ein um keine Ruhezeit festzulegen.</string>

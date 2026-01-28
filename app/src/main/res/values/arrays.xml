@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string-array name="device_states">
+		<item>@string/device_state_screen_off</item>
+		<item>@string/device_state_screen_on</item>
+		<item>@string/device_state_headset_off</item>
+		<item>@string/device_state_headset_on</item>
+		<item>@string/device_state_silent_vibrate</item>
+		<item>@string/device_state_in_call</item>
+	</string-array>
+	<string-array name="stream_name">
+		<item>@string/stream_media</item>
+		<item>@string/stream_notification</item>
+		<item>@string/stream_voice</item>
+		<item>@string/stream_ring</item>
+		<item>@string/stream_alarm</item>
+	</string-array>
+</resources>

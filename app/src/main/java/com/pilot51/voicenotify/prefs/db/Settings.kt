@@ -1,5 +1,5 @@
 /*
- * Copyright 2011-2025 Mark Injerd
+ * Copyright 2011-2026 Mark Injerd
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,6 +70,8 @@ data class Settings(
 	val speakHeadsetOn: Boolean? = null,
 	@ColumnInfo(name = "speak_silent_on")
 	val speakSilentOn: Boolean? = null,
+	@ColumnInfo(name = "speak_in_call")
+	val speakInCall: Boolean? = null,
 	@ColumnInfo(name = "quiet_start")
 	val quietStart: Int? = null,
 	@ColumnInfo(name = "quiet_end")
@@ -118,6 +120,7 @@ data class Settings(
 			speakHeadsetOff = overrides.speakHeadsetOff ?: speakHeadsetOff,
 			speakHeadsetOn = overrides.speakHeadsetOn ?: speakHeadsetOn,
 			speakSilentOn = overrides.speakSilentOn ?: speakSilentOn,
+			speakInCall = overrides.speakInCall ?: speakInCall,
 			quietStart = overrides.quietStart ?: quietStart,
 			quietEnd = overrides.quietEnd ?: quietEnd,
 			ttsString = overrides.ttsString ?: ttsString,
@@ -148,6 +151,7 @@ data class Settings(
 		const val DEFAULT_SPEAK_HEADSET_OFF = true
 		const val DEFAULT_SPEAK_HEADSET_ON = true
 		const val DEFAULT_SPEAK_SILENT_ON = false
+		const val DEFAULT_SPEAK_IN_CALL = false
 		const val DEFAULT_TTS_STRING = "${TTS_APP_LABEL}\n${TTS_CONTENT_TITLE}\n${TTS_CONTENT_TEXT}"
 		const val DEFAULT_SPEAK_EMOJIS = true
 		const val DEFAULT_MAX_LENGTH = 500
@@ -166,6 +170,7 @@ data class Settings(
 			speakHeadsetOff = DEFAULT_SPEAK_HEADSET_OFF,
 			speakHeadsetOn = DEFAULT_SPEAK_HEADSET_ON,
 			speakSilentOn = DEFAULT_SPEAK_SILENT_ON,
+			speakInCall = DEFAULT_SPEAK_IN_CALL,
 			quietStart = DEFAULT_QUIET_TIME,
 			quietEnd = DEFAULT_QUIET_TIME,
 			ttsString = DEFAULT_TTS_STRING,

@@ -49,13 +49,11 @@
 \n
 \nAsali:%d
 \nKosong untuk mematikan.</string>
-    <string-array name="stream_name">
-        <item>Media</item>
-        <item>Pemberitahuan</item>
-        <item>Suara</item>
-        <item>Dering</item>
-        <item>Alarm</item>
-    </string-array>
+    <string name="stream_media">Media</string>
+    <string name="stream_notification">Pemberitahuan</string>
+    <string name="stream_voice">Suara</string>
+    <string name="stream_ring">Dering</string>
+    <string name="stream_alarm">Alarm</string>
     <string name="ignore_strings">Teks Terabaikan</string>
     <string name="ignore_strings_summary">Abaikan pemberitahuan yang mengandung teks tertentu dalam pesan</string>
     <string name="require_ignore_strings_dialog_msg">Ini dicocokkan dengan pesan yang dikirim ke TTS, setelah pemformatan Pesan TTS dan Penggantian Teks, termasuk tanda baca.
@@ -75,13 +73,11 @@
     <string name="device_state">Keadaan Perangkat</string>
     <string name="device_state_summary">Pilih apakan akan berucap dalam keadaan perangkat tertentu</string>
     <string name="device_state_dialog_title">Berucap selama keadaan berikut</string>
-    <string-array name="device_states">
-        <item>Layar Mati</item>
-        <item>Layar Nyala</item>
-        <item>Pelantang Telinga Mati</item>
-        <item>Pelantang Telinga Nyala</item>
-        <item>Sunyi/Getar</item>
-    </string-array>
+    <string name="device_state_screen_off">Layar Mati</string>
+    <string name="device_state_screen_on">Layar Nyala</string>
+    <string name="device_state_headset_off">Pelantang Telinga Mati</string>
+    <string name="device_state_headset_on">Pelantang Telinga Nyala</string>
+    <string name="device_state_silent_vibrate">Sunyi/Getar</string>
     <string name="quiet_start">Awal Waktu Sunyi</string>
     <string name="quiet_start_summary">Jangan berucap setelah waktu ini.
 \nSamakan dengan akhir waktu untuk mematikan.</string>

@@ -31,13 +31,11 @@
     <string name="shake_to_silence">Potrząśnij aby wyciszyć</string>
     <string name="shake_to_silence_summary">Dostosuj próg czułości funkcji \"Potrząśnij, aby wyciszyć\"</string>
     <string name="shake_to_silence_dialog_msg">Niższe wartości są bardziej czułe.\n\nDomyślnie: %1$d\nPuste lub 0, aby wyłączyć.\n\nWartość drgań w czasie rzeczywistym: %2$d\nWartość szczytowa (5 sekund): %3$d</string>
-    <string-array name="stream_name">
-        <item>Media</item>
-        <item>Powiadomienia</item>
-        <item>Głos</item>
-        <item>Dzwonek</item>
-        <item>Alarm</item>
-    </string-array>
+    <string name="stream_media">Media</string>
+    <string name="stream_notification">Powiadomienia</string>
+    <string name="stream_voice">Głos</string>
+    <string name="stream_ring">Dzwonek</string>
+    <string name="stream_alarm">Alarm</string>
     <string name="ignore_strings">Ignoruj Tekst</string>
     <string name="ignore_strings_summary">Ignorowanie powiadomień zawierających określony tekst w wiadomości</string>
     <string name="require_ignore_strings_dialog_msg">Dopasowanie odbywa się względem wiadomości wysyłanej do TTS, po sformatowaniu wiadomości TTS i zastąpieniu tekstu, łącznie z interpunkcją. \n\nOddziel poszczególne wpisy nową linią. \nWiadomość musi zawierać dowolny wpis, a nie wszystkie, aby uznać ją za dopasowaną. \nBez rozróżniania wielkości liter.</string>
@@ -53,13 +51,11 @@
     <string name="device_state">Stany Urządzenia</string>
     <string name="device_state_summary">Wybierz w jakich statusach telefonu ma być mówione powiadomienie</string>
     <string name="device_state_dialog_title">Mów w tych stanach urządzenia</string>
-    <string-array name="device_states">
-        <item>Ekran wyłączony</item>
-        <item>Ekran włączony</item>
-        <item>Bez zestawem słuchawkowego</item>
-        <item>Z zestawem słuchawkowym</item>
-        <item>Wyciszony/tryb wibracji</item>
-    </string-array>
+    <string name="device_state_screen_off">Ekran wyłączony</string>
+    <string name="device_state_screen_on">Ekran włączony</string>
+    <string name="device_state_headset_off">Bez zestawem słuchawkowego</string>
+    <string name="device_state_headset_on">Z zestawem słuchawkowym</string>
+    <string name="device_state_silent_vibrate">Wyciszony/tryb wibracji</string>
     <string name="quiet_start">Rozpoczęcie Czasu Ciszy</string>
     <string name="quiet_start_summary">Nie mów po upływie tego czasu. \nUstaw to samo, co w \"Zakończ czas ciszy\" aby wyłączyć.</string>
     <string name="quiet_end">Zakończenie Czasu Ciszy</string>

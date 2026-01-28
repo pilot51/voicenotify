@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 3,
-    "identityHash": "093fbaf5602c1d309d6725a719c52f5f",
+    "identityHash": "519ba2fcc502729d9e00f7a4acada724",
     "entities": [
       {
         "tableName": "apps",
@@ -32,13 +32,11 @@
           "columnNames": [
             "package"
           ]
-        },
-        "indices": [],
-        "foreignKeys": []
+        }
       },
       {
         "tableName": "settings",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_package` TEXT, `audio_focus` INTEGER, `require_strings` TEXT, `ignore_strings` TEXT, `ignore_empty` INTEGER, `ignore_groups` INTEGER, `ignore_repeat` INTEGER, `speak_screen_off` INTEGER, `speak_screen_on` INTEGER, `speak_headset_off` INTEGER, `speak_headset_on` INTEGER, `speak_silent_on` INTEGER, `quiet_start` INTEGER, `quiet_end` INTEGER, `tts_string` TEXT, `tts_text_replace` TEXT, `tts_speak_emojis` INTEGER, `tts_max_length` INTEGER, `tts_stream` INTEGER, `tts_delay` INTEGER, `tts_repeat` REAL, FOREIGN KEY(`app_package`) REFERENCES `apps`(`package`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `app_package` TEXT, `audio_focus` INTEGER, `require_strings` TEXT, `ignore_strings` TEXT, `ignore_empty` INTEGER, `ignore_groups` INTEGER, `ignore_repeat` INTEGER, `speak_screen_off` INTEGER, `speak_screen_on` INTEGER, `speak_headset_off` INTEGER, `speak_headset_on` INTEGER, `speak_silent_on` INTEGER, `speak_in_call` INTEGER, `quiet_start` INTEGER, `quiet_end` INTEGER, `tts_string` TEXT, `tts_text_replace` TEXT, `tts_speak_emojis` INTEGER, `tts_max_length` INTEGER, `tts_stream` INTEGER, `tts_delay` INTEGER, `tts_repeat` REAL, FOREIGN KEY(`app_package`) REFERENCES `apps`(`package`) ON UPDATE NO ACTION ON DELETE CASCADE )",
         "fields": [
           {
             "fieldPath": "id",
@@ -49,128 +47,112 @@
           {
             "fieldPath": "appPackage",
             "columnName": "app_package",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "audioFocus",
             "columnName": "audio_focus",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "requireStrings",
             "columnName": "require_strings",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "ignoreStrings",
             "columnName": "ignore_strings",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "ignoreEmpty",
             "columnName": "ignore_empty",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "ignoreGroups",
             "columnName": "ignore_groups",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "ignoreRepeat",
             "columnName": "ignore_repeat",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "speakScreenOff",
             "columnName": "speak_screen_off",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "speakScreenOn",
             "columnName": "speak_screen_on",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "speakHeadsetOff",
             "columnName": "speak_headset_off",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "speakHeadsetOn",
             "columnName": "speak_headset_on",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "speakSilentOn",
             "columnName": "speak_silent_on",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "speakInCall",
+            "columnName": "speak_in_call",
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "quietStart",
             "columnName": "quiet_start",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "quietEnd",
             "columnName": "quiet_end",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "ttsString",
             "columnName": "tts_string",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "ttsTextReplace",
             "columnName": "tts_text_replace",
-            "affinity": "TEXT",
-            "notNull": false
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "ttsSpeakEmojis",
             "columnName": "tts_speak_emojis",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "ttsMaxLength",
             "columnName": "tts_max_length",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "ttsStream",
             "columnName": "tts_stream",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "ttsDelay",
             "columnName": "tts_delay",
-            "affinity": "INTEGER",
-            "notNull": false
+            "affinity": "INTEGER"
           },
           {
             "fieldPath": "ttsRepeat",
             "columnName": "tts_repeat",
-            "affinity": "REAL",
-            "notNull": false
+            "affinity": "REAL"
           }
         ],
         "primaryKey": {
@@ -205,10 +187,9 @@
         ]
       }
     ],
-    "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '093fbaf5602c1d309d6725a719c52f5f')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '519ba2fcc502729d9e00f7a4acada724')"
     ]
   }
 }
