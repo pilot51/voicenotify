@@ -3,160 +3,206 @@
     <string name="app_name">Voice Notify</string>
     <!-- Used by multiple files -->
     <string name="app_is_ignored">%s diabaikan</string>
-    <string name="app_is_not_ignored">%s tidak diabaikan</string>
-    <string name="service_running">Voice Notify sedang berjalan</string>
+    <string name="app_is_not_ignored">%s diaktifkan</string>
+    <string name="service_running">Layanan Voice Notify sedang berjalan</string>
     <string name="service_suspended">Layanan Voice Notify ditangguhkan</string>
     <!-- xml/preferences.xml -->
     <string name="app_list">Daftar Aplikasi</string>
-    <string name="app_list_summary">Daftar aplikasi yang dapat diabaikan</string>
-    <string name="tts">Teks-Ke-Ucap</string>
-    <string name="tts_summary">Atur kelakuan Teks-Ke-Ucap</string>
-    <string name="tts_settings">Pengaturan TKU</string>
-    <string name="tts_settings_summary">Buka pengaturan Teks-Ke-Ucap Android</string>
-    <string name="tts_settings_summary_fail">Tidak dapat menemukan pengaturan TKU! Bila ini tersedia di perangkat Anda (dan seharusnya), harap menghubungi pengembang.</string>
-    <string name="tts_message">Pesan TKU</string>
-    <string name="tts_message_summary">Sesuaikan bagian-bagian pemberitahuan yang diucapkan</string>
-    <string name="tts_message_dialog">#a = Judul Aplikasi
-\n#t = Detak
-\n#s = Sub-teks
-\n#c = Judul isi
-\n#m = Pesan isi
-\n#i = Info isi
-\n
-\nAsali:
-\n#a. #c. #m.
-\n
-\nAsali lama (v1.0.x):
-\n#a: #t</string>
-    <string name="tts_text_replace">Teks Pengganti TKU</string>
-    <string name="tts_text_replace_summary">Teks pengganti yang diucapkan, semisal memperbaiki pengucapan</string>
-    <string name="tts_text_replace_dialog">Pecah teks yang diucapkan, memungkinkan Anda untuk menyesuaikan bagaimana Teks-Ke-Ucap mengeja kata atau mengubah teks untuk alasan apapun. \n \nTeks pengganti tidak peka kapitalisasi.</string>
-    <string name="tts_stream">Aliran Audio TKU</string>
-    <string name="tts_stream_summary">Pilih aliran audio yang memainkan Teks-Ke-Ucap</string>
-    <string name="tts_delay">Tunda TKU</string>
-    <string name="tts_delay_summary">Menunda TKU sekian detik setelah pemberitahuan</string>
-    <string name="tts_delay_dialog_msg">Jumlah detik menunggu sebelum berucap setelah pemberitahuan.</string>
-    <string name="tts_repeat">Pengulang TKU</string>
-    <string name="tts_repeat_summary">Pengulangan pemberitahuan TKU hingga layar menyala</string>
-    <string name="tts_repeat_dialog_msg">Pengulangan pemberitahuan ditentukan berdasarkan jeda waktu hingga layar dinyalakan. Pemberitahuan tidak diulang bila dibuat ketika layar menyala.
-\n
-\nNilai dalam menit. Kosongkan atau 0 untuk mematikan.</string>
-    <string name="audio_focus">Jeda/redam media</string>
-    <string name="audio_focus_summary">Meminta media lain untuk menjeda/meredam ketika berucap</string>
-    <string name="shake_to_silence">Buncang-Tuk-Bungkam</string>
-    <string name="shake_to_silence_summary">Atur nilai kepekaan Buncang-Tuk-Bungkam</string>
-    <string name="shake_to_silence_dialog_msg">Semakin rendah nilai makan semakin peka.
-\n
-\nAsali:%d
-\nKosong untuk mematikan.</string>
+    <string name="app_list_summary">Pilih aplikasi untuk diaktifkan dan sesuaikan pengaturan per aplikasi</string>
+    <string name="tts">Teks-ke-Ucapan</string>
+    <string name="tts_summary">Konfigurasikan perilaku Teks-ke-Ucapan</string>
+    <string name="tts_settings">Pengaturan TTS</string>
+    <string name="tts_settings_summary">Buka pengaturan Teks-ke-Ucapan Android</string>
+    <string name="tts_settings_summary_fail">Tidak dapat menemukan pengaturan TTS! Jika ada di perangkat Anda (seharusnya ada), harap hubungi pengembang.</string>
+    <string name="tts_message">Pesan TTS</string>
+    <string name="tts_message_summary">Sesuaikan bagian notifikasi mana yang diucapkan</string>
+    <string name="tts_message_dialog">#A = Judul aplikasi\n#T = Ticker\n#S = Teks tambahan\n#C = Judul konten\n#M = Pesan konten\n#I = Info konten\n#H = Judul konten besar\n#Y = Ringkasan konten besar\n#B = Teks konten besar\n#L = Baris teks\nTidak membedakan huruf besar/kecil\n\nDefault:\n%1$s\n\nDefault lama (v1.1.0 - v1.3.0):\n#A. #C. #M.\n\nDefault lama (v1.0.x):\n#A: #T</string>
+    <string name="tts_text_replace">Penggantian Teks TTS</string>
+    <string name="tts_text_replace_summary">Ganti teks yang akan diucapkan, misalnya untuk memperbaiki pengucapan</string>
+    <string name="tts_text_replace_dialog">Ganti teks yang akan diucapkan, memungkinkan Anda menyesuaikan cara Teks-ke-Ucapan mengucapkan kata atau mengganti teks dengan teks lainnya.\n\nIni tidak membedakan huruf besar/kecil dan setiap penggantian diterapkan secara berurutan dari atas ke bawah, setelah pemformatan Pesan TTS dan sebelum penghapusan emoji.</string>
+    <string name="tts_stream">Aliran Audio TTS</string>
+    <string name="tts_stream_summary">Pilih aliran audio yang digunakan Teks-ke-Ucapan untuk memutar suara</string>
+    <string name="tts_delay">Penundaan TTS</string>
+    <string name="tts_delay_summary">Tunda TTS sejumlah detik tertentu setelah notifikasi</string>
+    <string name="tts_delay_dialog_msg">Jumlah detik yang ditunggu setelah notifikasi sebelum berbicara.</string>
+    <string name="tts_repeat">Pengulangan TTS</string>
+    <string name="tts_repeat_summary">Ulangi notifikasi secara terus-menerus melalui TTS hingga layar menyala</string>
+    <string name="tts_repeat_dialog_msg">Notifikasi diulang pada interval yang ditentukan hingga layar dinyalakan. Notifikasi yang dibuat saat layar menyala tidak diulang.\n\nNilai dalam menit. Kosong atau 0 untuk menonaktifkan.</string>
+    <string name="audio_focus">Jeda/redupkan media</string>
+    <string name="audio_focus_summary">Minta media lain untuk dijeda/diredup saat berbicara</string>
+    <string name="shake_to_silence">Kocok-untuk-Senyap</string>
+    <string name="shake_to_silence_summary">Sesuaikan ambang batas sensitivitas Kocok-untuk-Senyap</string>
+    <string name="shake_to_silence_dialog_msg">Nilai yang lebih rendah lebih sensitif.\n\nDefault: %1$d\nKosong atau 0 untuk menonaktifkan.\n\nNilai kocok saat ini: %2$d\nPuncak (5 detik): %3$d</string>
     <string name="stream_media">Media</string>
     <string name="stream_notification">Pemberitahuan</string>
     <string name="stream_voice">Suara</string>
     <string name="stream_ring">Dering</string>
     <string name="stream_alarm">Alarm</string>
-    <string name="ignore_strings">Teks Terabaikan</string>
-    <string name="ignore_strings_summary">Abaikan pemberitahuan yang mengandung teks tertentu dalam pesan</string>
-    <string name="require_ignore_strings_dialog_msg">Ini dicocokkan dengan pesan yang dikirim ke TTS, setelah pemformatan Pesan TTS dan Penggantian Teks, termasuk tanda baca.
-\n
-\nPisahkan setiap entri dengan baris baru. 
-\nPesan harus berisi entri mana saja, tidak semua, agar cocok. 
-\nTidak peka terhadap huruf besar/kecil.</string>
-    <string name="ignore_empty">Abaikan Kosong</string>
-    <string name="ignore_empty_summary_on">Pemberitahuan tanpa pesan tidak akan diucapkan</string>
-    <string name="ignore_empty_summary_off">Pemberitahuan tanpa pesan akan diucapkan \"Pemberitahuan dari [nama aplikasi].\"</string>
+    <string name="ignore_strings">Abaikan Teks</string>
+    <string name="ignore_strings_summary">Abaikan notifikasi yang mengandung teks tertentu dalam pesan</string>
+    <string name="require_ignore_strings_dialog_msg">Ini dicocokkan dengan pesan yang dikirim ke TTS, setelah pemformatan Pesan TTS dan Penggantian Teks, termasuk tanda baca.\n\nPisahkan entri individual dengan baris baru.\nPesan hanya perlu mengandung salah satu entri, bukan semua, untuk dianggap cocok.\nTidak membedakan huruf besar/kecil.</string>
+    <string name="ignore_empty">Abaikan yang Kosong</string>
+    <string name="ignore_empty_summary_on">Notifikasi tanpa pesan tidak akan diucapkan</string>
+    <string name="ignore_empty_summary_off">Notifikasi tanpa pesan akan diucapkan sebagai \"Notifikasi dari [nama aplikasi].\"</string>
     <string name="ignore_repeat">Abaikan Pengulangan</string>
-    <string name="ignore_repeat_summary">Abaikan pemberitahuan sama yang berulang dalam rentang waktu yang ditentukan</string>
-    <string name="ignore_repeat_dialog_msg">Sejumlah detik yang harus ditunggu sejak pemberitahuan terakhir sebelum pengulangan dapat diucapkan. \nMengabaikan pengulangan mengatur ulang penghitungan dan dibersihkan oleh pemberitahuan yang lain. \nKosong= tak terhingga.</string>
-    <string name="max_length">Pesan Maksimum</string>
-    <string name="max_length_summary">Panjang pesan diucapkan maksimum. Pesan panjang akan dipotong.</string>
-    <string name="max_length_dialog_msg">Panjang pesan diucapkan maksimum \nPesan panjang akan dipotong.</string>
-    <string name="device_state">Keadaan Perangkat</string>
-    <string name="device_state_summary">Pilih apakan akan berucap dalam keadaan perangkat tertentu</string>
-    <string name="device_state_dialog_title">Berucap selama keadaan berikut</string>
+    <string name="ignore_repeat_summary">Abaikan notifikasi identik berikutnya dalam waktu yang ditentukan</string>
+    <string name="ignore_repeat_dialog_msg">Tetapkan jumlah detik yang harus berlalu agar notifikasi yang berulang dapat diucapkan kembali.\nPengulangan yang diabaikan akan mengatur ulang hitungan.\n\nDeteksi pengulangan terbatas pada memori Catatan Notifikasi (%d notifikasi).\n\n0 = Nonaktifkan\nKosong = Tak terbatas</string>
+    <string name="max_length">Panjang Maksimum</string>
+    <string name="max_length_summary">Panjang pesan maksimum yang akan diucapkan</string>
+    <string name="max_length_dialog_msg">Panjang pesan maksimum yang akan diucapkan.\nPesan yang lebih panjang akan dipotong.\n\nKosong atau 0 untuk tidak terbatas.\nAndroid TTS memiliki batas panjang terpisah (%d) yang selalu berlaku.</string>
+    <string name="device_state">Status Perangkat</string>
+    <string name="device_state_summary">Pilih apakah akan berbicara selama status perangkat tertentu</string>
+    <string name="device_state_dialog_title">Ucapkan selama status perangkat ini</string>
     <string name="device_state_screen_off">Layar Mati</string>
     <string name="device_state_screen_on">Layar Nyala</string>
     <string name="device_state_headset_off">Pelantang Telinga Mati</string>
     <string name="device_state_headset_on">Pelantang Telinga Nyala</string>
     <string name="device_state_silent_vibrate">Sunyi/Getar</string>
-    <string name="quiet_start">Awal Waktu Sunyi</string>
-    <string name="quiet_start_summary">Jangan berucap setelah waktu ini.
-\nSamakan dengan akhir waktu untuk mematikan.</string>
-    <string name="quiet_end">Akhir Waktu Sunyi</string>
-    <string name="quiet_end_summary">Jangan berucap sebelum waktu ini.
-\nSamakan dengan awal waktu untuk mematikan.</string>
-    <string name="test_summary">Kirim sebuah pemberitahuan (jeda 5 detik) untuk menguji pengaturan</string>
-    <string name="test_ignored">Pemberitahuan Suara diabaikan dalam Daftar Aplikasi.
-\nTeks akan dijalankan, tapi pemberitahuan tidak akan diucapkan.</string>
-    <string name="notify_log_summary">Daftar %d pemberitahuan terakhir.
-\nMenampilkan waktu, nama aplikasi, pesan, dan pesan diabaikan.</string>
-    <string name="support_summary">Nilai &amp; ulasan, email pengembang, obrolan komunitas, terjemahan, kode sumber, pelacak masalah, kebijakan privasi</string>
+    <string name="quiet_start">Waktu Mulai Senyap</string>
+    <string name="quiet_start_summary">Jangan bicara setelah waktu ini.\nBiarkan sama seperti akhir untuk menonaktifkan.</string>
+    <string name="quiet_end">Waktu Akhir Senyap</string>
+    <string name="quiet_end_summary">Jangan bicara sebelum waktu ini.\nBiarkan sama seperti awal untuk menonaktifkan.</string>
+    <string name="test_summary">Posting notifikasi (ditunda 5 detik) untuk menguji pengaturan saat ini</string>
+    <string name="test_ignored">Voice Notify diabaikan di Daftar Aplikasi.\nUji akan berjalan, tetapi notifikasi tidak akan diucapkan.</string>
+    <string name="notify_log_summary">Daftar %d notifikasi terakhir.\nMenampilkan waktu, nama aplikasi, pesan, dan alasan diabaikan.</string>
+    <string name="support_summary">Beri nilai &amp; ulasan, email pengembang, obrolan komunitas, terjemahan, kode sumber, pelacak masalah, kebijakan privasi</string>
     <!-- TextReplacePreference -->
-    <string name="text_replace_error_duplicate">Ganda! Tidak akan disimpan.</string>
+    <string name="text_replace_error_duplicate">Duplikat! Tidak akan disimpan.</string>
     <!-- text_replace_row.xml -->
-    <string name="text_to_replace">Teks yang diganti</string>
+    <string name="text_to_replace">Teks yang akan diganti</string>
     <string name="replacement_text">Teks pengganti</string>
     <!-- MainActivity and xml/preferences.xml -->
     <string name="test">Uji</string>
-    <string name="notify_log">Catatan Pemberitahuan</string>
+    <string name="notify_log">Catatan Notifikasi</string>
     <string name="support">Bantuan &amp; Dukungan</string>
     <!-- MainActivity -->
     <string name="service_disabled">Layanan Voice Notify dinonaktifkan</string>
-    <string name="status_summary_notification_access_enabled">Ketuk untuk menangguhkan Voice Notify.
-\nTekan lama untuk membuka pengaturan akses notifikasi Android untuk menonaktifkan layanan.</string>
-    <string name="status_summary_notification_access_disabled">Ketuk untuk membuka pengaturan akses notifikasi Android untuk mengaktifkan layanan.</string>
-    <string name="status_summary_suspended">Ketuk untuk mengaktifkan Voice Notify. 
-\nTekan lama untuk membuka pengaturan akses pemberitahuan Android untuk menonaktifkan layanan.</string>
-    <string name="notification_channel_desc">Digunakan untuk pengujian pemberitahuan</string>
-    <string name="test_ticker">Ini adalah pesan detak</string>
-    <string name="test_subtext">Subteks</string>
-    <string name="test_content_title">Judul Isi</string>
-    <string name="test_content_text">Ini adalah pesan isi.</string>
-    <string name="test_content_info">Info Isi</string>
+    <string name="status_summary_notification_access_enabled">Ketuk untuk menangguhkan Voice Notify.\nTekan lama untuk membuka pengaturan akses notifikasi Android guna menonaktifkan layanan.</string>
+    <string name="status_summary_notification_access_disabled">Ketuk untuk membuka pengaturan akses notifikasi Android guna mengaktifkan layanan.</string>
+    <string name="status_summary_suspended">Ketuk untuk mengaktifkan Voice Notify.\nTekan lama untuk membuka pengaturan akses notifikasi Android guna menonaktifkan layanan.</string>
+    <string name="notification_channel_desc">Digunakan untuk notifikasi uji</string>
+    <string name="test_ticker">Ini adalah pesan ticker</string>
+    <string name="test_subtext">Teks Tambahan</string>
+    <string name="test_content_title">Judul Konten</string>
+    <string name="test_content_text">Ini adalah pesan konten. 🙂</string>
+    <string name="test_content_info">Info Konten</string>
     <string name="support_rate">Nilai &amp; Ulas</string>
     <string name="support_email">Email Pengembang</string>
-    <string name="support_translations">Alih Bahasa</string>
-    <string name="support_github">GitHub (Kode Sumber, Issue Tracker)</string>
-    <string name="error_market">Galat: Gagal menemukan Google Play Store terpasang.</string>
-    <string name="error_email">Galat: Gagal menemukan aplikasi surel terpasang.</string>
+    <string name="support_translations">Terjemahan</string>
+    <string name="support_github">GitHub</string>
+    <string name="error_market">Kesalahan: Tidak dapat menemukan Google Play Store yang terpasang.</string>
+    <string name="error_email">Kesalahan: Tidak dapat menemukan aplikasi email yang terpasang.</string>
     <!-- Service -->
-    <string name="notification_from">Pemberitahuan dari %s.</string>
-    <string name="error_tts_init">Galat: Gagal memulai Teks-Ke-Ucapan! [%d]</string>
+    <string name="notification_from">Notifikasi dari %s.</string>
+    <string name="error_tts_init">Kesalahan: Tidak dapat menginisialisasi TTS! Kode status %d</string>
     <!-- NotifyList -->
     <string name="yes">Ya</string>
     <string name="ignore_app">Abaikan %s\?</string>
-    <string name="unignore_app">Tak abaikan %s?</string>
+    <string name="unignore_app">Aktifkan %s?</string>
     <!-- menu/app_list.xml-->
     <string name="ignore_all">Abaikan Semua</string>
-    <string name="ignore_none">Tak Abaikan Semua</string>
-    <string name="filter">Tapis</string>
+    <string name="ignore_none">Jangan Abaikan</string>
+    <string name="filter">Filter</string>
     <!-- Ignore/Silence reasons -->
     <string name="reason_app">Aplikasi diabaikan</string>
     <string name="reason_string_ignored">Teks diabaikan</string>
     <string name="reason_empty_msg">Pesan kosong</string>
-    <string name="reason_identical">Pesan sama dalam {0,choice,-1#detik tak terbatas|1#{0} detik|1&lt;{0} detik}</string>
-    <string name="reason_quiet">Waktu Sunyi</string>
-    <string name="reason_silent">Mode sunyi atau getar</string>
-    <string name="reason_call">Nyalakan panggilan telepon</string>
+    <string name="reason_identical">Pesan identik dalam {0,choice,-1#waktu tak terbatas|1#{0} detik|1&lt;{0} detik}</string>
+    <string name="reason_quiet">Waktu senyap</string>
+    <string name="reason_silent">Mode senyap atau getar</string>
+    <string name="reason_call">Panggilan telepon aktif</string>
     <string name="reason_screen_off">Layar mati</string>
-    <string name="reason_screen_on">Layar Nyala</string>
-    <string name="reason_headset_off">Pelantang telinga mati</string>
-    <string name="reason_headset_on">Pelantang telinga nyala</string>
-    <string name="reason_shake">Membungkam dengan membuncang</string>
-    <string name="reason_suspended">Voice Notify ditangguhkan oleh widget</string>
-    <string name="reason_service_stopped">Layanan berhenti</string>
-    <string name="ignore_groups_summary_on">Pemberitahuan yang berisi beberapa pesan tidak akan diucapkan</string>
-    <string name="ignore_groups_summary_off">Pemberitahuan yang berisi beberapa pesan akan diucapkan</string>
+    <string name="reason_screen_on">Layar menyala</string>
+    <string name="reason_headset_off">Headset tidak terpasang</string>
+    <string name="reason_headset_on">Headset terpasang</string>
+    <string name="reason_shake">Diheningkan dengan goyangan</string>
+    <string name="reason_suspended">Voice Notify ditangguhkan</string>
+    <string name="reason_service_stopped">Layanan dihentikan</string>
+    <string name="ignore_groups_summary_on">Notifikasi yang berisi beberapa pesan tidak akan diucapkan</string>
+    <string name="ignore_groups_summary_off">Notifikasi yang berisi beberapa pesan akan diucapkan</string>
     <string name="ignore_groups">Abaikan Pesan Grup</string>
     <string name="support_privacy">Kebijakan Privasi</string>
-    <string name="support_privacy_message">Voice Notify tidak mengumpulkan atau mengirimkan data dari perangkat. Namun, Voice Notify menggunakan aplikasi atau layanan pihak ketiga yang dapat mengirimkan data, seperti yang diuraikan di bawah ini di bawah \"Aplikasi dan layanan pihak ketiga\". \n \nJika informasi sensitif atau pribadi diterima oleh pengembang, informasi tersebut tidak akan dijual, dibagikan, disalin, atau digunakan tanpa persetujuan tertulis dari pemilik informasi tersebut. Jika tidak ada persetujuan, informasi tersebut akan dihapus jika memungkinkan. \n \nTujuan Voice Notify adalah untuk menyuarakan notifikasi, dan dengan demikian ada kemungkinan notifikasi yang diucapkan dapat didengar oleh orang atau mikrofon di sekitarnya. Disarankan untuk mengonfigurasi Pemberitahuan Suara dan perangkat untuk mencegah pemberitahuan yang diucapkan yang tidak diinginkan. Gunakan dengan risiko Anda sendiri. \n \nNotifikasi yang diterima oleh Voice Notify hanya disimpan di memori untuk ditampilkan di Log Notifikasi (hingga 20 notifikasi terbaru) dan tidak ditulis ke penyimpanan. Hal ini mencegah aplikasi lain mengakses data, terutama jika perangkat di-root. Akibatnya, jika proses Pemberitahuan Suara dihentikan, log pemberitahuan akan dihapus. \n \nAplikasi yang terinstal dibaca dan didaftar untuk memungkinkan pengguna memilih aplikasi mana yang akan diucapkan notifikasinya. Judul aplikasi dan nama paket disimpan dalam basis data di penyimpanan data pribadi internal Voice Notify pada perangkat untuk menyimpan pilihan dan bertindak sebagai cache untuk meningkatkan kinerja pemuatan daftar aplikasi. \n \nAplikasi dan layanan pihak ketiga: \n- Mesin Text-To-Speech - Voice Notify meneruskan teks notifikasi untuk diucapkan ke mesin Text-To-Speech, yang berada di luar kendali langsung Voice Notify. Harap baca kebijakan privasi mesin TTS untuk mengetahui cara mesin tersebut menggunakan data. \n- Layanan Google Play dapat mengirimkan kerusakan yang dianonimkan dan data analitik dasar kembali ke pengembang untuk membantu meningkatkan aplikasi. \n- Aplikasi perpesanan - Opsi \"Hubungi Pengembang\" membuka aplikasi perpesanan yang dipilih pengguna atau aplikasi perpesanan default, misalnya aplikasi email, dan mengisi pesan sebelumnya dengan versi Pemberitahuan Suara, versi Android, nomor versi Android, dan nama perangkat. Untuk aplikasi email, kolom \"Kepada\" diatur ke alamat pengembang (pilota51@gmail.com). Dengan mengirimkan pesan, pengguna memahami dan menyetujui nama dan informasi kontak mereka dibagikan dengan penerima, sebagaimana ditentukan oleh aplikasi perpesanan. \n- Pilihan lain di bawah \"Bantuan &amp; Dukungan\" membuka aplikasi atau situs web eksternal yang relevan (Play Store, Weblate.org, GitHub.com), hanya mengirimkan URL yang dikodekan ke halaman Pemberitahuan Suara. \n \nDi bawah ini adalah izin yang digunakan oleh Pemberitahuan Suara dan mengapa izin tersebut diperlukan: \n- Bluetooth - Diperlukan untuk mendeteksi apakah headset Bluetooth tersambung. \n- Getar - Diperlukan untuk fitur Uji saat ponsel dalam mode getar. \n- Ubah Pengaturan Audio - Diperlukan untuk meningkatkan deteksi headset berkabel. \n- Baca Status Telepon - Diperlukan untuk menginterupsi TTS jika ada panggilan telepon yang aktif.</string>
-    <string name="permission_rationale_read_phone_state">Izin panggilan telepon diperlukan untuk mencegah Voice Notify berbicara selama panggilan berlangsung.</string>
-    <string name="require_strings">Teks diperlukan</string>
-    <string name="require_strings_summary">Hanya berbicara pemberitahuan yang berisi teks tertentu dalam pesan</string>
+    <string name="support_privacy_message">Voice Notify tidak mengumpulkan atau mengirimkan data dari perangkat. Namun, aplikasi ini menggunakan aplikasi atau layanan pihak ketiga yang mungkin mengirimkan data, sebagaimana diuraikan di bawah ini dalam \"Aplikasi dan layanan pihak ketiga\".\n\nTujuan Voice Notify adalah untuk mengucapkan notifikasi, dan karenanya notifikasi yang diucapkan mungkin terdengar oleh orang-orang di sekitar atau mikrofon. Disarankan untuk mengonfigurasi Voice Notify dan perangkat guna mencegah notifikasi yang diucapkan secara tidak diinginkan. Gunakan dengan risiko Anda sendiri.\n\nDalam kejadian yang tidak mungkin bahwa informasi sensitif diterima oleh pengembang, informasi tersebut tidak akan dijual, dibagikan, atau digunakan tanpa persetujuan tegas dari pemilik sah informasi tersebut. Informasi sensitif apa pun yang diketahui diterima akan dihapus jika tidak berkaitan dengan masalah yang dilaporkan atau setelah masalah tersebut diselesaikan.\n\nNotifikasi yang diterima oleh Voice Notify hanya disimpan dalam memori untuk ditampilkan di Catatan Notifikasi (hingga %1$d notifikasi terbaru) dan tidak ditulis ke penyimpanan. Hal ini mencegah aplikasi lain mengakses data meskipun perangkat di-root. Akibatnya, jika proses Voice Notify dihentikan, catatan notifikasi akan dihapus.\n\nAplikasi yang terpasang dibaca dan didaftar untuk memungkinkan pengguna memilih aplikasi mana yang notifikasinya diucapkan dan mengonfigurasi pengaturan per aplikasi. Judul dan nama paket aplikasi disimpan dalam basis data di penyimpanan data privat internal Voice Notify di perangkat untuk menyimpan pilihan dan bertindak sebagai cache guna meningkatkan performa pemuatan daftar aplikasi.\n\nCatatan debug disimpan ke penyimpanan eksternal di %2$s yang dapat diakses dari komputer melalui USB dan secara opsional dikirimkan saat menggunakan fitur Email Pengembang.\nCatatan ini berpotensi mengandung informasi sensitif dari notifikasi jika terjadi kesalahan. Dialog Email Pengembang menyediakan penampil catatan dasar.\n\nFitur cadangan menyimpan file zip yang berisi semua pengaturan termasuk aplikasi yang terpasang ke lokasi pilihan pengguna.\n\nAplikasi dan layanan pihak ketiga:\n• Mesin Teks-ke-Ucapan - Voice Notify meneruskan teks notifikasi untuk diucapkan ke mesin Teks-ke-Ucapan default, yang berada di luar kendali langsung Voice Notify. Harap baca kebijakan privasi mesin TTS untuk mengetahui cara penggunaan datanya.\n• Google Play Services dapat mengirimkan data anonim untuk analitik, crash, dan pembekuan kembali ke pengembang untuk membantu meningkatkan aplikasi. Ini sama untuk semua aplikasi yang didistribusikan melalui Play Store.\n• Aplikasi pesan - Opsi \"Hubungi Pengembang\" membuka aplikasi pesan pilihan atau default pengguna, seperti aplikasi email, dan mengisi pesan secara otomatis dengan versi Voice Notify, versi Android, nomor build Android, dan nama perangkat. Pengguna dapat memilih untuk melampirkan catatan debug dan file pengaturan. Saat mengirim ke aplikasi email, kolom \"Kepada\" diisi dengan alamat pengembang (%3$s). Dengan mengirim pesan, pengguna memahami dan menyetujui nama serta informasi kontak mereka dibagikan kepada penerima sebagaimana ditentukan oleh aplikasi pesan.\n• Opsi lain di bawah \"Bantuan &amp; Dukungan\" membuka aplikasi atau situs web eksternal yang relevan (Play Store, Discord, Matrix, Weblate.org, GitHub.com) ke halaman atau ruang obrolan Voice Notify.\n\nBerikut adalah izin yang digunakan oleh Voice Notify dan alasan diperlukannya:\n• Posting Notifikasi - Diperlukan untuk memposting notifikasi uji. Ini biasanya satu-satunya izin yang ditampilkan Android kepada pengguna.\n• Kueri Semua Paket - Diperlukan untuk mengambil daftar semua aplikasi yang terpasang untuk Daftar Aplikasi dan memungkinkan pengaturan per aplikasi.\n• Bluetooth - Diperlukan untuk mendeteksi apakah headset Bluetooth terhubung.\n• Ubah Pengaturan Audio - Diperlukan untuk deteksi headset kabel yang lebih baik.\n• Getar - Diperlukan untuk fitur Uji saat perangkat dalam mode getar.\n• Baca Status Telepon - Diperlukan di Android 11 dan di bawahnya untuk menghentikan TTS jika panggilan telepon aktif.</string>
+    <string name="permission_rationale_read_phone_state">Izin panggilan telepon diperlukan agar Voice Notify tidak berbicara selama panggilan berlangsung.</string>
+    <string name="require_strings">Wajib Ada Teks</string>
+    <string name="require_strings_summary">Hanya ucapkan notifikasi yang mengandung teks tertentu dalam pesan</string>
     <string name="support_discord">Discord</string>
     <string name="support_matrix">Matrix</string>
-    <string name="permission_rationale_post_notifications">Izin pemberitahuan posting diperlukan untuk Voice Notify untuk memposting pemberitahuan pengujian.</string>
-    <string name="reason_string_required">Teks yang diperlukan hilang</string>
+    <string name="permission_rationale_post_notifications">Izin posting notifikasi diperlukan agar Voice Notify dapat memposting notifikasi uji.</string>
+    <string name="reason_string_required">Teks yang diperlukan tidak ada</string>
     <string name="back">Kembali</string>
     <string name="test_big_content_title">Judul Konten Besar</string>
     <string name="test_big_content_summary">Ini adalah ringkasan konten besar</string>
+    <string name="app_overrides">Penggantian %s</string>
+    <string name="autostart_message">Agar Voice Notify bekerja secara andal di perangkat ini, aplikasi harus diizinkan untuk mulai otomatis atau berjalan di latar belakang.</string>
+    <string name="autostart_message_direct">\n\nTekan %s untuk membuka layar pengaturan yang relevan dan aktifkan Voice Notify jika belum diaktifkan.</string>
+    <string name="autostart_message_direct_failed">Gagal membuka layar pengaturan yang relevan</string>
+    <string name="autostart_message_manual">\n\nCari di Pengaturan Android untuk \'mulai otomatis\', \'peluncuran otomatis\', \'startup\', \'latar belakang\', atau \'jangan tidur\' dan aktifkan Voice Notify jika belum diaktifkan.\n\nPengaturan ini memiliki nama yang berbeda tergantung pada OS. Jika Anda tidak dapat menemukannya, harap hubungi pengembang.\n\nTekan %s untuk membuka Pengaturan Android.</string>
+    <string name="dont_show_again">Jangan tampilkan lagi</string>
+    <string name="test_big_content_text">Ini adalah teks konten besar.</string>
+    <string name="test_text_lines">Ini adalah baris teks.\nIni adalah baris teks lainnya.</string>
+    <string name="notify_log_settings">Pengaturan Catatan Notifikasi</string>
+    <string name="log_ignored_desc"><![CDATA[<b>Sembunyikan</b> &ndash; Notifikasi disembunyikan di catatan dan dapat ditampilkan nanti, tetapi dihitung terhadap batas catatan.<br><br><b>Jangan catat</b> &ndash; Notifikasi tidak dicatat dan tidak dihitung terhadap batas catatan, tetapi tidak dapat ditampilkan nanti. Notifikasi yang dicatat sebelum pengaturan ini diaktifkan akan disembunyikan.]]></string>
+    <string name="show_ignored">Tampilkan %s yang diabaikan</string>
+    <string name="hide_ignored">Sembunyikan %s yang diabaikan</string>
+    <string name="do_not_log_ignored">Jangan catat %s yang diabaikan</string>
+    <string name="notifications">notifikasi</string>
+    <string name="apps">aplikasi</string>
+    <string name="notification_details">Detail Notifikasi</string>
+    <string name="enable">Aktifkan</string>
+    <string name="ticker">Ticker</string>
+    <string name="subtext">Teks Tambahan</string>
+    <string name="title">Judul</string>
+    <string name="content_text">Teks Konten</string>
+    <string name="content_info_text">Teks Info Konten</string>
+    <string name="big_content_summary">Ringkasan Konten Besar</string>
+    <string name="big_content_title">Judul Konten Besar</string>
+    <string name="big_content_text">Teks Konten Besar</string>
+    <string name="text_lines">Baris Teks</string>
+    <string name="flags">Tanda</string>
+    <string name="ignored_reasons">Alasan Diabaikan</string>
+    <string name="interrupted_reason">Alasan Terputus</string>
+    <string name="metadata">Metadata</string>
+    <string name="metadata_id">ID: %d</string>
+    <string name="metadata_category">Kategori: %s</string>
+    <string name="metadata_progress">Progres: %1$d / %2$d</string>
+    <string name="metadata_progress_indeterminate">Progres: Tidak Tentu</string>
+    <string name="backup_restore">Cadangan / Pulihkan</string>
+    <string name="backup_restore_summary">Cadangkan atau pulihkan semua pengaturan Voice Notify</string>
+    <string name="backup_restore_message">Cadangkan atau pulihkan file zip yang berisi semua pengaturan.\n\nCadangan hanya dijamin kompatibel dengan versi yang sama atau lebih baru dari Voice Notify.\nTidak ada jaminan untuk cadangan dari versi beta atau non-rilis.</string>
+    <string name="backup_settings">Cadangkan Pengaturan</string>
+    <string name="restore_settings">Pulihkan Pengaturan</string>
+    <string name="support_rate_subtext">Lihat aplikasi di Play Store</string>
+    <string name="support_email_subtext">Umpan balik umum atau kirim file debug</string>
+    <string name="support_email_dialog_title">Pilih lampiran</string>
+    <string name="support_email_dialog_message">Ini hanya disarankan saat melaporkan bug dan crash.</string>
+    <string name="support_email_dialog_message_log">Meskipun informasi yang berpotensi sensitif tidak disertakan secara sengaja, catatan mungkin mencakup nama aplikasi yang terpasang dan beberapa kesalahan dapat mengandung konten notifikasi yang relevan atau pengaturan berbasis teks. Ukurannya dibatasi hingga 1MB, yang mungkin mencakup beberapa hari. Ini dapat diakses dari komputer melalui USB di %s</string>
+    <string name="support_email_dialog_message_settings">• File basis data: Berisi daftar semua aplikasi yang terpasang dan semua pengaturan yang tersedia dalam penggantian per aplikasi.\n• File preferensi: Berisi pengaturan yang tidak tersedia dalam penggantian per aplikasi.</string>
+    <string name="debug_log">Catatan Debug</string>
+    <string name="view">Lihat</string>
+    <string name="view_debug_log_failed">Tidak dapat membaca catatan debug</string>
+    <string name="settings">Pengaturan</string>
+    <string name="support_chat_subtext">Obrolan komunitas, respons pengembang tercepat</string>
+    <string name="support_translations_subtext">Terjemahan berbasis komunitas di Weblate.org</string>
+    <string name="support_github_subtext">Laporan bug, permintaan fitur, catatan rilis, rilis beta, kode sumber</string>
+    <string name="error_browser">Kesalahan: Tidak dapat menemukan aplikasi browser yang terpasang.</string>
+    <string name="remove_override">Hapus penggantian</string>
+    <string name="remove_override_confirm">Hapus penggantian %1$s untuk %2$s?</string>
+    <string name="regex_message">\n\nUntuk menggunakan regex, awali teks dengan \"$regex:\". Regex membedakan huruf besar/kecil secara default.\nMisalnya, untuk mencocokkan URL (mengabaikan huruf besar/kecil):\n$regex:(?i)https?:\\/\\/[^\\s]+\n</string>
+    <string name="invalid_regex">Regex tidak valid</string>
+    <string name="close">Tutup</string>
+    <string name="ignore_enable_apps_confirm">Apakah Anda yakin ingin %s semua aplikasi?</string>
+    <string name="ignore">mengabaikan</string>
+    <string name="remove_app_overrides">Hapus semua penggantian aplikasi</string>
+    <string name="remove_app_overrides_confirm">Hapus semua penggantian untuk %s?</string>
+    <string name="remove">Hapus</string>
+    <string name="error">Kesalahan</string>
+    <string name="tts_speak_emojis">Ucapkan Emoji</string>
+    <string name="tts_speak_emojis_summary_on">Emoji akan diucapkan</string>
+    <string name="tts_speak_emojis_summary_off">Emoji tidak akan diucapkan</string>
+    <string name="reason_tts_failed">TTS gagal. Mencoba memulai ulang dan mencoba kembali.\nTeks ini seharusnya berwarna kuning jika percobaan ulang berhasil atau merah jika tidak.\nHarap coba mulai ulang layanan Voice Notify jika notifikasi gagal diucapkan.</string>
+    <string name="reason_tts_restarted">TTS dimulai ulang saat pesan dalam antrean atau sedang diucapkan. Dimasukkan ulang ke antrean.</string>
+    <string name="reason_tts_interrupted">TTS terputus karena alasan yang tidak diketahui</string>
+    <string name="reason_tts_error">Kesalahan pemrosesan TTS</string>
+    <string name="reason_tts_length_limit">Pesan melebihi batas panjang TTS</string>
 </resources>
